@@ -39,6 +39,18 @@
       --t-page:     1.80s;  /* page fades up */
 
       --ease-settle: cubic-bezier(.25, 1, .5, 1);
+      /* Hard launch, long decaying tail. The opening slope is y1/x1 = 4.25x
+         the average, which puts the first frames of the return at roughly the
+         bullet's own speed; it then bleeds that off into the marquee drift. */
+      --ease-recoil: cubic-bezier(.2, .85, .25, 1);
+
+      /* Slogan ticker.
+         The ride is deliberately a long way. The return has to cover this
+         distance in its first few hundred milliseconds to leave at anything
+         like the bullet's pace, and a short ride leaves the deceleration
+         nothing to be felt across — measured, 144px read as a flat crawl. */
+      --ticker-ride: clamp(280px, 42vw, 620px);
+      --ticker-rate: 52s;   /* one full loop of the slogan set */
 
       /* Set by JS: how far left the logo must travel from centre */
       --logo-shift: 0px;
@@ -336,6 +348,87 @@
       color: var(--text-muted);
     }
 
+    /* ---------- slogan ticker ----------
+       A rotating strip of slogans in the slot under the nav rule. As with the
+       intro, the base state below is the FINISHED state: the marquee is simply
+       running and the strip is in place. .is-intro only adds the arrival.
+
+       Two nested transforms, deliberately:
+         .ticker__travel  intro only  — rides out with the bullet, comes back
+         .ticker__track   forever     — the constant-rate marquee
+       They compose. Through the return the travel layer is decelerating hard
+       while the track holds its steady pace, so the composite velocity runs
+       fast -> slow -> steady drift with no moment where one hands to the other. */
+
+    .ticker {
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+
+    .ticker__travel { will-change: transform; }
+
+    .ticker__track {
+      display: flex;
+      width: max-content;
+      animation: ticker-roll var(--ticker-rate) linear infinite;
+      /* Negative delay starts the loop already part-way through, so there is
+         always content off to the left. Without it the strip rides out and
+         drags an empty gap in behind itself. */
+      animation-delay: calc(var(--ticker-rate) * -0.55);
+      will-change: transform;
+    }
+
+    /* Reading beats drifting. Hover or tab into it and it holds still. */
+    .ticker:hover .ticker__track,
+    .ticker:focus-within .ticker__track { animation-play-state: paused; }
+
+    .ticker__set {
+      display: flex;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .ticker__set li {
+      position: relative;
+      flex: none;
+      padding: 13px clamp(22px, 3vw, 40px);
+      font-size: 14px;
+      color: var(--steel-500);
+      white-space: nowrap;
+    }
+
+    /* The hook — rev share / profit share / skin in the game — is the whole
+       pitch, so it opens the loop, returns at the halfway point, and carries
+       the emphasis value off the steel ramp. The supporting lines sit a step
+       down. Two bright items in ten is the ration; brighten them all and the
+       strip flattens into one grey band. */
+    .ticker__set li.is-hook {
+      color: var(--steel-100);
+      font-weight: 600;
+    }
+
+    /* Separator is a hairline, not a middle dot — see "Do not" in DESIGN.md. */
+    .ticker__set li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 1px;
+      height: 12px;
+      transform: translateY(-50%);
+      background: var(--slate);
+    }
+
+    /* Two identical sets sit side by side, so translating the track by exactly
+       -50% lands the second set where the first began. */
+    @keyframes ticker-roll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
     /* ==========================================================
        INTRO — the bullet
        Base state below is the FINISHED state. The animation only
@@ -497,6 +590,21 @@
       animation: logo-home .70s var(--ease-settle) var(--t-shift) both;
     }
 
+    /* Two phases, two animations, because each needs its own easing — a single
+       keyframe set with per-keyframe timing functions did not hold, and the
+       return measured flat instead of decelerating.
+
+       They never overlap, and the fill modes are what keep them apart:
+       ticker-home is `forwards` and deliberately NOT `backwards`, so through
+       its 1.15s delay it does not apply at all and ticker-ride owns the
+       transform. From --t-shift it is active and, being later in the list,
+       wins — which is the same instant the logo starts home. */
+    body.is-intro .ticker__travel {
+      animation:
+        ticker-ride var(--t-fly) linear var(--t-fire) both,
+        ticker-home 1.10s var(--ease-recoil) var(--t-shift) forwards;
+    }
+
     body.is-intro .logo__inner {
       animation: name-wipe .26s var(--ease-settle) var(--t-name) both;
     }
@@ -541,6 +649,20 @@
       100% { opacity: 0; transform: translateX(70%); }
     }
 
+    /* Out with the bullet: same direction, same linear pace, fading up. */
+    @keyframes ticker-ride {
+      0%   { opacity: 0; transform: translateX(0); }
+      70%  { opacity: 1; }
+      100% { opacity: 1; transform: translateX(var(--ticker-ride)); }
+    }
+
+    /* Back with the logo. Leaves at the bullet's pace and decays for a full
+       second; that tail is what hands over to the marquee unnoticed. */
+    @keyframes ticker-home {
+      from { transform: translateX(var(--ticker-ride)); }
+      to   { transform: translateX(0); }
+    }
+
     /* Logo starts centred on screen, then travels to its resting place. */
     @keyframes logo-home {
       from { transform: translateX(var(--logo-shift)); }
@@ -568,6 +690,9 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .intro-layer { display: none !important; }
+      /* The marquee runs off the base stylesheet, not off .is-intro, so the
+         blanket rule below does not reach it. Stop it by name. */
+      .ticker__track { animation: none !important; }
       body.is-intro *,
       body.is-intro *::before,
       body.is-intro *::after {
@@ -591,6 +716,44 @@
     </div>
     <div class="site-header__rule"></div>
   </header>
+
+  <!-- Slogan ticker. A real page element, deliberately NOT inside
+       .intro-layer: that layer is removed from the DOM when the sequence
+       ends, and this has to keep running afterwards. It also sits outside
+       <main>, which the intro fades in at 1.80s — inside it, the strip
+       could not fade in alongside the bullet at 0.10s. -->
+  <aside class="ticker" aria-label="How we work">
+    <div class="ticker__travel">
+      <div class="ticker__track">
+        <ul class="ticker__set">
+          <li class="is-hook">Rev share or profit share.</li>
+          <li class="is-hook">Skin in the game.</li>
+          <li>Paid on performance.</li>
+          <li>No revenue, no invoice.</li>
+          <li>We eat what we kill.</li>
+          <li class="is-hook">Rev share or profit share.</li>
+          <li>Revenue or nothing.</li>
+          <li>One shot. One bill.</li>
+          <li>Fire us for free.</li>
+          <li>No retainer. No deck. No excuses.</li>
+        </ul>
+        <!-- Duplicate set is what makes the loop seamless. Hidden from the
+             accessibility tree so the slogans are not announced twice. -->
+        <ul class="ticker__set" aria-hidden="true">
+          <li class="is-hook">Rev share or profit share.</li>
+          <li class="is-hook">Skin in the game.</li>
+          <li>Paid on performance.</li>
+          <li>No revenue, no invoice.</li>
+          <li>We eat what we kill.</li>
+          <li class="is-hook">Rev share or profit share.</li>
+          <li>Revenue or nothing.</li>
+          <li>One shot. One bill.</li>
+          <li>Fire us for free.</li>
+          <li>No retainer. No deck. No excuses.</li>
+        </ul>
+      </div>
+    </div>
+  </aside>
 
   <!-- The intro. Removed from the DOM once it has run. -->
   <div class="intro-layer" aria-hidden="true">
