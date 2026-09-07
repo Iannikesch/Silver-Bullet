@@ -3,10 +3,389 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Silver Bullet</title>
+  <title>Silver Bullet — Marketing Agency</title>
+  <meta name="description" content="Silver Bullet is a marketing agency that turns attention into revenue. Strategy, brand, performance marketing, and web.">
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg-alt: #f6f7f9;
+      --text: #14171f;
+      --muted: #5b6472;
+      --line: #e3e6eb;
+      --accent: #2f6df6;
+      --accent-text: #ffffff;
+      --radius: 10px;
+      --wrap: 1080px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1218;
+        --bg-alt: #161b24;
+        --text: #eef1f6;
+        --muted: #a3adbd;
+        --line: #262d3a;
+        --accent: #5b8cff;
+        --accent-text: #0f1218;
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: var(--wrap);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    a { color: inherit; }
+
+    /* ---------- header ---------- */
+    header {
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 10;
+    }
+
+    .bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 18px 0;
+    }
+
+    .logo {
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      font-size: 18px;
+      text-decoration: none;
+    }
+
+    .logo span { color: var(--accent); }
+
+    nav {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    nav a:hover { color: var(--text); }
+
+    @media (max-width: 720px) {
+      nav .nav-link { display: none; }
+    }
+
+    .btn {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--accent-text);
+      padding: 11px 20px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      white-space: nowrap;
+    }
+
+    .btn:hover { opacity: 0.9; }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    /* ---------- hero ---------- */
+    .hero {
+      padding: 96px 0 80px;
+    }
+
+    .hero h1 {
+      font-size: clamp(34px, 6vw, 60px);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin: 0 0 20px;
+      max-width: 16ch;
+    }
+
+    .hero p {
+      font-size: clamp(17px, 2.2vw, 20px);
+      color: var(--muted);
+      margin: 0 0 32px;
+      max-width: 56ch;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* ---------- sections ---------- */
+    section { padding: 72px 0; }
+
+    .alt { background: var(--bg-alt); }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 0 0 12px;
+    }
+
+    h2 {
+      font-size: clamp(26px, 3.6vw, 36px);
+      letter-spacing: -0.02em;
+      margin: 0 0 16px;
+    }
+
+    .lead {
+      color: var(--muted);
+      max-width: 60ch;
+      margin: 0 0 40px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    /* ---------- stats ---------- */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 20px;
+      border-top: 1px solid var(--line);
+      padding-top: 40px;
+      margin-top: 8px;
+    }
+
+    .stat .num {
+      font-size: clamp(28px, 4vw, 38px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      display: block;
+    }
+
+    .stat .label {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* ---------- contact ---------- */
+    .contact-box {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 40px;
+      text-align: center;
+      background: var(--bg);
+    }
+
+    /* ---------- footer ---------- */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 32px 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .foot {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Silver Bullet</h1>
-  <p>Coming soon.</p>
+  <header>
+    <div class="wrap bar">
+      <a class="logo" href="#top">Silver<span>&nbsp;Bullet</span></a>
+      <nav>
+        <a class="nav-link" href="#services">Services</a>
+        <a class="nav-link" href="#work">Approach</a>
+        <a class="nav-link" href="#about">About</a>
+        <a class="btn" href="#contact">Get in touch</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero -->
+    <div class="wrap hero">
+      <p class="eyebrow">Marketing Agency</p>
+      <h1>Marketing that actually moves the number.</h1>
+      <p>
+        We build brands people remember and campaigns that pay for themselves.
+        Strategy, creative, and performance under one roof — no handoffs, no guesswork.
+      </p>
+      <div class="cta-row">
+        <a class="btn" href="#contact">Book a consultation</a>
+        <a class="btn btn-ghost" href="#services">See what we do</a>
+      </div>
+    </div>
+
+    <!-- Services -->
+    <section id="services" class="alt">
+      <div class="wrap">
+        <p class="eyebrow">Services</p>
+        <h2>One team, the whole funnel</h2>
+        <p class="lead">
+          Most agencies hand you a deck. We own the outcome from first impression
+          to closed deal.
+        </p>
+
+        <div class="grid">
+          <div class="card">
+            <h3>Brand &amp; Positioning</h3>
+            <p>Identity, messaging, and the story that makes you the obvious choice.</p>
+          </div>
+          <div class="card">
+            <h3>Performance Marketing</h3>
+            <p>Paid search and social managed to pipeline and ROAS, not impressions.</p>
+          </div>
+          <div class="card">
+            <h3>Web &amp; Landing Pages</h3>
+            <p>Fast, accessible sites built to convert the traffic you already pay for.</p>
+          </div>
+          <div class="card">
+            <h3>SEO &amp; Content</h3>
+            <p>Durable organic growth from content that answers real buying questions.</p>
+          </div>
+          <div class="card">
+            <h3>Creative Production</h3>
+            <p>Photo, video, and ad creative built for the platform it runs on.</p>
+          </div>
+          <div class="card">
+            <h3>Analytics &amp; Reporting</h3>
+            <p>Clean tracking and plain-English reporting you can act on.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Approach -->
+    <section id="work">
+      <div class="wrap">
+        <p class="eyebrow">Approach</p>
+        <h2>No silver bullets. Just a sharper process.</h2>
+        <p class="lead">
+          The name is a joke about the thing that doesn't exist. What does exist
+          is disciplined work, run in short loops, measured honestly.
+        </p>
+
+        <div class="grid">
+          <div class="card">
+            <h3>01 &nbsp;Diagnose</h3>
+            <p>We audit the funnel and find where attention and money are leaking.</p>
+          </div>
+          <div class="card">
+            <h3>02 &nbsp;Build</h3>
+            <p>Creative, pages, and campaigns shipped in weeks, not quarters.</p>
+          </div>
+          <div class="card">
+            <h3>03 &nbsp;Compound</h3>
+            <p>We keep what works, cut what doesn't, and reinvest the difference.</p>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <span class="num">Placeholder</span>
+            <span class="label">Avg. return on ad spend</span>
+          </div>
+          <div class="stat">
+            <span class="num">Placeholder</span>
+            <span class="label">Clients served</span>
+          </div>
+          <div class="stat">
+            <span class="num">Placeholder</span>
+            <span class="label">Years in business</span>
+          </div>
+          <div class="stat">
+            <span class="num">Placeholder</span>
+            <span class="label">Client retention</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="alt">
+      <div class="wrap">
+        <p class="eyebrow">About</p>
+        <h2>Small team. Senior people. Your account.</h2>
+        <p class="lead">
+          Silver Bullet is a marketing agency for companies that are done paying
+          for activity and want results. The people you meet in the pitch are the
+          people doing the work — replace this copy with your own story, team, and
+          proof points.
+        </p>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+      <div class="wrap">
+        <div class="contact-box">
+          <p class="eyebrow">Contact</p>
+          <h2>Let's talk about your growth.</h2>
+          <p class="lead" style="margin: 0 auto 28px;">
+            Tell us what you're trying to grow and we'll tell you, honestly,
+            whether we can help.
+          </p>
+          <a class="btn" href="mailto:hello@example.com">hello@example.com</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <span>&copy; 2026 Silver Bullet. All rights reserved.</span>
+      <span>Placeholder site — replace copy and contact details before launch.</span>
+    </div>
+  </footer>
 </body>
 </html>
