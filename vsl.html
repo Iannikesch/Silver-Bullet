@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Silver Bullet — See if you qualify</title>
+  <meta name="description" content="Performance-based marketing for service businesses under $15M. Rev share or profit share. No retainer. Watch the 2-minute video and book a call.">
+  <!-- A VSL is a paid-traffic destination, not something to be found cold. -->
+  <meta name="robots" content="noindex, follow">
+
+  <link rel="stylesheet" href="tokens.css?v=2">
+
+  <style>
+    /* ==========================================================
+       Silver Bullet — VSL page
+       Colors come from tokens.css. No raw hex in here.
+
+       Deliberately carries NO motion library and no intro. The one
+       orchestrated moment lives on the home page; this page's whole
+       job is to get someone to the video and then to the call, and
+       every kilobyte in front of that costs conversions.
+       ========================================================== */
+
+    :root {
+      --wrap:     980px;   /* narrower than the site: this page is a column */
+      --gutter:   clamp(20px, 4vw, 40px);
+      --space-xl: clamp(96px, 11vw, 160px);
+      --space-lg: clamp(64px, 8vw, 112px);
+      --space-md: clamp(44px, 5vw, 72px);
+      --space-sm: clamp(24px, 3vw, 36px);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: var(--wrap);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+    }
+
+    a { color: inherit; }
+
+    :where(a, button):focus-visible {
+      outline: 2px solid var(--amber);
+      outline-offset: 3px;
+    }
+
+    /* ---------- type ---------- */
+
+    h1, h2, h3 {
+      color: var(--text-strong);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      margin: 0;
+    }
+
+    h1 { font-size: clamp(34px, 5.4vw, 62px); line-height: 1.0; }
+    h2 { font-size: clamp(26px, 3.4vw, 40px); line-height: 1.05; }
+    h3 { font-size: 18px; line-height: 1.25; letter-spacing: -0.02em; }
+
+    p { margin: 0; }
+
+    .lead {
+      font-size: clamp(17px, 1.5vw, 20px);
+      line-height: 1.6;
+      color: var(--steel-300);
+      max-width: 60ch;
+    }
+
+    .meta { font-size: 14px; color: var(--text-muted); }
+
+    /* ---------- header: logo only ----------
+       No nav. A VSL page does not offer exits. */
+
+    .vsl-header {
+      padding: 22px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .vsl-header .wrap { display: flex; justify-content: center; }
+
+    .logo { display: inline-block; line-height: 0; text-decoration: none; }
+
+    .logo__img {
+      display: block;
+      width: clamp(148px, 16vw, 190px);
+      height: auto;
+    }
+
+    /* ---------- hero ---------- */
+
+    .vsl-hero {
+      padding: var(--space-lg) 0 var(--space-md);
+      text-align: center;
+    }
+
+    .vsl-hero h1 { max-width: 18ch; margin: 0 auto; }
+
+    .vsl-hero .lead {
+      margin: var(--space-sm) auto 0;
+      text-align: center;
+    }
+
+    /* The instruction line. Sentence case, in the emphasis value — not a
+       tracked-out all-caps eyebrow, which DESIGN.md rules out. */
+    .watch-cue {
+      margin-top: var(--space-md);
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--steel-100);
+    }
+
+    /* ---------- the video ----------
+       Separation is a lit top edge, per DESIGN.md. No drop shadow. */
+
+    .vsl-video {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      margin-top: var(--space-sm);
+      background: var(--bg-raised);
+      border-top: 1px solid var(--border-lit);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--ink);
+      overflow: hidden;
+    }
+
+    .vsl-video > iframe,
+    .vsl-video > video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* Visible until a real embed replaces it. Loud on purpose. */
+    .vsl-video__placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 24px;
+      text-align: center;
+      color: var(--steel-700);
+    }
+
+    .vsl-video__placeholder strong {
+      color: var(--steel-100);
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    /* ---------- calls to action ----------
+       One amber element per viewport. The two CTAs on this page are a full
+       screen apart, so they never share one. */
+
+    .cta-block { text-align: center; padding: var(--space-md) 0; }
+
+    .cta {
+      display: inline-block;
+      padding: 17px 34px;
+      font: inherit;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+      background: var(--accent);
+      color: var(--ink);
+      border: none;
+      cursor: pointer;
+      transition: background-color .18s ease;
+    }
+
+    .cta:hover  { background: var(--accent-hover); }
+    .cta:active { background: var(--accent-active); }
+
+    .cta-note { margin-top: 14px; }
+
+    /* ---------- sections ---------- */
+
+    section { padding: var(--space-lg) 0; }
+
+    .band {
+      border-top: 1px solid var(--border);
+    }
+
+    .section-head { max-width: 26ch; }
+    .section-head + * { margin-top: var(--space-sm); }
+
+    /* ---------- the deal: three terms, not three identical cards ----------
+       Divided by rules rather than by a repeated rounded box. */
+
+    .terms {
+      display: grid;
+      gap: 0;
+      margin: 0;
+      padding: 0;
+    }
+
+    .terms > div {
+      display: grid;
+      grid-template-columns: minmax(0, 12ch) minmax(0, 1fr);
+      gap: clamp(16px, 4vw, 48px);
+      padding: var(--space-sm) 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .terms > div:last-child { border-bottom: 1px solid var(--border); }
+
+    .terms dt {
+      color: var(--steel-050);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .terms dd { margin: 0; color: var(--steel-300); }
+
+    @media (max-width: 640px) {
+      .terms > div { grid-template-columns: 1fr; gap: 6px; }
+    }
+
+    /* ---------- qualification ---------- */
+
+    .qual { list-style: none; margin: 0; padding: 0; }
+
+    .qual li {
+      position: relative;
+      padding: 12px 0 12px 26px;
+      border-bottom: 1px solid var(--border);
+      color: var(--steel-300);
+    }
+
+    /* A lit tick mark, not a bullet glyph. */
+    .qual li::before {
+      content: "";
+      position: absolute;
+      left: 2px;
+      top: 21px;
+      width: 9px;
+      height: 9px;
+      border-left: 1px solid var(--steel-500);
+      border-bottom: 1px solid var(--steel-500);
+      transform: rotate(-45deg);
+    }
+
+    .qual li.is-out { color: var(--steel-700); }
+    .qual li.is-out::before {
+      border-left-color: var(--maroon);
+      border-bottom-color: var(--maroon);
+      transform: rotate(-135deg);
+    }
+
+    /* ---------- proof ---------- */
+
+    .proof {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .proof > div { background: var(--bg); padding: var(--space-sm); }
+
+    .proof .figure {
+      display: block;
+      color: var(--white);
+      font-size: clamp(30px, 4vw, 44px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .proof .figure[data-placeholder] { color: var(--steel-700); }
+    .proof p { margin-top: 8px; }
+
+    /* ---------- disclaimer + footer ---------- */
+
+    .disclaimer {
+      padding: var(--space-md) 0;
+      border-top: 1px solid var(--border);
+      color: var(--steel-900);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .disclaimer p + p { margin-top: 10px; }
+
+    .vsl-footer {
+      padding: var(--space-sm) 0 var(--space-md);
+      border-top: 1px solid var(--border);
+    }
+
+    .vsl-footer .wrap {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* ---------- reduced motion ----------
+       There is no motion on this page to begin with. The guard is here so
+       that stays true if anything is added later. */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="vsl-header">
+    <div class="wrap">
+      <a class="logo" href="/" aria-label="Silver Bullet — home">
+        <img class="logo__img" src="silver-bullet-logo-alpha.png"
+             width="1708" height="140" alt="">
+      </a>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="vsl-hero">
+      <div class="wrap">
+        <h1>Marketing you pay for out of the upside.</h1>
+        <p class="lead">
+          Rev share or profit share. No retainer, no hourly billing, no invoice
+          for a deck. We take a cut of what we generate, which means we carry
+          the risk with you — and if it doesn't work, it costs you nothing.
+        </p>
+
+        <p class="watch-cue">Watch the 2-minute video below.</p>
+
+        <!-- ============================================================
+             VIDEO SLOT — replace this whole block with the embed.
+
+             Wistia / YouTube / Vimeo all drop straight in as an <iframe>;
+             the 16:9 box and the border are already handled by .vsl-video.
+             Delete the placeholder div when you do.
+             ============================================================ -->
+        <div class="vsl-video">
+          <div class="vsl-video__placeholder">
+            <strong>Video embed goes here</strong>
+            <span class="meta">Paste the Wistia / YouTube / Vimeo iframe into
+              this container in vsl.html</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-block">
+      <div class="wrap">
+        <!-- ============================================================
+             BOOKING LINK — not set yet.
+
+             Both CTAs on this page point here. Replace the href on BOTH
+             with the Calendly URL that routes to the closer. It is left
+             obviously broken on purpose: a plausible-looking wrong link
+             would fail silently on live traffic.
+             ============================================================ -->
+        <a class="cta" href="REPLACE_WITH_CALENDLY_URL">Book a call</a>
+        <p class="meta cta-note">Free, 30 minutes, no pitch deck.</p>
+      </div>
+    </div>
+
+    <section class="band">
+      <div class="wrap">
+        <h2 class="section-head">If you win, we win.</h2>
+        <dl class="terms">
+          <div>
+            <dt>Rev share</dt>
+            <dd>We take an agreed percentage of the revenue we can attribute to
+              the work. You keep the rest. No revenue, no invoice.</dd>
+          </div>
+          <div>
+            <dt>Profit share</dt>
+            <dd>For businesses where margin matters more than top line, we take
+              a share of the profit instead. Same principle, different line.</dd>
+          </div>
+          <div>
+            <dt>Skin in the game</dt>
+            <dd>Our fee moves with your results. That is the whole model — it is
+              why we turn work down, and why we say no to accounts we don't
+              think we can move.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="wrap">
+        <h2 class="section-head">Who this works for.</h2>
+        <ul class="qual">
+          <li>Service businesses doing up to $15M a year.</li>
+          <li>You have something that already sells — we scale it, we don't
+            invent it.</li>
+          <li>You can handle more customers than you currently get.</li>
+          <li>The owner is in the room when decisions get made.</li>
+          <li class="is-out">Pre-revenue, pre-product, or still deciding what
+            you sell.</li>
+          <li class="is-out">Looking for someone to run a retainer and report
+            on impressions.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         PROOF — placeholder figures.
+
+         These are deliberately empty. Do not ship invented numbers on a
+         page that makes performance claims; fill them with real, defensible
+         figures you can back up, or delete the section entirely.
+         ================================================================ -->
+    <section class="band">
+      <div class="wrap">
+        <h2 class="section-head">The record.</h2>
+        <div class="proof">
+          <div>
+            <span class="figure" data-placeholder>—</span>
+            <p class="meta">Revenue generated for clients</p>
+          </div>
+          <div>
+            <span class="figure" data-placeholder>—</span>
+            <p class="meta">Businesses worked with</p>
+          </div>
+          <div>
+            <span class="figure" data-placeholder>—</span>
+            <p class="meta">Average return on spend</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-block band">
+      <div class="wrap">
+        <h2 class="section-head" style="margin: 0 auto var(--space-sm);">
+          See if you qualify.</h2>
+        <a class="cta" href="REPLACE_WITH_CALENDLY_URL">Book a call</a>
+        <p class="meta cta-note">If we don't think we can move your numbers,
+          we'll tell you on the call.</p>
+      </div>
+    </div>
+
+    <!-- Earnings disclaimer. Standard for a performance-claims page.
+         Have someone qualified read this before it goes live. -->
+    <div class="disclaimer">
+      <div class="wrap">
+        <p>Results referenced on this page are not typical and are not a
+          guarantee of what your business will achieve. Performance depends on
+          your market, your offer, your operations and factors outside our
+          control.</p>
+        <p>Nothing on this page is a promise of specific revenue or profit.
+          Any working relationship is governed by a written agreement.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="vsl-footer">
+    <div class="wrap">
+      <span>&copy; 2026 Silver Bullet</span>
+      <span>Placeholder copy — replace before launch.</span>
+    </div>
+  </footer>
+
+</body>
+</html>

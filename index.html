@@ -194,17 +194,25 @@
 
     .logo {
       display: inline-block;
-      font-size: 19px;
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      color: var(--text-strong);
+      line-height: 0;
       text-decoration: none;
-      white-space: nowrap;
       will-change: transform;
     }
 
-    .logo__inner { display: inline-block; }
-    .logo__b { color: var(--steel-500); }
+    /* The wipe is applied to this wrapper, so it clips whatever sits inside —
+       it worked on text and it works on the image for the same reason. */
+    .logo__inner { display: block; }
+
+    .logo__img {
+      display: block;
+      /* A fixed width matters more than it looks. The intro measures this
+         element to work out how far it has to travel, and that measurement
+         happens before the image file has necessarily arrived. Without a
+         width reserved in CSS the box would still be empty at that moment
+         and the logo would fly to the wrong place. */
+      width: clamp(148px, 16vw, 196px);
+      height: auto;
+    }
 
     .nav {
       display: flex;
@@ -706,7 +714,15 @@
 <body>
   <header class="site-header">
     <div class="wrap">
-      <a class="logo" href="#top"><span class="logo__inner">Silver<span class="logo__b">&nbsp;Bullet</span></span></a>
+      <a class="logo" href="#top" aria-label="Silver Bullet — home">
+        <span class="logo__inner">
+          <!-- width/height are the file's real pixels: they give the browser
+               the aspect ratio so the header never jumps as it loads.
+               alt is empty because the link above already carries the name. -->
+          <img class="logo__img" src="silver-bullet-logo-alpha.png"
+               width="1708" height="140" alt="">
+        </span>
+      </a>
       <nav class="nav">
         <a class="nav-link" href="#how">How it works</a>
         <a class="nav-link" href="#proof">Proof</a>

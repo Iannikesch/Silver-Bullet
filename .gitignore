@@ -18,3 +18,5 @@ sandbox.html
 .playwright-mcp/
 chrome-*.png
 light-*.png
+ticker-*.png
+vsl-*.png
