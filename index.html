@@ -50,7 +50,7 @@
          like the bullet's pace, and a short ride leaves the deceleration
          nothing to be felt across — measured, 144px read as a flat crawl. */
       --ticker-ride: clamp(280px, 42vw, 620px);
-      --ticker-rate: 52s;   /* one full loop of the slogan set */
+      --ticker-rate: 62s;   /* one full loop. Slow on purpose. */
 
       /* Set by JS: how far left the logo must travel from centre */
       --logo-shift: 0px;
@@ -253,8 +253,51 @@
     section { padding: var(--space-xl) 0; }
 
     .hero {
-      padding-top: var(--space-lg);
+      padding-top: var(--space-md);
       padding-bottom: var(--space-xl);
+    }
+
+    /* The VSL. Separation is a lit top edge, not a drop shadow — the same
+       move as .panel in tokens.css. */
+    .hero__video {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      margin-bottom: var(--space-md);
+      background: var(--bg-raised);
+      border-top: 1px solid var(--border-lit);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--ink);
+      overflow: hidden;
+    }
+
+    .hero__video > iframe,
+    .hero__video > video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* Visible until a real embed replaces it. Loud on purpose. */
+    .hero__video-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 24px;
+      text-align: center;
+      color: var(--steel-700);
+    }
+
+    .hero__video-placeholder strong {
+      color: var(--steel-100);
+      font-size: 18px;
+      letter-spacing: -0.02em;
     }
 
     .hero h1 { max-width: 15ch; }
@@ -370,10 +413,41 @@
 
     .ticker {
       position: relative;
-      overflow: hidden;
+      display: flex;
+      align-items: stretch;
       border-bottom: 1px solid var(--border);
       background: var(--bg);
     }
+
+    /* Clipping moved off .ticker and onto this, so the pinned CTA is a
+       sibling of the scrolling area rather than something inside it that
+       would be carried away by the marquee. */
+    .ticker__viewport {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    /* The one persistent conversion path on the page. Amber, and the only
+       amber in this band — see the accent rule in DESIGN.md. */
+    .ticker__cta {
+      flex: none;
+      display: flex;
+      align-items: center;
+      padding: 0 clamp(16px, 2.2vw, 28px);
+      border-left: 1px solid var(--border);
+      background: var(--accent);
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background-color .18s ease;
+    }
+
+    .ticker__cta:hover  { background: var(--accent-hover); }
+    .ticker__cta:active { background: var(--accent-active); }
 
     .ticker__travel { will-change: transform; }
 
@@ -617,6 +691,13 @@
       animation: name-wipe .26s var(--ease-settle) var(--t-name) both;
     }
 
+    /* The banner CTA arrives on the nav's beat rather than riding out with
+       the bullet — it is pinned, so travelling would read as a mistake. */
+    body.is-intro .ticker__cta {
+      animation: nav-in .40s ease both;
+      animation-delay: calc(var(--t-nav) + .24s);
+    }
+
     body.is-intro .nav > * {
       animation: nav-in .40s ease both;
       animation-delay: var(--t-nav);
@@ -739,36 +820,35 @@
        <main>, which the intro fades in at 1.80s — inside it, the strip
        could not fade in alongside the bullet at 0.10s. -->
   <aside class="ticker" aria-label="How we work">
-    <div class="ticker__travel">
-      <div class="ticker__track">
-        <ul class="ticker__set">
-          <li class="is-hook">Rev share or profit share.</li>
-          <li class="is-hook">Skin in the game.</li>
-          <li>Paid on performance.</li>
-          <li>No revenue, no invoice.</li>
-          <li>We eat what we kill.</li>
-          <li class="is-hook">Rev share or profit share.</li>
-          <li>Revenue or nothing.</li>
-          <li>One shot. One bill.</li>
-          <li>Fire us for free.</li>
-          <li>No retainer. No deck. No excuses.</li>
-        </ul>
-        <!-- Duplicate set is what makes the loop seamless. Hidden from the
-             accessibility tree so the slogans are not announced twice. -->
-        <ul class="ticker__set" aria-hidden="true">
-          <li class="is-hook">Rev share or profit share.</li>
-          <li class="is-hook">Skin in the game.</li>
-          <li>Paid on performance.</li>
-          <li>No revenue, no invoice.</li>
-          <li>We eat what we kill.</li>
-          <li class="is-hook">Rev share or profit share.</li>
-          <li>Revenue or nothing.</li>
-          <li>One shot. One bill.</li>
-          <li>Fire us for free.</li>
-          <li>No retainer. No deck. No excuses.</li>
-        </ul>
+    <div class="ticker__viewport">
+      <div class="ticker__travel">
+        <div class="ticker__track">
+          <ul class="ticker__set">
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>No revenue, no invoice.</li>
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>We eat what we kill.</li>
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>Paid on performance.</li>
+          </ul>
+          <!-- Duplicate set is what makes the loop seamless. Hidden from the
+               accessibility tree so the hook is not announced twice. -->
+          <ul class="ticker__set" aria-hidden="true">
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>No revenue, no invoice.</li>
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>We eat what we kill.</li>
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>Paid on performance.</li>
+          </ul>
+        </div>
       </div>
     </div>
+    <!-- Pinned outside the scrolling viewport, so it never drifts off. The
+         href is the one place a booking link needs to go when Calendly
+         exists; until then it drops to the contact section rather than
+         being a dead link on the front door. -->
+    <a class="ticker__cta" href="#contact">Book a call</a>
   </aside>
 
   <!-- The intro. Removed from the DOM once it has run. -->
@@ -785,6 +865,20 @@
   <main id="top">
 
     <section class="hero wrap">
+      <!-- ============================================================
+           VSL SLOT — the video goes here.
+
+           Wistia / YouTube / Vimeo iframes drop straight into this
+           container; the 16:9 box and the lit top edge are handled by
+           .hero__video. Delete the placeholder div when the embed lands.
+           ============================================================ -->
+      <div class="hero__video">
+        <div class="hero__video-placeholder">
+          <strong>VSL goes here</strong>
+          <span class="meta">Paste the video embed into .hero__video in index.html</span>
+        </div>
+      </div>
+
       <h1 data-chrome="headline">We only get paid when you do.</h1>
       <p class="lead">
         Silver Bullet is a performance-based marketing firm. No retainers, no

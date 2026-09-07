@@ -124,6 +124,30 @@ One orchestrated moment, if any. Motion that answers a click — opening, expand
 confirming — is welcome because it shows what changed. Ambient motion is not.
 Respect `prefers-reduced-motion`.
 
+Motion that answers a *pointer* counts as answering input. The reactive chrome on
+the hero headline and the bullet never moves on its own — only when the visitor
+does — so it is in scope. Its scroll-scrubbed half is bound to scroll position
+rather than to a clock: it is still when you are, and it reverses when you go
+back up.
+
+### The one ambient exception: the hook banner
+
+`.ticker`, the strip under the nav rule, runs a perpetual marquee. It moves with
+no input at all, which is the thing this section otherwise rules out. It is
+allowed because the hook — rev share or profit share, skin in the game — is the
+entire pitch, and the strip is the page's persistent conversion path rather than
+decoration.
+
+The terms of the exception, so it does not spread:
+
+- It is the **only** thing on the site permitted to move without input.
+- It drifts at roughly 30px/s. It is a slow read, not a scroll.
+- Hover or keyboard focus stops it, because reading beats drifting.
+- It stops dead under `prefers-reduced-motion`, and the slogans stay readable.
+
+A second ambient element cancels this one, exactly the way a second amber element
+cancels the first.
+
 ## Floor
 
 Responsive to mobile. Visible keyboard focus on every interactive element. Contrast
