@@ -1,0 +1,76 @@
+/* Silver Bullet Agency — color tokens
+   Derived from reference art. Core rule: no pure black, no pure white.
+   Every neutral is pulled toward cyan. Warmth appears once, as accent. */
+
+:root {
+  /* ---- Base: the dark. ~43% of the reference frame. ---- */
+  --ink:            #010205;  /* deepest — reserve for linework, dividers on light */
+  --bg:             #0A0D0E;  /* page background */
+  --bg-raised:      #161A1B;  /* section separation without a border */
+  --charcoal:       #202222;  /* input fields, inactive states */
+  --slate:          #323738;  /* hairline borders, dividers */
+  --grey:           #4A4C4D;  /* rim-light edge, disabled text */
+
+  /* ---- Steel: the silver. ~35%. This is your text ramp. ---- */
+  --steel-900:      #50636E;  /* muted / tertiary text */
+  --steel-700:      #6B7C86;  /* captions, meta */
+  --steel-500:      #83979F;  /* secondary text */
+  --steel-300:      #9AAFB8;  /* BODY TEXT — default */
+  --steel-100:      #B4CAD2;  /* emphasis within body */
+  --steel-050:      #D4E5EA;  /* subheads */
+  --white:          #E8F1F2;  /* headlines only. Ration this. */
+
+  /* ---- Warm: the counterweight. ~22%. ---- */
+  --taupe-dark:     #6F685D;
+  --taupe:          #958978;
+  --sand:           #B0A795;
+  --amber:          #DFC38C;  /* PRIMARY ACCENT — CTA, active state */
+  --gold:           #EDD997;  /* accent hover / peak highlight */
+
+  /* ---- Saturated. 7% of the frame. Treat as rare. ---- */
+  --amber-burnt:    #AB804F;  /* accent pressed state */
+  --petrol:         #2C4557;  /* cool depth behind steel elements */
+  --magenta:        #844C76;  /* <1% usage. Error, or a single detail. */
+  --magenta-hot:    #A76D96;
+  --maroon:         #562C38;  /* deep warm shadow */
+
+  /* ---- Semantic ---- */
+  --text:           var(--steel-300);
+  --text-strong:    var(--white);
+  --text-muted:     var(--steel-700);
+  --border:         var(--slate);
+  --border-lit:     var(--grey);
+  --accent:         var(--amber);
+  --accent-hover:   var(--gold);
+  --accent-active:  var(--amber-burnt);
+}
+
+/* ---- The rim-light move ----
+   Separation comes from a lit top edge, not a fill or a drop shadow.
+   Light falls from above; the bottom edge disappears into the page. */
+.panel {
+  background: var(--bg-raised);
+  border-top: 1px solid var(--border-lit);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--ink);
+}
+
+/* ---- Accent discipline ----
+   One amber element per viewport. If a second one appears,
+   the first stops working. */
+.cta {
+  background: var(--accent);
+  color: var(--ink);
+  border: none;
+}
+.cta:hover  { background: var(--accent-hover); }
+.cta:active { background: var(--accent-active); }
+
+/* Secondary actions stay in steel. They do not get warmth. */
+.cta-secondary {
+  background: transparent;
+  color: var(--steel-100);
+  border: 1px solid var(--border-lit);
+}
+.cta-secondary:hover { color: var(--white); border-color: var(--steel-700); }

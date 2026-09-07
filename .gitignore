@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# R
+.Rhistory
+
+# Editor / OS noise
+Thumbs.db
+*.swp

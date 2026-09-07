@@ -3,230 +3,284 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Silver Bullet — Marketing Agency</title>
-  <meta name="description" content="Silver Bullet is a marketing agency that turns attention into revenue. Strategy, brand, performance marketing, and web.">
+  <title>Silver Bullet — Performance Marketing</title>
+  <meta name="description" content="Silver Bullet is a performance-based marketing firm. We get paid when you do — rev share and profit share, not retainers.">
+
+  <link rel="stylesheet" href="tokens.css">
 
   <style>
-    :root {
-      --bg: #ffffff;
-      --bg-alt: #f6f7f9;
-      --text: #14171f;
-      --muted: #5b6472;
-      --line: #e3e6eb;
-      --accent: #2f6df6;
-      --accent-text: #ffffff;
-      --radius: 10px;
-      --wrap: 1080px;
-    }
+    /* ==========================================================
+       Silver Bullet — page styles
+       Colors come from tokens.css. No raw hex in here.
+       ========================================================== */
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0f1218;
-        --bg-alt: #161b24;
-        --text: #eef1f6;
-        --muted: #a3adbd;
-        --line: #262d3a;
-        --accent: #5b8cff;
-        --accent-text: #0f1218;
-      }
+    :root {
+      /* Layout */
+      --nav-h:      72px;
+      --wrap:       1180px;
+      --gutter:     clamp(20px, 4vw, 40px);
+
+      /* Vertical rhythm ladder */
+      --space-xl:   clamp(120px, 14vw, 200px);
+      --space-lg:   clamp(88px, 10vw, 144px);
+      --space-md:   clamp(56px, 6vw, 88px);
+      --space-sm:   clamp(28px, 3vw, 40px);
+
+      /* Intro timeline — every value the animation depends on */
+      --t-fire:     0.10s;  /* muzzle blip */
+      --t-fly:      1.00s;  /* bullet crosses the screen */
+      --t-glint:    0.55s;  /* light catches it, mid-screen */
+      --t-name:     0.60s;  /* wordmark wipes in */
+      --t-shift:    1.15s;  /* logo slides to the left */
+      --t-nav:      1.50s;  /* nav items arrive */
+      --t-page:     1.80s;  /* page fades up */
+
+      --ease-settle: cubic-bezier(.25, 1, .5, 1);
+
+      /* Set by JS: how far left the logo must travel from centre */
+      --logo-shift: 0px;
     }
 
     * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
       background: var(--bg);
       color: var(--text);
-      font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
     .wrap {
       width: 100%;
       max-width: var(--wrap);
       margin: 0 auto;
-      padding: 0 24px;
+      padding: 0 var(--gutter);
     }
 
     a { color: inherit; }
 
-    /* ---------- header ---------- */
-    header {
-      border-bottom: 1px solid var(--line);
-      position: sticky;
-      top: 0;
-      background: var(--bg);
-      z-index: 10;
+    :where(a, button, input, textarea):focus-visible {
+      outline: 2px solid var(--amber);
+      outline-offset: 3px;
     }
 
-    .bar {
+    /* ---------- type ---------- */
+
+    h1, h2, h3 {
+      color: var(--text-strong);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(40px, 7vw, 86px);
+      line-height: 0.98;
+    }
+
+    h2 {
+      font-size: clamp(28px, 4vw, 46px);
+      line-height: 1.02;
+    }
+
+    h3 {
+      font-size: 18px;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+
+    p { margin: 0; }
+
+    .lead {
+      font-size: clamp(17px, 1.5vw, 20px);
+      line-height: 1.6;
+      color: var(--steel-300);
+      max-width: 62ch;
+    }
+
+    .meta {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* ---------- header ---------- */
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      height: var(--nav-h);
+      background: var(--bg);
+    }
+
+    .site-header .wrap {
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 24px;
-      padding: 18px 0;
+    }
+
+    /* The line the bullet leaves behind. It is the nav separator. */
+    .site-header__rule {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background: var(--border);
+      transform-origin: left center;
     }
 
     .logo {
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      font-size: 18px;
-      text-decoration: none;
-    }
-
-    .logo span { color: var(--accent); }
-
-    nav {
-      display: flex;
-      gap: 28px;
-      align-items: center;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: var(--muted);
-      font-size: 15px;
-    }
-
-    nav a:hover { color: var(--text); }
-
-    @media (max-width: 720px) {
-      nav .nav-link { display: none; }
-    }
-
-    .btn {
       display: inline-block;
-      background: var(--accent);
-      color: var(--accent-text);
-      padding: 11px 20px;
-      border-radius: var(--radius);
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--text-strong);
       text-decoration: none;
-      font-weight: 600;
-      font-size: 15px;
       white-space: nowrap;
+      will-change: transform;
     }
 
-    .btn:hover { opacity: 0.9; }
+    .logo__inner { display: inline-block; }
+    .logo__b { color: var(--steel-500); }
 
-    .btn-ghost {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--line);
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: clamp(18px, 2.5vw, 34px);
     }
 
-    /* ---------- hero ---------- */
+    .nav a {
+      font-size: 15px;
+      color: var(--steel-500);
+      text-decoration: none;
+      transition: color .18s ease;
+    }
+
+    .nav a:hover { color: var(--white); }
+
+    @media (max-width: 760px) {
+      .nav .nav-link { display: none; }
+    }
+
+    /* ---------- buttons (base classes live in tokens.css) ---------- */
+
+    .cta, .cta-secondary {
+      display: inline-block;
+      padding: 13px 22px;
+      font: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color .18s ease, color .18s ease, border-color .18s ease;
+    }
+
+    .nav .cta-secondary { padding: 9px 16px; font-size: 14px; }
+
+    /* ---------- sections ---------- */
+
+    section { padding: var(--space-xl) 0; }
+
     .hero {
-      padding: 96px 0 80px;
+      padding-top: var(--space-lg);
+      padding-bottom: var(--space-xl);
     }
 
-    .hero h1 {
-      font-size: clamp(34px, 6vw, 60px);
-      line-height: 1.08;
-      letter-spacing: -0.03em;
-      margin: 0 0 20px;
-      max-width: 16ch;
-    }
+    .hero h1 { max-width: 15ch; }
 
-    .hero p {
-      font-size: clamp(17px, 2.2vw, 20px);
-      color: var(--muted);
-      margin: 0 0 32px;
-      max-width: 56ch;
-    }
+    .hero .lead { margin-top: var(--space-sm); }
 
     .cta-row {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
+      margin-top: var(--space-md);
     }
 
-    /* ---------- sections ---------- */
-    section { padding: 72px 0; }
+    .section-head { max-width: 62ch; margin-bottom: var(--space-md); }
+    .section-head .lead { margin-top: 20px; }
 
-    .alt { background: var(--bg-alt); }
-
-    .eyebrow {
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--accent);
-      margin: 0 0 12px;
-    }
-
-    h2 {
-      font-size: clamp(26px, 3.6vw, 36px);
-      letter-spacing: -0.02em;
-      margin: 0 0 16px;
-    }
-
-    .lead {
-      color: var(--muted);
-      max-width: 60ch;
-      margin: 0 0 40px;
-    }
-
+    /* Explicit columns, not auto-fit: both grids hold 3 or 6 cards, so a
+       fixed 3 / 2 / 1 ladder never leaves an empty cell showing the
+       hairline background as a solid block. */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
     }
 
-    .card {
-      background: var(--bg);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 24px;
+    @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+
+    /* Cards are separated by lit edges, not fills or shadows. */
+    .grid .panel {
+      border: none;
+      border-top: 1px solid var(--border-lit);
+      padding: var(--space-sm) 28px calc(var(--space-sm) + 8px);
     }
 
-    .card h3 {
-      margin: 0 0 8px;
-      font-size: 17px;
-    }
+    .panel h3 + p { margin-top: 12px; }
+    .panel p { font-size: 15px; color: var(--steel-500); }
 
-    .card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 15px;
+    .index {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--steel-900);
+      margin-bottom: 14px;
     }
 
     /* ---------- stats ---------- */
+
     .stats {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 20px;
-      border-top: 1px solid var(--line);
-      padding-top: 40px;
-      margin-top: 8px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--space-sm);
+      margin-top: var(--space-lg);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--border);
     }
 
     .stat .num {
-      font-size: clamp(28px, 4vw, 38px);
-      font-weight: 700;
-      letter-spacing: -0.02em;
       display: block;
+      font-size: clamp(30px, 3.6vw, 44px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--steel-050);
     }
 
     .stat .label {
-      color: var(--muted);
+      display: block;
+      margin-top: 10px;
       font-size: 14px;
+      color: var(--text-muted);
     }
 
     /* ---------- contact ---------- */
-    .contact-box {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 40px;
-      text-align: center;
-      background: var(--bg);
+
+    .contact {
+      border-top: 1px solid var(--border-lit);
+      background: var(--bg-raised);
     }
 
+    .contact h2 { max-width: 18ch; }
+    .contact .lead { margin-top: 20px; }
+
     /* ---------- footer ---------- */
-    footer {
-      border-top: 1px solid var(--line);
-      padding: 32px 0;
-      color: var(--muted);
-      font-size: 14px;
+
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: var(--space-md) 0;
     }
 
     .foot {
@@ -234,158 +288,454 @@
       justify-content: space-between;
       gap: 16px;
       flex-wrap: wrap;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================
+       INTRO — the bullet
+       Base state below is the FINISHED state. The animation only
+       runs while <body> carries .is-intro, which JS adds. No JS,
+       or reduced motion, and the page is simply already correct.
+       ========================================================== */
+
+    .intro-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      pointer-events: none;
+      display: none;
+      overflow: hidden;
+    }
+
+    body.is-intro .intro-layer { display: block; }
+
+    /* -- the muzzle blip: two hard bars crossing. no blur. -- */
+    .blip {
+      position: absolute;
+      top: var(--nav-h);
+      left: 0;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
+    .blip::before,
+    .blip::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      background: var(--white);
+      transform: translate(-50%, -50%);
+    }
+
+    .blip::before { width: 60px; height: 1px; }
+    .blip::after  { width: 1px;  height: 18px; }
+
+    /* -- the bullet: a tapered steel shard -- */
+    .bullet {
+      position: absolute;
+      top: calc(var(--nav-h) - 4.5px);
+      left: 0;
+      width: 78px;
+      height: 9px;
+      transform: translateX(-160px);
+      will-change: transform;
+    }
+
+    .bullet__body,
+    .bullet__glint {
+      position: absolute;
+      inset: 0;
+      clip-path: polygon(100% 50%, 76% 0, 0 0, 0 100%, 76% 100%);
+    }
+
+    /* Cylindrical metal: dark top, hot band at the centre line, dark base. */
+    .bullet__body {
+      background: linear-gradient(
+        to bottom,
+        var(--slate)     0%,
+        var(--grey)      16%,
+        var(--steel-050) 38%,
+        var(--white)     50%,
+        var(--steel-100) 60%,
+        var(--steel-900) 82%,
+        var(--ink)      100%
+      );
+    }
+
+    /* The airstream behind it. */
+    .bullet__wake {
+      position: absolute;
+      right: 88%;
+      top: 50%;
+      width: 260px;
+      height: 2px;
+      transform: translateY(-50%);
+      background: linear-gradient(
+        to right,
+        color-mix(in srgb, var(--steel-500) 0%, transparent),
+        color-mix(in srgb, var(--steel-500) 55%, transparent) 70%,
+        var(--steel-100)
+      );
+    }
+
+    /* Friction heat building at the nose. */
+    .bullet__heat {
+      position: absolute;
+      right: -1px;
+      top: 50%;
+      width: 38px;
+      height: 9px;
+      transform: translateY(-50%);
+      clip-path: polygon(100% 50%, 44% 0, 0 22%, 0 78%, 44% 100%);
+      background: linear-gradient(
+        to left,
+        var(--gold)        0%,
+        var(--amber)      30%,
+        var(--amber-burnt) 58%,
+        color-mix(in srgb, var(--amber-burnt) 0%, transparent) 100%
+      );
+      opacity: 0;
+    }
+
+    /* Hard specular band — a sharp edge of light, not a bloom. */
+    .bullet__glint {
+      background: linear-gradient(
+        112deg,
+        color-mix(in srgb, var(--white) 0%, transparent) 42%,
+        var(--white) 47%,
+        var(--gold)  53%,
+        color-mix(in srgb, var(--gold) 0%, transparent) 58%
+      );
+      opacity: 0;
+    }
+
+    /* ---------- intro: the animations ---------- */
+
+    body.is-intro .site-header__rule {
+      animation: rule-draw var(--t-fly) linear var(--t-fire) both;
+    }
+
+    body.is-intro .blip {
+      animation: blip .18s ease-out var(--t-fire) both;
+    }
+
+    body.is-intro .bullet {
+      animation: fly var(--t-fly) linear var(--t-fire) both;
+    }
+
+    body.is-intro .bullet__heat {
+      animation: heat .60s ease-in .34s both;
+    }
+
+    body.is-intro .bullet__glint {
+      animation: glint .2s linear var(--t-glint) both;
+    }
+
+    body.is-intro .logo {
+      animation: logo-home .70s var(--ease-settle) var(--t-shift) both;
+    }
+
+    body.is-intro .logo__inner {
+      animation: name-wipe .26s var(--ease-settle) var(--t-name) both;
+    }
+
+    body.is-intro .nav > * {
+      animation: nav-in .40s ease both;
+      animation-delay: var(--t-nav);
+    }
+    body.is-intro .nav > *:nth-child(2) { animation-delay: calc(var(--t-nav) + .06s); }
+    body.is-intro .nav > *:nth-child(3) { animation-delay: calc(var(--t-nav) + .12s); }
+    body.is-intro .nav > *:nth-child(4) { animation-delay: calc(var(--t-nav) + .18s); }
+
+    body.is-intro main,
+    body.is-intro .site-footer {
+      animation: page-in .55s var(--ease-settle) var(--t-page) both;
+    }
+
+    @keyframes rule-draw {
+      from { transform: scaleX(0); }
+      to   { transform: scaleX(1); }
+    }
+
+    @keyframes blip {
+      0%   { opacity: 0; transform: scale(.25); }
+      22%  { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.6); }
+    }
+
+    @keyframes fly {
+      from { transform: translateX(-160px); }
+      to   { transform: translateX(calc(100vw + 160px)); }
+    }
+
+    @keyframes heat {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes glint {
+      0%   { opacity: 0; transform: translateX(-70%); }
+      30%  { opacity: 1; }
+      100% { opacity: 0; transform: translateX(70%); }
+    }
+
+    /* Logo starts centred on screen, then travels to its resting place. */
+    @keyframes logo-home {
+      from { transform: translateX(var(--logo-shift)); }
+      to   { transform: translateX(0); }
+    }
+
+    /* The name is wiped in left-to-right, in the bullet's direction. */
+    @keyframes name-wipe {
+      from { clip-path: inset(0 100% 0 0); }
+      to   { clip-path: inset(0 0 0 0); }
+    }
+
+    @keyframes nav-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes page-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ---------- reduced motion: no intro at all ---------- */
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .intro-layer { display: none !important; }
+      body.is-intro *,
+      body.is-intro *::before,
+      body.is-intro *::after {
+        animation: none !important;
+        transition: none !important;
+      }
     }
   </style>
 </head>
 
 <body>
-  <header>
-    <div class="wrap bar">
-      <a class="logo" href="#top">Silver<span>&nbsp;Bullet</span></a>
-      <nav>
-        <a class="nav-link" href="#services">Services</a>
-        <a class="nav-link" href="#work">Approach</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="logo" href="#top"><span class="logo__inner">Silver<span class="logo__b">&nbsp;Bullet</span></span></a>
+      <nav class="nav">
+        <a class="nav-link" href="#how">How it works</a>
+        <a class="nav-link" href="#proof">Proof</a>
         <a class="nav-link" href="#about">About</a>
-        <a class="btn" href="#contact">Get in touch</a>
+        <a class="cta-secondary" href="#contact">Talk to us</a>
       </nav>
     </div>
+    <div class="site-header__rule"></div>
   </header>
 
+  <!-- The intro. Removed from the DOM once it has run. -->
+  <div class="intro-layer" aria-hidden="true">
+    <div class="blip"></div>
+    <div class="bullet">
+      <span class="bullet__wake"></span>
+      <span class="bullet__body"></span>
+      <span class="bullet__glint"></span>
+      <span class="bullet__heat"></span>
+    </div>
+  </div>
+
   <main id="top">
-    <!-- Hero -->
-    <div class="wrap hero">
-      <p class="eyebrow">Marketing Agency</p>
-      <h1>Marketing that actually moves the number.</h1>
-      <p>
-        We build brands people remember and campaigns that pay for themselves.
-        Strategy, creative, and performance under one roof — no handoffs, no guesswork.
+
+    <section class="hero wrap">
+      <h1>We only get paid when you do.</h1>
+      <p class="lead">
+        Silver Bullet is a performance-based marketing firm. No retainers, no
+        hourly billing, no invoice for a deck. We take a share of the revenue we
+        generate — which means if it doesn't work, we don't get paid.
       </p>
       <div class="cta-row">
-        <a class="btn" href="#contact">Book a consultation</a>
-        <a class="btn btn-ghost" href="#services">See what we do</a>
+        <a class="cta" href="#contact">See if you qualify</a>
+        <a class="cta-secondary" href="#how">How it works</a>
       </div>
-    </div>
+    </section>
 
-    <!-- Services -->
-    <section id="services" class="alt">
+    <section id="how">
       <div class="wrap">
-        <p class="eyebrow">Services</p>
-        <h2>One team, the whole funnel</h2>
-        <p class="lead">
-          Most agencies hand you a deck. We own the outcome from first impression
-          to closed deal.
-        </p>
+        <div class="section-head">
+          <h2>How the arrangement works</h2>
+          <p class="lead">
+            Three steps, no surprises. If we can't find enough upside to make the
+            deal worth doing, we'll tell you that in the first conversation.
+          </p>
+        </div>
 
         <div class="grid">
-          <div class="card">
-            <h3>Brand &amp; Positioning</h3>
-            <p>Identity, messaging, and the story that makes you the obvious choice.</p>
-          </div>
-          <div class="card">
-            <h3>Performance Marketing</h3>
-            <p>Paid search and social managed to pipeline and ROAS, not impressions.</p>
-          </div>
-          <div class="card">
-            <h3>Web &amp; Landing Pages</h3>
-            <p>Fast, accessible sites built to convert the traffic you already pay for.</p>
-          </div>
-          <div class="card">
-            <h3>SEO &amp; Content</h3>
-            <p>Durable organic growth from content that answers real buying questions.</p>
-          </div>
-          <div class="card">
-            <h3>Creative Production</h3>
-            <p>Photo, video, and ad creative built for the platform it runs on.</p>
-          </div>
-          <div class="card">
-            <h3>Analytics &amp; Reporting</h3>
-            <p>Clean tracking and plain-English reporting you can act on.</p>
-          </div>
+          <article class="panel">
+            <span class="index">01</span>
+            <h3>We audit what you have</h3>
+            <p>Your numbers, your funnel, your margins. We find where money is leaking and what it would take to fix it.</p>
+          </article>
+          <article class="panel">
+            <span class="index">02</span>
+            <h3>We agree on the split</h3>
+            <p>A share of revenue or profit above an agreed baseline. Written down, capped, and reviewed on a schedule.</p>
+          </article>
+          <article class="panel">
+            <span class="index">03</span>
+            <h3>We go build</h3>
+            <p>Campaigns, pages, creative, tracking. You see the same dashboard we do, and our cut is calculated off it.</p>
+          </article>
         </div>
       </div>
     </section>
 
-    <!-- Approach -->
-    <section id="work">
+    <section id="proof">
       <div class="wrap">
-        <p class="eyebrow">Approach</p>
-        <h2>No silver bullets. Just a sharper process.</h2>
-        <p class="lead">
-          The name is a joke about the thing that doesn't exist. What does exist
-          is disciplined work, run in short loops, measured honestly.
-        </p>
+        <div class="section-head">
+          <h2>What we actually do</h2>
+          <p class="lead">
+            Everything below is in service of one number: revenue you would not
+            have had otherwise.
+          </p>
+        </div>
 
         <div class="grid">
-          <div class="card">
-            <h3>01 &nbsp;Diagnose</h3>
-            <p>We audit the funnel and find where attention and money are leaking.</p>
-          </div>
-          <div class="card">
-            <h3>02 &nbsp;Build</h3>
-            <p>Creative, pages, and campaigns shipped in weeks, not quarters.</p>
-          </div>
-          <div class="card">
-            <h3>03 &nbsp;Compound</h3>
-            <p>We keep what works, cut what doesn't, and reinvest the difference.</p>
-          </div>
+          <article class="panel">
+            <h3>Paid acquisition</h3>
+            <p>Search and social managed to pipeline and profit, not impressions.</p>
+          </article>
+          <article class="panel">
+            <h3>Landing pages</h3>
+            <p>Fast pages built to convert the traffic you are already paying for.</p>
+          </article>
+          <article class="panel">
+            <h3>Offer and positioning</h3>
+            <p>Often the cheapest fix. What you sell and how you frame it beats ad spend.</p>
+          </article>
+          <article class="panel">
+            <h3>Tracking and attribution</h3>
+            <p>Clean measurement. Our compensation depends on it being honest.</p>
+          </article>
+          <article class="panel">
+            <h3>Creative production</h3>
+            <p>Photo, video and ad creative built for the platform it runs on.</p>
+          </article>
+          <article class="panel">
+            <h3>Lifecycle and retention</h3>
+            <p>Email and follow-up, so acquisition spend compounds instead of leaking.</p>
+          </article>
         </div>
 
         <div class="stats">
           <div class="stat">
             <span class="num">Placeholder</span>
-            <span class="label">Avg. return on ad spend</span>
+            <span class="label">Average client revenue lift</span>
           </div>
           <div class="stat">
             <span class="num">Placeholder</span>
-            <span class="label">Clients served</span>
+            <span class="label">Clients on performance deals</span>
           </div>
           <div class="stat">
             <span class="num">Placeholder</span>
-            <span class="label">Years in business</span>
+            <span class="label">Years running this model</span>
           </div>
           <div class="stat">
             <span class="num">Placeholder</span>
-            <span class="label">Client retention</span>
+            <span class="label">Average engagement length</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- About -->
-    <section id="about" class="alt">
+    <section id="about">
       <div class="wrap">
-        <p class="eyebrow">About</p>
-        <h2>Small team. Senior people. Your account.</h2>
-        <p class="lead">
-          Silver Bullet is a marketing agency for companies that are done paying
-          for activity and want results. The people you meet in the pitch are the
-          people doing the work — replace this copy with your own story, team, and
-          proof points.
-        </p>
-      </div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact">
-      <div class="wrap">
-        <div class="contact-box">
-          <p class="eyebrow">Contact</p>
-          <h2>Let's talk about your growth.</h2>
-          <p class="lead" style="margin: 0 auto 28px;">
-            Tell us what you're trying to grow and we'll tell you, honestly,
-            whether we can help.
+        <div class="section-head">
+          <h2>Who you would be working with</h2>
+          <p class="lead">
+            Silver Bullet works with service businesses doing under $15M a year.
+            Small team, senior people, and the person you meet in the first call
+            is the person doing the work. Replace this with the real story before
+            launch.
           </p>
-          <a class="btn" href="mailto:hello@example.com">hello@example.com</a>
         </div>
       </div>
     </section>
+
+    <section id="contact" class="contact">
+      <div class="wrap">
+        <h2>Tell us what you're trying to grow.</h2>
+        <p class="lead">
+          We'll look at your numbers and tell you honestly whether a performance
+          deal makes sense. If it doesn't, we'll say so.
+        </p>
+        <div class="cta-row">
+          <a class="cta" href="mailto:hello@example.com">hello@example.com</a>
+        </div>
+      </div>
+    </section>
+
   </main>
 
-  <footer>
+  <footer class="site-footer">
     <div class="wrap foot">
-      <span>&copy; 2026 Silver Bullet. All rights reserved.</span>
-      <span>Placeholder site — replace copy and contact details before launch.</span>
+      <span>&copy; 2026 Silver Bullet</span>
+      <span>Placeholder copy — replace before launch.</span>
     </div>
   </footer>
+
+  <script>
+  (function () {
+    'use strict';
+
+    /* Flip to true to show the intro only once per browser session.
+       Left false so it replays on every reload while we're tuning it. */
+    var ONCE_PER_SESSION = false;
+
+    var TOTAL_MS = 2400;         // full sequence, including the page fade
+    var KEY = 'sb-intro-seen';
+
+    var body = document.body;
+    var layer = document.querySelector('.intro-layer');
+    var logo = document.querySelector('.logo');
+
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var seen = ONCE_PER_SESSION && sessionStorage.getItem(KEY) === '1';
+
+    if (reduced || seen || !layer || !logo) {
+      if (layer) layer.remove();
+      return;
+    }
+
+    /* Measure the logo where it naturally sits, then work out how far right
+       it would have to start to be dead centre. The animation runs that in
+       reverse: centre -> resting place. */
+    var box = logo.getBoundingClientRect();
+    var shift = (window.innerWidth / 2) - (box.left + box.width / 2);
+    document.documentElement.style.setProperty('--logo-shift', shift + 'px');
+
+    var done = false;
+    function finish() {
+      if (done) return;
+      done = true;
+      body.classList.remove('is-intro');
+      if (layer) layer.remove();
+      window.removeEventListener('wheel', finish);
+      window.removeEventListener('touchstart', finish);
+      window.removeEventListener('keydown', finish);
+      window.removeEventListener('pointerdown', finish);
+    }
+
+    body.classList.add('is-intro');
+    if (ONCE_PER_SESSION) sessionStorage.setItem(KEY, '1');
+
+    /* Any sign of impatience skips straight to the finished state. */
+    window.addEventListener('wheel', finish, { passive: true, once: true });
+    window.addEventListener('touchstart', finish, { passive: true, once: true });
+    window.addEventListener('keydown', finish, { once: true });
+    window.addEventListener('pointerdown', finish, { once: true });
+
+    setTimeout(finish, TOTAL_MS);
+  })();
+  </script>
 </body>
 </html>
