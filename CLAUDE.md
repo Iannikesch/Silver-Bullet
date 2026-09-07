@@ -74,7 +74,10 @@ This moves on its own, which DESIGN.md otherwise rules out. That exception is
 deliberate and recorded there — do not "fix" it, and do not extend it to
 anything else.
 
-No GSAP. Same as the intro.
+The loop itself is CSS. The one thing JS touches is speed: hovering the strip
+ramps the animation's `playbackRate` down to 0.4 and back, because
+`animation-duration` cannot be changed mid-loop without remapping progress and
+jumping. With JS off the banner still rotates, just at one constant speed.
 
 ### GSAP does reactive chrome and scroll-linked motion only
 

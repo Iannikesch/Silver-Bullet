@@ -462,8 +462,14 @@
       will-change: transform;
     }
 
-    /* Reading beats drifting. Hover or tab into it and it holds still. */
-    .ticker:hover .ticker__track,
+    /* Hover slows the drift to 0.4x rather than stopping it — that is done
+       in motion.js via playbackRate, because changing animation-duration
+       here would remap the loop's progress and make it jump.
+
+       Keyboard focus still stops it dead. Focus is an explicit "I am using
+       this" signal where hover is incidental, and someone tabbing through
+       needs the thing to actually hold still. This also keeps a real stop
+       available without a pointer. */
     .ticker:focus-within .ticker__track { animation-play-state: paused; }
 
     .ticker__set {
@@ -1022,7 +1028,8 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
-  <script defer src="motion.js"></script>
+  <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
+  <script defer src="motion.js?v=2"></script>
 
   <script>
   (function () {

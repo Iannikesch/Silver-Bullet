@@ -142,7 +142,8 @@ The terms of the exception, so it does not spread:
 
 - It is the **only** thing on the site permitted to move without input.
 - It drifts at roughly 30px/s. It is a slow read, not a scroll.
-- Hover or keyboard focus stops it, because reading beats drifting.
+- Hovering it slows it to 0.4x, so it yields to a reader without stopping
+  dead. Keyboard focus stops it completely.
 - It stops dead under `prefers-reduced-motion`, and the slogans stay readable.
 
 A second ambient element cancels this one, exactly the way a second amber element

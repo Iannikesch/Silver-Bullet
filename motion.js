@@ -20,6 +20,9 @@
   /* Coarse pointer / no hover = touch. Scroll drives the chrome there. */
   var CAN_HOVER = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
+  /* What the hook banner slows to while the pointer is over it. */
+  var BANNER_HOVER_RATE = 0.4;
+
   /* ------------------------------------------------------------------ *
    * 1. Lenis smooth scroll
    * ------------------------------------------------------------------ */
@@ -188,7 +191,45 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * 3. Boot
+   * 3. Hook banner — hover slows the drift
+   *
+   * The marquee is a plain CSS animation and stays that way. Speed is the
+   * one thing CSS cannot change cleanly: animation-duration remaps the
+   * animation's progress, so a 62s loop switched to 155s mid-flight jumps
+   * to a completely different position. The Web Animations API changes
+   * rate without moving the playhead, so playbackRate is the only way to
+   * do this without a visible snap.
+   *
+   * Tweened rather than set, for the same reason the chrome lags behind
+   * the cursor: an instant speed change reads as a glitch, a ramped one
+   * reads as something heavy being slowed down.
+   * ------------------------------------------------------------------ */
+
+  function initBannerSpeed() {
+    var strip = document.querySelector('.ticker');
+    var track = document.querySelector('.ticker__track');
+
+    /* No pointer to hover with, or a browser without getAnimations: the
+       strip simply keeps its constant speed. Nothing breaks. */
+    if (!strip || !track || !CAN_HOVER || !track.getAnimations) return;
+
+    var running = track.getAnimations();
+    if (!running.length) return;
+    var roll = running[0];
+
+    var rate = { v: 1 };
+    var setRate = gsap.quickTo(rate, 'v', {
+      duration: 0.35,
+      ease: 'power2.out',
+      onUpdate: function () { roll.playbackRate = rate.v; }
+    });
+
+    strip.addEventListener('pointerenter', function () { setRate(BANNER_HOVER_RATE); });
+    strip.addEventListener('pointerleave', function () { setRate(1); });
+  }
+
+  /* ------------------------------------------------------------------ *
+   * 4. Boot
    * ------------------------------------------------------------------ */
 
   if (REDUCED) {
@@ -208,6 +249,7 @@
 
   initLenis();
   initChrome();
+  initBannerSpeed();
   document.documentElement.setAttribute('data-motion', 'full');
 
   /* Exposed for verification only. */
