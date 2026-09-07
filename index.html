@@ -10,6 +10,8 @@
        with background-clip:text, so a stale palette that drops the
        --chrome-* ramp would render it as invisible text. -->
   <link rel="stylesheet" href="tokens.css?v=2">
+  <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
+  <link rel="stylesheet" href="textures.css?v=1">
 
   <style>
     /* ==========================================================
@@ -139,7 +141,8 @@
     /* ---------- reactive chrome ----------
        --light slides the hard stops. It never softens them: every band is
        still a PAIR of stops at one position, the pair just moves together.
-       Applied to exactly two elements — the hero headline and the bullet.
+       Applied to exactly three elements — the hero headline, the bullet,
+       and the machined bar above the contact heading.
        Driving a gradient from a custom property repaints that element every
        frame, so this deliberately does not scale. */
 
@@ -380,6 +383,18 @@
       background: var(--bg-raised);
     }
 
+    /* The thermal ground sits behind the hero and is clipped to it. */
+    .hero-ground { position: relative; }
+
+    /* The site's third and last metal moment. Thin on purpose: at this size
+       it reads as a machined part, and anything taller starts reading as
+       decoration. */
+    .contact__bar {
+      height: clamp(10px, 1.3vw, 15px);
+      width: 100%;
+      margin-bottom: var(--space-sm);
+    }
+
     .contact h2 { max-width: 18ch; }
     .contact .lead { margin-top: 20px; }
 
@@ -520,7 +535,7 @@
     /* ==========================================================
        INTRO — the bullet
        Base state below is the FINISHED state. The animation only
-       runs while <body> carries .is-intro, which JS adds. No JS,
+       runs while <body class="tx-grain"> carries .is-intro, which JS adds. No JS,
        or reduced motion, and the page is simply already correct.
        ========================================================== */
 
@@ -870,6 +885,13 @@
 
   <main id="top">
 
+    <!-- Full-bleed ground behind the hero. Warmth rises and recedes with
+         SCROLL position, never on a clock — the ticker holds the site's one
+         ambient exemption, and this stays still when the visitor does. -->
+    <div class="hero-ground tx-thermal tx-vignette--in">
+      <span class="th-cold"></span>
+      <span class="th-warm"></span>
+
     <section class="hero wrap">
       <!-- ============================================================
            VSL SLOT — the video goes here.
@@ -896,6 +918,7 @@
         <a class="cta-secondary" href="#how">How it works</a>
       </div>
     </section>
+    </div><!-- /.hero-ground -->
 
     <section id="how">
       <div class="wrap">
@@ -1001,6 +1024,12 @@
 
     <section id="contact" class="contact">
       <div class="wrap">
+        <!-- A machined component, not a background. Metal behind text would
+             be unreadable — chrome is far too light for steel type to sit on.
+             So the metal is an OBJECT above the heading: brushed, rim-lit on
+             hover, and it catches the light once as the section arrives. -->
+        <div class="contact__bar tx-brushed tx-rim tx-sweep"
+             data-chrome="contact" data-texture="rim" aria-hidden="true"></div>
         <h2>Tell us what you're trying to grow.</h2>
         <p class="lead">
           We'll look at your numbers and tell you honestly whether a performance
@@ -1030,6 +1059,18 @@
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
   <script defer src="motion.js?v=2"></script>
+  <script defer src="textures.js?v=1"></script>
+
+  <script>
+    /* Deferred scripts have all run by the time this fires, so both
+       functions exist. drive:false because motion.js already publishes
+       --light / --light-y / --lit from its own pointer+scroll engine —
+       the pack must not attach a second set of listeners. */
+    window.addEventListener('DOMContentLoaded', function () {
+      if (typeof initTextures === 'function') initTextures({ drive: false });
+      if (typeof initThermal  === 'function') initThermal();
+    });
+  </script>
 
   <script>
   (function () {

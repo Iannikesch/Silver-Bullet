@@ -1,0 +1,424 @@
+/* ============================================================
+   Silver Bullet — texture pack
+   Drop-in surface treatments, layered over the real project.
+   Load AFTER tokens.css. Nothing here defines a colour of its own.
+
+     0. motion tokens    shared timing, used by everything below
+     1. .tx-grain        page-wide film grain
+     2. .tx-vignette     edge falloff
+     3. .tx-brushed      machined metal surface
+     4. .tx-rim          cursor-reactive rim light      (needs JS)
+     5. [data-texture="star"]   cursor-tracked star     (needs JS)
+     6. .tx-sweep        specular sweep on scroll-in    (needs JS + ScrollTrigger)
+     7. .tx-etched       type stamped into metal
+   ============================================================ */
+
+
+/* ---- 0. motion tokens -------------------------------------------------
+   Three durations and two curves, shared by every texture. This is the
+   thing that makes a pile of separate effects feel like one system: if
+   two elements move at different speeds for no reason, the page reads as
+   assembled rather than designed.
+
+   When this pack lands in the real project these belong in tokens.css.
+   --ease-settle deliberately matches the value already in index.html. */
+
+:root {
+  --dur-quick: 0.18s;   /* a state change answering a click or hover */
+  --dur-base:  0.42s;   /* the default: most things should use this */
+  --dur-slow:  1.15s;   /* one orchestrated moment, used sparingly */
+
+  --ease-settle: cubic-bezier(.25, 1, .5, 1);   /* fast out, long settle */
+  --ease-metal:  cubic-bezier(.22, .61, .36, 1);/* weighty, no overshoot */
+}
+
+
+/* ---- shared building blocks ------------------------------------------
+   Gradient lists held in custom properties so treatments can be stacked.
+   background-image can only be declared once per element, so composing
+   them as variables is what lets one element be brushed metal AND carry
+   a star without either overwriting the other. */
+
+:root {
+  /* The metal. Neutral grey, no hue - metal is neutral, the environment
+     carries the colour. Darker at the ends so a highlight has somewhere
+     dimmer to sit against. */
+  --tx-metal-ramp:
+    linear-gradient(
+      172deg,
+      var(--chrome-500) 0%,
+      var(--chrome-300) 16%,
+      var(--chrome-100) 34%,
+      var(--chrome-050) 46%,
+      var(--chrome-400) 62%,
+      var(--chrome-500) 100%
+    );
+
+  /* Machining marks. Felt, not counted - if you can see individual lines
+     it has gone too far. */
+  --tx-brushed-grain:
+    repeating-linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--chrome-050) 3%, transparent) 0px,
+      color-mix(in srgb, var(--chrome-050) 3%, transparent) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--ink) 11%, transparent) 0px,
+      color-mix(in srgb, var(--ink) 11%, transparent) 1px,
+      transparent 1px,
+      transparent 9px
+    );
+}
+
+
+/* ---- pointer plumbing -------------------------------------------------
+   JS writes ONE pair of plain numbers, 0-100. Everything else is derived
+   in CSS from those. Percentages for gradient positions, raw numbers for
+   arithmetic - deriving both from one source keeps them in step. */
+
+[data-texture], .tx-rim {
+  /* --light is the site's existing signal, published by motion.js: a 0-100
+     number blending pointer position with scroll, eased so it lags. The pack
+     used to invent its own --mx-n; it now reads the one already there, so
+     every metal element on the page moves off a single source.
+     --light-y and --lit are extensions of that same engine. */
+  --light: 50;
+  --light-y: 50;
+  --lit: 0;
+
+  --mx: calc(var(--light, 50) * 1%);
+  --my: calc(var(--light-y, 50) * 1%);
+}
+
+
+/* ---- 1. film grain ----------------------------------------------------
+   Put .tx-grain on <body>. Static, never animated: moving grain is
+   ambient motion and repaints the whole viewport every frame. */
+
+.tx-grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 70;              /* above .intro-layer (60): grain covers everything */
+  pointer-events: none;
+  opacity: 0.05;                 /* the whole effect lives between .03 and .07 */
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+
+/* ---- 2. vignette ------------------------------------------------------
+   Also on <body>. The same idea as the grain at a different scale: it
+   stops the background reading as a flat screen and starts it reading as
+   a lit object. Keep it below the threshold where you notice it. */
+
+:where(.tx-vignette--in) { position: relative; }
+.tx-vignette--in::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 80% 70% at 50% 45%,
+    transparent 0%, transparent 58%,
+    color-mix(in srgb, var(--ink) 55%, transparent) 100%
+  );
+}
+
+.tx-vignette::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 75% 65% at 50% 45%,
+    transparent 0%,
+    transparent 55%,
+    color-mix(in srgb, var(--ink) 60%, transparent) 100%
+  );
+}
+
+
+/* ---- 3. brushed metal -------------------------------------------------
+   Separation comes from a lit top edge, never a drop shadow. */
+
+.tx-brushed {
+  background-image: var(--tx-brushed-grain), var(--tx-metal-ramp);
+  border-top: 1px solid var(--chrome-050);
+  border-bottom: 1px solid var(--ink);
+}
+
+
+/* ---- 4. rim light on hover -------------------------------------------
+   The restrained sibling of the star. Nothing glows: the lit top edge
+   gets brighter, and the bright band in the metal leans toward the
+   cursor. Highlights define edges - they never bleed.
+
+   Use this where the star would be too much, which is most places. */
+
+.tx-rim {
+  /* How far the band leans. Half the cursor's travel, so it tracks
+     without feeling stuck to the pointer. */
+  --rim-lean: calc((var(--light, 50) - 50) * 0.45%);
+
+  --tx-rim-ramp: linear-gradient(
+    100deg,
+    var(--chrome-500) calc(0%  + var(--rim-lean)),
+    var(--chrome-300) calc(28% + var(--rim-lean)),
+    var(--chrome-100) calc(44% + var(--rim-lean)),
+    var(--chrome-050) calc(50% + var(--rim-lean)),
+    var(--chrome-300) calc(64% + var(--rim-lean)),
+    var(--chrome-500) 100%
+  );
+  background-image: var(--tx-rim-ramp);
+
+  border-top: 1px solid var(--chrome-400);
+  border-bottom: 1px solid var(--ink);
+
+  /* The edge is the whole effect, so it gets the transition. Pure CSS -
+     no JS needed for this half. */
+  transition: border-top-color var(--dur-base) var(--ease-metal);
+}
+.tx-rim:hover { border-top-color: var(--chrome-050); }
+
+/* Brushed marks over a rim-lit ramp. Declared explicitly because both
+   classes set background-image, and without this the later rule wins. */
+.tx-brushed.tx-rim {
+  background-image: var(--tx-brushed-grain), var(--tx-rim-ramp);
+}
+
+
+/* ---- 5. the star ------------------------------------------------------
+   A hot core, two crossed spikes, a small warm pool. Warm because it is
+   the room reflecting off the surface, not the surface itself.
+
+   Every size is multiplied by --lit, so at --lit:0 every layer has zero
+   size and the star is simply gone.
+
+   These layers MUST be declared here rather than on :root. A custom
+   property has its var()s resolved where it is DECLARED - referencing
+   --lit from :root, where it does not exist, makes the whole value
+   invalid and silently kills background-image. */
+
+[data-texture="star"] {
+  --star-unit: 1em;              /* em in type, overridden to px on surfaces */
+
+  --tx-star-layers:
+    radial-gradient(
+      circle calc(var(--lit) * var(--star-unit) * 0.3) at var(--mx) var(--my),
+      var(--white) 0%, var(--white) 20%, var(--gold) 52%, transparent 82%
+    ),
+    radial-gradient(
+      ellipse calc(var(--lit) * var(--star-unit) * 0.1)
+              calc(var(--lit) * var(--star-unit) * 5.6) at var(--mx) var(--my),
+      var(--white) 0%, var(--gold) 9%,
+      color-mix(in srgb, var(--amber) 65%, transparent) 26%, transparent 68%
+    ),
+    radial-gradient(
+      ellipse calc(var(--lit) * var(--star-unit) * 4.6)
+              calc(var(--lit) * var(--star-unit) * 0.13) at var(--mx) var(--my),
+      var(--white) 0%, var(--gold) 9%,
+      color-mix(in srgb, var(--amber) 65%, transparent) 26%, transparent 68%
+    ),
+    radial-gradient(
+      circle calc(var(--lit) * var(--star-unit) * 0.85) at var(--mx) var(--my),
+      color-mix(in srgb, var(--amber) 62%, transparent) 0%,
+      color-mix(in srgb, var(--amber-burnt) 30%, transparent) 45%, transparent 75%
+    );
+}
+
+.tx-brushed[data-texture="star"] {
+  --star-unit: 46px;
+  background-image: var(--tx-star-layers), var(--tx-brushed-grain), var(--tx-metal-ramp);
+}
+
+.tx-metal-text {
+  background-image: var(--tx-metal-ramp);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: var(--chrome-100);      /* readable if clipping fails */
+}
+.tx-metal-text[data-texture="star"] {
+  background-image: var(--tx-star-layers), var(--tx-metal-ramp);
+}
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  .tx-metal-text { color: transparent; }
+}
+
+
+/* ---- 6. specular sweep ------------------------------------------------
+   A band of light rakes across once, when the element scrolls into view.
+   Not a loop: one orchestrated moment. Only a transform animates, so it
+   is cheap enough for a real page. */
+
+.tx-sweep {
+  position: relative;
+  overflow: hidden;              /* clips the band to the element */
+}
+
+.tx-sweep::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 34%;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--gold) 20%, transparent) 38%,
+    color-mix(in srgb, var(--gold) 75%, transparent) 50%,
+    color-mix(in srgb, var(--gold) 20%, transparent) 62%,
+    transparent 100%
+  );
+  /* --sweep is a plain number JS drives from -200 to 500. The skew makes
+     the light rake at an angle instead of crossing flat. */
+  transform: skewX(-18deg) translateX(calc(var(--sweep, -200) * 1%));
+}
+
+
+/* ---- 7. etched type ---------------------------------------------------
+   The inverse of metal type: letters pressed INTO the surface rather
+   than made of it. Light from above means the top edge is in shadow and
+   the bottom edge catches it.
+
+   Both offsets have ZERO blur. A blurred text-shadow is glow, which the
+   brief rules out; a 1px hard offset is an edge, which it encourages.
+   Meant for labels, numbers and small caps - not headlines. */
+
+.tx-etched {
+  color: var(--steel-700);
+  text-shadow:
+    0 -1px 0 var(--ink),
+    0  1px 0 color-mix(in srgb, var(--chrome-050) 18%, transparent);
+}
+
+
+/* ---- no hover, no cursor textures ------------------------------------ */
+@media (hover: none) {
+  [data-texture] { --lit: 0; }
+}
+
+
+/* ---- 9. video ground — .tx-video-ground ------------------------------
+   Footage as a background, suppressed until it reads as atmosphere
+   rather than as a video playing behind the text.
+
+   Three stacked pieces:
+     .vg-css     a CSS drift ground. ALWAYS present.
+     .vg-video   optional footage on top of it.
+     .vg-crush   the vignette and bottom fade that kill the edges.
+
+   The CSS layer underneath is the point. If the file is missing, still
+   loading, blocked, or skipped on a phone, the background is still a
+   background - it just stops being footage. Nothing ever falls to black.
+
+   Suppression is the whole technique. Raw video behind text looks cheap;
+   video at a third brightness with its edges deleted looks like a room. */
+
+.tx-video-ground {
+  --vg-bright: 0.32;   /* how much of the footage survives. Keep it low. */
+  --vg-sat:    0.55;   /* pulled toward neutral - the palette is cold */
+  --vg-blur:   2px;    /* hides compression artefacts in dark gradients */
+
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+  isolation: isolate;
+}
+
+.tx-video-ground > .vg-css,
+.tx-video-ground > .vg-video,
+.tx-video-ground > .vg-crush {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* The ground that never fails. Two slow masses, driven by initTextures. */
+.tx-video-ground > .vg-css {
+  inset: -30%;
+  opacity: .55;
+  will-change: transform;
+  background:
+    radial-gradient(ellipse 46% 50% at 32% 42%,
+      color-mix(in srgb, var(--petrol) 72%, transparent) 0%, transparent 70%),
+    radial-gradient(ellipse 42% 46% at 70% 62%,
+      color-mix(in srgb, var(--steel-900) 55%, transparent) 0%, transparent 70%);
+}
+
+.tx-video-ground > .vg-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(var(--vg-bright)) saturate(var(--vg-sat)) blur(var(--vg-blur));
+  /* Starts invisible and is faded in by JS only once it can actually play,
+     so a slow or missing file never shows as a black rectangle. */
+  opacity: 0;
+  transition: opacity 1.2s var(--ease-metal);
+}
+.tx-video-ground > .vg-video.is-ready { opacity: 1; }
+
+/* Edges deleted. This is what stops it reading as "a video is playing". */
+.tx-video-ground > .vg-crush {
+  background:
+    radial-gradient(ellipse 78% 72% at 50% 45%,
+      transparent 0%, transparent 38%,
+      color-mix(in srgb, var(--bg) 92%, transparent) 100%),
+    linear-gradient(to bottom,
+      transparent 0%, transparent 45%, var(--bg) 100%);
+}
+
+/* Flip this on to see the footage undressed - demo aid, not for the site. */
+.tx-video-ground.is-raw > .vg-video { filter: none; }
+.tx-video-ground.is-raw > .vg-crush { display: none; }
+
+
+/* ---- 10. thermal ground — .tx-thermal --------------------------------
+   Cold steel with warmth rising underneath and receding again.
+
+   Driven by SCROLL POSITION, not by a clock. That is a deliberate choice,
+   not a limitation: DESIGN.md permits exactly one element that moves with
+   no input, and the ticker holds that slot. Bound to scroll, this is still
+   when the visitor is - the same defence the reactive chrome already has.
+
+   --heat is a 0-1 value written by initThermal(). */
+
+.tx-thermal {
+  --heat: 0;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.tx-thermal > .th-cold,
+.tx-thermal > .th-warm {
+  position: absolute;
+  inset: -30%;
+  pointer-events: none;
+  z-index: -1;                   /* behind the section's own content */
+  will-change: transform, opacity;
+}
+
+.tx-thermal > .th-cold {
+  opacity: .55;
+  background: radial-gradient(ellipse 55% 55% at 42% 45%,
+    color-mix(in srgb, var(--petrol) 72%, transparent) 0%, transparent 72%);
+  transform: scale(calc(1 + var(--heat) * 0.06));
+}
+
+/* Never bright. This is the suggestion of heat, not a glow - the warm ramp
+   because it is the environment, not the surface. */
+.tx-thermal > .th-warm {
+  opacity: calc(var(--heat) * 0.42);
+  background: radial-gradient(ellipse 40% 42% at 62% 66%,
+    color-mix(in srgb, var(--amber-burnt) 58%, transparent) 0%,
+    color-mix(in srgb, var(--maroon) 38%, transparent) 45%, transparent 74%);
+  transform: scale(calc(1 + var(--heat) * 0.12));
+}

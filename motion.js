@@ -94,17 +94,34 @@
 
   function registerChrome(el) {
     if (!el) return null;
-    var state = { v: 50 };
+    /* v   the specular band position, 0-100, the original signal
+       vy  the same thing vertically, for textures that need two axes
+       lit 0 or 1: is the pointer actually over this element */
+    var state = { v: 50, vy: 50, lit: 0 };
+
+    /* One writer for all three, so they can never be published out of step
+       with each other. */
+    function paint() {
+      el.style.setProperty('--light', state.v.toFixed(2));
+      el.style.setProperty('--light-y', state.vy.toFixed(2));
+      el.style.setProperty('--lit', state.lit.toFixed(3));
+    }
+
     /* quickTo eases the value at 0.3s so the highlight LAGS behind the
        cursor. Instant tracking reads cheap; the lag is what gives it mass. */
     var setter = gsap.quickTo(state, 'v', {
-      duration: 0.3,
-      ease: 'power2.out',
-      onUpdate: function () {
-        el.style.setProperty('--light', state.v.toFixed(2));
-      }
+      duration: 0.3, ease: 'power2.out', onUpdate: paint
     });
-    CHROME.push({ el: el, state: state, set: setter });
+    var setterY = gsap.quickTo(state, 'vy', {
+      duration: 0.3, ease: 'power2.out', onUpdate: paint
+    });
+    /* Slower on the way in than the band, so a surface "wakes up" rather
+       than snapping on. */
+    var setterLit = gsap.quickTo(state, 'lit', {
+      duration: 0.42, ease: 'power2.out', onUpdate: paint
+    });
+
+    CHROME.push({ el: el, state: state, set: setter, setY: setterY, setLit: setterLit });
   }
 
   /* Recomputes every chrome target from the current pointer + scroll state.
@@ -142,9 +159,20 @@
         /* Pointer leads, scroll still contributes, so the highlight moves
            when the page moves as well as when the cursor does. */
         v = pointerPct * 0.75 + scrollPct * 0.25;
+
+        /* Vertical position across the element, and whether the pointer is
+           genuinely inside its box. Textures that draw a point of light need
+           to know where it is in BOTH axes and when to stop drawing it. */
+        c.setY(clamp(vert * 100, -20, 120));
+        c.setLit(
+          lastX >= r.left && lastX <= r.right &&
+          lastY >= r.top  && lastY <= r.bottom ? 1 : 0
+        );
       } else {
         /* Touch, off-screen, or before the pointer has ever moved. */
         v = scrollPct;
+        c.setY(scrollPct);
+        c.setLit(0);
       }
 
       c.set(clamp(v, -20, 120));
@@ -161,6 +189,7 @@
   function initChrome() {
     registerChrome(document.querySelector('[data-chrome="headline"]'));
     registerChrome(document.querySelector('[data-chrome="bullet"]'));
+    registerChrome(document.querySelector('[data-chrome="contact"]'));
     if (!CHROME.length) return;
 
     /* -- pointer: desktop only, rAF-throttled ------------------------ */
