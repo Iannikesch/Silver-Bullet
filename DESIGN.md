@@ -130,24 +130,36 @@ does — so it is in scope. Its scroll-scrubbed half is bound to scroll position
 rather than to a clock: it is still when you are, and it reverses when you go
 back up.
 
-### The one ambient exception: the hook banner
+### The ambient exception: three bands, three speeds
 
-`.ticker`, the strip under the nav rule, runs a perpetual marquee. It moves with
-no input at all, which is the thing this section otherwise rules out. It is
-allowed because the hook — rev share or profit share, skin in the game — is the
-entire pitch, and the strip is the page's persistent conversion path rather than
-decoration.
+Three strips run perpetual right-to-left marquees. They move with no input at
+all, which is the thing this section otherwise rules out:
 
-The terms of the exception, so it does not spread:
+| Band | What it carries | Speed |
+| --- | --- | --- |
+| `.ticker` | the hook — rev share or profit share, skin in the game | ~28px/s |
+| `.conveyor` | creative, four slots in view | ~45px/s |
+| `.logo-band` | client logos | ~18px/s |
 
-- It is the **only** thing on the site permitted to move without input.
-- It drifts at roughly 30px/s. It is a slow read, not a scroll.
-- Hovering it slows it to 0.4x, so it yields to a reader without stopping
-  dead. Keyboard focus stops it completely.
-- It stops dead under `prefers-reduced-motion`, and the slogans stay readable.
+This is a deliberate call, made knowingly, and it is the part of this document
+most likely to go wrong. Three self-moving bands on one page is close to the
+line where a site stops reading as a precision instrument and starts reading as
+a template. What keeps it on the right side of that line:
 
-A second ambient element cancels this one, exactly the way a second amber element
-cancels the first.
+- **Three clearly different speeds.** Matched speeds would read as one striped
+  block rather than as three separate systems. If a fourth band is ever added it
+  needs its own speed, and at that point the whole idea should be re-examined
+  instead.
+- **One direction.** All three run right to left. Mixed directions read as chaos.
+- **Nothing else moves ambiently.** Not sections, not cards, not backgrounds.
+- **Hovering any band slows it to 0.4x** rather than stopping it dead, so it
+  yields to a reader without snapping. Keyboard focus on the hook banner stops
+  it completely.
+- **All three stop dead under `prefers-reduced-motion`**, and every band stays
+  readable when they do.
+
+The speeds live in `:root` as `--ticker-rate`, `--conveyor-rate` and
+`--logo-rate`. Keep them far apart.
 
 ## Floor
 

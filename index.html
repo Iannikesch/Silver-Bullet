@@ -54,6 +54,14 @@
       --ticker-ride: clamp(280px, 42vw, 620px);
       --ticker-rate: 62s;   /* one full loop. Slow on purpose. */
 
+      /* Work conveyors. Three bands run right-to-left on this page, so they
+         get three clearly different speeds — matched speeds would read as
+         one striped block rather than as separate systems. Roughly
+         45px/s for the creative slots, 18px/s for the logo band, against
+         the hook banner's 28px/s. */
+      --conveyor-rate: 43s;
+      --logo-rate:    100s;
+
       /* Set by JS: how far left the logo must travel from centre */
       --logo-shift: 0px;
 
@@ -469,7 +477,7 @@
     .ticker__track {
       display: flex;
       width: max-content;
-      animation: ticker-roll var(--ticker-rate) linear infinite;
+      animation: marquee-left var(--ticker-rate) linear infinite;
       /* Negative delay starts the loop already part-way through, so there is
          always content off to the left. Without it the strip rides out and
          drags an empty gap in behind itself. */
@@ -526,10 +534,88 @@
     }
 
     /* Two identical sets sit side by side, so translating the track by exactly
-       -50% lands the second set where the first began. */
-    @keyframes ticker-roll {
+       -50% lands the second set where the first began. Shared by all three
+       bands — every one of them uses paired sets and no flex `gap`, which is
+       what keeps -50% exact. Put a gap on the track and this breaks. */
+    @keyframes marquee-left {
       from { transform: translateX(0); }
       to   { transform: translateX(-50%); }
+    }
+
+    /* ---------- a glimpse at our work ---------- */
+
+    .work { padding: var(--space-xl) 0; }
+    .work__head { margin-bottom: var(--space-md); }
+
+    .conveyor,
+    .logo-band { overflow: hidden; }
+
+    .conveyor__track,
+    .logo-band__track {
+      display: flex;
+      width: max-content;
+      will-change: transform;
+    }
+
+    .conveyor__track  { animation: marquee-left var(--conveyor-rate) linear infinite; }
+    .logo-band__track { animation: marquee-left var(--logo-rate)     linear infinite; }
+
+    .conveyor__set,
+    .logo-band__set {
+      display: flex;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    /* Four in view. Width is derived from the viewport rather than set in
+       px, so the count stays exactly right at every width instead of
+       drifting to three-and-a-bit. No flex `gap` anywhere — the spacing is
+       margin on the item, because a gap on the track would break the -50%
+       loop. */
+    .conveyor {
+      --cols: 4;
+      --slot-gap: clamp(12px, 1.6vw, 24px);
+    }
+
+    .slot {
+      flex: none;
+      width: calc((100vw - var(--cols) * var(--slot-gap)) / var(--cols));
+      aspect-ratio: 4 / 3;
+      margin-right: var(--slot-gap);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* Lit top edge, per DESIGN.md. No drop shadow. */
+      background: var(--bg-raised);
+      border-top: 1px solid var(--border-lit);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .slot span {
+      color: var(--steel-700);
+      font-size: 14px;
+    }
+
+    @media (max-width: 900px) { .conveyor { --cols: 2; } }
+    @media (max-width: 560px) { .conveyor { --cols: 1; } }
+
+    .logo-band {
+      margin-top: var(--space-md);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo-band__set li {
+      flex: none;
+      padding: 22px clamp(28px, 4vw, 56px);
+      color: var(--steel-700);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
     }
 
     /* ==========================================================
@@ -800,9 +886,10 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .intro-layer { display: none !important; }
-      /* The marquee runs off the base stylesheet, not off .is-intro, so the
-         blanket rule below does not reach it. Stop it by name. */
-      .ticker__track { animation: none !important; }
+      /* The marquees run off the base stylesheet, not off .is-intro, so the
+         blanket rule below does not reach them. Stop all three by attribute,
+         which also covers any band added later. */
+      [data-marquee-track] { animation: none !important; }
       body.is-intro *,
       body.is-intro *::before,
       body.is-intro *::after {
@@ -826,9 +913,7 @@
         </span>
       </a>
       <nav class="nav">
-        <a class="nav-link" href="#how">How it works</a>
-        <a class="nav-link" href="#proof">Proof</a>
-        <a class="nav-link" href="#about">About</a>
+        <a class="nav-link" href="#work">Our work</a>
         <a class="cta-secondary" href="#contact">Talk to us</a>
       </nav>
     </div>
@@ -840,10 +925,10 @@
        ends, and this has to keep running afterwards. It also sits outside
        <main>, which the intro fades in at 1.80s — inside it, the strip
        could not fade in alongside the bullet at 0.10s. -->
-  <aside class="ticker" aria-label="How we work">
+  <aside class="ticker" data-marquee aria-label="How we work">
     <div class="ticker__viewport">
       <div class="ticker__travel">
-        <div class="ticker__track">
+        <div class="ticker__track" data-marquee-track>
           <ul class="ticker__set">
             <li class="is-hook">Rev share or profit share. Skin in the game.</li>
             <li>No revenue, no invoice.</li>
@@ -915,109 +1000,73 @@
       </p>
       <div class="cta-row">
         <a class="cta" href="#contact">See if you qualify</a>
-        <a class="cta-secondary" href="#how">How it works</a>
+        <a class="cta-secondary" href="#work">See our work</a>
       </div>
     </section>
     </div><!-- /.hero-ground -->
 
-    <section id="how">
-      <div class="wrap">
-        <div class="section-head">
-          <h2>How the arrangement works</h2>
-          <p class="lead">
-            Three steps, no surprises. If we can't find enough upside to make the
-            deal worth doing, we'll tell you that in the first conversation.
-          </p>
-        </div>
+    <!-- ============================================================
+         A glimpse at our work.
 
-        <div class="grid">
-          <article class="panel">
-            <span class="index">01</span>
-            <h3>We audit what you have</h3>
-            <p>Your numbers, your funnel, your margins. We find where money is leaking and what it would take to fix it.</p>
-          </article>
-          <article class="panel">
-            <span class="index">02</span>
-            <h3>We agree on the split</h3>
-            <p>A share of revenue or profit above an agreed baseline. Written down, capped, and reviewed on a schedule.</p>
-          </article>
-          <article class="panel">
-            <span class="index">03</span>
-            <h3>We go build</h3>
-            <p>Campaigns, pages, creative, tracking. You see the same dashboard we do, and our cut is calculated off it.</p>
-          </article>
+         Two conveyors, both running right to left at different paces so
+         they read as two bands rather than one striped block: the creative
+         slots at ~45px/s, the logo band at ~18px/s. The hook banner up top
+         is a third speed again at ~28px/s.
+
+         Both are placeholders. The slots take creative, the band takes
+         client logos.
+         ============================================================ -->
+    <section id="work" class="work">
+      <div class="wrap work__head">
+        <h2>A glimpse at our work.</h2>
+      </div>
+
+      <!-- Four in view at desktop widths, dropping to two then one.
+           Slots leave to the left and are replaced from the right. -->
+      <div class="conveyor" data-marquee aria-label="Selected work">
+        <div class="conveyor__track" data-marquee-track>
+        <ul class="conveyor__set">
+          <li class="slot"><span>Placeholder creative</span></li>
+          <li class="slot"><span>Placeholder creative</span></li>
+          <li class="slot"><span>Placeholder creative</span></li>
+          <li class="slot"><span>Placeholder creative</span></li>
+          <li class="slot"><span>Placeholder creative</span></li>
+          <li class="slot"><span>Placeholder creative</span></li>
+        </ul>
+          <!-- Duplicate set is what makes the loop seamless. -->
+        <ul class="conveyor__set" aria-hidden="true">
+          <li class="slot"><span>Placeholder creative</span></li>
+          <li class="slot"><span>Placeholder creative</span></li>
+          <li class="slot"><span>Placeholder creative</span></li>
+          <li class="slot"><span>Placeholder creative</span></li>
+          <li class="slot"><span>Placeholder creative</span></li>
+          <li class="slot"><span>Placeholder creative</span></li>
+        </ul>
         </div>
       </div>
-    </section>
 
-    <section id="proof">
-      <div class="wrap">
-        <div class="section-head">
-          <h2>What we actually do</h2>
-          <p class="lead">
-            Everything below is in service of one number: revenue you would not
-            have had otherwise.
-          </p>
-        </div>
-
-        <div class="grid">
-          <article class="panel">
-            <h3>Paid acquisition</h3>
-            <p>Search and social managed to pipeline and profit, not impressions.</p>
-          </article>
-          <article class="panel">
-            <h3>Landing pages</h3>
-            <p>Fast pages built to convert the traffic you are already paying for.</p>
-          </article>
-          <article class="panel">
-            <h3>Offer and positioning</h3>
-            <p>Often the cheapest fix. What you sell and how you frame it beats ad spend.</p>
-          </article>
-          <article class="panel">
-            <h3>Tracking and attribution</h3>
-            <p>Clean measurement. Our compensation depends on it being honest.</p>
-          </article>
-          <article class="panel">
-            <h3>Creative production</h3>
-            <p>Photo, video and ad creative built for the platform it runs on.</p>
-          </article>
-          <article class="panel">
-            <h3>Lifecycle and retention</h3>
-            <p>Email and follow-up, so acquisition spend compounds instead of leaking.</p>
-          </article>
-        </div>
-
-        <div class="stats">
-          <div class="stat">
-            <span class="num">Placeholder</span>
-            <span class="label">Average client revenue lift</span>
-          </div>
-          <div class="stat">
-            <span class="num">Placeholder</span>
-            <span class="label">Clients on performance deals</span>
-          </div>
-          <div class="stat">
-            <span class="num">Placeholder</span>
-            <span class="label">Years running this model</span>
-          </div>
-          <div class="stat">
-            <span class="num">Placeholder</span>
-            <span class="label">Average engagement length</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="about">
-      <div class="wrap">
-        <div class="section-head">
-          <h2>Who you would be working with</h2>
-          <p class="lead">
-            Silver Bullet works with service businesses doing under $15M a year.
-            Small team, senior people, and the person you meet in the first call
-            is the person doing the work. Replace this with the real story before
-            launch.
-          </p>
+      <div class="logo-band" data-marquee aria-label="Clients">
+        <div class="logo-band__track" data-marquee-track>
+        <ul class="logo-band__set">
+          <li>Placeholder logo</li>
+          <li>Placeholder logo</li>
+          <li>Placeholder logo</li>
+          <li>Placeholder logo</li>
+          <li>Placeholder logo</li>
+          <li>Placeholder logo</li>
+          <li>Placeholder logo</li>
+          <li>Placeholder logo</li>
+        </ul>
+        <ul class="logo-band__set" aria-hidden="true">
+          <li>Placeholder logo</li>
+          <li>Placeholder logo</li>
+          <li>Placeholder logo</li>
+          <li>Placeholder logo</li>
+          <li>Placeholder logo</li>
+          <li>Placeholder logo</li>
+          <li>Placeholder logo</li>
+          <li>Placeholder logo</li>
+        </ul>
         </div>
       </div>
     </section>
@@ -1058,7 +1107,7 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
-  <script defer src="motion.js?v=2"></script>
+  <script defer src="motion.js?v=3"></script>
   <script defer src="textures.js?v=1"></script>
 
   <script>

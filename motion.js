@@ -20,8 +20,8 @@
   /* Coarse pointer / no hover = touch. Scroll drives the chrome there. */
   var CAN_HOVER = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-  /* What the hook banner slows to while the pointer is over it. */
-  var BANNER_HOVER_RATE = 0.4;
+  /* What a marquee slows to while the pointer is over it. */
+  var MARQUEE_HOVER_RATE = 0.4;
 
   /* ------------------------------------------------------------------ *
    * 1. Lenis smooth scroll
@@ -220,32 +220,45 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * 3. Hook banner — hover slows the drift
+   * 3. Marquees — hover slows the drift
    *
-   * The marquee is a plain CSS animation and stays that way. Speed is the
-   * one thing CSS cannot change cleanly: animation-duration remaps the
+   * Applies to every [data-marquee] band: the hook banner, the creative
+   * conveyor and the logo band.
+   *
+   * The loops are plain CSS animations and stay that way. Speed is the one
+   * thing CSS cannot change cleanly: animation-duration remaps the
    * animation's progress, so a 62s loop switched to 155s mid-flight jumps
-   * to a completely different position. The Web Animations API changes
-   * rate without moving the playhead, so playbackRate is the only way to
-   * do this without a visible snap.
+   * to a completely different position. The Web Animations API changes rate
+   * without moving the playhead, so playbackRate is the only way to do this
+   * without a visible snap.
    *
-   * Tweened rather than set, for the same reason the chrome lags behind
-   * the cursor: an instant speed change reads as a glitch, a ramped one
-   * reads as something heavy being slowed down.
+   * Tweened rather than set, for the same reason the chrome lags behind the
+   * cursor: an instant speed change reads as a glitch, a ramped one reads
+   * as something heavy being slowed down.
    * ------------------------------------------------------------------ */
 
-  function initBannerSpeed() {
-    var strip = document.querySelector('.ticker');
-    var track = document.querySelector('.ticker__track');
+  function initMarquees() {
+    /* No pointer to hover with, or a browser without getAnimations: every
+       band simply keeps its constant speed. Nothing breaks. */
+    if (!CAN_HOVER) return;
 
-    /* No pointer to hover with, or a browser without getAnimations: the
-       strip simply keeps its constant speed. Nothing breaks. */
-    if (!strip || !track || !CAN_HOVER || !track.getAnimations) return;
+    var strips = document.querySelectorAll('[data-marquee]');
+
+    for (var i = 0; i < strips.length; i++) {
+      bindMarquee(strips[i]);
+    }
+  }
+
+  function bindMarquee(strip) {
+    var track = strip.querySelector('[data-marquee-track]');
+    if (!track || !track.getAnimations) return;
 
     var running = track.getAnimations();
     if (!running.length) return;
     var roll = running[0];
 
+    /* Each band keeps its own tween target, or they would share one value
+       and hovering the logos would slow the creative conveyor too. */
     var rate = { v: 1 };
     var setRate = gsap.quickTo(rate, 'v', {
       duration: 0.35,
@@ -253,7 +266,7 @@
       onUpdate: function () { roll.playbackRate = rate.v; }
     });
 
-    strip.addEventListener('pointerenter', function () { setRate(BANNER_HOVER_RATE); });
+    strip.addEventListener('pointerenter', function () { setRate(MARQUEE_HOVER_RATE); });
     strip.addEventListener('pointerleave', function () { setRate(1); });
   }
 
@@ -278,7 +291,7 @@
 
   initLenis();
   initChrome();
-  initBannerSpeed();
+  initMarquees();
   document.documentElement.setAttribute('data-motion', 'full');
 
   /* Exposed for verification only. */

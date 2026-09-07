@@ -30,9 +30,9 @@ framework, say so and ask before doing it.
 
 ## Motion
 
-Movement is a priority for this site, but it is rationed. Three things move:
-the bullet intro, the reactive chrome on two elements, and the hook banner.
-Nothing else does.
+Movement is a priority for this site, but it is rationed. What moves: the bullet
+intro, the reactive chrome on two elements, and three marquee bands — the hook
+banner, the creative conveyor and the logo band. Nothing else does.
 
 ### What's loaded
 
@@ -58,13 +58,20 @@ JS off or motion reduced the page is simply correct and nothing animates.
 
 Timeline values live in `:root` in `index.html` as `--t-*` custom properties.
 
-### The hook banner is CSS-only, and it is the one ambient exception
+### The marquee bands are CSS-only, and they are the ambient exception
 
-The strip under the nav rule — `.ticker` — rotates the hook (rev share or
-profit share, skin in the game) on a perpetual CSS marquee, with a pinned
-amber CTA that does not scroll. It is the page's persistent conversion path.
+Three strips run perpetual right-to-left CSS marquees at deliberately different
+speeds: `.ticker` (the hook, ~28px/s, with a pinned amber CTA that does not
+scroll), `.conveyor` (creative, four slots in view, ~45px/s) and `.logo-band`
+(client logos, ~18px/s). Rates live in `:root`; keep them far apart or the three
+read as one striped block.
 
-It is two nested transforms that compose: `.ticker__travel` is intro-only and
+Every band is `[data-marquee]` wrapping a `[data-marquee-track]`. That pairing is
+what the reduced-motion rule and the hover handler both key off, so a new band
+gets both behaviours for free.
+
+The hook banner alone also arrives with the intro. It is two nested transforms
+that compose: `.ticker__travel` is intro-only and
 rides out with the bullet, then returns on a hard ease-out; `.ticker__track` is
 the constant-rate loop underneath. Through the return the travel layer sheds
 speed while the track holds its pace, so the composite runs from the bullet's
@@ -74,8 +81,9 @@ This moves on its own, which DESIGN.md otherwise rules out. That exception is
 deliberate and recorded there — do not "fix" it, and do not extend it to
 anything else.
 
-The loop itself is CSS. The one thing JS touches is speed: hovering the strip
-ramps the animation's `playbackRate` down to 0.4 and back, because
+The loops are CSS. The one thing JS touches is speed: hovering a band ramps that
+band's `playbackRate` down to 0.4 and back — each keeps its own tween, so
+hovering the logos does not slow the conveyor — because
 `animation-duration` cannot be changed mid-loop without remapping progress and
 jumping. With JS off the banner still rotates, just at one constant speed.
 
