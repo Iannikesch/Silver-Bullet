@@ -6,7 +6,10 @@
   <title>Silver Bullet — Performance Marketing</title>
   <meta name="description" content="Silver Bullet is a performance-based marketing firm. We get paid when you do — rev share and profit share, not retainers.">
 
-  <link rel="stylesheet" href="tokens.css">
+  <!-- Bump ?v= whenever tokens.css changes. The hero headline is painted
+       with background-clip:text, so a stale palette that drops the
+       --chrome-* ramp would render it as invisible text. -->
+  <link rel="stylesheet" href="tokens.css?v=2">
 
   <style>
     /* ==========================================================
@@ -39,11 +42,25 @@
 
       /* Set by JS: how far left the logo must travel from centre */
       --logo-shift: 0px;
+
+      /* Reactive chrome. 0-100. Drives the hard stop positions in the chrome
+         gradients via calc(). 50 = centred band, which is also the static
+         state when JS is off or motion is reduced. */
+      --light: 50;
     }
 
     * { box-sizing: border-box; }
 
-    html { scroll-behavior: smooth; }
+    /* No CSS smooth scrolling: Lenis owns scrolling when motion is on, and
+       the two fight if both are active. Under reduced motion Lenis never
+       initialises and anchors jump instantly, which is correct. */
+    html { scroll-behavior: auto; }
+
+    /* Lenis base styles (required by lenis 1.x). */
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+    .lenis.lenis-stopped { overflow: hidden; }
 
     body {
       margin: 0;
@@ -106,6 +123,33 @@
       font-size: 14px;
       color: var(--text-muted);
     }
+
+    /* ---------- reactive chrome ----------
+       --light slides the hard stops. It never softens them: every band is
+       still a PAIR of stops at one position, the pair just moves together.
+       Applied to exactly two elements — the hero headline and the bullet.
+       Driving a gradient from a custom property repaints that element every
+       frame, so this deliberately does not scale. */
+
+    [data-chrome] { --lo: calc((var(--light) - 50) * 0.9%); }
+
+    .hero h1[data-chrome] {
+      background-image: linear-gradient(
+        100deg,
+        var(--chrome-300) calc(0%  + var(--lo)), var(--chrome-300) calc(30% + var(--lo)),
+        var(--chrome-100) calc(30% + var(--lo)), var(--chrome-100) calc(43% + var(--lo)),
+        var(--chrome-050) calc(43% + var(--lo)), var(--chrome-050) calc(50% + var(--lo)),
+        var(--chrome-100) calc(50% + var(--lo)), var(--chrome-100) calc(63% + var(--lo)),
+        var(--chrome-300) calc(63% + var(--lo)), var(--chrome-300) 100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* The bullet sweeps less far — it is 20px tall, not 200px wide. */
+    .bullet[data-chrome] { --lo: calc((var(--light) - 50) * 0.42%); }
 
     /* ---------- header ---------- */
 
@@ -336,11 +380,11 @@
     /* -- the bullet: a tapered steel shard -- */
     .bullet {
       position: absolute;
-      top: calc(var(--nav-h) - 4.5px);
+      top: calc(var(--nav-h) - 10px);
       left: 0;
-      width: 78px;
-      height: 9px;
-      transform: translateX(-160px);
+      width: 150px;
+      height: 20px;
+      transform: translateX(-260px);
       will-change: transform;
     }
 
@@ -352,16 +396,31 @@
     }
 
     /* Cylindrical metal: dark top, hot band at the centre line, dark base. */
+    /* Chrome, not plastic.
+
+       Every stop is PAIRED at an identical percentage, which produces a hard
+       edge with no blend between bands. Smooth gradients read as plastic;
+       abrupt value jumps read as metal, because real chrome reflects a
+       cut-up environment rather than a soft falloff.
+
+       Neutral --chrome-* ramp only (see "Two metal ramps" in DESIGN.md).
+       Tonal split is roughly 36% shadow / 46% midtone / 19% highlight, with
+       only 5% at the brightest band. Most of chrome is dark. */
     .bullet__body {
       background: linear-gradient(
         to bottom,
-        var(--slate)     0%,
-        var(--grey)      16%,
-        var(--steel-050) 38%,
-        var(--white)     50%,
-        var(--steel-100) 60%,
-        var(--steel-900) 82%,
-        var(--ink)      100%
+        var(--chrome-900) calc(  0% + var(--lo)), var(--chrome-900) calc(  5% + var(--lo)),
+        var(--chrome-700) calc(  5% + var(--lo)), var(--chrome-700) calc( 22% + var(--lo)),
+        var(--chrome-500) calc( 22% + var(--lo)), var(--chrome-500) calc( 33% + var(--lo)),
+        var(--chrome-400) calc( 33% + var(--lo)), var(--chrome-400) calc( 45% + var(--lo)),
+        var(--chrome-300) calc( 45% + var(--lo)), var(--chrome-300) calc( 51% + var(--lo)),
+        var(--chrome-100) calc( 51% + var(--lo)), var(--chrome-100) calc( 58% + var(--lo)),
+        var(--chrome-050) calc( 58% + var(--lo)), var(--chrome-050) calc( 63% + var(--lo)),
+        var(--chrome-100) calc( 63% + var(--lo)), var(--chrome-100) calc( 70% + var(--lo)),
+        var(--chrome-300) calc( 70% + var(--lo)), var(--chrome-300) calc( 78% + var(--lo)),
+        var(--chrome-500) calc( 78% + var(--lo)), var(--chrome-500) calc( 86% + var(--lo)),
+        var(--chrome-700) calc( 86% + var(--lo)), var(--chrome-700) calc( 96% + var(--lo)),
+        var(--chrome-900) calc( 96% + var(--lo)), var(--chrome-900) 100%
       );
     }
 
@@ -386,8 +445,8 @@
       position: absolute;
       right: -1px;
       top: 50%;
-      width: 38px;
-      height: 9px;
+      width: 72px;
+      height: 20px;
       transform: translateY(-50%);
       clip-path: polygon(100% 50%, 44% 0, 0 22%, 0 78%, 44% 100%);
       background: linear-gradient(
@@ -404,10 +463,10 @@
     .bullet__glint {
       background: linear-gradient(
         112deg,
-        color-mix(in srgb, var(--white) 0%, transparent) 42%,
-        var(--white) 47%,
-        var(--gold)  53%,
-        color-mix(in srgb, var(--gold) 0%, transparent) 58%
+        color-mix(in srgb, var(--gold) 0%, transparent) 42%,
+        var(--gold)  47%,
+        var(--amber) 53%,
+        color-mix(in srgb, var(--amber) 0%, transparent) 58%
       );
       opacity: 0;
     }
@@ -467,8 +526,8 @@
     }
 
     @keyframes fly {
-      from { transform: translateX(-160px); }
-      to   { transform: translateX(calc(100vw + 160px)); }
+      from { transform: translateX(-260px); }
+      to   { transform: translateX(calc(100vw + 260px)); }
     }
 
     @keyframes heat {
@@ -536,7 +595,7 @@
   <!-- The intro. Removed from the DOM once it has run. -->
   <div class="intro-layer" aria-hidden="true">
     <div class="blip"></div>
-    <div class="bullet">
+    <div class="bullet" data-chrome="bullet">
       <span class="bullet__wake"></span>
       <span class="bullet__body"></span>
       <span class="bullet__glint"></span>
@@ -547,7 +606,7 @@
   <main id="top">
 
     <section class="hero wrap">
-      <h1>We only get paid when you do.</h1>
+      <h1 data-chrome="headline">We only get paid when you do.</h1>
       <p class="lead">
         Silver Bullet is a performance-based marketing firm. No retainers, no
         hourly billing, no invoice for a deck. We take a share of the revenue we
@@ -682,6 +741,15 @@
       <span>Placeholder copy — replace before launch.</span>
     </div>
   </footer>
+
+  <!-- Motion libraries. CDN only, exact versions pinned, deferred so they
+       never block first paint. The bullet intro below is deliberately
+       CSS-only and does not depend on any of these. -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+  <script defer src="motion.js"></script>
 
   <script>
   (function () {

@@ -7,3 +7,14 @@
 # Editor / OS noise
 Thumbs.db
 *.swp
+
+# Working doc: names and critiques real agencies. Public repo — keep local.
+reference-notes.md
+
+# Personal GSAP scratch page. Not part of the site.
+sandbox.html
+
+# Playwright verification artifacts. Regenerated on demand, not site source.
+.playwright-mcp/
+chrome-*.png
+light-*.png

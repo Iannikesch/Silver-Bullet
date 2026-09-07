@@ -15,6 +15,12 @@ not read as a SaaS product page.
 
 ## Color rules
 
+**The site is dark-only by design.** The steel palette is the brand, not a theme
+preference. There is no light mode and `prefers-color-scheme: light` is explicitly
+out of scope — do not add a light palette, and do not add `@media (prefers-color-scheme)`
+blocks. `tokens.css` is the whole story.
+
+
 The palette is derived from a specific reference: cold steel subject, warm environment
 behind it, deep ink shadows. Three rules carry it.
 
@@ -37,6 +43,31 @@ first. Secondary actions stay in steel — they do not get warmth.
 Saturated color is 7% of the reference frame. Keep it near that. The palette includes
 a magenta; it is under 1% of the source and should be used as a single small detail or
 an error state, never as a theme.
+
+## Two metal ramps, two jobs
+
+The palette carries a contradiction that has to be held deliberately, not resolved
+by picking one side.
+
+**Metal is neutral. The environment carries the color.**
+
+Measurement of real bullet photography came back at 0.5-0.9% saturation - effectively
+dead neutral grey. But the cyan-tinted neutrals are what make the *page* read as cold.
+Both are correct, for different jobs:
+
+- `--steel-*` is the **TEXT ramp**, and it stays cyan-tinted. Body copy, headings,
+  captions, borders, UI. This is what makes the interface read as cold metal.
+- `--chrome-*` is the **DEPICTION ramp**, and it is pure neutral grey with zero hue.
+  Use it only for elements that are pretending to be an actual piece of metal - the
+  bullet, chrome surfaces, reflective type treatments.
+
+Never use `--chrome-*` for text and never use `--steel-*` to depict a metal object.
+If a surface is supposed to look machined, it gets chrome. If it is supposed to be
+read, it gets steel.
+
+Light falling *on* depicted metal is a third thing again: specular highlights and
+friction heat stay on the warm ramp (`--gold`, `--amber`, `--amber-burnt`), because
+that is the environment reflecting off the surface, not the surface itself.
 
 ## Separation without shadows
 

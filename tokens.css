@@ -20,6 +20,18 @@
   --steel-050:      #D4E5EA;  /* subheads */
   --white:          #E8F1F2;  /* headlines only. Ration this. */
 
+  /* ---- Chrome: DEPICTED metal. Pure neutral greys, zero hue. ----
+     Measurement of real bullet photography came back at 0.5-0.9% saturation.
+     Metal is neutral; the environment around it carries the color.
+     Use these ONLY for elements that depict metal. Never for text. ---- */
+  --chrome-900:     #0C0C0C;
+  --chrome-700:     #343434;
+  --chrome-500:     #4C4C4C;
+  --chrome-400:     #666766;
+  --chrome-300:     #7F7F7F;
+  --chrome-100:     #BDBDBD;
+  --chrome-050:     #E1E1E1;
+
   /* ---- Warm: the counterweight. ~22%. ---- */
   --taupe-dark:     #6F685D;
   --taupe:          #958978;
