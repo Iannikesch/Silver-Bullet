@@ -201,9 +201,12 @@ request, no canvas, no JS. Built as the ground for the punchline band.
 - **Ships neutral.** `--tx-bore-warm` tints the key toward `--amber` and is
   nicer, but metal is neutral per `tokens.css` and the band spends its one accent
   on a CTA. Dial, not a default.
-- **The twist is pointer-driven.** `--bore-aim` (0–1) is how close the pointer is
-  to the middle of the band, normalised against the half-diagonal so only the far
-  corners reach zero. It slides between `--tx-bore-twist-near` and
+- **The twist is pointer-driven, and gated on the OBJECT, not the section.** The
+  band is a full-bleed rectangle but the thing in it is a circle, so `--bore-aim`
+  (0–1) is distance from the middle as a fraction of the barrel's RADIUS. Dead
+  centre is 1, the rim is 0, and past the rim nothing is driven at all — no
+  tweening, no promotion, no writes. Moving through the corners of the band never
+  touches it. It slides between `--tx-bore-twist-near` and
   `--tx-bore-twist-far`. `--tx-bore-aim-rest` is the single source of truth for
   the resting look — the CSS `var()` fallback is that same value, so with no JS
   it renders composed rather than collapsing to the flat target.
@@ -213,19 +216,29 @@ request, no canvas, no JS. Built as the ground for the punchline band.
 - **One writer per variable.** `initTextures()` already drives `--light` for
   anything carrying `data-texture`, so `initBore()` deliberately does not touch
   it. Give the section `data-texture="bore"` and call both.
-- **`will-change` is the entire performance story, and it is applied only while
-  the pointer is in the band.** Rotating twenty blurred, masked rings forces the
-  blur to re-run every frame — measured at 19.8fps. Promoted to their own
-  compositor layers the blur is baked in once and the rotation is a compositor
-  transform: 50.8fps in isolation, ~46fps with the light tween running too. The
-  masks cost nothing. `initBore()` adds the promotion on enter and removes it a
-  second after leave, once the ease home has finished; twenty permanently
-  promoted layers is real GPU memory and is exactly what the property warns
+- **The felt lag was FORCED LAYOUT, not frame rate.** `getBoundingClientRect()`
+  ran on every mousemove, twice over — once in `initBore()` and once in
+  `initTextures()`, which was bound to the same element because it carried
+  `data-texture`. Two synchronous layouts per frame on a page already animating
+  under Lenis is an input-latency problem, and it feels awful regardless of what
+  fps says. The rect is cached and invalidated on scroll/resize, the element no
+  longer carries `data-texture`, and `initBore()` writes both `--light` and
+  `--bore-aim` off one measurement.
+- **`will-change: transform` while interacting only.** Rotating blurred, masked
+  rings re-runs the blur every frame — 19.8fps against 52.7 with no filters.
+  Promoted, the blur bakes into the layer texture once: 50.8fps. Added when the
+  pointer enters the barrel, removed a second after it leaves; twenty
+  permanently promoted layers is real GPU memory and is what the property warns
   against.
-- **Do not buy frames with ring count or blur.** 14 rings reaches 59fps and a 1px
-  blur cap reaches 55fps; both were tried and refused. Ring count is what makes
-  the grooves a helix instead of a stack of plates, and the per-ring blur is what
-  anti-aliases the ring steps — capping it put the sawtooth straight back.
+- **The blur is not decoration — do not remove it.** It is the only thing hiding
+  the stair-steps that twenty discretely-rotated rings inevitably produce. It was
+  removed once for performance and three substitutes were tried to replace it —
+  widening the gradient stops, removing the mask plateau so rings cross-fade, and
+  dropping the rifling contrast. All three looked worse. Only the four outermost
+  rings, where the blur is sub-pixel, safely go without (`:nth-child(-n+5)`);
+  exempting eight was tried and the sawtooth returned on the mid-radius lands.
+- **Do not buy frames with ring count.** 14 rings reaches 59fps and was refused:
+  ring count is what makes the grooves a helix instead of a stack of plates.
 - **Narrow viewports get their own geometry.** Under 720px the barrel scales up
   and the ring span compresses, because the throat has to stay bigger than the
   headline or the type lands on lit metal. Ring count does not change.

@@ -168,75 +168,111 @@ function initBore(selector) {
   var smooth  = typeof window.gsap !== 'undefined';
 
   Array.prototype.forEach.call(els, function (el) {
-    /* Rest comes from CSS so there is one source of truth. If the
-       stylesheet has not parsed or the knob is missing, .32 matches
-       the documented default rather than collapsing to a flat 0. */
     var rest = parseFloat(
       getComputedStyle(el).getPropertyValue('--tx-bore-aim-rest')) || 0.32;
 
-    /* Pinned at rest and no listeners bound at all — not bound and
-       ignored. Touch devices have no hover to track and would sit at
-       whatever the last tap happened to be. */
+    /* Pinned at rest and no listeners bound at all. */
     if (reduced || noHover) { el.style.setProperty('--bore-aim', rest); return; }
 
-    var state = { aim: rest };
-    function paint() { el.style.setProperty('--bore-aim', state.aim.toFixed(4)); }
-    paint();
+    var barrel = el.querySelector('.bore-barrel');
+    var rings  = el.querySelectorAll('.bore-ring');
 
-    /* Slower than the light. The light is a reflection and can be quick;
-       the twist is the barrel itself appearing to turn, and mass reads as
-       slow. Matching them made the whole thing feel like a slider. */
-    var toAim = smooth
-      ? gsap.quickTo(state, 'aim', { duration: 0.62, ease: 'power3.out', onUpdate: paint })
-      : function (v) { state.aim = v; paint(); };
+    /* ---- cached geometry ------------------------------------------
+       getBoundingClientRect() forces a synchronous layout. Calling it
+       on every mousemove — which this did, and which initTextures did
+       again for the same element — means two forced layouts per frame,
+       and with Lenis driving the scroll that is a layout thrash on a
+       page that is already animating. It is the difference between the
+       benchmark being fine and the thing feeling awful in the hand.
 
-    /* Promote the rings to their own compositor layers WHILE interacting,
-       and only while. Rotating a blurred, masked element forces the blur
-       to re-run every frame — measured at 19.8fps. Promoted, the blur is
-       baked into the layer texture once and the rotation is a compositor
-       transform: 50.8fps, with no visual difference at all.
+       Measured once, then only after a scroll or a resize actually
+       invalidates it. The barrel's radius comes from its computed
+       width rather than its bounding box, because the box is the
+       AXIS-ALIGNED bounds of an element that is rotated 3.2deg, which
+       reads about 5% wide. */
+    var box = null, radius = 0;
+    function measure() {
+      box = el.getBoundingClientRect();
+      radius = (barrel ? parseFloat(getComputedStyle(barrel).width) : box.width) / 2;
+    }
+    function invalidate() { box = null; }
+    window.addEventListener('scroll', invalidate, { passive: true });
+    window.addEventListener('resize', invalidate);
 
-       It is removed again after the twist settles, because twenty
-       promoted layers is real GPU memory and leaving will-change on
-       permanently is the documented way to misuse it. */
-    var rings = el.querySelectorAll('.bore-ring');
-    var settle;
+    /* ---- one listener, both signals -------------------------------
+       This element does NOT carry data-texture any more. It used to,
+       which meant initTextures() bound a second mousemove to it and
+       read the rect a second time to drive --light. One listener
+       writing both signals off one cached rect is half the work and
+       still one writer per variable. */
+    var state = { aim: rest, x: 34, y: 24 };
+    function paintAim()   { el.style.setProperty('--bore-aim', state.aim.toFixed(4)); }
+    function paintLight() {
+      el.style.setProperty('--light',   state.x.toFixed(2));
+      el.style.setProperty('--light-y', state.y.toFixed(2));
+    }
+    paintAim(); paintLight();
+
+    /* The twist eases slower than the light. The light is a reflection
+       and can be quick; the twist is the barrel itself appearing to
+       turn, and mass reads as slow. Matching them made the whole thing
+       feel like a slider being dragged. */
+    var toAim, toX, toY;
+    if (smooth) {
+      toAim = gsap.quickTo(state, 'aim', { duration: 0.62, ease: 'power3.out', onUpdate: paintAim });
+      toX   = gsap.quickTo(state, 'x',   { duration: 0.28, ease: 'power3.out', onUpdate: paintLight });
+      toY   = gsap.quickTo(state, 'y',   { duration: 0.28, ease: 'power3.out', onUpdate: paintLight });
+    } else {
+      toAim = function (v) { state.aim = v; paintAim(); };
+      toX   = function (v) { state.x = v; paintLight(); };
+      toY   = function (v) { state.y = v; paintLight(); };
+    }
+
+    /* ---- promotion, only while actually on the barrel -------------- */
+    var touching = false, settle;
     function promote(on) {
       Array.prototype.forEach.call(rings, function (r) {
         r.style.willChange = on ? 'transform' : '';
       });
     }
 
-    el.addEventListener('mouseenter', function () {
-      clearTimeout(settle);
-      promote(true);
-    });
-
-    el.addEventListener('mousemove', function (e) {
-      /* Measured every move so it survives a scroll or a resize. */
-      var box = el.getBoundingClientRect();
-      var dx  = (e.clientX - (box.left + box.width  / 2)) / (box.width  / 2);
-      var dy  = (e.clientY - (box.top  + box.height / 2)) / (box.height / 2);
-
-      /* Normalised against the half-DIAGONAL, so the far corners are the
-         only places that reach a true zero. Normalising against the
-         half-width instead would flatten the barrel halfway along every
-         edge, and the effect would spend most of its range already spent. */
-      var d = Math.sqrt(dx * dx + dy * dy) / Math.SQRT2;
-      toAim(Math.max(0, Math.min(1, 1 - d)));
-    });
-
-    /* Back to rest on the way out, so the section is never left parked
-       at whatever the pointer happened to be doing when it left. */
-    el.addEventListener('mouseleave', function () {
-      if (smooth) gsap.to(state, { aim: rest, duration: 0.9, ease: 'power2.inOut', onUpdate: paint });
-      else { state.aim = rest; paint(); }
-      /* Drop the promotion once the ease home has finished, not on the
-         way out — releasing the layers mid-tween puts the stutter back
-         exactly where it is most visible. */
+    function release() {
+      if (!touching) return;
+      touching = false;
+      if (smooth) gsap.to(state, { aim: rest, duration: 0.9, ease: 'power2.inOut', onUpdate: paintAim });
+      else { state.aim = rest; paintAim(); }
+      /* Drop the layers once the ease home has finished, not on the way
+         out — releasing them mid-tween puts the stutter back exactly
+         where it is most visible. */
       clearTimeout(settle);
       settle = setTimeout(function () { promote(false); }, 1000);
-    });
+    }
+
+    el.addEventListener('mousemove', function (e) {
+      if (!box) measure();
+
+      /* Distance from the middle, as a fraction of the barrel's radius.
+         The band is a full-bleed rectangle but the object in it is a
+         circle, so "on it" means inside that circle — not anywhere in
+         the section. Past the rim nothing is driven at all. */
+      var dx = e.clientX - (box.left + box.width  / 2);
+      var dy = e.clientY - (box.top  + box.height / 2);
+      var r  = radius ? Math.sqrt(dx * dx + dy * dy) / radius : 1;
+
+      if (r > 1) { release(); return; }
+
+      if (!touching) { touching = true; clearTimeout(settle); promote(true); }
+
+      /* Dead centre winds the rifling all the way up; the rim unwinds
+         it flat. Radius, not the half-diagonal the first version used —
+         that one kept driving out to the corners of the rectangle,
+         which are nowhere near the object. */
+      toAim(1 - r);
+      toX(((e.clientX - box.left) / box.width)  * 100);
+      toY(((e.clientY - box.top)  / box.height) * 100);
+    }, { passive: true });
+
+    el.addEventListener('mouseleave', release);
   });
 }
 

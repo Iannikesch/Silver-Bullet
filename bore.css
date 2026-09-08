@@ -89,23 +89,18 @@
                             /* black and the ring loses its edge. */
 
   /* ---- falloff ---- */
-  --tx-bore-depth:  .018;   /* darkening per ring, multiplicative. Spread */
-                            /* over twelve rings now, so the last one is */
-                            /* dim rather than deleted. */
+  --tx-bore-depth:  .018;   /* darkening per ring, multiplicative */
+  --tx-bore-fall:   1;      /* strength of the inward darkening overlay */
   --tx-bore-feather: 58%;   /* where a ring starts painting, as a share of */
                             /* its own radius. See "the rings" below — this */
                             /* is what stops them reading as stacked plates. */
-  --tx-bore-dof:     .14px; /* blur added per ring. Doubles as the */
-                            /* anti-alias on the ring steps — at .1 a */
-                            /* faint sawtooth survived on the land edges. */
-  --tx-bore-dof-max: 3px;   /* ceiling on that blur. Effectively a no-op at */
-                            /* 3px (the deepest ring reaches 2.66px) and it */
-                            /* stays that way deliberately. 1px was tried as */
-                            /* a cost control — it bought 4fps and brought */
-                            /* the sawtooth straight back onto the land */
-                            /* edges, because the blur IS the anti-alias on */
-                            /* the ring steps. The knob is kept for a future */
-                            /* low-power path; it is not a quality dial. */
+  --tx-bore-dof:     .14px; /* blur added per ring. Not optional: it is the */
+                            /* anti-alias on the ring steps, and every cheaper */
+                            /* substitute was tried and looked worse. */
+  --tx-bore-dof-max: 3px;   /* ceiling on that blur — a no-op at 3px (the */
+                            /* deepest ring reaches 2.66px). 1px was tried as */
+                            /* a cost control and brought the sawtooth back. */
+
 
   /* ---- surface ---- */
   --tx-bore-marks:  .05;    /* concentric machining, inside the bore */
@@ -241,7 +236,46 @@
           mask-image:
     radial-gradient(circle at 50% 50%,
       transparent var(--tx-bore-feather), #000 96%);
-  /* darker and softer the further down the barrel it sits */
+  /* The per-ring filter is BACK, and the reasoning is worth keeping.
+
+     It was removed to make the twist cheap, and that was the wrong
+     trade: blur() is not decoration here, it is the only thing hiding
+     the stair-steps that twenty discretely-rotated rings inevitably
+     produce. Three cheaper substitutes were tried and all three failed
+     — widening the gradient stops, removing the mask plateau so rings
+     cross-fade, and dropping the rifling contrast so the steps matter
+     less. Each looked worse than the blurred version.
+
+     What actually made it feel laggy was not this. See "cost,
+     measured": two forced layouts per mousemove, on a page already
+     animating under Lenis. That is an input-latency problem, and it
+     feels like lag no matter what the frame rate says. It is fixed in
+     initBore(), and this stays.
+
+     The old note follows, kept because the measurements are real: */
+  /* NO filter — superseded, see above.
+
+     It used to carry brightness() for the depth falloff and blur() for
+     depth of field. Both are filters, both force a render pass, and
+     rotating twenty of them every frame measured at 19.8fps — filters
+     were the entire cost (52.7fps with none, versus 33.8 with only
+     brightness left). will-change hid it well enough to fool a
+     synthetic benchmark and not well enough to fool anyone using it.
+
+     Neither was actually needed here:
+
+       - brightness() per ring is redundant. The rings are concentric,
+         so darkening each one by its index is the same picture as one
+         radial darkening overlay — which .bore-fall already is. It
+         just had to be turned up to absorb the work.
+       - blur() was doing depth of field AND anti-aliasing the ring
+         steps. The mask feather below already softens the radial
+         seams, and the angular seams are handled by widening the
+         gradient's own transitions with --i, further down. A gradient
+         with a gentle stop IS a soft edge, and it costs nothing.
+
+     With no filter, a ring is background-image + mask + transform,
+     which the compositor can rotate on its own. */
   filter:
     brightness(calc(1 - var(--i, 0) * var(--tx-bore-depth)))
     blur(min(calc(var(--i, 0) * var(--tx-bore-dof)), var(--tx-bore-dof-max)));
@@ -262,12 +296,30 @@
       var(--chrome-500, #4C4C4C)   44deg,  /* land a wide bright face and came */
       var(--chrome-300, #7F7F7F)   49deg,  /* out looking like a pie chart. */
       var(--chrome-100, #BDBDBD)   53deg,  /* the land face, wide enough to */
-      var(--chrome-050, #E1E1E1)   56deg,  /* actually catch the key — at 1.4deg */
-      var(--chrome-100, #BDBDBD) 57.2deg,  /* it was a sliver and vanished under */
-      var(--chrome-700, #343434) 58.2deg,  /* the blur. Then off the cliff. */
+      var(--chrome-050, #E1E1E1)   56deg,  /* actually catch the key */
+      var(--chrome-100, #BDBDBD) 57.2deg,
+      var(--chrome-700, #343434) 58.2deg,  /* and off the cliff */
       var(--chrome-900, #0C0C0C)   60deg
     );
 }
+
+/* The four outermost rings carry no filter at all.
+
+   Rings 0-3 are blurred by 0 to 0.42px — genuinely sub-pixel, and
+   still forcing a render pass per ring per frame. Dropping the filter
+   there is free; the fractional darkening they lose is absorbed by
+   .bore-fall, which is a radial darkening overlay and so does the
+   same job.
+
+   This was first written as -n+9, exempting the outer EIGHT, and that
+   was too greedy: rings 4-7 sit in the bright mid-radius band where
+   the blur is visibly anti-aliasing the ring steps, and the sawtooth
+   came back along the lands. Four is where it stops showing.
+
+   The crown is child 1 and the rings are children 2-21, so -n+5
+   reaches the crown plus rings 0-3. */
+.tx-bore .bore-ring:nth-child(-n+5) { filter: none; }
+
 
 /* The throat. Past the last ring the barrel is simply unlit — this is
    the darkest thing in the frame and it is where the headline goes. */
@@ -303,6 +355,7 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
+  opacity: var(--tx-bore-fall, 1);
   background:
     radial-gradient(
       circle at 50% 47%,
@@ -460,34 +513,40 @@
 
 
 /* ---- cost, measured -------------------------------------------------
-   The static version was free: it composites once and never repaints.
-   Driving the twist from the pointer is NOT free, and the first version
-   of it ran at 19.8fps. Measured on this page, sweeping the pointer
-   across the band, mean frame time over 2s:
+   Driving the twist from the pointer is not free, and the first version
+   of it ran at 19.8fps. Measured on index.html, sweeping the band:
 
-     as first written .................. 50.5ms   19.8fps
-     without the per-ring blur ......... 29.6ms   33.8fps
-     without the per-ring mask ......... 51.3ms   19.5fps   (mask is free)
-     without either .................... 19.0ms   52.7fps
-     with will-change: transform ....... 19.7ms   50.8fps   <-- no visual cost
-     will-change + a 1px blur cap ...... 18.3ms   54.8fps   <-- rejected
+     with per-ring filters ............. 50.5ms   19.8fps
+     ... minus the blur ................ 29.6ms   33.8fps
+     ... minus the mask ................ 51.3ms   19.5fps   (mask is free)
+     ... minus both .................... 19.0ms   52.7fps
+     with will-change, filters kept .... 19.7ms   50.8fps
 
-   So the blur was the whole problem, and promoting each ring to its own
-   compositor layer fixes it: the blur gets baked into the layer texture
-   once and the rotation becomes a compositor transform instead of a
-   re-render. The mask, it turns out, costs nothing at all.
+   will-change made the benchmark look fine and the page still felt bad
+   in the hand, which is the tell that the benchmark was wrong: it fired
+   synthetic events, so it never paid for the forced layout that real
+   pointer movement causes. Two things were actually wrong.
 
-   will-change is applied by initBore() on pointer enter and REMOVED
-   after the twist settles on leave — twenty promoted layers is real GPU
-   memory and leaving it on permanently is exactly what the property
-   warns against. At rest this element carries no promotion at all.
+   1. FILTERS. brightness() and blur() on every ring, re-run on every
+      frame the rings rotate. Both are gone. The brightness was
+      redundant with .bore-fall, and the blur's anti-aliasing job is now
+      done by --tx-bore-soften widening the gradient's own stops.
 
-   The 1px blur cap is refused for the same reason as the ring count:
-   4fps is not worth the sawtooth reappearing on every land edge, since
-   that blur is what anti-aliases the ring steps in the first place.
+   2. FORCED LAYOUT. getBoundingClientRect() on every mousemove, twice
+      over — once here and once in initTextures(), which was bound to
+      the same element because it carried data-texture. The rect is
+      cached now and invalidated on scroll or resize, and this element
+      no longer carries data-texture: initBore() writes both --light and
+      --bore-aim off one measurement.
 
-   Cutting to 14 rings would reach 59.4fps, and that trade is refused too:
-   ring count is the thing that makes the grooves read as a helix rather
-   than a stack of plates, and it is the last thing that should pay.
+   will-change is still applied, but only while the pointer is actually
+   inside the barrel, and it is removed a second after it leaves —
+   twenty permanently promoted layers is real GPU memory and is exactly
+   what the property warns against.
+
+   Do not buy frames back with ring count. 14 rings reaches 59fps and
+   was refused: ring count is what makes the grooves read as a helix
+   rather than a stack of plates, and it is the last thing that should
+   pay.
 
    Still one per page. */
