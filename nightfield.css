@@ -29,19 +29,25 @@
    ========================================================== */
 
 .tx-nightfield {
-  /* ---- palette ---- */
-  --tx-nightfield-base:  #0B0E10;   /* near-black petrol */
-  --tx-nightfield-char:  #1A1E20;   /* charcoal it fades toward */
-  --tx-nightfield-neon:  #A06090;   /* orchid-magenta bloom */
-  --tx-nightfield-plum:  #703050;   /* shadow the bloom falls off into */
-  --tx-nightfield-cyan:  #2DC8FF;   /* cool accent, rationed */
+  /* ---- palette ----
+     Pulled roughly halfway back toward the site's own dark. The orchid is
+     mixed down toward petrol rather than being swapped for a different hue,
+     so it is the same light, just further away and less lurid. The full
+     comic-noir values are still available as .tx-nightfield--vivid. */
+  --tx-nightfield-base:  #0A0D0E;   /* the site's own background */
+  --tx-nightfield-char:  #14181A;   /* charcoal it fades toward */
+  --tx-nightfield-neon:  #6E4A63;   /* orchid, taken down toward steel */
+  --tx-nightfield-plum:  #43273A;   /* shadow the bloom falls off into */
+  --tx-nightfield-cyan:  #2DC8FF;   /* cool accent, heavily rationed */
 
-  /* ---- intensity ---- */
-  --tx-nightfield-bloom:  0.55;     /* bloom opacity */
-  --tx-nightfield-bokeh:  0.40;     /* orb opacity */
-  --tx-nightfield-cyan-a: 0.30;     /* cyan orb opacity */
-  --tx-nightfield-grain:  0.05;
-  --tx-nightfield-vignette: 0.85;
+  /* ---- intensity ----
+     Roughly half of where this started. It should read as a lit room the
+     page happens to sit in, not as the subject. */
+  --tx-nightfield-bloom:  0.30;
+  --tx-nightfield-bokeh:  0.18;
+  --tx-nightfield-cyan-a: 0.12;
+  --tx-nightfield-grain:  0.04;
+  --tx-nightfield-vignette: 0.92;
 
   /* ---- drift ---- */
   --tx-nightfield-rate:   90s;      /* bloom layer */
@@ -208,3 +214,19 @@ body.has-nightfield .site-header,
 body.has-nightfield .ticker,
 body.has-nightfield .capabilities,
 body.has-nightfield .contact { background: transparent; }
+
+
+/* ---- the original comic-noir grade ----
+   What this looked like before it was toned down. Kept so the two can be
+   compared rather than argued about from memory. */
+.tx-nightfield--vivid {
+  --tx-nightfield-base:  #0B0E10;
+  --tx-nightfield-char:  #1A1E20;
+  --tx-nightfield-neon:  #A06090;
+  --tx-nightfield-plum:  #703050;
+  --tx-nightfield-bloom:  0.55;
+  --tx-nightfield-bokeh:  0.40;
+  --tx-nightfield-cyan-a: 0.30;
+  --tx-nightfield-grain:  0.05;
+  --tx-nightfield-vignette: 0.85;
+}
