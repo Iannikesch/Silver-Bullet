@@ -428,20 +428,151 @@
     .contact h2 { max-width: 18ch; }
     .contact .lead { margin-top: 20px; }
 
-    /* ---------- footer ---------- */
+    /* ---------- footer ----------
+       Modeled on the vaynermedia.com footer: a full-bleed social strip
+       across the top, then a block of two link columns with the wordmark
+       and a single action right-aligned opposite them, and the copyright
+       line underneath.
+
+       Two deliberate departures from the reference:
+
+       1. Vayner's social strip is a saturated accent field. Here it's a
+          lit-edge band instead. A strip of amber that size would spend the
+          page's one warm accent on a row of icons, and the contact CTA
+          directly above the footer is the element that needs it.
+       2. Vayner's left column is partner badges — Google, Meta, TikTok,
+          Snap. We don't hold those, so that slot is a site nav column. If
+          real partner badges ever land, this is where they go. */
 
     .site-footer {
       border-top: 1px solid var(--border);
-      padding: var(--space-md) 0;
     }
 
-    .foot {
+    /* Full-bleed by design: it should read as a band across the page, not
+       as a row sitting inside the content column. Separation is the usual
+       rim-light move — lit top edge, ink bottom, no fill, no shadow. */
+    .foot-social {
+      background: var(--bg-raised);
+      border-top: 1px solid var(--border-lit);
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .foot-social__list {
+      max-width: var(--wrap);
+      margin: 0 auto;
+      padding: 14px var(--gutter);
+      list-style: none;
       display: flex;
-      justify-content: space-between;
-      gap: 16px;
       flex-wrap: wrap;
-      font-size: 14px;
-      color: var(--text-muted);
+      justify-content: center;
+      gap: clamp(18px, 5vw, 56px);
+    }
+
+    .foot-social__link {
+      display: block;
+      padding: 6px;   /* touch target only — reads as no padding at all */
+      color: var(--steel-500);
+      transition: color .18s ease;
+    }
+
+    .foot-social__link:hover,
+    .foot-social__link:focus-visible { color: var(--white); }
+
+    .foot-social__link svg {
+      display: block;
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    /* Link columns left, brand block right, copyright spanning underneath.
+       .wrap supplies the horizontal gutter; this only adds the vertical. */
+    .foot {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, auto);
+      gap: var(--space-sm) clamp(24px, 5vw, 72px);
+      align-items: start;
+      padding-top: var(--space-md);
+      padding-bottom: var(--space-sm);
+    }
+
+    .foot-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    /* Overrides the global h1-h3 rule: at 13px the display tracking of
+       -0.035em closes the letters up into a smudge. */
+    .foot-col__head {
+      margin: 0 0 4px;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: 0;
+      color: var(--steel-700);
+    }
+
+    .foot-link {
+      font-size: 15px;
+      text-decoration: none;
+      color: var(--steel-300);
+      transition: color .18s ease;
+    }
+
+    .foot-link:hover,
+    .foot-link:focus-visible { color: var(--white); }
+
+    .foot-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 20px;
+      text-align: right;
+    }
+
+    /* width/height in the markup are the file's real pixels, so the box is
+       the right shape before the image lands. */
+    .foot-brand__logo {
+      display: block;
+      width: clamp(170px, 20vw, 240px);
+      height: auto;
+    }
+
+    .foot-copy {
+      grid-column: 1 / -1;
+      margin: 0;
+      padding-top: var(--space-sm);
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      line-height: 1.7;
+      text-align: right;
+      color: var(--steel-700);
+    }
+
+    /* Brand block leads once the three columns stop fitting — the wordmark
+       is the thing worth seeing first on a phone, not the nav list. */
+    @media (max-width: 860px) {
+      .foot { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+      .foot-brand {
+        order: -1;
+        grid-column: 1 / -1;
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .foot-copy { text-align: left; }
+    }
+
+    @media (max-width: 460px) {
+      .foot { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .foot-social__link,
+      .foot-link { transition: none; }
     }
 
     /* ---------- slogan ticker ----------
