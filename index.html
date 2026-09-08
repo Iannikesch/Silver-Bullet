@@ -181,7 +181,8 @@
       top: 0;
       z-index: 40;
       height: var(--nav-h);
-      background: var(--bg);
+      /* No fill of its own. .tx-frost supplies a translucent pane, and only
+         once the page has been scrolled - see textures.css. */
     }
 
     .site-header .wrap {
@@ -618,6 +619,42 @@
       white-space: nowrap;
     }
 
+    /* ---------- capabilities ----------
+       Separation by hairline, not by a repeated rounded box. The 1px grid
+       gap lets the container colour through as the rules, so there is one
+       border to change rather than twenty-four. */
+
+    .capabilities {
+      padding: var(--space-xl) 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .cap-grid {
+      display: grid;
+      /* 300px puts three across the 1100px content column, so six items
+         land as a clean 3x2 instead of 4 + a ragged row of 2. Drops to two
+         then one on the way down. */
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1px;
+      margin: var(--space-md) 0 0;
+      padding: 0;
+      list-style: none;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .cap-grid > li {
+      background: var(--bg);
+      padding: var(--space-sm);
+    }
+
+    /* Subheads step down the steel ramp. --white is rationed to headlines;
+       six of them at full white would flatten the hierarchy. */
+    .cap-grid h3 {
+      color: var(--steel-050);
+      margin-bottom: 8px;
+    }
+
     /* ==========================================================
        INTRO — the bullet
        Base state below is the FINISHED state. The animation only
@@ -901,9 +938,9 @@
 </head>
 
 <body>
-  <header class="site-header">
+  <header class="site-header tx-frost">
     <div class="wrap">
-      <a class="logo" href="#top" aria-label="Silver Bullet — home">
+      <a class="logo tx-pulse" href="#top" aria-label="Silver Bullet — home">
         <span class="logo__inner">
           <!-- width/height are the file's real pixels: they give the browser
                the aspect ratio so the header never jumps as it loads.
@@ -914,6 +951,7 @@
       </a>
       <nav class="nav">
         <a class="nav-link" href="#work">Our work</a>
+        <a class="nav-link" href="#capabilities">Capabilities</a>
         <a class="cta-secondary" href="#contact">Talk to us</a>
       </nav>
     </div>
@@ -1071,6 +1109,48 @@
       </div>
     </section>
 
+    <!-- ============================================================
+         Capabilities — placeholder.
+
+         Deliberately static. Three marquee bands is the ceiling set in
+         DESIGN.md, so this one does not move.
+
+         The grid is hairline-divided rather than a row of identical
+         rounded cards; swap the copy, add or remove <li>s and the columns
+         reflow on their own.
+         ============================================================ -->
+    <section id="capabilities" class="capabilities">
+      <div class="wrap">
+        <h2>Capabilities</h2>
+        <ul class="cap-grid">
+          <li>
+            <h3>Placeholder capability</h3>
+            <p class="meta">One line on what this is. Replace when you know.</p>
+          </li>
+          <li>
+            <h3>Placeholder capability</h3>
+            <p class="meta">One line on what this is. Replace when you know.</p>
+          </li>
+          <li>
+            <h3>Placeholder capability</h3>
+            <p class="meta">One line on what this is. Replace when you know.</p>
+          </li>
+          <li>
+            <h3>Placeholder capability</h3>
+            <p class="meta">One line on what this is. Replace when you know.</p>
+          </li>
+          <li>
+            <h3>Placeholder capability</h3>
+            <p class="meta">One line on what this is. Replace when you know.</p>
+          </li>
+          <li>
+            <h3>Placeholder capability</h3>
+            <p class="meta">One line on what this is. Replace when you know.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
     <section id="contact" class="contact">
       <div class="wrap">
         <!-- A machined component, not a background. Metal behind text would
@@ -1118,6 +1198,8 @@
     window.addEventListener('DOMContentLoaded', function () {
       if (typeof initTextures === 'function') initTextures({ drive: false });
       if (typeof initThermal  === 'function') initThermal();
+      if (typeof initFrost    === 'function') initFrost('.site-header', 24);
+      if (typeof initPulse    === 'function') initPulse('.logo');
     });
   </script>
 
