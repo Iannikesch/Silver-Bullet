@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NSP Plumbing — Silver Bullet</title>
-  <meta name="description" content="NSP Plumbing: +50% revenue growth in 2 months on rev share.">
+  <meta name="description" content="How NSP Plumbing built a commercial book on top of emergency callouts and grew revenue 50% in two months, on a share of tracked new revenue.">
 
   <!-- Icons. The mark is the bullet, drawn with the same hard-stopped chrome
        ramp as the site: paired stops at identical offsets, so every band is
@@ -110,7 +111,10 @@
       border-bottom: 1px solid var(--ink);
     }
 
-    .attribution h3 { color: var(--steel-050); margin-bottom: 8px; }
+    /* h2 to keep the outline in order — it sat before the first h2.
+       Size restated because the global h2 is clamp(28px,4vw,46px). */
+    .attribution h2 { color: var(--steel-050); margin-bottom: 8px;
+                      font-size: 18px; line-height: 1.25; letter-spacing: -.02em; }
     .attribution p { color: var(--steel-500); font-size: 15px; max-width: 70ch; }
 
     /* Three sections and no more: Situation, Strategy, Results. */
@@ -242,7 +246,7 @@
       </ul>
 
       <div class="attribution">
-        <h3>How this was measured</h3>
+        <h2>How this was measured</h2>
         <p>Residential emergency work is tracked per job through a channel-tagged number. Commercial revenue counts only where the first touch appears in our outbound records, recognised on invoice rather than at account opening. Work from existing customers is excluded from the share.</p>
       </div>
 

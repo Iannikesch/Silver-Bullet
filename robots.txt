@@ -1,0 +1,13 @@
+# Silver Bullet
+# Everything is crawlable. vsl.html is deliberately NOT disallowed here:
+# it carries <meta name="robots" content="noindex, follow">, and a page
+# blocked in robots.txt is never fetched, so that noindex would never be
+# seen. Blocking it would risk the opposite of the intent — the URL can
+# still surface in results, just without a description.
+
+User-agent: *
+Allow: /
+
+# TODO: add the sitemap once the production domain is settled. The
+# directive requires an absolute URL, so it cannot be written yet:
+# Sitemap: https://<domain>/sitemap.xml

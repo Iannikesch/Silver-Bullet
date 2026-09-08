@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mantis Moving & Storage — Silver Bullet</title>
-  <meta name="description" content="Mantis Moving and Storage: about $60k in booked revenue from $2k of attributable ad spend, in three days.">
+  <meta name="description" content="Mantis Moving & Storage booked around $60k from about $2,000 of ad spend, three days after launch, on a share of incremental gross profit.">
 
   <!-- Icons. The mark is the bullet, drawn with the same hard-stopped chrome
        ramp as the site: paired stops at identical offsets, so every band is
@@ -110,7 +111,10 @@
       border-bottom: 1px solid var(--ink);
     }
 
-    .attribution h3 { color: var(--steel-050); margin-bottom: 8px; }
+    /* h2 to keep the outline in order — it sat before the first h2.
+       Size restated because the global h2 is clamp(28px,4vw,46px). */
+    .attribution h2 { color: var(--steel-050); margin-bottom: 8px;
+                      font-size: 18px; line-height: 1.25; letter-spacing: -.02em; }
     .attribution p { color: var(--steel-500); font-size: 15px; max-width: 70ch; }
 
     /* Three sections and no more: Situation, Strategy, Results. */
@@ -242,7 +246,7 @@
       </ul>
 
       <div class="attribution">
-        <h3>How this was measured</h3>
+        <h2>How this was measured</h2>
         <p>Booked revenue attributed to the paid search account across a three-day window, out of their dispatch system and matched against ad platform spend for the same three days. Attributable means the job carries a click ID or a channel-tagged call back to the campaign &mdash; organic, repeat and referral work is excluded, as is storage revenue, which we did not touch. Long-haul jobs book at high ticket, so a small number of them move this figure a long way.</p>
       </div>
 

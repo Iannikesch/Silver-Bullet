@@ -33,7 +33,19 @@
       --t-name:     0.60s;  /* wordmark wipes in */
       --t-shift:    1.15s;  /* logo slides to the left */
       --t-nav:      1.50s;  /* nav items arrive */
-      --t-page:     1.80s;  /* page fades up */
+      /* Page fades up. Held at 1.80s originally, which meant <main> and the
+         footer sat at opacity:0 from first paint until 2.35s — and Largest
+         Contentful Paint cannot fire on an element that has not been
+         painted, so LCP measured 2488ms on every page except the homepage.
+         That is 12ms under Google's 2.5s threshold on a LOCAL server with a
+         warm cache and no network; on a phone it fails outright.
+
+         Brought forward so the page arrives while the bullet is still
+         crossing rather than after it has finished. The sequence is intact
+         — blip, flight, glint, wordmark, logo travel, nav — it now plays
+         OVER a page that is already there, which is also why .intro-layer
+         is transparent and always was. */
+      --t-page:     0.35s;
 
       --ease-settle: cubic-bezier(.25, 1, .5, 1);
       /* Hard launch, long decaying tail. The opening slope is y1/x1 = 4.25x
@@ -194,6 +206,22 @@
       line-height: 0;
       text-decoration: none;
       will-change: transform;
+      position: relative;
+    }
+
+    /* The wordmark is 148x12, far under any tap-target minimum. Its BOX must
+       not change: intro.js measures logo.getBoundingClientRect() to compute
+       --logo-shift, so padding here would move where the logo flies from.
+       An absolutely positioned overlay expands only the hit area and leaves
+       the anchor's own rect untouched. Safe here precisely because the logo
+       has no neighbour within 44px to overlap. */
+    .logo::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 44px;
     }
 
     /* The wipe is applied to this wrapper, so it clips whatever sits inside —
@@ -500,7 +528,11 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      gap: 10px;
+      /* gap is 0 because .foot-link now carries its own vertical padding to
+         reach a 44px tap target. Head margin (4px) + the first link's top
+         padding (10px) reproduces the 14px that the old 4px + 10px gap gave,
+         so the head sits exactly where it did. */
+      gap: 0;
     }
 
     /* Overrides the global h1-h3 rule: at 13px the display tracking of
@@ -514,7 +546,17 @@
       color: var(--steel-700);
     }
 
+    /* Google's mobile usability guidance wants a 44-48px tap target and
+       WCAG 2.5.8 sets 24px as the hard floor. These measured 25px tall —
+       one pixel above an outright failure — because an inline <a> at 15px
+       is only as tall as its line box. Padding makes the target real.
+
+       Padding rather than a stretched ::after pseudo-element: these sit
+       10px apart in a column, so a 44px overlay on each would overlap its
+       neighbours and cause mis-taps, which is worse than a small target. */
     .foot-link {
+      display: block;
+      padding-block: 10px;          /* 25px line box + 20px = 45px */
       font-size: 15px;
       text-decoration: none;
       color: var(--steel-300);
@@ -884,7 +926,7 @@
     .cap-num {
       display: block;
       margin-bottom: 16px;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 700;
       letter-spacing: 0.08em;
       color: var(--steel-900);

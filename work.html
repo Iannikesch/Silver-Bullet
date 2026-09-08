@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -114,7 +115,11 @@
       color: var(--steel-700);
     }
 
-    .case-card h3 {
+    /* h2, not h3: these are the page's primary content, and they used to sit
+       before the first h2 on the page, which made the outline read
+       h1 -> h3 -> h2. Promoted a level; the selector moved with the tag so
+       the rendered size is unchanged. */
+    .case-card h2 {
       margin: 10px 0 14px;
       color: var(--steel-050);
       font-size: clamp(19px, 1.7vw, 23px);
@@ -254,7 +259,7 @@
             <span class="case-card__art"><img src="Assets/web/work-vitality-meter.webp" width="1200" height="800" loading="lazy" decoding="async" alt="A Vitality Mechanical technician metering a motor"></span>
             <span class="case-card__body">
               <span class="case-card__meta"><span>Vitality Mechanical</span><span>Rev share</span></span>
-              <h3>Turning a service department that ran on callbacks into a booked calendar.</h3>
+              <h2>Turning a service department that ran on callbacks into a booked calendar.</h2>
               <span class="case-card__figure">+25%
                 <span class="in">revenue growth, 2 months</span></span>
             </span>
@@ -265,7 +270,7 @@
             <span class="case-card__art"><img src="Assets/web/work-mantis-dolly.webp" width="1200" height="800" loading="lazy" decoding="async" alt="A Mantis Moving crew member loading a truck"></span>
             <span class="case-card__body">
               <span class="case-card__meta"><span>Mantis Moving &amp; Storage</span><span>Profit share</span></span>
-              <h3>Getting paid for the moves worth doing instead of every move going.</h3>
+              <h2>Getting paid for the moves worth doing instead of every move going.</h2>
               <span class="case-card__figure">~$60k
                 <span class="in">from ~$2k of attributable ad spend, 3 days</span></span>
             </span>
@@ -276,7 +281,7 @@
             <span class="case-card__art"><img src="Assets/web/work-nsp-van.webp" width="1200" height="800" loading="lazy" decoding="async" alt="An NSP Plumbing service van"></span>
             <span class="case-card__body">
               <span class="case-card__meta"><span>NSP Plumbing</span><span>Rev share</span></span>
-              <h3>A commercial book built on top of a business that only rang when something burst.</h3>
+              <h2>A commercial book built on top of a business that only rang when something burst.</h2>
               <span class="case-card__figure">+50%
                 <span class="in">revenue growth, 2 months</span></span>
             </span>

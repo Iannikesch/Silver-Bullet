@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vitality Mechanical — Silver Bullet</title>
-  <meta name="description" content="Vitality Mechanical: +25% revenue growth in 2 months on rev share.">
+  <meta name="description" content="How Vitality Mechanical turned a callback-driven service department into a booked calendar, growing revenue 25% in two months on a share of tracked new revenue.">
 
   <!-- Icons. The mark is the bullet, drawn with the same hard-stopped chrome
        ramp as the site: paired stops at identical offsets, so every band is
@@ -110,7 +111,10 @@
       border-bottom: 1px solid var(--ink);
     }
 
-    .attribution h3 { color: var(--steel-050); margin-bottom: 8px; }
+    /* h2 to keep the outline in order — it sat before the first h2.
+       Size restated because the global h2 is clamp(28px,4vw,46px). */
+    .attribution h2 { color: var(--steel-050); margin-bottom: 8px;
+                      font-size: 18px; line-height: 1.25; letter-spacing: -.02em; }
     .attribution p { color: var(--steel-500); font-size: 15px; max-width: 70ch; }
 
     /* Three sections and no more: Situation, Strategy, Results. */
@@ -242,7 +246,7 @@
       </ul>
 
       <div class="attribution">
-        <h3>How this was measured</h3>
+        <h2>How this was measured</h2>
         <p>A quarter is the round number; the monthly reconciliation is not. Growth is counted on invoiced work rather than booked work, sourced to a tracked number or a channel-tagged form, and reconciled against their service management system. Maintenance agreements already in place at signing were carved out of the baseline, so renewals cannot flatter it.</p>
       </div>
 
