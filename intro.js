@@ -13,9 +13,17 @@
 (function () {
   'use strict';
 
-  /* Flip to true to show the intro only once per browser session.
-     Left false so it replays on every reload while we're tuning it. */
-  var ONCE_PER_SESSION = false;
+  /* Once per browser session, not once per page load.
+
+     Every page carries .intro-layer, so with this false the full 2.4s
+     bullet sequence replayed on every single navigation — click a case
+     card and the ticker rides out, comes back, and the amber CTA fades
+     in again on the nav's beat. On the home page that reads as the
+     intro. Clicking into a case study it just reads as the banner
+     glitching, because nobody asked for it a second time.
+
+     A fresh tab still gets the intro. Moving around the site does not. */
+  var ONCE_PER_SESSION = true;
 
   var TOTAL_MS = 2400;         // full sequence, including the page fade
   var KEY = 'sb-intro-seen';
@@ -24,8 +32,21 @@
   var layer = document.querySelector('.intro-layer');
   var logo = document.querySelector('.logo');
 
+  /* sessionStorage throws outright in some privacy contexts rather than
+     returning null. Both calls were unreachable while ONCE_PER_SESSION was
+     false; now they are not, and a throw between adding .is-intro and
+     scheduling finish() would leave the class on <body> for good. Treat an
+     unreadable store as "not seen" and an unwritable one as a no-op — the
+     intro replaying is a far smaller problem than it never ending. */
+  function seenThisSession() {
+    try { return sessionStorage.getItem(KEY) === '1'; } catch (e) { return false; }
+  }
+  function markSeen() {
+    try { sessionStorage.setItem(KEY, '1'); } catch (e) { /* nothing to do */ }
+  }
+
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var seen = ONCE_PER_SESSION && sessionStorage.getItem(KEY) === '1';
+  var seen = ONCE_PER_SESSION && seenThisSession();
 
   if (reduced || seen || !layer || !logo) {
     if (layer) layer.remove();
@@ -74,7 +95,7 @@
   }
 
   body.classList.add('is-intro');
-  if (ONCE_PER_SESSION) sessionStorage.setItem(KEY, '1');
+  if (ONCE_PER_SESSION) markSeen();
 
   /* Any sign of impatience skips straight to the finished state. */
   window.addEventListener('wheel', finish, { passive: true, once: true });
