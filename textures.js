@@ -339,6 +339,12 @@ function initThermal() {
       start: 'top bottom',
       end: 'bottom top',
       scrub: true,
+      /* Promote the two gradient layers only while the section is on
+         screen. They are ~2300px square each; left promoted for the life
+         of the page they cost ~161MB of GPU texture doing nothing. */
+      onToggle: function (self) {
+        el.classList.toggle('is-onstage', self.isActive);
+      },
       onUpdate: function (self) {
         /* A sine arc, not a straight ramp: heat is nothing as the section
            arrives, peaks as it fills the screen, and is gone by the time it

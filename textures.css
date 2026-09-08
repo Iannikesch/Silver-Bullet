@@ -428,6 +428,25 @@
   inset: -30%;
   pointer-events: none;
   z-index: -1;                   /* behind the section's own content */
+}
+
+/* Promoted ONLY while the section is on screen.
+
+   inset: -30% makes each of these 160% of the hero in both axes — two
+   layers of roughly 2300x2300 CSS px. Carrying will-change permanently
+   kept both of them rasterised and resident for the life of the page,
+   including while the hero was thousands of pixels off screen. Measured
+   on index.html: 20 composited layers / 102.5 Mpx / ~391MB of GPU
+   texture, of which these two were 42 Mpx and ~161MB. Dropping the
+   promotion when they leave the viewport takes the page to 17 layers /
+   51.9 Mpx / ~198MB. Half the memory, no visual change whatsoever.
+
+   They still need promoting while they ARE on screen — the transform is
+   driven per scroll frame off --tx-heat, and un-promoted that would
+   re-raster a 2300px-square gradient every frame. This is a scope fix,
+   not a removal. initThermal() toggles the class. */
+.tx-thermal.is-onstage > .th-cold,
+.tx-thermal.is-onstage > .th-warm {
   will-change: transform, opacity;
 }
 

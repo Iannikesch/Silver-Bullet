@@ -308,7 +308,36 @@
     var rate = { v: 1 };
     var setRate = gsap.quickTo(rate, 'v', { duration: 0.35, ease: 'power2.out' });
 
+    /* ---- only run while the band is on screen -------------------------
+       Every marquee adds a ticker callback that writes a transform to its
+       track on EVERY frame, for the life of the page. Three bands means
+       three per-frame writes to large promoted layers, continuing long
+       after the band has scrolled away — which showed up as ~394 style
+       recalcs during a single scroll of the page.
+
+       An IntersectionObserver rather than a ScrollTrigger: this is one
+       boolean per band and it does not need to know the scroll position,
+       only whether the thing is visible. rootMargin keeps it running
+       slightly before it appears so it is never caught mid-jump.
+
+       Pausing off screen is invisible by definition, and the band simply
+       resumes from where it stopped. The class it toggles is also what
+       gates will-change and the ticker's CSS animation, in site.css. */
+    var onstage = true;
+    if (typeof IntersectionObserver !== 'undefined') {
+      onstage = false;
+      new IntersectionObserver(function (entries) {
+        onstage = entries[0].isIntersecting;
+        strip.classList.toggle('is-onstage', onstage);
+      }, { rootMargin: '200px 0px' }).observe(strip);
+    } else {
+      strip.classList.add('is-onstage');
+    }
+
     gsap.ticker.add(function (time, delta) {
+      /* Nothing to see, nothing to do. Dragging still wins, so a throw in
+         progress is never cut off by the band leaving the viewport. */
+      if (!onstage && !dragging && !fling) return;
       if (!dragging) {
         pos += (baseVel * rate.v + fling) * (delta / 1000);
         if (fling) {

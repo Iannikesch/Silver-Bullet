@@ -625,7 +625,7 @@
     .ticker__cta:hover  { background: var(--accent-hover); }
     .ticker__cta:active { background: var(--accent-active); }
 
-    .ticker__travel { will-change: transform; }
+    [data-marquee].is-onstage .ticker__travel { will-change: transform; }
 
     .ticker__track {
       display: flex;
@@ -635,8 +635,14 @@
          always content off to the left. Without it the strip rides out and
          drags an empty gap in behind itself. */
       animation-delay: calc(var(--ticker-rate) * -0.55);
-      will-change: transform;
     }
+
+    /* NOTE: deliberately no animation-play-state rule here. motion.js sets
+       track.style.animation = 'none' and drives the band from GSAP, so the
+       CSS animation only ever runs as the no-JS fallback — and pausing it
+       on :not(.is-onstage) would freeze every band permanently with JS off,
+       since nothing would be there to add the class. The off-screen saving
+       is made in bindMarquee() instead, which is where the motion lives. */
 
     /* The bands are draggable. pan-y keeps vertical page scrolling working
        on touch while horizontal drags come to us. */
@@ -723,8 +729,16 @@
     .logo-band__track {
       display: flex;
       width: max-content;
-      will-change: transform;
     }
+
+    /* Promoted only while the band is on screen — see bindMarquee() in
+       motion.js, which also stops writing to it when it is not. A track
+       is as wide as its content (7200px on the conveyor), so leaving it
+       promoted off screen is megabytes of texture for something nobody
+       is looking at. */
+    [data-marquee].is-onstage .conveyor__track,
+    [data-marquee].is-onstage .logo-band__track,
+    [data-marquee].is-onstage .ticker__track { will-change: transform; }
 
     .conveyor__track  { animation: marquee-left var(--conveyor-rate) linear infinite; }
     .logo-band__track { animation: marquee-left var(--logo-rate)     linear infinite; }
@@ -842,7 +856,41 @@
     .cap-grid > li {
       background: var(--bg);
       padding: var(--space-sm);
+      position: relative;
     }
+
+    /* Hover is a RIM LIGHT, not a fill. A hairline on the leading edge lights
+       up and the number steps up the steel ramp - nothing bleeds, nothing
+       glows, and no metal is spent. The page already carries its three
+       metallic moments and six more would cancel them. */
+    .cap-grid > li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 1px;
+      background: var(--border-lit);
+      opacity: 0;
+      transition: opacity var(--dur-base) var(--ease-metal);
+    }
+    .cap-grid > li:hover::before,
+    .cap-grid > li:focus-within::before { opacity: 1; }
+
+    /* The index. .tx-etched presses it INTO the surface - a 1px hard offset
+       each way, zero blur. This is the home that texture never had: it was
+       built for labels and numbers, and the brief rules out the eyebrow
+       labels that were the obvious alternative. */
+    .cap-num {
+      display: block;
+      margin-bottom: 16px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--steel-900);
+      transition: color var(--dur-base) var(--ease-metal);
+    }
+    .cap-grid > li:hover .cap-num { color: var(--steel-500); }
 
     /* Subheads step down the steel ramp. --white is rationed to headlines;
        six of them at full white would flatten the hierarchy. */
