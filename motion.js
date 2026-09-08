@@ -279,11 +279,19 @@
     var setWidth = fillTrack(track);
     if (!setWidth) return;
 
-    /* Speed stays declared in CSS. Read it, then take the loop over. */
+    /* Speed can be declared two ways.
+       data-marquee-speed is px per second and is the one to prefer: it is
+       independent of how many items the band holds. The CSS duration is a
+       whole-loop time, so speed = setWidth / duration, which means adding or
+       removing a single item silently retunes the band. That is exactly what
+       happened when the conveyor went from six placeholders to five photos -
+       it lost 16% of its speed without anything about motion being touched.
+       The CSS duration remains the no-JS fallback and the default. */
     var dur = parseFloat(getComputedStyle(track).animationDuration) || 40;
     track.style.animation = 'none';
 
-    var baseVel = -setWidth / dur;              /* px/s, negative = leftward */
+    var declared = parseFloat(strip.getAttribute('data-marquee-speed'));
+    var baseVel = declared > 0 ? -declared : -setWidth / dur;  /* px/s, negative = leftward */
     var wrapX   = gsap.utils.wrap(-setWidth, 0);
 
     var pos = 0;        /* the number this file now owns */

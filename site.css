@@ -54,8 +54,8 @@
          one striped block rather than as separate systems. Roughly
          45px/s for the creative slots, 18px/s for the logo band, against
          the hook banner's 28px/s. */
-      --conveyor-rate: 43s;
-      --logo-rate:    100s;
+      --conveyor-rate: 36s;   /* no-JS fallback; JS uses data-marquee-speed */
+      --logo-rate:    112s;   /* no-JS fallback; JS uses data-marquee-speed */
 
       /* Set by JS: how far left the logo must travel from centre */
       --logo-shift: 0px;
