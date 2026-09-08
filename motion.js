@@ -220,54 +220,192 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * 3. Marquees — hover slows the drift
+   * 3. Marquees — hover, drag, throw
    *
    * Applies to every [data-marquee] band: the hook banner, the creative
    * conveyor and the logo band.
    *
-   * The loops are plain CSS animations and stay that way. Speed is the one
-   * thing CSS cannot change cleanly: animation-duration remaps the
-   * animation's progress, so a 62s loop switched to 155s mid-flight jumps
-   * to a completely different position. The Web Animations API changes rate
-   * without moving the playhead, so playbackRate is the only way to do this
-   * without a visible snap.
+   * The stylesheet declares each loop as a CSS animation, and that is what
+   * runs with JS off — the bands still rotate, they just cannot be touched.
+   * When this file loads it reads the duration the CSS declared, cancels the
+   * animation and drives the same motion from GSAP's ticker instead.
    *
-   * Tweened rather than set, for the same reason the chrome lags behind the
-   * cursor: an instant speed change reads as a glitch, a ramped one reads
-   * as something heavy being slowed down.
+   * That handover is the whole reason for the complexity. A CSS animation's
+   * position cannot be scrubbed: there is no way to say "you are now 340px
+   * further along" without restarting it. Dragging is exactly that, so the
+   * position has to become a number this file owns.
    * ------------------------------------------------------------------ */
 
+  var MAX_FLING = 3200;      /* px/s. A violent flick should not fire the
+                                band across several screens. */
+  var DRAG_SLOP = 5;         /* px of movement before a press counts as a
+                                drag and stops being a click. */
+
   function initMarquees() {
-    /* No pointer to hover with, or a browser without getAnimations: every
-       band simply keeps its constant speed. Nothing breaks. */
-    if (!CAN_HOVER) return;
-
     var strips = document.querySelectorAll('[data-marquee]');
+    for (var i = 0; i < strips.length; i++) bindMarquee(strips[i]);
+  }
 
-    for (var i = 0; i < strips.length; i++) {
-      bindMarquee(strips[i]);
+  /* Clones the set until the track covers the viewport plus one whole set.
+     The wrap below repeats every setWidth, so anything narrower than that
+     would expose the end of the content on a wide screen. Returns the width
+     of a single set, which is the wrap distance. */
+  function fillTrack(track) {
+    var first = track.firstElementChild;
+    if (!first) return 0;
+    var setWidth = first.offsetWidth;
+    if (!setWidth) return 0;
+
+    var guard = 0;
+    while (track.offsetWidth < window.innerWidth + setWidth && guard++ < 20) {
+      var copy = first.cloneNode(true);
+      copy.setAttribute('aria-hidden', 'true');
+      track.appendChild(copy);
     }
+    return setWidth;
   }
 
   function bindMarquee(strip) {
     var track = strip.querySelector('[data-marquee-track]');
-    if (!track || !track.getAnimations) return;
+    if (!track) return;
 
-    var running = track.getAnimations();
-    if (!running.length) return;
-    var roll = running[0];
+    /* The clipping element is what you grab. On the hook banner that is the
+       viewport rather than the strip, so the pinned CTA stays clickable
+       instead of being a drag handle. */
+    var area = strip.hasAttribute('data-marquee-viewport')
+      ? strip
+      : (strip.querySelector('[data-marquee-viewport]') || strip);
 
-    /* Each band keeps its own tween target, or they would share one value
-       and hovering the logos would slow the creative conveyor too. */
+    var setWidth = fillTrack(track);
+    if (!setWidth) return;
+
+    /* Speed stays declared in CSS. Read it, then take the loop over. */
+    var dur = parseFloat(getComputedStyle(track).animationDuration) || 40;
+    track.style.animation = 'none';
+
+    var baseVel = -setWidth / dur;              /* px/s, negative = leftward */
+    var wrapX   = gsap.utils.wrap(-setWidth, 0);
+
+    var pos = 0;        /* the number this file now owns */
+    var fling = 0;      /* decaying velocity carried out of a throw */
+    var vel = 0;        /* pointer velocity while dragging */
+    var dragging = false;
+    var moved = 0;
+    var startX = 0, startPos = 0, lastX = 0, lastT = 0;
+
+    /* Hover and focus scale the drift. Tweened for the same reason the
+       chrome lags behind the cursor: an instant speed change reads as a
+       glitch. Each band keeps its own target, so hovering the logos does
+       not slow the conveyor. */
     var rate = { v: 1 };
-    var setRate = gsap.quickTo(rate, 'v', {
-      duration: 0.35,
-      ease: 'power2.out',
-      onUpdate: function () { roll.playbackRate = rate.v; }
+    var setRate = gsap.quickTo(rate, 'v', { duration: 0.35, ease: 'power2.out' });
+
+    gsap.ticker.add(function (time, delta) {
+      if (!dragging) {
+        pos += (baseVel * rate.v + fling) * (delta / 1000);
+        if (fling) {
+          /* Exponential decay expressed per-frame-time rather than
+             per-frame, so the throw travels the same distance at 120Hz as
+             it does at 60. */
+          fling *= Math.pow(0.93, delta / 16.667);
+          if (Math.abs(fling) < 2) fling = 0;
+        }
+      }
+      gsap.set(track, { x: wrapX(pos) });
     });
 
-    strip.addEventListener('pointerenter', function () { setRate(MARQUEE_HOVER_RATE); });
-    strip.addEventListener('pointerleave', function () { setRate(1); });
+    /* ---- drag ------------------------------------------------------ */
+
+    area.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      dragging = true;
+      moved = 0;
+      fling = 0;
+      vel = 0;
+      startX = lastX = e.clientX;
+      startPos = pos;
+      lastT = performance.now();
+      area.setPointerCapture(e.pointerId);
+      area.classList.add('is-dragging');
+    });
+
+    area.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      var dx = e.clientX - startX;
+      moved = Math.max(moved, Math.abs(dx));
+      pos = startPos + dx;
+
+      var now = performance.now();
+      var dt = now - lastT;
+      /* Sampling over a few milliseconds rather than every event: a single
+         mouse delta is far too noisy to throw with. */
+      if (dt > 12) {
+        vel = (e.clientX - lastX) / dt * 1000;
+        lastX = e.clientX;
+        lastT = now;
+      }
+    });
+
+    function endDrag(e) {
+      if (!dragging) return;
+      dragging = false;
+      area.classList.remove('is-dragging');
+      if (e && e.pointerId != null && area.hasPointerCapture(e.pointerId)) {
+        area.releasePointerCapture(e.pointerId);
+      }
+      /* A stale sample would throw the band after the pointer had already
+         stopped, so only carry velocity that is actually current. */
+      if (performance.now() - lastT > 120) vel = 0;
+      fling = clamp(vel, -MAX_FLING, MAX_FLING);
+    }
+
+    area.addEventListener('pointerup', endDrag);
+    area.addEventListener('pointercancel', endDrag);
+
+    /* A drag that ends over a link must not follow it. Capture phase, so
+       this runs before the link's own handling. */
+    area.addEventListener('click', function (e) {
+      if (moved > DRAG_SLOP) { e.preventDefault(); e.stopPropagation(); }
+    }, true);
+
+    /* ---- speed ------------------------------------------------------ */
+
+    /* Hover and focus are held as separate states rather than each calling
+       setRate directly. Sharing one value meant the last event to fire won,
+       so hovering a band that already had focus started it moving again and
+       the keyboard stop silently stopped working. */
+    var hovered = false;
+    var focused = false;
+
+    function applyRate() {
+      setRate(focused ? 0 : (hovered ? MARQUEE_HOVER_RATE : 1));
+    }
+
+    if (CAN_HOVER) {
+      strip.addEventListener('pointerenter', function () { hovered = true;  applyRate(); });
+      strip.addEventListener('pointerleave', function () { hovered = false; applyRate(); });
+    }
+
+    /* Keyboard focus stops it outright, and outranks hover. Someone tabbing
+       through needs the thing to hold still, and this keeps a real stop
+       available without a pointer. */
+    strip.addEventListener('focusin',  function () { focused = true;  applyRate(); });
+    strip.addEventListener('focusout', function () { focused = false; applyRate(); });
+
+    /* Slot widths are viewport-derived, so the wrap distance moves with the
+       window. Re-measure once things have settled. */
+    var resizeTimer = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () {
+        var w = fillTrack(track);
+        if (!w) return;
+        setWidth = w;
+        baseVel = -setWidth / dur;
+        wrapX = gsap.utils.wrap(-setWidth, 0);
+        pos = wrapX(pos);
+      }, 180);
+    });
   }
 
   /* ------------------------------------------------------------------ *

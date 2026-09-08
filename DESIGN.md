@@ -152,9 +152,11 @@ a template. What keeps it on the right side of that line:
   instead.
 - **One direction.** All three run right to left. Mixed directions read as chaos.
 - **Nothing else moves ambiently.** Not sections, not cards, not backgrounds.
-- **Hovering any band slows it to 0.4x** rather than stopping it dead, so it
-  yields to a reader without snapping. Keyboard focus on the hook banner stops
-  it completely.
+- **The bands answer the pointer.** Hovering one slows it to 0.4x rather than
+  stopping it dead, so it yields to a reader without snapping. You can grab any
+  band and drag it, and a throw carries and decays back into the drift. This is
+  the same argument as the reactive chrome: it moves because you moved.
+- **Keyboard focus stops a band completely**, and outranks hover.
 - **All three stop dead under `prefers-reduced-motion`**, and every band stays
   readable when they do.
 

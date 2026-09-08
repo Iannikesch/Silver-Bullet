@@ -81,11 +81,23 @@ This moves on its own, which DESIGN.md otherwise rules out. That exception is
 deliberate and recorded there — do not "fix" it, and do not extend it to
 anything else.
 
-The loops are CSS. The one thing JS touches is speed: hovering a band ramps that
-band's `playbackRate` down to 0.4 and back — each keeps its own tween, so
-hovering the logos does not slow the conveyor — because
-`animation-duration` cannot be changed mid-loop without remapping progress and
-jumping. With JS off the banner still rotates, just at one constant speed.
+**The stylesheet declares each loop as a CSS animation, and `motion.js` takes it
+over at runtime.** It reads the duration the CSS declared, sets
+`animation: none`, and drives the same motion from GSAP's ticker. With JS off
+the CSS animation is what runs, so the bands still rotate — they just cannot be
+touched.
+
+That handover exists because a CSS animation's position cannot be scrubbed:
+there is no way to say "you are now 340px further along" without restarting it,
+and dragging is exactly that. Once the position is a number this file owns, drag,
+throw and speed all fall out of the same value.
+
+Per band: `pos` is the owned position, wrapped with `gsap.utils.wrap` over one
+set width; hover and focus are held as separate booleans and resolved by
+`applyRate()` (focus outranks hover) rather than each calling the setter, which
+is what stopped the keyboard stop from being cancelled by a hover; a throw
+becomes a decaying `fling` velocity, clamped, and decayed per frame-time so it
+travels the same distance at 120Hz as at 60.
 
 ### GSAP does reactive chrome and scroll-linked motion only
 

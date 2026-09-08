@@ -486,6 +486,22 @@
       will-change: transform;
     }
 
+    /* The bands are draggable. pan-y keeps vertical page scrolling working
+       on touch while horizontal drags come to us. */
+    [data-marquee-viewport] {
+      cursor: grab;
+      touch-action: pan-y;
+    }
+
+    [data-marquee-viewport].is-dragging { cursor: grabbing; }
+
+    /* Without this a drag selects the slogans instead of moving the band. */
+    [data-marquee-viewport].is-dragging,
+    [data-marquee-viewport].is-dragging * { user-select: none; }
+
+    /* The pinned CTA is a button, not a drag handle. */
+    .ticker__cta { cursor: pointer; }
+
     /* Hover slows the drift to 0.4x rather than stopping it — that is done
        in motion.js via playbackRate, because changing animation-duration
        here would remap the loop's progress and make it jump.
@@ -964,7 +980,7 @@
        <main>, which the intro fades in at 1.80s — inside it, the strip
        could not fade in alongside the bullet at 0.10s. -->
   <aside class="ticker" data-marquee aria-label="How we work">
-    <div class="ticker__viewport">
+    <div class="ticker__viewport" data-marquee-viewport>
       <div class="ticker__travel">
         <div class="ticker__track" data-marquee-track>
           <ul class="ticker__set">
@@ -1061,7 +1077,7 @@
 
       <!-- Four in view at desktop widths, dropping to two then one.
            Slots leave to the left and are replaced from the right. -->
-      <div class="conveyor" data-marquee aria-label="Selected work">
+      <div class="conveyor" data-marquee data-marquee-viewport aria-label="Selected work">
         <div class="conveyor__track" data-marquee-track>
         <ul class="conveyor__set">
           <li class="slot"><span>Placeholder creative</span></li>
@@ -1083,7 +1099,7 @@
         </div>
       </div>
 
-      <div class="logo-band" data-marquee aria-label="Clients">
+      <div class="logo-band" data-marquee data-marquee-viewport aria-label="Clients">
         <div class="logo-band__track" data-marquee-track>
         <ul class="logo-band__set">
           <li>Placeholder logo</li>
@@ -1187,7 +1203,7 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
-  <script defer src="motion.js?v=3"></script>
+  <script defer src="motion.js?v=5"></script>
   <script defer src="textures.js?v=1"></script>
 
   <script>
