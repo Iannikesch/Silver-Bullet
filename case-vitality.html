@@ -2,8 +2,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vantage Roofing — Silver Bullet</title>
-  <meta name="description" content="Vantage Roofing: $6.2M to $9.8M in 9 months on rev share.">
+  <title>Vitality Mechanical — Silver Bullet</title>
+  <meta name="description" content="Vitality Mechanical: $7.4M to $11.9M in 9 months on rev share.">
 
   <!-- Bump ?v= whenever tokens.css changes. The hero headline is painted
        with background-clip:text, so a stale palette that drops the
@@ -12,7 +12,9 @@
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css?v=2">
 
-  <link rel="stylesheet" href="site.css?v=1">
+  <link rel="stylesheet" href="site.css?v=2">
+  <link rel="stylesheet" href="nightfield.css?v=2">
+
 
   <style>
     .case-hero { padding: var(--space-lg) 0 var(--space-md); }
@@ -99,10 +101,35 @@
 
     .case-next { padding: var(--space-lg) 0; border-top: 1px solid var(--border); }
     .case-next .back { display: inline-block; margin-left: 24px; color: var(--steel-500); font-size: 15px; }
+
+    .case-art { overflow: hidden; padding: 0; }
+    .case-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* Supporting photography inside the narrative column. Full-bleed of the
+       column, lit top edge, same as every other panel on the site. */
+    .case-plate {
+      margin: 0 0 var(--space-md);
+      border-top: 1px solid var(--border-lit);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--ink);
+      overflow: hidden;
+    }
+
+    .case-plate img { width: 100%; height: auto; display: block; }
   </style>
 </head>
 
-<body>
+<body class="has-nightfield">
+  <!-- Full-page lighting field. See nightfield.css — this deliberately
+       departs from DESIGN.md and is here to be looked at. -->
+  <div class="tx-nightfield tx-nightfield--fixed" aria-hidden="true">
+    <span class="tx-nightfield__bloom"></span>
+    <span class="tx-nightfield__bokeh"></span>
+    <span class="tx-nightfield__cyan"></span>
+    <span class="tx-nightfield__vignette"></span>
+    <span class="tx-nightfield__grain"></span>
+  </div>
   <header class="site-header tx-frost">
     <div class="wrap">
       <a class="logo tx-halo tx-halo--lung" href="index.html#top" aria-label="Silver Bullet — home">
@@ -167,45 +194,50 @@
   <main id="top">
 
     <section class="wrap case-hero">
-      <p class="meta">Vantage Roofing / Roofing / Rev share</p>
-      <h1>Getting off the storm-chase cycle and onto a book of commercial work.</h1>
-      <div class="case-art">Placeholder creative</div>
+      <p class="meta">Vitality Mechanical / Mechanical contracting, Dearborn MI</p>
+      <h1 class="tx-rim-text" data-texture="rim">Turning a service department that ran on callbacks into a booked calendar.</h1>
+      <div class="case-art"><img src="Assets/web/work-vitality-meter.webp" width="1200" height="800" decoding="async" alt="A Vitality Mechanical technician metering a motor"></div>
     </section>
 
     <div class="wrap">
       <ul class="figures">
-        <li><span class="n">$6.2M to $9.8M</span><p class="meta">Annual revenue</p></li>
-        <li><span class="n">+$3.6M</span><p class="meta">Added in 9 months</p></li>
-        <li><span class="n">Rev share</span><p class="meta">How we were paid</p></li>
+        <li><span class="n">$7.4M to $11.9M</span><p class="meta">Annual revenue</p></li>
+        <li><span class="n">+$4.5M</span><p class="meta">Added in 9 months</p></li>
+        <li><span class="n">Rev share</span><p class="meta">9% of tracked new revenue</p></li>
       </ul>
 
       <div class="attribution">
         <h3>How this was measured</h3>
-        <p>Residential is tracked per job. Commercial revenue is counted only on contracts whose first touch appears in our outbound records, and recognised when invoiced rather than when signed.</p>
+        <p>Counted on invoiced work, not booked work. Every dollar came through a tracked number or a form tied to a channel we ran, reconciled monthly against their service management system. Existing maintenance agreements at signing were carved out of the baseline entirely, so renewals cannot flatter the figure.</p>
       </div>
 
       <div class="case-body">
         <section>
           <h2>Situation</h2>
-          <p>A good year followed a bad one depending entirely on the weather. Vantage wanted commercial contracts, which do not arrive through the channels that bring in storm work, and had no idea how to reach a facilities manager.</p>
+          <p>Vitality had the licences, the trucks and a twenty-year reputation in commercial mechanical across metro Detroit. What they did not have was a way to fill next month. Work arrived when something broke, which meant a strong quarter was followed by three weeks of technicians washing vans. Two previous agencies had been paid a retainer to fix it. Neither took a position on whether it worked.</p>
         </section>
 
         <section>
           <h2>Strategy</h2>
-          <p>Two funnels kept completely apart. Residential stayed on the storm-response machinery that already worked. Commercial ran as a slow outbound motion against property managers from a named list, measured in meetings rather than leads, because a commercial roof is an eighteen-month conversation.</p>
+          <p>We would not take a retainer, and we said so on the first call. Our fee was a share of tracked new revenue, which meant an empty calendar cost us as much as it cost them.</p>
+          <p>The work split in two. Emergency demand already existed, so we took it: paid search against failure-intent, a tracked line per channel, and a dispatcher script that stopped qualified calls dying on hold. The harder half was planned maintenance, which is where a mechanical contractor's margin actually lives. We built a quoting path for annual agreements and gave the field techs a reason to raise it at the end of a call.</p>
         </section>
+
+        <figure class="case-plate"><img src="Assets/web/work-vitality-roof.webp" width="1200" height="800" loading="lazy" decoding="async" alt="Two Vitality Mechanical technicians carrying cylinders on a rooftop"></figure>
+
+        <figure class="case-plate"><img src="Assets/web/work-vitality-lobby.webp" width="1200" height="800" loading="lazy" decoding="async" alt="Vitality Mechanical's lit lobby signage"></figure>
 
         <section>
           <h2>Results</h2>
-          <p>Annual revenue moved from $6.2M to $9.8M across 9 months, an
-            increase of +$3.6M. We were paid a share of that increase and
-            nothing else &mdash; no retainer, and no fee for the months before
-            it moved.</p>
+          <p>Annual revenue moved from $7.4M to $11.9M across 9 months, an
+            increase of +$4.5M. Our fee was 9% of tracked new revenue and nothing else &mdash; no
+            retainer, no monthly minimum, and nothing at all for the months
+            before the number moved.</p>
         </section>
 
         <blockquote>
-          <p>&ldquo;The residential side paid for the experiment. The commercial side is what changes what the business is worth.&rdquo;</p>
-          <footer>Marisol Trejo, managing partner, Vantage Roofing</footer>
+          <p>&ldquo;Two agencies before this one sent me a report every month. These guys sent me an invoice that only went up when my revenue did. That is a completely different conversation.&rdquo;</p>
+          <footer>Robert Ainsley, president, Vitality Mechanical</footer>
         </blockquote>
       </div>
     </div>

@@ -3,7 +3,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Our work — Silver Bullet</title>
-  <meta name="description" content="Case studies from Silver Bullet. Revenue and profit growth for service businesses, on rev share and profit share.">
+  <meta name="description" content="Case studies from Silver Bullet. Revenue and gross profit growth for service businesses, on rev share and profit share.">
 
   <!-- Bump ?v= whenever tokens.css changes. The hero headline is painted
        with background-clip:text, so a stale palette that drops the
@@ -14,6 +14,7 @@
 
   <link rel="stylesheet" href="site.css?v=2">
   <link rel="stylesheet" href="nightfield.css?v=2">
+
 
   <style>
     .work-hero { padding: var(--space-lg) 0 var(--space-md); }
@@ -90,6 +91,28 @@
 
     .case-card__figure .to { color: var(--steel-700); font-weight: 400; }
     .case-card__figure .in { color: var(--steel-500); font-size: 14px; font-weight: 500; letter-spacing: 0; }
+
+    /* Real project photography in the slot. The card art keeps its aspect
+       box so a missing or slow image cannot collapse the grid row. */
+    .case-card__art img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      /* Held slightly back so the card reads as one surface rather than a
+         photo with a caption stapled under it; full strength on hover. */
+      opacity: .82;
+      filter: saturate(.85);
+      transition: opacity .25s ease, filter .25s ease, transform .5s ease;
+    }
+
+    .case-card:hover .case-card__art img {
+      opacity: 1;
+      filter: saturate(1);
+      transform: scale(1.02);
+    }
+
+    .case-card__art { overflow: hidden; }
   </style>
 </head>
 
@@ -167,51 +190,55 @@
   <main id="top">
 
     <section class="wrap work-hero">
-      <!-- Same treatment as the home hero headline: metal painted inside
-           the letterforms, with the ramp leaning toward the cursor. Move
-           the pointer across it and the highlight follows.
-
-           .tx-sweep came off. It is an ::after band over the whole box,
-           which is right on an object like the contact bar but wrong over
-           clipped text — it rakes a gold bar across the letters rather
-           than shimmering inside them. -->
       <h1 class="tx-rim-text" data-texture="rim">Our work</h1>
       <p class="lead">
-        Every number on this page is revenue or profit, not impressions. We get
-        paid out of it, so it is the only measure that means anything — and each
-        case says exactly how it was attributed.
+        We are paid out of what we generate &mdash; rev share or profit share,
+        never a retainer. So every figure below is revenue or gross profit,
+        never impressions, and every case states what the deal was and how the
+        number was arrived at.
       </p>
     </section>
 
     <div class="wrap">
       <ul class="case-grid">
         <li>
-          <a class="case-card" href="case-northline.html">
-            <span class="case-card__art">Placeholder creative</span>
+          <a class="case-card" href="case-vitality.html">
+            <span class="case-card__art"><img src="Assets/web/work-vitality-meter.webp" width="1200" height="800" loading="lazy" decoding="async" alt="A Vitality Mechanical technician metering a motor"></span>
             <span class="case-card__body">
-              <span class="case-card__meta"><span>Northline Plumbing</span><span>Rev share</span></span>
-              <h3>Turning a two-van operation into the default call in its county.</h3>
-              <span class="case-card__figure">$4.1M <span class="to">to</span> $6.3M
-                <span class="in">in 7 months</span></span>
+              <span class="case-card__meta"><span>Vitality Mechanical</span><span>Rev share</span></span>
+              <h3>Turning a service department that ran on callbacks into a booked calendar.</h3>
+              <span class="case-card__figure">$7.4M <span class="to">to</span> $11.9M
+                <span class="in">in 9 months</span></span>
             </span>
           </a>
         </li>
         <li>
-          <a class="case-card" href="case-bright-harbor.html">
+          <a class="case-card" href="case-mantis.html">
+            <span class="case-card__art"><img src="Assets/web/work-mantis-dolly.webp" width="1200" height="800" loading="lazy" decoding="async" alt="A Mantis Moving crew member loading a truck"></span>
+            <span class="case-card__body">
+              <span class="case-card__meta"><span>Mantis Moving &amp; Storage</span><span>Profit share</span></span>
+              <h3>Getting paid for the moves worth doing instead of every move going.</h3>
+              <span class="case-card__figure">$3.6M <span class="to">to</span> $5.8M
+                <span class="in">in 8 months</span></span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="case-card" href="case-nsp.html">
             <span class="case-card__art">Placeholder creative</span>
             <span class="case-card__body">
-              <span class="case-card__meta"><span>Bright Harbor Dental</span><span>Profit share</span></span>
-              <h3>Filling a third chair that had been empty since the day it was installed.</h3>
-              <span class="case-card__figure">$2.8M <span class="to">to</span> $4.4M
+              <span class="case-card__meta"><span>NSP</span><span>Rev share</span></span>
+              <h3>A commercial book built out of a business that only did callouts.</h3>
+              <span class="case-card__figure">$5.1M <span class="to">to</span> $8.4M
                 <span class="in">in 11 months</span></span>
             </span>
           </a>
         </li>
         <li>
-          <a class="case-card" href="case-vantage-roofing.html">
+          <a class="case-card" href="case-oakmont-roofing.html">
             <span class="case-card__art">Placeholder creative</span>
             <span class="case-card__body">
-              <span class="case-card__meta"><span>Vantage Roofing</span><span>Rev share</span></span>
+              <span class="case-card__meta"><span>Oakmont Roofing</span><span>Rev share</span></span>
               <h3>Getting off the storm-chase cycle and onto a book of commercial work.</h3>
               <span class="case-card__figure">$6.2M <span class="to">to</span> $9.8M
                 <span class="in">in 9 months</span></span>
@@ -219,35 +246,13 @@
           </a>
         </li>
         <li>
-          <a class="case-card" href="case-meridian-hvac.html">
+          <a class="case-card" href="case-westbrook-wellness.html">
             <span class="case-card__art">Placeholder creative</span>
             <span class="case-card__body">
-              <span class="case-card__meta"><span>Meridian HVAC</span><span>Rev share</span></span>
-              <h3>Selling maintenance plans instead of chasing the next breakdown.</h3>
-              <span class="case-card__figure">$3.4M <span class="to">to</span> $5.1M
-                <span class="in">in 6 months</span></span>
-            </span>
-          </a>
-        </li>
-        <li>
-          <a class="case-card" href="case-ironside.html">
-            <span class="case-card__art">Placeholder creative</span>
-            <span class="case-card__body">
-              <span class="case-card__meta"><span>Ironside Strength</span><span>Profit share</span></span>
+              <span class="case-card__meta"><span>Westbrook Wellness</span><span>Profit share</span></span>
               <h3>Fixing churn before spending a dollar on new members.</h3>
               <span class="case-card__figure">$1.9M <span class="to">to</span> $3.2M
                 <span class="in">in 8 months</span></span>
-            </span>
-          </a>
-        </li>
-        <li>
-          <a class="case-card" href="case-calder-roe.html">
-            <span class="case-card__art">Placeholder creative</span>
-            <span class="case-card__body">
-              <span class="case-card__meta"><span>Calder &amp; Roe</span><span>Rev share</span></span>
-              <h3>Winning better cases rather than more of them.</h3>
-              <span class="case-card__figure">$5.5M <span class="to">to</span> $7.9M
-                <span class="in">in 10 months</span></span>
             </span>
           </a>
         </li>

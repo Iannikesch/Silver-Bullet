@@ -621,11 +621,19 @@
       border-bottom: 1px solid var(--border);
     }
 
+    /* A stacked lockup matched by HEIGHT reads far smaller than a wide one,
+       because almost all of its area is vertical. Matched optically instead. */
+    .logo-band__set li img.is-stacked { height: 54px; }
+
     .logo-band__set li img {
       display: block;
-      height: 34px;              /* marks are matched by HEIGHT, never width */
+      height: 34px;              /* marks are matched by height, never width */
       width: auto;
-      opacity: .78;              /* they are context, not the subject */
+      /* Greyscale is not a preference. A green mascot and an orange wordmark
+         next to cold steel would each read as a second accent, and the palette
+         allows one. Stripped of hue they become texture. */
+      filter: grayscale(1) brightness(1.12) contrast(.95);
+      opacity: .7;               /* context, not the subject */
       transition: opacity var(--dur-base) var(--ease-metal);
     }
     .logo-band__set li:hover img { opacity: 1; }

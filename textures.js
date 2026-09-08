@@ -7,6 +7,7 @@
      data-texture="star"   cursor-tracked star
      data-texture="rim"    cursor-reactive rim light
      .tx-sweep             specular sweep on scroll-in
+     .tx-bore              pointer-driven rifling twist (initBore)
 
    Usage:  initTextures();        // once the DOM exists
 
@@ -140,6 +141,76 @@ function initTextures(opts) {
       el.__txSweep = sweep;   // exposed so a demo page can replay it
     });
   }
+}
+
+
+/* ============================================================
+   Bore twist. Call after initTextures().
+
+   Owns ONE signal: --bore-aim, 0-1, from how close the pointer is
+   to the middle of the band. 1 is dead centre and winds the rifling
+   up; 0 is the far corner and unwinds it flat.
+
+   It deliberately does NOT touch --light / --light-y. The bore
+   carries data-texture, so initTextures() is already driving those
+   with the right easing — a second writer would fight it. This is
+   the same division of labour as the two engines above: one writer
+   per variable, always.
+   ============================================================ */
+
+function initBore(selector) {
+  'use strict';
+  var els = document.querySelectorAll(selector || '.tx-bore');
+  if (!els.length) return;
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var noHover = window.matchMedia('(hover: none)').matches;
+  var smooth  = typeof window.gsap !== 'undefined';
+
+  Array.prototype.forEach.call(els, function (el) {
+    /* Rest comes from CSS so there is one source of truth. If the
+       stylesheet has not parsed or the knob is missing, .32 matches
+       the documented default rather than collapsing to a flat 0. */
+    var rest = parseFloat(
+      getComputedStyle(el).getPropertyValue('--tx-bore-aim-rest')) || 0.32;
+
+    /* Pinned at rest and no listeners bound at all — not bound and
+       ignored. Touch devices have no hover to track and would sit at
+       whatever the last tap happened to be. */
+    if (reduced || noHover) { el.style.setProperty('--bore-aim', rest); return; }
+
+    var state = { aim: rest };
+    function paint() { el.style.setProperty('--bore-aim', state.aim.toFixed(4)); }
+    paint();
+
+    /* Slower than the light. The light is a reflection and can be quick;
+       the twist is the barrel itself appearing to turn, and mass reads as
+       slow. Matching them made the whole thing feel like a slider. */
+    var toAim = smooth
+      ? gsap.quickTo(state, 'aim', { duration: 0.62, ease: 'power3.out', onUpdate: paint })
+      : function (v) { state.aim = v; paint(); };
+
+    el.addEventListener('mousemove', function (e) {
+      /* Measured every move so it survives a scroll or a resize. */
+      var box = el.getBoundingClientRect();
+      var dx  = (e.clientX - (box.left + box.width  / 2)) / (box.width  / 2);
+      var dy  = (e.clientY - (box.top  + box.height / 2)) / (box.height / 2);
+
+      /* Normalised against the half-DIAGONAL, so the far corners are the
+         only places that reach a true zero. Normalising against the
+         half-width instead would flatten the barrel halfway along every
+         edge, and the effect would spend most of its range already spent. */
+      var d = Math.sqrt(dx * dx + dy * dy) / Math.SQRT2;
+      toAim(Math.max(0, Math.min(1, 1 - d)));
+    });
+
+    /* Back to rest on the way out, so the section is never left parked
+       at whatever the pointer happened to be doing when it left. */
+    el.addEventListener('mouseleave', function () {
+      if (smooth) gsap.to(state, { aim: rest, duration: 0.9, ease: 'power2.inOut', onUpdate: paint });
+      else { state.aim = rest; paint(); }
+    });
+  });
 }
 
 

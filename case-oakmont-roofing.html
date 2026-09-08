@@ -2,8 +2,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calder & Roe — Silver Bullet</title>
-  <meta name="description" content="Calder and Roe: $5.5M to $7.9M in 10 months on rev share.">
+  <title>Oakmont Roofing — Silver Bullet</title>
+  <meta name="description" content="Oakmont Roofing: $6.2M to $9.8M in 9 months on rev share.">
 
   <!-- Bump ?v= whenever tokens.css changes. The hero headline is painted
        with background-clip:text, so a stale palette that drops the
@@ -12,7 +12,9 @@
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css?v=2">
 
-  <link rel="stylesheet" href="site.css?v=1">
+  <link rel="stylesheet" href="site.css?v=2">
+  <link rel="stylesheet" href="nightfield.css?v=2">
+
 
   <style>
     .case-hero { padding: var(--space-lg) 0 var(--space-md); }
@@ -99,10 +101,35 @@
 
     .case-next { padding: var(--space-lg) 0; border-top: 1px solid var(--border); }
     .case-next .back { display: inline-block; margin-left: 24px; color: var(--steel-500); font-size: 15px; }
+
+    .case-art { overflow: hidden; padding: 0; }
+    .case-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* Supporting photography inside the narrative column. Full-bleed of the
+       column, lit top edge, same as every other panel on the site. */
+    .case-plate {
+      margin: 0 0 var(--space-md);
+      border-top: 1px solid var(--border-lit);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--ink);
+      overflow: hidden;
+    }
+
+    .case-plate img { width: 100%; height: auto; display: block; }
   </style>
 </head>
 
-<body>
+<body class="has-nightfield">
+  <!-- Full-page lighting field. See nightfield.css — this deliberately
+       departs from DESIGN.md and is here to be looked at. -->
+  <div class="tx-nightfield tx-nightfield--fixed" aria-hidden="true">
+    <span class="tx-nightfield__bloom"></span>
+    <span class="tx-nightfield__bokeh"></span>
+    <span class="tx-nightfield__cyan"></span>
+    <span class="tx-nightfield__vignette"></span>
+    <span class="tx-nightfield__grain"></span>
+  </div>
   <header class="site-header tx-frost">
     <div class="wrap">
       <a class="logo tx-halo tx-halo--lung" href="index.html#top" aria-label="Silver Bullet — home">
@@ -167,45 +194,46 @@
   <main id="top">
 
     <section class="wrap case-hero">
-      <p class="meta">Calder &amp; Roe / Family law / Rev share</p>
-      <h1>Winning better cases rather than more of them.</h1>
+      <p class="meta">Oakmont Roofing / Roofing</p>
+      <h1 class="tx-rim-text" data-texture="rim">Getting off the storm-chase cycle and onto a book of commercial work.</h1>
       <div class="case-art">Placeholder creative</div>
     </section>
 
     <div class="wrap">
       <ul class="figures">
-        <li><span class="n">$5.5M to $7.9M</span><p class="meta">Annual revenue</p></li>
-        <li><span class="n">+$2.4M</span><p class="meta">Added in 10 months</p></li>
-        <li><span class="n">Rev share</span><p class="meta">How we were paid</p></li>
+        <li><span class="n">$6.2M to $9.8M</span><p class="meta">Annual revenue</p></li>
+        <li><span class="n">+$3.6M</span><p class="meta">Added in 9 months</p></li>
+        <li><span class="n">Rev share</span><p class="meta">7% of tracked new revenue</p></li>
       </ul>
 
       <div class="attribution">
         <h3>How this was measured</h3>
-        <p>Counted on matters opened where the enquiry is attributable to a channel we ran, and recognised on fees billed rather than matters signed.</p>
+        <p>Residential is tracked per job. Commercial revenue is counted only on contracts whose first touch appears in our outbound records, and recognised when invoiced rather than when signed.</p>
       </div>
 
       <div class="case-body">
         <section>
           <h2>Situation</h2>
-          <p>A full pipeline of the wrong work. High volume, low value, and partners spending their days on consultations that were never going to be worth taking. More leads would only have made the problem worse.</p>
+          <p>A good year followed a bad one depending entirely on the weather. Oakmont wanted commercial contracts, which do not arrive through the channels that bring in storm work, and had no idea how to reach a facilities manager.</p>
         </section>
 
         <section>
           <h2>Strategy</h2>
-          <p>We made the intake harder rather than easier. A qualification step before anyone could book, targeting shifted onto the matter types that carry real fees, and a follow-up sequence for the enquiries worth a second attempt. Enquiry volume fell by about a third.</p>
+          <p>Two funnels kept completely apart. Residential stayed on the storm-response machinery that already worked. Commercial ran as a slow outbound motion against property managers from a named list, measured in meetings rather than leads, because a commercial roof is an eighteen-month conversation.</p>
+          <p>Because our fee came out of new revenue rather than a monthly retainer, the eighteen-month conversation cost them nothing while it was still a conversation.</p>
         </section>
 
         <section>
           <h2>Results</h2>
-          <p>Annual revenue moved from $5.5M to $7.9M across 10 months, an
-            increase of +$2.4M. We were paid a share of that increase and
-            nothing else &mdash; no retainer, and no fee for the months before
-            it moved.</p>
+          <p>Annual revenue moved from $6.2M to $9.8M across 9 months, an
+            increase of +$3.6M. Our fee was 7% of tracked new revenue and nothing else &mdash; no
+            retainer, no monthly minimum, and nothing at all for the months
+            before the number moved.</p>
         </section>
 
         <blockquote>
-          <p>&ldquo;Our enquiries went down and our revenue went up. I have stopped trying to explain that to other firms.&rdquo;</p>
-          <footer>Ellis Calder, senior partner, Calder &amp; Roe</footer>
+          <p>&ldquo;The residential side paid for the experiment. The commercial side is what changes what the business is worth.&rdquo;</p>
+          <footer>Marisol Trejo, managing partner, Oakmont Roofing</footer>
         </blockquote>
       </div>
     </div>

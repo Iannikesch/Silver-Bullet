@@ -2,8 +2,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bright Harbor Dental — Silver Bullet</title>
-  <meta name="description" content="Bright Harbor Dental: $2.8M to $4.4M in 11 months on profit share.">
+  <title>Westbrook Wellness — Silver Bullet</title>
+  <meta name="description" content="Westbrook Wellness: $1.9M to $3.2M in 8 months on profit share.">
 
   <!-- Bump ?v= whenever tokens.css changes. The hero headline is painted
        with background-clip:text, so a stale palette that drops the
@@ -12,7 +12,9 @@
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css?v=2">
 
-  <link rel="stylesheet" href="site.css?v=1">
+  <link rel="stylesheet" href="site.css?v=2">
+  <link rel="stylesheet" href="nightfield.css?v=2">
+
 
   <style>
     .case-hero { padding: var(--space-lg) 0 var(--space-md); }
@@ -99,10 +101,35 @@
 
     .case-next { padding: var(--space-lg) 0; border-top: 1px solid var(--border); }
     .case-next .back { display: inline-block; margin-left: 24px; color: var(--steel-500); font-size: 15px; }
+
+    .case-art { overflow: hidden; padding: 0; }
+    .case-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* Supporting photography inside the narrative column. Full-bleed of the
+       column, lit top edge, same as every other panel on the site. */
+    .case-plate {
+      margin: 0 0 var(--space-md);
+      border-top: 1px solid var(--border-lit);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--ink);
+      overflow: hidden;
+    }
+
+    .case-plate img { width: 100%; height: auto; display: block; }
   </style>
 </head>
 
-<body>
+<body class="has-nightfield">
+  <!-- Full-page lighting field. See nightfield.css — this deliberately
+       departs from DESIGN.md and is here to be looked at. -->
+  <div class="tx-nightfield tx-nightfield--fixed" aria-hidden="true">
+    <span class="tx-nightfield__bloom"></span>
+    <span class="tx-nightfield__bokeh"></span>
+    <span class="tx-nightfield__cyan"></span>
+    <span class="tx-nightfield__vignette"></span>
+    <span class="tx-nightfield__grain"></span>
+  </div>
   <header class="site-header tx-frost">
     <div class="wrap">
       <a class="logo tx-halo tx-halo--lung" href="index.html#top" aria-label="Silver Bullet — home">
@@ -167,45 +194,46 @@
   <main id="top">
 
     <section class="wrap case-hero">
-      <p class="meta">Bright Harbor Dental / Dental, three locations / Profit share</p>
-      <h1>Filling a third chair that had been empty since the day it was installed.</h1>
+      <p class="meta">Westbrook Wellness / Wellness, two facilities</p>
+      <h1 class="tx-rim-text" data-texture="rim">Fixing churn before spending a dollar on new members.</h1>
       <div class="case-art">Placeholder creative</div>
     </section>
 
     <div class="wrap">
       <ul class="figures">
-        <li><span class="n">$2.8M to $4.4M</span><p class="meta">Annual revenue</p></li>
-        <li><span class="n">+$1.6M</span><p class="meta">Added in 11 months</p></li>
-        <li><span class="n">Profit share</span><p class="meta">How we were paid</p></li>
+        <li><span class="n">$1.9M to $3.2M</span><p class="meta">Annual revenue</p></li>
+        <li><span class="n">+$1.3M</span><p class="meta">Added in 8 months</p></li>
+        <li><span class="n">Profit share</span><p class="meta">15% of incremental gross profit</p></li>
       </ul>
 
       <div class="attribution">
         <h3>How this was measured</h3>
-        <p>Measured against production per location in the practice management system, net of the ad spend we controlled. Recall revenue is included because it was work we initiated; walk-ins are not.</p>
+        <p>Profit share on net membership revenue against a trailing twelve-month baseline, so the seasonal comparison holds. Personal training revenue is excluded.</p>
       </div>
 
       <div class="case-body">
         <section>
           <h2>Situation</h2>
-          <p>Three locations, and the third had never run at capacity. Chair time is a fixed cost, so an empty chair is not a slow month, it is a loss for every hour the lights are on. Margin mattered more than top line here, which ruled out buying volume at any price.</p>
+          <p>Westbrook was adding ninety members a month and losing eighty-five. Every acquisition dollar was going into a bucket with a hole in it, and the owner was convinced the answer was a bigger acquisition budget.</p>
         </section>
 
         <section>
           <h2>Strategy</h2>
-          <p>Profit share rather than rev share, because filling chairs with low-value cleanings would have moved revenue and missed the point entirely. We went after the treatments that actually carry margin, and put a recall system on the existing patient list before spending anything at all on new patients.</p>
+          <p>We refused to run acquisition for the first sixty days. On profit share that refusal cost us as much as it cost them, which is the only reason it was a credible thing to say.</p>
+          <p>Onboarding was rebuilt around the first six weeks, where almost all of the churn sat, and we did not touch paid media until the retention curve moved. Then we scaled acquisition into a business that could hold what it caught.</p>
         </section>
 
         <section>
           <h2>Results</h2>
-          <p>Annual revenue moved from $2.8M to $4.4M across 11 months, an
-            increase of +$1.6M. We were paid a share of that increase and
-            nothing else &mdash; no retainer, and no fee for the months before
-            it moved.</p>
+          <p>Annual revenue moved from $1.9M to $3.2M across 8 months, an
+            increase of +$1.3M. Our fee was 15% of incremental gross profit and nothing else &mdash; no
+            retainer, no monthly minimum, and nothing at all for the months
+            before the number moved.</p>
         </section>
 
         <blockquote>
-          <p>&ldquo;They talked me out of the campaign I called them about. That is when I knew.&rdquo;</p>
-          <footer>Dr. Anneke Vosloo, principal, Bright Harbor Dental</footer>
+          <p>&ldquo;They spent two months telling me not to give them money. Then the number moved.&rdquo;</p>
+          <footer>Priya Raghunathan, founder, Westbrook Wellness</footer>
         </blockquote>
       </div>
     </div>

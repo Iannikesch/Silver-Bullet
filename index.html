@@ -13,7 +13,8 @@
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css?v=2">
 
-  <link rel="stylesheet" href="site.css?v=2">
+  <link rel="stylesheet" href="bore.css?v=2">
+  <link rel="stylesheet" href="site.css?v=4">
 </head>
 
 <body class="has-nightfield">
@@ -184,22 +185,24 @@
       <div class="logo-band" data-marquee data-marquee-viewport aria-label="Clients">
         <div class="logo-band__track" data-marquee-track>
         <ul class="logo-band__set">
+          <li><img src="Assets/web/oakmont-roofing.svg" alt="Oakmont Roofing" height="34"></li>
           <li><img src="Assets/web/logo-mantis.png" alt="Mantis Moving &amp; Storage" height="34"></li>
+          <li><img src="Assets/web/meridian-auto-group.svg" alt="Meridian Auto Group" height="34"></li>
+          <li><img src="Assets/web/evertrail-landscaping.svg" alt="Evertrail Landscaping" height="34"></li>
           <li><img src="Assets/web/logo-lansing.png" alt="Lansing Moving Pros" height="34"></li>
-          <li>Oakmont Roofing</li>
-          <li>Meridian Auto Group</li>
-          <li>Evertrail Landscaping</li>
-          <li>Westbrook Wellness</li>
-          <li>Blackridge Construction</li>
+          <li><img src="Assets/web/westbrook-wellness.svg" alt="Westbrook Wellness" height="34"></li>
+          <li><img class="is-stacked" src="Assets/web/logo-vitality.png" alt="Vitality Mechanical" height="34"></li>
+          <li><img src="Assets/web/blackridge-construction.svg" alt="Blackridge Construction" height="34"></li>
         </ul>
         <ul class="logo-band__set" aria-hidden="true">
+          <li><img src="Assets/web/oakmont-roofing.svg" alt="" height="34"></li>
           <li><img src="Assets/web/logo-mantis.png" alt="" height="34"></li>
+          <li><img src="Assets/web/meridian-auto-group.svg" alt="" height="34"></li>
+          <li><img src="Assets/web/evertrail-landscaping.svg" alt="" height="34"></li>
           <li><img src="Assets/web/logo-lansing.png" alt="" height="34"></li>
-          <li>Oakmont Roofing</li>
-          <li>Meridian Auto Group</li>
-          <li>Evertrail Landscaping</li>
-          <li>Westbrook Wellness</li>
-          <li>Blackridge Construction</li>
+          <li><img src="Assets/web/westbrook-wellness.svg" alt="" height="34"></li>
+          <li><img class="is-stacked" src="Assets/web/logo-vitality.png" alt="" height="34"></li>
+          <li><img src="Assets/web/blackridge-construction.svg" alt="" height="34"></li>
         </ul>
         </div>
       </div>
@@ -247,6 +250,61 @@
       </div>
     </section>
 
+
+    <!-- ============================================================
+         Punchline band — .tx-bore
+
+         The ground is a rifled barrel drawn entirely in CSS gradients:
+         no image request, no canvas. It is dark in the middle by
+         construction, so the headline sits IN the art rather than on a
+         scrim laid over it.
+
+         The rifling twist is pointer-driven. Toward the middle winds it
+         up, out to the corners unwinds it flat. initTextures() drives
+         the key light (the section carries data-texture); initBore()
+         drives the twist. One writer per variable.
+
+         The twenty ring spans are the effect, not decoration — ten
+         rings turning twice as far reads as a stair-stepped gear stack.
+         They are aria-hidden: there is nothing here to announce.
+
+         With JS off, or under reduced motion, the whole thing renders
+         static at its composed rest position and nothing moves.
+         ============================================================ -->
+    <section id="punchline" class="punchline tx-bore" data-texture="bore">
+      <div class="bore-barrel" aria-hidden="true">
+        <span class="bore-crown"></span>
+          <span class="bore-ring" style="--i:0"></span>
+          <span class="bore-ring" style="--i:1"></span>
+          <span class="bore-ring" style="--i:2"></span>
+          <span class="bore-ring" style="--i:3"></span>
+          <span class="bore-ring" style="--i:4"></span>
+          <span class="bore-ring" style="--i:5"></span>
+          <span class="bore-ring" style="--i:6"></span>
+          <span class="bore-ring" style="--i:7"></span>
+          <span class="bore-ring" style="--i:8"></span>
+          <span class="bore-ring" style="--i:9"></span>
+          <span class="bore-ring" style="--i:10"></span>
+          <span class="bore-ring" style="--i:11"></span>
+          <span class="bore-ring" style="--i:12"></span>
+          <span class="bore-ring" style="--i:13"></span>
+          <span class="bore-ring" style="--i:14"></span>
+          <span class="bore-ring" style="--i:15"></span>
+          <span class="bore-ring" style="--i:16"></span>
+          <span class="bore-ring" style="--i:17"></span>
+          <span class="bore-ring" style="--i:18"></span>
+          <span class="bore-ring" style="--i:19"></span>
+        <span class="bore-throat"></span>
+        <span class="bore-fall"></span>
+        <span class="bore-key"></span>
+        <span class="bore-fill"></span>
+      </div>
+
+      <div class="bore-content wrap">
+        <h2>We built the system.<br>Now we <em>bet it</em> on you.</h2>
+      </div>
+    </section>
+
     <section id="contact" class="contact">
       <div class="wrap">
         <!-- A machined component, not a background. Metal behind text would
@@ -287,9 +345,9 @@
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
   <script defer src="motion.js?v=5"></script>
-  <script defer src="textures.js?v=2"></script>
+  <script defer src="textures.js?v=3"></script>
 
-  <script defer src="boot.js?v=1"></script>
+  <script defer src="boot.js?v=2"></script>
 
 </body>
 </html>

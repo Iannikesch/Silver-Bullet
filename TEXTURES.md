@@ -124,6 +124,7 @@ fight over one variable.
 | `.tx-vignette--in` | ground | no | on site — hero |
 | `.tx-thermal` | ground | yes | on site — hero |
 | `.tx-video-ground` | ground | yes | sandbox only, no footage yet |
+| `.tx-bore` | ground | no | sandbox only |
 | `.tx-brushed` | surface | no | on site — contact bar |
 | `.tx-metal-text` | type | no | sandbox only |
 | `.tx-etched` | type | no | built, unused |
@@ -167,6 +168,38 @@ Cold ground with warmth rising underneath and receding.
 - **Wrap, don't apply.** On `index.html` it wraps the hero rather than sitting
   on `.hero`, which is a `.wrap` — the ground would have stopped at the text
   column instead of running full width.
+
+### `.tx-bore`
+Looking straight down a rifled barrel, drawn entirely in gradients. No image
+request, no canvas, no JS. Built as the ground for the punchline band.
+- **Knobs:** `--tx-bore-size`, `-crown`, `-step`, `-throat`, `-twist`, `-feather`,
+  `-key` / `-key-x` / `-key-y` / `-fill`, `-depth`, `-dof`, `-marks`, `-turn`,
+  `-grain`, `-warm`
+- **Markup:** `.tx-bore` > `.bore-barrel` > `.bore-crown`, twenty
+  `.bore-ring` spans carrying `--i:0`…`19`, then `.bore-throat`, `.bore-fall`,
+  `.bore-key`, `.bore-fill`. Content goes in a sibling `.bore-content`.
+- **Ring count is the whole illusion.** Each ring is inset further and rotated
+  further round; that rotation is the rifling twist. Ten rings at 6deg read as a
+  stair-stepped gear stack. Twenty at 2.2deg cover the same total twist and
+  resolve into a continuous helix.
+- **Every inset is from all four sides, so 50% is zero diameter.** The first
+  version had `crown + 6 * step` land past 50%, and the throat and the last two
+  rings silently had negative size. Keep `--tx-bore-throat` well under 50%.
+- **Rings are masked to a feathered outer band** (`--tx-bore-feather`). Unmasked,
+  each ring paints a full disc and the one inside covers it with a hard circular
+  edge — plates on a spindle, not a tunnel.
+- **`.bore-fall` is the layer that sells it.** Light entering a barrel does not
+  come back out. Without that inward falloff the rings stay evenly bright to the
+  middle and it reads as a target. It also beds the headline: the type sits in
+  the dark part of the art rather than on a scrim over it.
+- **`.bore-key` is `overlay`, not `soft-light`.** On a base this dark soft-light
+  did nothing and the bore had no light direction at all.
+- **Ships neutral.** `--tx-bore-warm` tints the key toward `--amber` and is
+  nicer, but metal is neutral per `tokens.css` and the band spends its one accent
+  on a CTA. Dial, not a default.
+- **One per page.** Twenty blurred layers plus two blend modes. It is static so
+  it composites once and never repaints — but do not animate anything that would
+  force the blurred rings to re-render.
 
 ### `.tx-video-ground`
 Footage as a background, suppressed until it reads as a room.
