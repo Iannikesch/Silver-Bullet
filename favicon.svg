@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Silver Bullet mark. Hard-stopped chrome, same doctrine as the site:
+       paired stops at identical offsets, so every band is an edge rather
+       than a blend. Neutral --chrome-* greys; the glint is warm because it
+       is light falling on the metal, not the metal itself. -->
+  <rect width="64" height="64" fill="#0A0D0E"/>
+  <defs>
+    <linearGradient id="c" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%"   stop-color="#0C0C0C"/><stop offset="6%"  stop-color="#0C0C0C"/>
+      <stop offset="6%"   stop-color="#343434"/><stop offset="24%" stop-color="#343434"/>
+      <stop offset="24%"  stop-color="#4C4C4C"/><stop offset="36%" stop-color="#4C4C4C"/>
+      <stop offset="36%"  stop-color="#666766"/><stop offset="47%" stop-color="#666766"/>
+      <stop offset="47%"  stop-color="#7F7F7F"/><stop offset="52%" stop-color="#7F7F7F"/>
+      <stop offset="52%"  stop-color="#BDBDBD"/><stop offset="59%" stop-color="#BDBDBD"/>
+      <stop offset="59%"  stop-color="#E1E1E1"/><stop offset="65%" stop-color="#E1E1E1"/>
+      <stop offset="65%"  stop-color="#BDBDBD"/><stop offset="72%" stop-color="#BDBDBD"/>
+      <stop offset="72%"  stop-color="#7F7F7F"/><stop offset="80%" stop-color="#7F7F7F"/>
+      <stop offset="80%"  stop-color="#4C4C4C"/><stop offset="88%" stop-color="#4C4C4C"/>
+      <stop offset="88%"  stop-color="#343434"/><stop offset="96%" stop-color="#343434"/>
+      <stop offset="96%"  stop-color="#0C0C0C"/><stop offset="100%" stop-color="#0C0C0C"/>
+    </linearGradient>
+    <clipPath id="b">
+      <path d="M32 4.5 C40.5 11 49 19 49 27 L49 59.5 L15 59.5 L15 27 C15 19 23.5 11 32 4.5 Z"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#b)">
+    <rect x="15" y="0" width="34" height="64" fill="url(#c)"/>
+    <path d="M26.5 18.5 L32.5 8.2" stroke="#DFC38C" stroke-width="1.6" fill="none"/>
+  </g>
+</svg>

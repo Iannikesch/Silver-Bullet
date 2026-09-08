@@ -6,6 +6,31 @@
   <title>Silver Bullet — Performance Marketing</title>
   <meta name="description" content="Silver Bullet is a performance-based marketing firm. Rev share and profit share — a growth partner with skin in the game.">
 
+  <!-- Icons. The mark is the bullet, drawn with the same hard-stopped chrome
+       ramp as the site: paired stops at identical offsets, so every band is
+       an edge. The .svg is what modern browsers use; the .ico is the
+       fallback and the reason the console stops 404ing on every load. -->
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#0A0D0E">
+
+  <!-- Social card. Paths are root-relative: absolute URLs are preferred by
+       the OG spec and should be switched once the domain is settled. -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Silver Bullet">
+  <meta property="og:title" content="Silver Bullet — Performance Marketing">
+  <meta property="og:description" content="Silver Bullet is a performance-based marketing firm. Rev share and profit share — a growth partner with skin in the game.">
+  <meta property="og:image" content="/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Silver Bullet — Performance Marketing">
+  <meta name="twitter:description" content="Silver Bullet is a performance-based marketing firm. Rev share and profit share — a growth partner with skin in the game.">
+  <meta name="twitter:image" content="/og-image.png">
+
+
   <!-- Bump ?v= whenever tokens.css changes. The hero headline is painted
        with background-clip:text, so a stale palette that drops the
        --chrome-* ramp would render it as invisible text. -->
