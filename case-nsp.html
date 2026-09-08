@@ -3,7 +3,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NSP Plumbing — Silver Bullet</title>
-  <meta name="description" content="NSP Plumbing: +50% revenue growth in 11 months on rev share.">
+  <meta name="description" content="NSP Plumbing: +50% revenue growth in 2 months on rev share.">
 
   <!-- Bump ?v= whenever tokens.css changes. The hero headline is painted
        with background-clip:text, so a stale palette that drops the
@@ -12,7 +12,7 @@
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css?v=4">
 
-  <link rel="stylesheet" href="site.css?v=6">
+  <link rel="stylesheet" href="site.css?v=9">
   <link rel="stylesheet" href="nightfield.css?v=3">
 
 
@@ -153,7 +153,7 @@
       </a>
       <nav class="nav">
         <a class="nav-link" href="work.html">Our work</a>
-        <a class="nav-link" href="index.html#capabilities">Capabilities</a>
+        <a class="nav-link" href="capabilities.html">Capabilities</a>
         <a class="cta-secondary tx-glare" href="index.html#contact" data-texture="rim">Talk to us</a>
       </nav>
     </div>
@@ -212,7 +212,7 @@
     <div class="wrap">
       <ul class="figures">
         <li><span class="n">+50%</span><p class="meta">Revenue growth</p></li>
-        <li><span class="n">11 months</span><p class="meta">Time to get there</p></li>
+        <li><span class="n">2 months</span><p class="meta">Time to get there</p></li>
         <li><span class="n">Rev share</span><p class="meta">A single-digit share of tracked new revenue</p></li>
       </ul>
 
@@ -232,20 +232,51 @@
           <h2>Strategy</h2>
           <p>Emergency work already converted, so we left the machinery that caught it alone and simply made it tighter: intent-led paid search, a tracked line per channel, and after-hours routing that stopped a 2am call going to voicemail. That side funded everything else.</p>
           <p>Commercial was the actual job, and it is slow. Named-account outbound against property managers, facilities teams and general contractors across West Michigan, measured in accounts opened rather than leads generated, because commercial plumbing is won by being the number already in the building's file before anything breaks.</p>
-          <p>Weighting our fee to the outcome is the only reason a young firm could afford to spend eleven months building a book that pays later. Billing the whole thing up front through that stretch would have come straight out of the emergency margin keeping the lights on.</p>
+          <p>Weighting our fee to the outcome is the only reason a young firm could afford to build a commercial book that pays later rather than chasing whatever billed this month. Billing the whole thing up front through that stretch would have come straight out of the emergency margin keeping the lights on.</p>
+          <p>The paid account was built from nothing. NSP had never run search, so
+            there was no history to salvage and no bad habits to unpick &mdash; we
+            started with commercial intent rather than the emergency terms everyone
+            in the trade bids on, because a burst pipe at 2am buys one invoice and a
+            building manager buys a schedule. Negative keyword lists did as much work
+            as the bids: filtering out DIY, parts and residential searches kept the
+            budget on enquiries a commercial crew could actually service.</p>
+          <p>Every campaign was held to booked work rather than to leads. A form fill
+            that never turned into a job counted as a cost, not a conversion, which
+            is the only way a PPC account stays honest when the person running it is
+            paid on revenue.</p>
+          <p>Before any of that could be bid on, the site had to be able to say what
+            was happening on it. We built a data layer from scratch &mdash; every form,
+            every call tap, every quote request emitting a structured event with the
+            service type, the property type and the urgency attached. That is the
+            difference between an ad account that knows a lead arrived and one that
+            knows a building manager asked about a backflow test.</p>
+          <p>With intent on every event, campaigns could be built around what someone
+            actually wanted rather than the keyword they happened to type. A search for
+            a burst pipe and a search for a scheduled inspection are worth very
+            different amounts to a commercial plumber, and they now bid like it.</p>
+          <p>Identity resolution is what made the follow-up work. Stitching known
+            contacts across devices and sessions meant retargeting could address the
+            person who abandoned a commercial quote at the specification stage
+            differently from someone who read one page and left &mdash; and could stop
+            addressing people who had already booked, which is the cost most
+            retargeting quietly wastes.</p>
+          <p>All of it feeds one loop: better intent going in means the platforms
+            optimise against the jobs that are actually worth having, return on ad spend
+            climbs as a result, and our fee comes out of that increase rather than out of
+            a retainer that would have been owed either way.</p>
         </section>
 
         <figure class="case-plate"><img src="Assets/web/work-nsp-service.webp" width="1200" height="800" loading="lazy" decoding="async" alt="An NSP Plumbing technician on an emergency service call"></figure>
 
         <section>
           <h2>Results</h2>
-          <p>Revenue growth of +50% across 11 months, on a business doing
+          <p>Revenue growth of +50% across 2 months, on a business doing
             high seven figures. A single-digit share of tracked new revenue came to us out of that growth, which is
             the part of our fee that exists only if the number moves.</p>
         </section>
 
         <blockquote>
-          <p>&ldquo;We were eleven months in before the commercial side was worth anything. If the full bill had been due every one of those months regardless, I would have pulled the plug around month four.&rdquo;</p>
+          <p>&ldquo;The commercial side was not worth anything at the start, and I knew it. If the full bill had been due every month regardless, I would have pulled the plug before it ever turned.&rdquo;</p>
           <footer>Owner, NSP Plumbing, NSP Plumbing</footer>
         </blockquote>
       </div>
@@ -301,7 +332,7 @@
         <h2 class="foot-col__head" id="foot-site-head">Site</h2>
         <a class="foot-link" href="index.html">Home</a>
         <a class="foot-link" href="work.html">Our work</a>
-        <a class="foot-link" href="index.html#capabilities">Capabilities</a>
+        <a class="foot-link" href="capabilities.html">Capabilities</a>
         <a class="foot-link" href="index.html#contact">Contact</a>
       </nav>
 
@@ -331,9 +362,9 @@
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
   <script defer src="motion.js?v=7"></script>
-  <script defer src="textures.js?v=6"></script>
+  <script defer src="textures.js?v=8"></script>
 
-  <script defer src="boot.js?v=1"></script>
+  <script defer src="boot.js?v=3"></script>
 
 </body>
 </html>

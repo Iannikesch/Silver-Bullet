@@ -2,8 +2,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vitality Mechanical — Silver Bullet</title>
-  <meta name="description" content="Vitality Mechanical: +25% revenue growth in 2 months on rev share.">
+  <title>Capabilities — Silver Bullet</title>
+  <meta name="description" content="Every capability Silver Bullet runs, under one incentive: rev share and profit share.">
 
   <!-- Bump ?v= whenever tokens.css changes. The hero headline is painted
        with background-clip:text, so a stale palette that drops the
@@ -12,72 +12,65 @@
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css?v=4">
 
-  <link rel="stylesheet" href="site.css?v=9">
+  <link rel="stylesheet" href="site.css?v=6">
   <link rel="stylesheet" href="nightfield.css?v=3">
 
 
-  <style>
-    .case-hero { padding: var(--space-lg) 0 var(--space-md); }
-    .case-hero .meta { margin-bottom: 18px; }
-    .case-hero h1 { max-width: 20ch; }
 
-    .case-art {
-      aspect-ratio: 21 / 9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: var(--space-md) 0 0;
-      background: var(--bg-raised);
-      border-top: 1px solid var(--border-lit);
-      border-left: 1px solid var(--border);
-      border-right: 1px solid var(--border);
-      border-bottom: 1px solid var(--ink);
-      color: var(--steel-900);
-      font-size: 13px;
+  <style>
+    /* ---------- capabilities ----------
+       Modelled on the Profectus capabilities page: a flat, uncategorised
+       list where each service offering is one wide row, small label above a
+       large title, with a hairline circle at the end. No cards, no icons,
+       no grouping.
+
+       Two deliberate departures. Their eyebrow is tracked-out all caps,
+       which DESIGN.md rules out, so ours is sentence case in the meta
+       value. And the circle holds a plus rather than an arrow, because an
+       arrow appended to link text is on the Do-not list. */
+
+    .cap-hero {
+      padding: var(--space-lg) 0 var(--space-md);
+      text-align: center;
     }
 
-    /* The headline figures, pulled out as display type. This is the part
-       anyone actually reads. */
-    /* Flex, for the same reason .case-grid is: three figures in a two-column
-       grid leaves an empty cell, and an empty cell in a hairline grid is a
-       slab of grey. These grow to fill instead, so a short last row is wide
-       rather than half missing. */
-    .figures {
-      display: flex;
-      flex-wrap: wrap;
-      gap: clamp(12px, 1.4vw, 18px);
-      margin: var(--space-md) 0;
+    .cap-hero h1 { max-width: 14ch; margin: 0 auto; }
+
+    .cap-hero .lead {
+      margin: var(--space-sm) auto 0;
+      text-align: center;
+      max-width: 54ch;
+    }
+
+    .cap-list {
+      margin: 0 0 var(--space-xl);
       padding: 0;
       list-style: none;
+      border-top: 1px solid var(--border);
     }
 
-    .figures > li {
-      flex: 1 1 190px;
-      background: var(--bg);
-      padding: var(--space-sm);
-      border-top: 1px solid var(--border-lit);
-      border-left: 1px solid var(--border);
-      border-right: 1px solid var(--border);
-      border-bottom: 1px solid var(--ink);
+    .cap-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: clamp(18px, 3vw, 40px);
+      padding: clamp(18px, 2.4vw, 26px) 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      transition: padding-left .35s var(--ease-settle), border-color .25s ease;
     }
 
-    .figures .n {
-      display: block;
-      color: var(--white);
-      font-size: clamp(24px, 2.8vw, 36px);
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      line-height: 1;
+    /* The row itself moves rather than anything inside it lighting up.
+       Slower than a normal state change because it is a large object. */
+    .cap-row:hover {
+      padding-left: clamp(10px, 1.6vw, 22px);
+      border-bottom-color: var(--border-lit);
     }
 
-    .figures p { margin-top: 8px; }
-
-    /* How the number was arrived at. On a page whose entire claim is that we
-       are paid on results, the method is the load-bearing part — and it is
-       the thing every agency case study we looked at leaves out. */
-    .attribution {
-      padding: var(--space-sm);
-      margin-bottom: var(--space-lg);
+    .cap-row__plate {
+      width: clamp(96px, 13vw, 168px);
+      aspect-ratio: 3 / 2;
+      overflow: hidden;
       background: var(--bg-raised);
       border-top: 1px solid var(--border-lit);
       border-left: 1px solid var(--border);
@@ -85,48 +78,88 @@
       border-bottom: 1px solid var(--ink);
     }
 
-    .attribution h3 { color: var(--steel-050); margin-bottom: 8px; }
-    .attribution p { color: var(--steel-500); font-size: 15px; max-width: 70ch; }
-
-    /* Three sections and no more: Situation, Strategy, Results. */
-    .case-body { max-width: 62ch; }
-    .case-body section { padding: 0 0 var(--space-md); }
-    .case-body h2 { font-size: clamp(22px, 2.4vw, 30px); margin-bottom: 14px; }
-
-    blockquote {
-      max-width: 62ch;
-      margin: 0 0 var(--space-md);
-      padding-left: var(--space-sm);
-      border-left: 1px solid var(--border-lit);
+    .cap-row__plate img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      /* Held well back so a bright stock photo cannot outshout the type,
+         which is what the page is actually made of. */
+      opacity: .55;
+      filter: saturate(.7) contrast(1.05);
+      transition: opacity .3s ease, filter .3s ease, transform .6s ease;
     }
 
-    blockquote p {
+    .cap-row:hover .cap-row__plate img {
+      opacity: .9;
+      filter: saturate(.95) contrast(1);
+      transform: scale(1.04);
+    }
+
+    .cap-row__num {
+      display: block;
+      font-size: 13px;
+      color: var(--steel-900);
+      margin-bottom: 6px;
+    }
+
+    .cap-row__title {
+      display: block;
       color: var(--steel-050);
-      font-size: clamp(19px, 2vw, 25px);
-      line-height: 1.35;
-      letter-spacing: -0.02em;
+      font-size: clamp(22px, 2.9vw, 38px);
+      font-weight: 800;
+      line-height: 1.04;
+      letter-spacing: -0.035em;
+      transition: color .25s ease;
     }
 
-    blockquote footer { margin-top: 14px; color: var(--text-muted); font-size: 14px; }
-
-    .case-next { padding: var(--space-lg) 0; border-top: 1px solid var(--border); }
-    .case-next .back { display: inline-block; margin-left: 24px; color: var(--steel-500); font-size: 15px; }
-
-    .case-art { overflow: hidden; padding: 0; }
-    .case-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-    /* Supporting photography inside the narrative column. Full-bleed of the
-       column, lit top edge, same as every other panel on the site. */
-    .case-plate {
-      margin: 0 0 var(--space-md);
-      border-top: 1px solid var(--border-lit);
-      border-left: 1px solid var(--border);
-      border-right: 1px solid var(--border);
-      border-bottom: 1px solid var(--ink);
-      overflow: hidden;
+    .cap-row__desc {
+      display: block;
+      margin-top: 8px;
+      max-width: 52ch;
+      font-size: 15px;
+      color: var(--steel-700);
+      transition: color .25s ease;
     }
 
-    .case-plate img { width: 100%; height: auto; display: block; }
+    .cap-row:hover .cap-row__title { color: var(--white); }
+    .cap-row:hover .cap-row__desc  { color: var(--steel-300); }
+
+    /* Hairline circle. Fills with the accent on hover — the only warm thing
+       on the page, and only one is ever lit at a time. */
+    .cap-row__go {
+      position: relative;
+      width: clamp(34px, 3.6vw, 48px);
+      height: clamp(34px, 3.6vw, 48px);
+      border: 1px solid var(--border-lit);
+      border-radius: 50%;
+      transition: background-color .25s ease, border-color .25s ease;
+    }
+
+    .cap-row__go::before,
+    .cap-row__go::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      background: var(--steel-300);
+      transform: translate(-50%, -50%);
+      transition: background-color .25s ease;
+    }
+
+    .cap-row__go::before { width: 12px; height: 1px; }
+    .cap-row__go::after  { width: 1px;  height: 12px; }
+
+    .cap-row:hover .cap-row__go { background: var(--accent); border-color: var(--accent); }
+    .cap-row:hover .cap-row__go::before,
+    .cap-row:hover .cap-row__go::after { background: var(--ink); }
+
+    @media (max-width: 620px) {
+      .cap-row { grid-template-columns: auto 1fr; }
+      .cap-row__go { display: none; }
+    }
+
+    .cap-foot { padding: 0 0 var(--space-xl); }
   </style>
 </head>
 
@@ -153,7 +186,7 @@
       </a>
       <nav class="nav">
         <a class="nav-link" href="work.html">Our work</a>
-        <a class="nav-link" href="capabilities.html">Capabilities</a>
+        <a class="nav-link" href="index.html#capabilities">Capabilities</a>
         <a class="cta-secondary tx-glare" href="index.html#contact" data-texture="rim">Talk to us</a>
       </nav>
     </div>
@@ -203,75 +236,88 @@
 
   <main id="top">
 
-    <section class="wrap case-hero">
-      <p class="meta">Vitality Mechanical / Mechanical contracting, Dearborn MI / around $50M a year</p>
-      <h1 class="tx-rim-text" data-texture="rim">Turning a service department that ran on callbacks into a booked calendar.</h1>
-      <div class="case-art"><img src="Assets/web/work-vitality-meter.webp" width="1200" height="800" decoding="async" alt="A Vitality Mechanical technician metering a motor"></div>
+    <section class="wrap cap-hero">
+      <h1 class="tx-rim-text" data-texture="rim">Every capability. One incentive.</h1>
+      <p class="lead">
+        Each of these runs on its own or as part of the whole. What does not
+        change from one to the next is how we are paid for it &mdash; a share
+        of the revenue or profit it produces.
+      </p>
     </section>
 
     <div class="wrap">
-      <ul class="figures">
-        <li><span class="n">+25%</span><p class="meta">Revenue growth</p></li>
-        <li><span class="n">2 months</span><p class="meta">Time to get there</p></li>
-        <li><span class="n">Rev share</span><p class="meta">A single-digit share of tracked new revenue</p></li>
+      <ul class="cap-list">
+        <li>
+          <a class="cap-row" href="work.html">
+            <span class="cap-row__plate"><img src="Assets/web/cap-paid-acquisition.jpg" width="1400" height="933" loading="lazy" decoding="async" alt="A team reviewing a rising performance chart"></span>
+            <span>
+              <span class="cap-row__num">01</span>
+              <span class="cap-row__title">Paid acquisition</span>
+              <span class="cap-row__desc">Search and social managed to pipeline and profit, not impressions.</span>
+            </span>
+            <span class="cap-row__go" aria-hidden="true"></span>
+          </a>
+        </li>
+        <li>
+          <a class="cap-row" href="work.html">
+            <span class="cap-row__plate"><img src="Assets/web/cap-landing-pages.jpg" width="1400" height="933" loading="lazy" decoding="async" alt="A laptop beside a printed set of performance charts"></span>
+            <span>
+              <span class="cap-row__num">02</span>
+              <span class="cap-row__title">Landing pages</span>
+              <span class="cap-row__desc">Fast pages built to convert the traffic you are already paying for.</span>
+            </span>
+            <span class="cap-row__go" aria-hidden="true"></span>
+          </a>
+        </li>
+        <li>
+          <a class="cap-row" href="work.html">
+            <span class="cap-row__plate"><img src="Assets/web/cap-offer-positioning.jpg" width="1400" height="933" loading="lazy" decoding="async" alt="A team working through strategy documents around a table"></span>
+            <span>
+              <span class="cap-row__num">03</span>
+              <span class="cap-row__title">Offer and positioning</span>
+              <span class="cap-row__desc">Often the cheapest fix. What you sell and how you frame it beats ad spend.</span>
+            </span>
+            <span class="cap-row__go" aria-hidden="true"></span>
+          </a>
+        </li>
+        <li>
+          <a class="cap-row" href="work.html">
+            <span class="cap-row__plate"><img src="Assets/web/cap-tracking-attribution.jpg" width="1400" height="933" loading="lazy" decoding="async" alt="A hand marking up a printed performance report"></span>
+            <span>
+              <span class="cap-row__num">04</span>
+              <span class="cap-row__title">Tracking and attribution</span>
+              <span class="cap-row__desc">Clean measurement. Our compensation depends on it being honest.</span>
+            </span>
+            <span class="cap-row__go" aria-hidden="true"></span>
+          </a>
+        </li>
+        <li>
+          <a class="cap-row" href="work.html">
+            <span class="cap-row__plate"><img src="Assets/web/cap-creative-production.jpg" width="1400" height="933" loading="lazy" decoding="async" alt="Social platform icons on a phone screen"></span>
+            <span>
+              <span class="cap-row__num">05</span>
+              <span class="cap-row__title">Creative production</span>
+              <span class="cap-row__desc">Photo, video and ad creative built for the platform it runs on.</span>
+            </span>
+            <span class="cap-row__go" aria-hidden="true"></span>
+          </a>
+        </li>
+        <li>
+          <a class="cap-row" href="work.html">
+            <span class="cap-row__plate"><img src="Assets/web/cap-lifecycle-retention.jpg" width="1400" height="933" loading="lazy" decoding="async" alt="A mailbox with its flag raised"></span>
+            <span>
+              <span class="cap-row__num">06</span>
+              <span class="cap-row__title">Lifecycle and retention</span>
+              <span class="cap-row__desc">Email and follow-up, so acquisition spend compounds instead of leaking.</span>
+            </span>
+            <span class="cap-row__go" aria-hidden="true"></span>
+          </a>
+        </li>
       </ul>
-
-      <div class="attribution">
-        <h3>How this was measured</h3>
-        <p>A quarter is the round number; the monthly reconciliation is not. Growth is counted on invoiced work rather than booked work, sourced to a tracked number or a channel-tagged form, and reconciled against their service management system. Maintenance agreements already in place at signing were carved out of the baseline, so renewals cannot flatter it.</p>
-      </div>
-
-      <div class="case-body">
-        <section>
-          <h2>Situation</h2>
-          <p>At around $50M a year, Vitality is the largest firm we work with and the one with the least to prove. Licences, trucks, a twenty-year name in commercial mechanical across metro Detroit. What they did not have was a way to fill next month. Work arrived when something broke, so a strong quarter was followed by three weeks of technicians washing vans. Two previous agencies had been paid a retainer to fix it. Neither took a position on whether it worked.</p>
-        </section>
-
-        <section>
-          <h2>Strategy</h2>
-          <p>We put the bulk of our fee on the outcome rather than on the hours, and said so on the first call. An empty calendar cost us what it cost them.</p>
-          <p>The work split in two. Emergency demand already existed, so we took it: paid search against failure intent, a tracked line per channel, and a dispatcher script that stopped qualified calls dying on hold. The harder half was planned maintenance, which is where a mechanical contractor's margin actually lives. We built a quoting path for annual agreements and gave the field techs a reason to raise it at the end of a call.</p>
-          <p>The first build was a data layer. Every service request, quote view and
-            call on the site now emits a structured event carrying the equipment type,
-            the building type and whether the enquiry is a breakdown or a planned
-            replacement. Before that, the ad platforms could see that something had
-            happened and nothing about what it was worth.</p>
-          <p>That intent signal is what the campaigns are built on. An emergency
-            no-cool call and a rooftop unit replacement are the same lead to a form and
-            wildly different jobs to a mechanical contractor, so they are separated,
-            budgeted and bid as separate businesses.</p>
-          <p>Identity resolution carries it into retargeting. Matching people across
-            devices and sessions means a facilities manager who priced a replacement in
-            March can be reached in the buying window rather than the week after, and
-            anyone already on the books drops out of the audience instead of being paid
-            for twice.</p>
-          <p>The loop is the point. Richer intent going into the platforms means the
-            optimisation is chasing invoiced work rather than form fills, return on ad
-            spend rises because the budget is aimed better, and our share is taken out of
-            that increase &mdash; which is why the reporting is built around it.</p>
-        </section>
-
-        <figure class="case-plate"><img src="Assets/web/work-vitality-roof.webp" width="1200" height="800" loading="lazy" decoding="async" alt="Two Vitality Mechanical technicians carrying cylinders on a rooftop"></figure>
-
-        <figure class="case-plate"><img src="Assets/web/work-vitality-lobby.webp" width="1200" height="800" loading="lazy" decoding="async" alt="Vitality Mechanical's lit lobby signage"></figure>
-
-        <section>
-          <h2>Results</h2>
-          <p>Revenue growth of +25% across 2 months, on a business doing
-            around $50M a year. A single-digit share of tracked new revenue came to us out of that growth, which is
-            the part of our fee that exists only if the number moves.</p>
-        </section>
-
-        <blockquote>
-          <p>&ldquo;Two agencies before this one sent me a report every month. These guys sent me an invoice that only went up when my revenue did. That is a completely different conversation.&rdquo;</p>
-          <footer>Robert Ainsley, president, Vitality Mechanical</footer>
-        </blockquote>
-      </div>
     </div>
 
-    <div class="wrap case-next">
+    <div class="wrap cap-foot">
       <a class="cta" href="index.html#contact">See if you qualify</a>
-      <a class="back" href="work.html">All work</a>
     </div>
 
   </main>
@@ -319,7 +365,7 @@
         <h2 class="foot-col__head" id="foot-site-head">Site</h2>
         <a class="foot-link" href="index.html">Home</a>
         <a class="foot-link" href="work.html">Our work</a>
-        <a class="foot-link" href="capabilities.html">Capabilities</a>
+        <a class="foot-link" href="index.html#capabilities">Capabilities</a>
         <a class="foot-link" href="index.html#contact">Contact</a>
       </nav>
 
@@ -349,9 +395,9 @@
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
   <script defer src="motion.js?v=7"></script>
-  <script defer src="textures.js?v=8"></script>
+  <script defer src="textures.js?v=6"></script>
 
-  <script defer src="boot.js?v=3"></script>
+  <script defer src="boot.js?v=1"></script>
 
 </body>
 </html>

@@ -1254,3 +1254,25 @@
         transition: none !important;
       }
     }
+
+
+/* Route from the home page's six capabilities to the full tab. */
+.cap-more { margin: var(--space-sm) 0 0; }
+
+
+    /* ---------- case study art ----------
+       .case-art is a 21:9 frame declared inline on each case page, but no
+       rule ever sized the image inside it - so a 1200x800 photo sat there
+       at natural size and spilled out of the frame, cropped by wherever the
+       flex centring happened to land. cover fits it to the frame instead. */
+    .case-art img,
+    .case-art--wide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* The crew shot is a group portrait, so it gets a squarer frame than the
+       21:9 hero - five faces in a letterbox lose their heads. */
+    .case-art--wide { aspect-ratio: 3 / 2; }

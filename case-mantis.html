@@ -3,7 +3,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mantis Moving & Storage — Silver Bullet</title>
-  <meta name="description" content="Mantis Moving and Storage: +35% gross profit growth in 8 months on profit share.">
+  <meta name="description" content="Mantis Moving and Storage: about $60k in booked revenue from $2k of ad spend, in 4 weeks.">
 
   <!-- Bump ?v= whenever tokens.css changes. The hero headline is painted
        with background-clip:text, so a stale palette that drops the
@@ -12,7 +12,7 @@
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css?v=4">
 
-  <link rel="stylesheet" href="site.css?v=6">
+  <link rel="stylesheet" href="site.css?v=9">
   <link rel="stylesheet" href="nightfield.css?v=3">
 
 
@@ -153,7 +153,7 @@
       </a>
       <nav class="nav">
         <a class="nav-link" href="work.html">Our work</a>
-        <a class="nav-link" href="index.html#capabilities">Capabilities</a>
+        <a class="nav-link" href="capabilities.html">Capabilities</a>
         <a class="cta-secondary tx-glare" href="index.html#contact" data-texture="rim">Talk to us</a>
       </nav>
     </div>
@@ -211,39 +211,56 @@
 
     <div class="wrap">
       <ul class="figures">
-        <li><span class="n">+35%</span><p class="meta">Gross profit growth</p></li>
-        <li><span class="n">8 months</span><p class="meta">Time to get there</p></li>
+        <li><span class="n">~$60k</span><p class="meta">Revenue from about $2,000 of ad spend</p></li>
+        <li><span class="n">4 weeks</span><p class="meta">Time to get there</p></li>
         <li><span class="n">Profit share</span><p class="meta">A low-teens share of incremental gross profit</p></li>
       </ul>
 
       <div class="attribution">
         <h3>How this was measured</h3>
-        <p>Gross profit per job out of their dispatch system, net of the media spend we controlled, against a trailing twelve-month baseline so a summer peak is compared against a summer peak. Storage revenue is excluded &mdash; we did not touch it.</p>
+        <p>Booked revenue attributed to the paid search account, out of their dispatch system and matched against ad platform spend for the same four weeks. Only jobs that came through the campaign are counted &mdash; organic, repeat and referral work is excluded, as is storage revenue, which we did not touch.</p>
       </div>
 
       <div class="case-body">
         <section>
           <h2>Situation</h2>
-          <p>Mantis was busy and barely profitable. The lead flow was fine; the mix was not. Crews spent Saturdays on one-bedroom local moves that grossed a few hundred dollars and tied up a truck for most of a day, while the long-haul and commercial jobs that actually carry margin went to competitors who bid faster.</p>
+          <p>Mantis was busy and barely profitable, and the reason was not the crews. The lead flow was fine; the mix was not. Saturdays went on one-bedroom local moves that grossed a few hundred dollars and tied up a truck for most of a day, while the long-haul and commercial jobs that actually carry margin went to whoever bid faster.</p>
+          <p>What they did not have was a paid channel worth the name. No search account to speak of, nothing bidding on the work they wanted, and no way to put a thumb on the scale of which enquiries came in.</p>
         </section>
 
         <section>
           <h2>Strategy</h2>
-          <p>Rev share would have been the wrong deal here, and we turned it down. Paid on revenue, we would have been rewarded for stuffing the calendar with exactly the low-margin work that was already the problem. We took profit share instead, which meant a cheap job on the books cost us money too.</p>
-          <p>So we made the funnel pickier. Distance and job size moved to the top of the enquiry form, quoting was rebuilt to return a long-haul number in about an hour rather than the next day, and spend moved off the neighbourhood terms onto commercial and interstate intent.</p>
+          <p>The first thing built was not the campaign, it was the data layer. Every
+            enquiry, quote request and call tap on the site now fires a structured event
+            carrying what the job actually is &mdash; distance, size, local or long-haul
+            &mdash; so the ad platforms stopped seeing "a lead" and started seeing which
+            leads were worth money. That intent signal is what the optimisation runs on:
+            fed back into the campaigns, the bidding learns to chase the jobs that return,
+            and return on ad spend climbs because the spend is being pointed better rather
+            than pushed harder. Our fee comes out of that increase.</p>
+          <p>Identity resolution did the rest. Matching enquiries to people across
+            devices and sessions meant retargeting could keep working on someone still
+            pricing a long-haul move without paying to chase anyone already booked, which
+            is where most retargeting budget quietly goes.</p>
+          <p>One campaign, built properly. Spend went onto long-haul and commercial intent rather than the neighbourhood terms every mover in the county is already bidding on, negatives stripped out the small local jobs that were the problem in the first place, and quoting was rebuilt to return a long-haul number in about an hour instead of the next day &mdash; because on that kind of job, the fast quote wins it.</p>
         </section>
 
         <section>
           <h2>Results</h2>
-          <p>Gross profit growth of +35% across 8 months, on a business doing
-            mid seven figures. A low-teens share of incremental gross profit came to us out of that growth, which is
-            the part of our fee that exists only if the number moves.</p>
+          <p>Four weeks. About $2,000 of ad spend returned roughly $60,000 in booked revenue &mdash; and the campaign was tuned the whole way toward the moves worth doing rather than the most of them, because volume was never the problem.</p>
+          <p>No rebuild, no rebrand, no new operational system. The business already worked. It needed one paid channel that worked as well as the crews did.</p>
         </section>
 
-        <blockquote>
-          <p>&ldquo;They told me the metric I asked them to hit was the wrong metric. Nobody had ever argued themselves into a harder deal in front of me before.&rdquo;</p>
-          <footer>Dana Kowalczyk, owner, Mantis Moving &amp; Storage</footer>
-        </blockquote>
+        <!-- QUOTE REMOVED. Dana's line was about turning down rev share
+             because revenue was the wrong metric; with the profit-share
+             argument gone it had nothing to sit against. Needs a real
+             replacement from her - not an invented one. -->
+
+        <figure class="case-art case-art--wide">
+          <img src="Assets/web/work-mantis-crew.webp" width="1200" height="800"
+               loading="lazy" decoding="async"
+               alt="The Mantis Moving &amp; Storage crew">
+        </figure>
       </div>
     </div>
 
@@ -297,7 +314,7 @@
         <h2 class="foot-col__head" id="foot-site-head">Site</h2>
         <a class="foot-link" href="index.html">Home</a>
         <a class="foot-link" href="work.html">Our work</a>
-        <a class="foot-link" href="index.html#capabilities">Capabilities</a>
+        <a class="foot-link" href="capabilities.html">Capabilities</a>
         <a class="foot-link" href="index.html#contact">Contact</a>
       </nav>
 
@@ -327,9 +344,9 @@
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
   <script defer src="motion.js?v=7"></script>
-  <script defer src="textures.js?v=6"></script>
+  <script defer src="textures.js?v=8"></script>
 
-  <script defer src="boot.js?v=1"></script>
+  <script defer src="boot.js?v=3"></script>
 
 </body>
 </html>
