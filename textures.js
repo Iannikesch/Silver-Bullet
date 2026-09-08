@@ -205,7 +205,34 @@ function initBore(selector) {
        read the rect a second time to drive --light. One listener
        writing both signals off one cached rect is half the work and
        still one writer per variable. */
-    var state = { aim: rest, x: 34, y: 24 };
+
+    /* ---- how the twist follows the pointer -------------------------
+       Exponential smoothing on the ticker, NOT a tween per mousemove.
+
+       This was gsap.quickTo with power3.out, and it read as the barrel
+       struggling to keep up rather than as a heavy thing moving. That is
+       what a restarted ease actually does: quickTo starts a fresh tween
+       on every pointer event, power3.out front-loads most of its travel
+       into the first few frames, and at sixty events a second the result
+       is lunge, crawl, lunge, crawl. The harder you moved, the more it
+       looked like it was fighting to catch up.
+
+       A lerp toward the target every frame has no restarts and no ease
+       curve to re-enter. It is a constant exponential approach: fastest
+       when far from the target, slower as it closes, and it never jumps
+       because the pointer moved. That is what mass feels like.
+
+       --tx-bore-follow is the fraction closed per frame at 60fps. Lower
+       is heavier. It is normalised against real frame time below, so the
+       weight is identical at 60Hz, 120Hz or a stuttering 30. */
+    var follow = parseFloat(
+      getComputedStyle(el).getPropertyValue('--tx-bore-follow')) || 0.055;
+
+    var touching = false;
+
+    var state  = { aim: rest, x: 34, y: 24 };
+    var target = { aim: rest, x: 34, y: 24 };
+
     function paintAim()   { el.style.setProperty('--bore-aim', state.aim.toFixed(4)); }
     function paintLight() {
       el.style.setProperty('--light',   state.x.toFixed(2));
@@ -213,23 +240,54 @@ function initBore(selector) {
     }
     paintAim(); paintLight();
 
-    /* The twist eases slower than the light. The light is a reflection
-       and can be quick; the twist is the barrel itself appearing to
-       turn, and mass reads as slow. Matching them made the whole thing
-       feel like a slider being dragged. */
-    var toAim, toX, toY;
+    /* The light follows roughly three times faster than the twist. It is a
+       reflection and can be quick; the twist is the barrel itself
+       appearing to turn. Giving them the same speed made the whole thing
+       feel like one slider being dragged. */
+    var idle = true;
+    function tick(time, delta) {
+      if (idle) return;
+
+      /* 1 - (1-k)^(dt/frame): the same closing fraction per unit TIME
+         rather than per frame, so frame rate cannot change the feel. */
+      var kA = 1 - Math.pow(1 - follow,       delta / 16.667);
+      var kL = 1 - Math.pow(1 - follow * 3.2, delta / 16.667);
+
+      state.aim += (target.aim - state.aim) * kA;
+      state.x   += (target.x   - state.x)   * kL;
+      state.y   += (target.y   - state.y)   * kL;
+      paintAim(); paintLight();
+
+      /* Park once it has effectively arrived, so an untouched band costs
+         nothing per frame. The threshold is well below what a 0-1 value
+         driving a 7deg range can show. */
+      if (!touching &&
+          Math.abs(target.aim - state.aim) < 0.0008 &&
+          Math.abs(target.x   - state.x)   < 0.05 &&
+          Math.abs(target.y   - state.y)   < 0.05) {
+        state.aim = target.aim; state.x = target.x; state.y = target.y;
+        paintAim(); paintLight();
+        idle = true;
+        promote(false);
+      }
+    }
+
+    /* GSAP's ticker when it exists, a plain rAF loop when it does not.
+       House rule 4: the texture has to work with no JS at all, and the
+       weaker claim — no GSAP — has to work too. Same smoothing either
+       way, since the step is normalised against real elapsed time. */
     if (smooth) {
-      toAim = gsap.quickTo(state, 'aim', { duration: 0.62, ease: 'power3.out', onUpdate: paintAim });
-      toX   = gsap.quickTo(state, 'x',   { duration: 0.28, ease: 'power3.out', onUpdate: paintLight });
-      toY   = gsap.quickTo(state, 'y',   { duration: 0.28, ease: 'power3.out', onUpdate: paintLight });
+      gsap.ticker.add(tick);
     } else {
-      toAim = function (v) { state.aim = v; paintAim(); };
-      toX   = function (v) { state.x = v; paintLight(); };
-      toY   = function (v) { state.y = v; paintLight(); };
+      var prev = 0;
+      (function raf(now) {
+        tick(now, prev ? now - prev : 16.667);
+        prev = now;
+        requestAnimationFrame(raf);
+      })(performance.now());
     }
 
     /* ---- promotion, only while actually on the barrel -------------- */
-    var touching = false, settle;
     function promote(on) {
       Array.prototype.forEach.call(rings, function (r) {
         r.style.willChange = on ? 'transform' : '';
@@ -239,13 +297,11 @@ function initBore(selector) {
     function release() {
       if (!touching) return;
       touching = false;
-      if (smooth) gsap.to(state, { aim: rest, duration: 0.9, ease: 'power2.inOut', onUpdate: paintAim });
-      else { state.aim = rest; paintAim(); }
-      /* Drop the layers once the ease home has finished, not on the way
-         out — releasing them mid-tween puts the stutter back exactly
-         where it is most visible. */
-      clearTimeout(settle);
-      settle = setTimeout(function () { promote(false); }, 1000);
+      target.aim = rest;
+      /* The promotion is dropped by tick() once the unwind has actually
+         arrived, not on a timer — releasing the layers while the rings
+         are still moving puts the stutter back exactly where it is most
+         visible. */
     }
 
     el.addEventListener('mousemove', function (e) {
@@ -261,18 +317,23 @@ function initBore(selector) {
 
       if (r > 1) { release(); return; }
 
-      if (!touching) { touching = true; clearTimeout(settle); promote(true); }
+      if (!touching) { touching = true; promote(true); }
+      idle = false;
 
       /* Dead centre winds the rifling all the way up; the rim unwinds
          it flat. Radius, not the half-diagonal the first version used —
          that one kept driving out to the corners of the rectangle,
-         which are nowhere near the object. */
-      toAim(1 - r);
-      toX(((e.clientX - box.left) / box.width)  * 100);
-      toY(((e.clientY - box.top)  / box.height) * 100);
+         which are nowhere near the object.
+
+         Only a target is set here. Nothing is written to the DOM on a
+         pointer event any more — tick() owns every write, at exactly one
+         per frame however fast the mouse is moving. */
+      target.aim = 1 - r;
+      target.x   = ((e.clientX - box.left) / box.width)  * 100;
+      target.y   = ((e.clientY - box.top)  / box.height) * 100;
     }, { passive: true });
 
-    el.addEventListener('mouseleave', release);
+    el.addEventListener('mouseleave', function () { release(); idle = false; });
   });
 }
 

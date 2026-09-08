@@ -77,6 +77,18 @@
   --tx-bore-twist-near: 7deg;   /* pointer dead centre */
   --tx-bore-twist-far:  0deg;   /* pointer at the far corner */
   --tx-bore-aim-rest:   .32;    /* resting aim, and the no-JS render */
+  --tx-bore-follow:     .055;   /* how much of the remaining distance the */
+                                /* twist closes each frame at 60fps. LOWER */
+                                /* IS HEAVIER. Read by initBore(), which */
+                                /* normalises it against real frame time, so */
+                                /* the weight is the same at 30, 60 or 120Hz. */
+                                /* .055 settles in roughly a second. Below */
+                                /* about .02 it stops reading as weight and */
+                                /* starts reading as broken; above about .2 */
+                                /* the barrel snaps to the cursor and the */
+                                /* mass goes out of it entirely. The light */
+                                /* follows at 3.2x this, since a reflection */
+                                /* can be quick where the object cannot. */
 
   --tx-bore-lands:  6;      /* 6 grooves. Real, and it divides 360 cleanly. */
 

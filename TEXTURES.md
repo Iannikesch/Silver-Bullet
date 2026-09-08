@@ -210,9 +210,24 @@ request, no canvas, no JS. Built as the ground for the punchline band.
   `--tx-bore-twist-far`. `--tx-bore-aim-rest` is the single source of truth for
   the resting look — the CSS `var()` fallback is that same value, so with no JS
   it renders composed rather than collapsing to the flat target.
-- **Ease the twist SLOWER than the light.** The light is a reflection and can be
-  quick; the twist is the barrel itself appearing to turn. Matched speeds made it
-  feel like a slider being dragged.
+- **Smooth the twist, do not tween it.** `initBore()` lerps toward the target on
+  the ticker; it does not fire a tween per pointer event. `gsap.quickTo` with
+  `power3.out` was the first version and it read as the barrel *struggling to keep
+  up*: quickTo restarts a tween on every event, `power3.out` front-loads its
+  travel into the first frames, and sixty events a second gives lunge, crawl,
+  lunge. A lerp has no restarts and no curve to re-enter — it is fastest when far
+  from the target and slows as it closes, which is what mass actually looks like.
+- **`--tx-bore-follow`** is the fraction of the remaining distance closed per
+  frame at 60fps. **Lower is heavier.** It is normalised against real frame time,
+  so the weight is identical at 30, 60 or 120Hz. `.055` settles in about 1.4s.
+  Under ~`.02` it stops reading as weight and starts reading as broken; over ~`.2`
+  the barrel snaps to the cursor and the mass is gone.
+- **The light follows 3.2x faster than the twist.** A reflection can be quick
+  where the object cannot. Matched speeds made it feel like one slider dragging.
+- **Nothing is written to the DOM on a pointer event.** The handler only sets a
+  target; the ticker owns every write, at exactly one per frame however fast the
+  mouse moves. It parks itself once it arrives, so an untouched band costs
+  nothing, and the promotion is dropped there rather than on a timer.
 - **One writer per variable.** `initTextures()` already drives `--light` for
   anything carrying `data-texture`, so `initBore()` deliberately does not touch
   it. Give the section `data-texture="bore"` and call both.
