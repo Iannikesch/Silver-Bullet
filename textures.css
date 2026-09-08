@@ -161,7 +161,7 @@
 
    Use this where the star would be too much, which is most places. */
 
-.tx-rim {
+.tx-rim, .tx-rim-text {
   /* How far the band leans. Half the cursor's travel, so it tracks
      without feeling stuck to the pointer. */
   --rim-lean: calc((var(--light, 50) - 50) * 0.45%);
@@ -175,8 +175,10 @@
     var(--chrome-300) calc(64% + var(--rim-lean)),
     var(--chrome-500) 100%
   );
-  background-image: var(--tx-rim-ramp);
+}
 
+.tx-rim {
+  background-image: var(--tx-rim-ramp);
   border-top: 1px solid var(--chrome-400);
   border-bottom: 1px solid var(--ink);
 
@@ -185,6 +187,21 @@
   transition: border-top-color var(--dur-base) var(--ease-metal);
 }
 .tx-rim:hover { border-top-color: var(--chrome-050); }
+
+/* The same rim ramp painted inside letterforms instead of on a surface.
+   Text gets no borders - the ramp leaning toward the cursor IS the effect. */
+.tx-rim-text {
+  background-image: var(--tx-rim-ramp);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: var(--chrome-100);        /* readable if clipping fails */
+}
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  .tx-rim-text {
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+}
 
 /* Brushed marks over a rim-lit ramp. Declared explicitly because both
    classes set background-image, and without this the later rule wins. */
@@ -208,27 +225,35 @@
 [data-texture="star"] {
   --star-unit: 1em;              /* em in type, overridden to px on surfaces */
 
+  /* The light's colour, as four stops. Warm by default, because on cold
+     metal the highlight is the room reflecting off the surface. A surface
+     that is ALREADY warm has to restate these - see the amber CTA below. */
+  --star-hot:  var(--white);
+  --star-warm: var(--gold);
+  --star-mid:  var(--amber);
+  --star-pool: var(--amber-burnt);
+
   --tx-star-layers:
     radial-gradient(
       circle calc(var(--lit) * var(--star-unit) * 0.3) at var(--mx) var(--my),
-      var(--white) 0%, var(--white) 20%, var(--gold) 52%, transparent 82%
+      var(--star-hot) 0%, var(--star-hot) 20%, var(--star-warm) 52%, transparent 82%
     ),
     radial-gradient(
       ellipse calc(var(--lit) * var(--star-unit) * 0.1)
               calc(var(--lit) * var(--star-unit) * 5.6) at var(--mx) var(--my),
-      var(--white) 0%, var(--gold) 9%,
-      color-mix(in srgb, var(--amber) 65%, transparent) 26%, transparent 68%
+      var(--star-hot) 0%, var(--star-warm) 9%,
+      color-mix(in srgb, var(--star-mid) 65%, transparent) 26%, transparent 68%
     ),
     radial-gradient(
       ellipse calc(var(--lit) * var(--star-unit) * 4.6)
               calc(var(--lit) * var(--star-unit) * 0.13) at var(--mx) var(--my),
-      var(--white) 0%, var(--gold) 9%,
-      color-mix(in srgb, var(--amber) 65%, transparent) 26%, transparent 68%
+      var(--star-hot) 0%, var(--star-warm) 9%,
+      color-mix(in srgb, var(--star-mid) 65%, transparent) 26%, transparent 68%
     ),
     radial-gradient(
       circle calc(var(--lit) * var(--star-unit) * 0.85) at var(--mx) var(--my),
-      color-mix(in srgb, var(--amber) 62%, transparent) 0%,
-      color-mix(in srgb, var(--amber-burnt) 30%, transparent) 45%, transparent 75%
+      color-mix(in srgb, var(--star-mid) 62%, transparent) 0%,
+      color-mix(in srgb, var(--star-pool) 30%, transparent) 45%, transparent 75%
     );
 }
 
@@ -647,3 +672,114 @@
 @media (prefers-reduced-motion: reduce) {
   .tx-lung::before { animation: none; }
 }
+
+
+/* ---- 15. glare — .tx-glare -------------------------------------------
+   A moving specular band laid OVER an element, rather than replacing its
+   surface. This is the version for anything that already has a colour it
+   needs to keep - the amber CTAs especially. Applying .tx-rim to those
+   would swap the accent for chrome and there would no longer be an amber
+   element in the viewport at all.
+
+   Two separate signals do two separate jobs:
+     --lit    fades the band in. 0 unless the pointer is on the element,
+              so this is hover-only and invisible the rest of the time.
+     --light  slides it across, so the band tracks where the cursor is. */
+
+.tx-glare {
+  position: relative;
+  overflow: hidden;             /* the band is clipped to the button */
+}
+
+.tx-glare::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--lit, 0);
+  transition: opacity var(--dur-quick) var(--ease-metal);
+
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    color-mix(in srgb, var(--white) 26%, transparent) 47%,
+    color-mix(in srgb, var(--white) 42%, transparent) 50%,
+    color-mix(in srgb, var(--white) 26%, transparent) 53%,
+    transparent 70%
+  );
+
+  /* Travels further than the cursor does, so it reads as a reflection
+     swinging across a surface rather than a highlight glued to the mouse. */
+  transform: translateX(calc((var(--light, 50) - 50) * 1.5%));
+}
+
+/* Secondary buttons are transparent, so the same band at full strength
+   reads as a wash rather than as light on a surface. Halve it. */
+.cta-secondary.tx-glare::after { opacity: calc(var(--lit, 0) * 0.55); }
+
+
+/* ---- the star, on a button -------------------------------------------
+   Sized in px rather than em: button text is 15px, and an em-scaled star
+   would be a pinprick. The layers are a background-image, so they are
+   clipped to the button and the spikes cannot escape it. */
+
+.cta[data-texture="star"],
+.cta-secondary[data-texture="star"] {
+  --star-unit: 24px;
+  background-image: var(--tx-star-layers);
+}
+
+/* The amber CTA is already bright AND already warm, so a white-and-gold
+   star has almost nothing to contrast against - the first attempt was
+   nearly invisible on it. Restating the light as cold gives it hue
+   contrast as well as luminance, which is what makes it read. */
+.cta[data-texture="star"] {
+  --star-hot:  var(--white);
+  --star-warm: var(--steel-050);
+  --star-mid:  var(--steel-100);
+  --star-pool: var(--petrol);
+}
+
+
+/* ---- 16. torch — .tx-torch -------------------------------------------
+   The pointer becomes a light source and the surface under it is lit.
+   No hot core, no spikes, no rhythm - one soft pool that arrives slowly
+   and leaves slowly.
+
+   This is the gentle end of the cursor treatments. The star announces
+   itself; the torch just reveals what was already there. On something as
+   small as a button the star reads as an event, which is too much for a
+   surface you are only passing over on the way to clicking it.
+
+   Speed is the whole character. --lit is ramped by JS over the duration
+   in data-lit-in / data-lit-out, so "slowly illuminates" is a number in
+   the markup rather than a value buried in here. */
+
+.tx-torch {
+  --torch-size: 120px;
+  --torch-col: var(--gold);
+  position: relative;
+  overflow: hidden;
+}
+
+.tx-torch::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--lit, 0);
+
+  /* A length, not a percentage: percentages are invalid for a circle
+     radius and would silently kill the whole declaration. */
+  background: radial-gradient(
+    circle var(--torch-size) at var(--mx) var(--my),
+    color-mix(in srgb, var(--torch-col) 50%, transparent) 0%,
+    color-mix(in srgb, var(--torch-col) 26%, transparent) 38%,
+    color-mix(in srgb, var(--torch-col) 8%, transparent) 66%,
+    transparent 82%
+  );
+}
+
+/* On the amber CTA the light has to be cold or it has nothing to contrast
+   against - the surface is already bright and already warm. */
+.cta.tx-torch { --torch-col: var(--steel-050); }

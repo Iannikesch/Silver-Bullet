@@ -189,6 +189,48 @@ halo treatments — no rhythm to read, no travelling light to track.
   72px header and never bleeds onto the ticker.
 - **Currently on:** `.logo`
 
+## 15. Glare — `.tx-glare`
+
+A moving specular band laid OVER an element instead of replacing its surface.
+For anything that already has a colour it must keep.
+
+- **Needs JS:** yes (hover listeners)
+- **Why not `.tx-rim` on a button:** rim replaces the fill with chrome, so an
+  amber CTA stops being amber and the viewport loses its accent entirely.
+- `--lit` fades it in (hover-only), `--light` slides it across.
+- **Currently on:** `Talk to us`, `Book a call`, `hello@example.com`
+
+## 16. Torch — `.tx-torch`
+
+The pointer becomes a light source and the surface under it is lit. No hot
+core, no spikes, no rhythm — one soft pool that arrives and leaves slowly.
+
+- **Needs JS:** yes. Speed comes from `data-lit-in` / `data-lit-out` on the
+  element, in seconds, so "slowly illuminates" is visible in the markup.
+- **Knobs:** `--torch-size` (120px), `--torch-col` (`--gold`; `--steel-050`
+  on the amber CTA, which is too bright and too warm for a warm light)
+- **This is the gentle end of the cursor treatments.** The star announces
+  itself; the torch reveals what was already there. On something as small as
+  a button the star reads as an event, which is too much for a surface you
+  are only passing over on the way to clicking.
+- A slow ramp uses `power2.out`, not the star's `back.out` — an overshoot on
+  a slow light reads as a flicker.
+- **Currently on:** `See if you qualify`, `See our work`
+
+## 17. Rim text — `.tx-rim-text`
+
+The rim ramp painted inside letterforms rather than on a surface. Shares
+`--tx-rim-ramp` with `.tx-rim`; no borders, because on text the band leaning
+toward the cursor is the whole effect.
+
+- **Needs JS:** yes (hover listeners)
+- **Currently on:** the hero `h1`, which previously used the hard stepped
+  chrome bands driven by `motion.js`. That engine blends scroll in, so the
+  headline moved wherever you were on the page. It is now hover-only.
+- **Consequence:** the headline no longer animates on touch at all. The old
+  path fell back to scroll there; the pack's hover driver skips no-hover
+  devices entirely.
+
 ## Where the pack touches index.html
 
 Five places, and nothing else. If the page is restructured, these are the only
@@ -212,7 +254,20 @@ rebuild untouched.
 7. **`<a class="logo tx-lung">`** — the breathing halo behind the wordmark
    (`.tx-orbit` and `.tx-pulse` are the alternatives; swapping is one class name)
 
-Plus one line in `motion.js`: `registerChrome()` for `[data-chrome="contact"]`.
+Plus in `motion.js`: `registerChrome()` for `[data-chrome="contact"]`. The
+headline's registration was REMOVED when it moved to the hover-only driver —
+`motion.js` now owns only the bullet and the contact bar.
+
+### Which engine drives what
+
+- **`[data-chrome]`** — `motion.js`, one global per-frame loop, blends pointer
+  with scroll, always active. For a couple of always-on elements.
+- **`[data-texture]` without `data-chrome`** — the pack, per-element hover
+  listeners, active only while the pointer is on the element. Cheaper, and it
+  is what "hover-only" actually means.
+
+The pack skips anything carrying `data-chrome` so the two can never fight over
+one variable.
 
 ### Rule while restructuring
 

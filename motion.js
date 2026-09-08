@@ -4,7 +4,8 @@
 
    Scope, deliberately narrow:
      - Lenis smooth scroll
-     - Reactive chrome on exactly two elements (hero headline, bullet)
+     - Reactive chrome on the bullet and the contact bar. The headline
+       moved to the texture pack's hover-only driver.
 
    The bullet intro sequence is CSS-only and lives in index.html. It does
    not touch GSAP and is not orchestrated from here.
@@ -187,7 +188,6 @@
   }
 
   function initChrome() {
-    registerChrome(document.querySelector('[data-chrome="headline"]'));
     registerChrome(document.querySelector('[data-chrome="bullet"]'));
     registerChrome(document.querySelector('[data-chrome="contact"]'));
     if (!CHROME.length) return;

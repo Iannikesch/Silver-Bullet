@@ -53,9 +53,9 @@ function initTextures(opts) {
 
   /* ---- cursor-reactive textures: star and rim --------------------- */
 
-  if (drive && !reduced && !noHover) {
+  if (!reduced && !noHover) {
     Array.prototype.forEach.call(
-      document.querySelectorAll('[data-texture="star"], [data-texture="rim"]'),
+      document.querySelectorAll('[data-texture]'),
       function (el) {
 
         // One pair of plain numbers per element. CSS derives the rest.
@@ -90,12 +90,22 @@ function initTextures(opts) {
 
         // Enter and leave happen rarely, so a normal tween is right here.
         // quickTo only earns its keep on constant updates.
+        /* How fast the surface lights and unlights, per element. A star
+           wants to snap; a torch wants to seep. Reading it off the markup
+           keeps "slowly illuminates" a decision you can see in the HTML
+           instead of a constant buried in this file. */
+        var litIn   = parseFloat(el.getAttribute('data-lit-in'))  || DUR.base;
+        var litOut  = parseFloat(el.getAttribute('data-lit-out')) || DUR.base;
+        /* A slow light should not overshoot - back.out is the star's snap,
+           and on a torch it reads as a flicker. */
+        var easeIn  = litIn > DUR.base ? 'power2.out' : EASE.snap;
+
         el.addEventListener('mouseenter', function () {
-          if (smooth) gsap.to(light, { lit: 1, duration: DUR.base, ease: EASE.snap, onUpdate: paint });
+          if (smooth) gsap.to(light, { lit: 1, duration: litIn, ease: easeIn, onUpdate: paint });
           else { light.lit = 1; paint(); }
         });
         el.addEventListener('mouseleave', function () {
-          if (smooth) gsap.to(light, { lit: 0, duration: DUR.base, ease: 'power2.in', onUpdate: paint });
+          if (smooth) gsap.to(light, { lit: 0, duration: litOut, ease: 'power2.inOut', onUpdate: paint });
           else { light.lit = 0; paint(); }
         });
       }

@@ -156,20 +156,10 @@
 
     [data-chrome] { --lo: calc((var(--light) - 50) * 0.9%); }
 
-    .hero h1[data-chrome] {
-      background-image: linear-gradient(
-        100deg,
-        var(--chrome-300) calc(0%  + var(--lo)), var(--chrome-300) calc(30% + var(--lo)),
-        var(--chrome-100) calc(30% + var(--lo)), var(--chrome-100) calc(43% + var(--lo)),
-        var(--chrome-050) calc(43% + var(--lo)), var(--chrome-050) calc(50% + var(--lo)),
-        var(--chrome-100) calc(50% + var(--lo)), var(--chrome-100) calc(63% + var(--lo)),
-        var(--chrome-300) calc(63% + var(--lo)), var(--chrome-300) 100%
-      );
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      -webkit-text-fill-color: transparent;
-    }
+    /* The headline's metal is .tx-rim-text now: one soft band that leans
+       toward the cursor, rather than the hard stepped bands. And it is
+       hover-only - see textures.js. Previously it was driven by motion.js,
+       which blends scroll in, so it moved wherever you were on the page. */
 
     /* The bullet sweeps less far — it is 20px tall, not 200px wide. */
     .bullet[data-chrome] { --lo: calc((var(--light) - 50) * 0.42%); }
@@ -968,7 +958,7 @@
       <nav class="nav">
         <a class="nav-link" href="#work">Our work</a>
         <a class="nav-link" href="#capabilities">Capabilities</a>
-        <a class="cta-secondary" href="#contact">Talk to us</a>
+        <a class="cta-secondary tx-glare" href="#contact" data-texture="rim">Talk to us</a>
       </nav>
     </div>
     <div class="site-header__rule"></div>
@@ -1008,7 +998,7 @@
          href is the one place a booking link needs to go when Calendly
          exists; until then it drops to the contact section rather than
          being a dead link on the front door. -->
-    <a class="ticker__cta" href="#contact">Book a call</a>
+    <a class="ticker__cta tx-glare" href="#contact" data-texture="rim">Book a call</a>
   </aside>
 
   <!-- The intro. Removed from the DOM once it has run. -->
@@ -1046,15 +1036,17 @@
         </div>
       </div>
 
-      <h1 data-chrome="headline">We only get paid when you do.</h1>
+      <h1 class="tx-rim-text" data-texture="rim">We only get paid when you do.</h1>
       <p class="lead">
         Silver Bullet is a performance-based marketing firm. No retainers, no
         hourly billing, no invoice for a deck. We take a share of the revenue we
         generate — which means if it doesn't work, we don't get paid.
       </p>
       <div class="cta-row">
-        <a class="cta" href="#contact">See if you qualify</a>
-        <a class="cta-secondary" href="#work">See our work</a>
+        <a class="cta tx-torch" href="#contact" data-texture="torch"
+           data-lit-in="0.9" data-lit-out="0.7">See if you qualify</a>
+        <a class="cta-secondary tx-torch" href="#work" data-texture="torch"
+           data-lit-in="0.9" data-lit-out="0.7">See our work</a>
       </div>
     </section>
     </div><!-- /.hero-ground -->
@@ -1181,7 +1173,7 @@
           deal makes sense. If it doesn't, we'll say so.
         </p>
         <div class="cta-row">
-          <a class="cta" href="mailto:hello@example.com">hello@example.com</a>
+          <a class="cta tx-glare" href="mailto:hello@example.com" data-texture="rim">hello@example.com</a>
         </div>
       </div>
     </section>
@@ -1213,6 +1205,8 @@
        the pack must not attach a second set of listeners. */
     window.addEventListener('DOMContentLoaded', function () {
       if (typeof initTextures === 'function') initTextures({ drive: false });
+      /* drive:false = leave [data-chrome] elements to motion.js. Everything
+         else with a data-texture (the CTAs) gets its own hover listeners. */
       if (typeof initThermal  === 'function') initThermal();
       if (typeof initFrost    === 'function') initFrost('.site-header', 24);
       /* .tx-orbit needs no JS - it is a CSS animation. initPulse is kept
