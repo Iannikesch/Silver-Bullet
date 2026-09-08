@@ -8,6 +8,4 @@
 User-agent: *
 Allow: /
 
-# TODO: add the sitemap once the production domain is settled. The
-# directive requires an absolute URL, so it cannot be written yet:
-# Sitemap: https://<domain>/sitemap.xml
+Sitemap: https://silverbulletagency.com/sitemap.xml
