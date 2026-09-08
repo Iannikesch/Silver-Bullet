@@ -425,7 +425,20 @@
 .tx-thermal > .th-cold,
 .tx-thermal > .th-warm {
   position: absolute;
-  inset: -30%;
+  /* -12%, not -30%. These only ever scale to 1.12, so 124% of the hero
+     already covers it at full heat with room to spare — -30% was 160%,
+     which is 2.5x the area of the hero for no reason anyone can see.
+
+     Area is what matters here because these are composited layers: at
+     -30% they were about 2300px square each, 42 Mpx and ~161MB of GPU
+     texture between them, rasterised at the top of the page, which is
+     exactly where the bullet intro is trying to run. Dropping to -12%
+     takes roughly 40% off that.
+
+     The gradients are positioned in percentages OF THIS ELEMENT, so
+     changing its size rescales them. Checked against the previous
+     render before committing to it. */
+  inset: -12%;
   pointer-events: none;
   z-index: -1;                   /* behind the section's own content */
 }

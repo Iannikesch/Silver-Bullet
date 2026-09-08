@@ -11,10 +11,10 @@
        --chrome-* ramp would render it as invisible text. -->
   <link rel="stylesheet" href="tokens.css?v=2">
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
-  <link rel="stylesheet" href="textures.css?v=3">
+  <link rel="stylesheet" href="textures.css?v=4">
 
   <link rel="stylesheet" href="bore.css?v=5">
-  <link rel="stylesheet" href="site.css?v=6">
+  <link rel="stylesheet" href="site.css?v=7">
 </head>
 
 <body class="has-nightfield">
@@ -221,6 +221,9 @@
     <section id="capabilities" class="capabilities">
       <div class="wrap">
         <h2>Capabilities</h2>
+        <!-- Wrapper exists so the beam overlay can be a sibling of the grid:
+             a <ul> may only contain <li>, so the tracer cannot live inside it. -->
+        <div class="cap-grid-wrap">
         <ul class="cap-grid">
           <li>
             <span class="cap-num tx-etched">01</span>
@@ -253,6 +256,19 @@
             <p class="meta">Email and follow-up, so acquisition spend compounds instead of leaking.</p>
           </li>
         </ul>
+
+        <!-- The tracer. Percentages, so it follows the grid's own hairlines
+             at any width. Order matters only for readability; the timeline
+             drives them. -->
+        <div class="cap-beam" aria-hidden="true">
+          <span class="b-down"></span>
+          <span class="b-mid"></span>
+          <span class="b-up2"></span>
+          <span class="b-dn2"></span>
+          <span class="b-lf2"></span>
+          <span class="b-rt2"></span>
+        </div>
+        </div><!-- /.cap-grid-wrap -->
       </div>
     </section>
 
@@ -416,7 +432,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
   <script defer src="motion.js?v=7"></script>
-  <script defer src="textures.js?v=6"></script>
+  <script defer src="textures.js?v=7"></script>
 
   <script defer src="boot.js?v=2"></script>
 
