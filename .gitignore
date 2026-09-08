@@ -25,3 +25,11 @@ home-top.png
 work-band.png
 capabilities.png
 head-check.png
+
+# Raw source photography and logo working files. ~10MB, and the repo is
+# public — client photos of real people don't belong in it. Only the
+# exported web assets in Assets/web/ ship.
+Assets/photos/
+
+# Verification screenshots dropped in the project root.
+footer-*.png
