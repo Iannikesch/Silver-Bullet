@@ -184,3 +184,27 @@
 @media (prefers-reduced-motion: reduce) {
   .tx-nightfield > * { animation: none !important; }
 }
+
+
+/* ---- full-page backdrop ----
+   Fixed, so it stays put while the page scrolls over it. It paints above
+   the body background and everything else is lifted above it. */
+.tx-nightfield--fixed {
+  position: fixed;
+  z-index: 0;
+}
+
+body.has-nightfield > *:not(.tx-nightfield--fixed) {
+  position: relative;
+  z-index: 1;
+}
+
+/* The page's own opaque backgrounds would hide the field entirely, so the
+   sections that sit over it go transparent and let it through. */
+/* body deliberately keeps its dark background. Making it transparent hands
+   the canvas to <html>, which has none — so if the field ever fails to
+   paint you get a white page instead of a dark one. */
+body.has-nightfield .site-header,
+body.has-nightfield .ticker,
+body.has-nightfield .capabilities,
+body.has-nightfield .contact { background: transparent; }
