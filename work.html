@@ -10,9 +10,9 @@
        --chrome-* ramp would render it as invisible text. -->
   <link rel="stylesheet" href="tokens.css?v=2">
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
-  <link rel="stylesheet" href="textures.css?v=2">
+  <link rel="stylesheet" href="textures.css?v=3">
 
-  <link rel="stylesheet" href="site.css?v=2">
+  <link rel="stylesheet" href="site.css?v=6">
   <link rel="stylesheet" href="nightfield.css?v=3">
 
 
@@ -20,27 +20,49 @@
     .work-hero { padding: var(--space-lg) 0 var(--space-md); }
     .work-hero .lead { margin-top: var(--space-sm); }
 
-    /* Hairline-divided grid, the same move as the capabilities block: the 1px
-       gap lets the container colour through as the rules, so there is one
-       border to change rather than one per cell. */
+    /* Flex rather than grid, deliberately.
+
+       The hairline-divided grid used elsewhere paints the container in
+       --border and lets a 1px gap show through as the rules. That is right
+       when the cells always fill the row. With three cards it does not: drop
+       to two columns and the last row is one card and one EMPTY cell, and
+       that empty cell is a slab of grey.
+
+       Flex has no cells to leave empty. justify-content centres a short last
+       row, so the third card sits in the middle of the row instead of hanging
+       off the left with a hole beside it. Each card carries its own lit top
+       edge, which is the panel treatment from DESIGN.md anyway. */
     .case-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 1px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: clamp(14px, 1.6vw, 22px);
       margin: 0 0 var(--space-xl);
       padding: 0;
       list-style: none;
-      background: var(--border);
-      border: 1px solid var(--border);
+    }
+
+    /* Basis rather than a fixed width: three sit across at full width, then
+       two, then one, and a lone card never stretches to fill the row. */
+    .case-grid > li {
+      display: flex;
+      flex: 0 1 clamp(300px, 31%, 380px);
     }
 
     .case-card {
+      flex: 1;
       display: flex;
       flex-direction: column;
       background: var(--bg);
       text-decoration: none;
-      transition: background-color .2s ease;
+      border-top: 1px solid var(--border-lit);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--ink);
+      transition: background-color .2s ease, border-color .2s ease;
     }
+
+    .case-card:hover { border-top-color: var(--steel-500); }
 
     .case-card:hover { background: var(--bg-raised); }
 
@@ -312,8 +334,8 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
-  <script defer src="motion.js?v=5"></script>
-  <script defer src="textures.js?v=2"></script>
+  <script defer src="motion.js?v=6"></script>
+  <script defer src="textures.js?v=5"></script>
 
   <script defer src="boot.js?v=1"></script>
 

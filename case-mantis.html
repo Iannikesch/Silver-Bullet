@@ -10,9 +10,9 @@
        --chrome-* ramp would render it as invisible text. -->
   <link rel="stylesheet" href="tokens.css?v=2">
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
-  <link rel="stylesheet" href="textures.css?v=2">
+  <link rel="stylesheet" href="textures.css?v=3">
 
-  <link rel="stylesheet" href="site.css?v=2">
+  <link rel="stylesheet" href="site.css?v=6">
   <link rel="stylesheet" href="nightfield.css?v=3">
 
 
@@ -38,18 +38,28 @@
 
     /* The headline figures, pulled out as display type. This is the part
        anyone actually reads. */
+    /* Flex, for the same reason .case-grid is: three figures in a two-column
+       grid leaves an empty cell, and an empty cell in a hairline grid is a
+       slab of grey. These grow to fill instead, so a short last row is wide
+       rather than half missing. */
     .figures {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(12px, 1.4vw, 18px);
       margin: var(--space-md) 0;
       padding: 0;
       list-style: none;
-      background: var(--border);
-      border: 1px solid var(--border);
     }
 
-    .figures > li { background: var(--bg); padding: var(--space-sm); }
+    .figures > li {
+      flex: 1 1 190px;
+      background: var(--bg);
+      padding: var(--space-sm);
+      border-top: 1px solid var(--border-lit);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--ink);
+    }
 
     .figures .n {
       display: block;
@@ -317,8 +327,8 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
-  <script defer src="motion.js?v=5"></script>
-  <script defer src="textures.js?v=2"></script>
+  <script defer src="motion.js?v=6"></script>
+  <script defer src="textures.js?v=5"></script>
 
   <script defer src="boot.js?v=1"></script>
 
