@@ -587,3 +587,63 @@
 @media (prefers-reduced-motion: reduce) {
   .tx-orbit::before { animation: none; }
 }
+
+
+/* ---- 14. lung — .tx-lung ---------------------------------------------
+   One mass behind an element, swelling and subsiding. The calmest of the
+   three halo treatments: no rhythm to read, no travelling light to track,
+   just a slow inhale you notice only by its absence.
+
+   Sized to cover the WHOLE element rather than pooling in the middle.
+   The wordmark is about 196x16 - a 12:1 box - so the halo is deliberately
+   wide and shallow, and its stops reach out to 74% of the radius so the
+   ends of the mark are still inside the light rather than beyond it.
+
+   Vertical padding is capped so that even at full swell the halo stays
+   inside the 72px header and never bleeds onto the ticker below.
+
+   Needs no JavaScript: an alternating CSS animation is exactly a breath. */
+
+.tx-lung {
+  --lung-rate: 9s;              /* one full inhale-and-out */
+  --lung-pad-x: 46px;           /* reach past the ends of the mark */
+  --lung-pad-y: 22px;           /* keep (16/2 + this) * swell inside --nav-h */
+  --lung-low: 0.26;             /* opacity at rest */
+  --lung-high: 0.60;            /* opacity at full swell */
+  position: relative;
+}
+
+.tx-lung::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--lung-pad-y) * -1) calc(var(--lung-pad-x) * -1);
+  z-index: -1;                  /* behind the mark, above the frosted pane */
+  pointer-events: none;
+  border-radius: 999px;
+
+  /* Wide and shallow, matching the mark. Colour is carried well out before
+     it falls away, so the halo belongs to the whole wordmark instead of
+     sitting under its middle. */
+  background: radial-gradient(
+    ellipse 60% 66% at 50% 50%,
+    color-mix(in srgb, var(--petrol) 88%, transparent) 0%,
+    color-mix(in srgb, var(--petrol) 55%, transparent) 34%,
+    color-mix(in srgb, var(--steel-900) 34%, transparent) 56%,
+    transparent 74%
+  );
+
+  opacity: var(--lung-low);
+  animation: tx-lung-breathe var(--lung-rate) ease-in-out infinite alternate;
+  will-change: opacity, transform;
+}
+
+/* alternate reverses it, so the exhale is the inhale played backwards -
+   which is what stops it having a seam you can hear. */
+@keyframes tx-lung-breathe {
+  from { opacity: var(--lung-low);  transform: scale(1); }
+  to   { opacity: var(--lung-high); transform: scale(1.07); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tx-lung::before { animation: none; }
+}

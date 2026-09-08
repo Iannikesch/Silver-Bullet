@@ -171,6 +171,22 @@ No rhythm and no event — a slow sweep you never catch starting.
   over the ticker. Animating `from var(--spin)` leaves the footprint put.
 - Conic origin is outside the box (`at 50% 140%`) so its hard pinch is never
   visible; a radial mask fades it out inside its own box. That is the silo.
+- **Currently unused.** The logo carries `.tx-lung`; swapping is one class name.
+
+## 14. Lung — `.tx-lung`
+
+One mass behind an element, swelling and subsiding. The calmest of the three
+halo treatments — no rhythm to read, no travelling light to track.
+
+- **Needs JS:** no. An `alternate` CSS animation is exactly a breath, and the
+  exhale is the inhale reversed, so there is no seam.
+- **Knobs:** `--lung-rate` (9s), `--lung-pad-x` (46px), `--lung-pad-y` (22px),
+  `--lung-low` / `--lung-high` opacity
+- **Sized to cover the whole element, not pool in its middle.** The wordmark is
+  a 12:1 box (~196x16), so the halo is wide and shallow and its stops reach to
+  74% of the radius — the ends of the mark sit inside the light.
+- **Vertical padding is capped** so that at full swell it still fits inside the
+  72px header and never bleeds onto the ticker.
 - **Currently on:** `.logo`
 
 ## Where the pack touches index.html
@@ -193,7 +209,8 @@ rebuild untouched.
 6. **`<header class="site-header tx-frost">`** — and its `background: var(--bg)`
    removed, or it wins over the frost (the inline `<style>` loads after
    `textures.css`)
-7. **`<a class="logo tx-orbit">`** — the travelling halo behind the wordmark
+7. **`<a class="logo tx-lung">`** — the breathing halo behind the wordmark
+   (`.tx-orbit` and `.tx-pulse` are the alternatives; swapping is one class name)
 
 Plus one line in `motion.js`: `registerChrome()` for `[data-chrome="contact"]`.
 
