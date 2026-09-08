@@ -29,8 +29,30 @@
 
   if (reduced || seen || !layer || !logo) {
     if (layer) layer.remove();
-    return;
+    return;   /* scrollRestoration deliberately left alone — see below */
   }
+
+  /* ---- the page must be at the top for any of this to make sense ----
+     Browsers restore the previous scroll position on reload, and the
+     intro assumes it is playing at the top of the document: the bullet
+     crosses the viewport, draws the nav rule and hands off to the logo,
+     while <main> fades up underneath. Reload while scrolled down and
+     all of that plays over the middle of the page, which reads as the
+     animation glitching rather than as the page being scrolled.
+
+     It only looks broken SOME of the time, which is what makes it hard
+     to place: it depends entirely on where you happened to be when you
+     hit reload.
+
+     Taken over only on the path where the intro actually runs. The
+     early return above leaves scrollRestoration at 'auto', so once
+     ONCE_PER_SESSION is flipped on, returning visitors who skip the
+     intro keep normal browser behaviour and come back where they were.
+
+     Set before .is-intro is added, and before Lenis exists — motion.js
+     loads after this file, so Lenis reads a document already at 0. */
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.scrollTo(0, 0);
 
   /* Measure the logo where it naturally sits, then work out how far right
      it would have to start to be dead centre. The animation runs that in
