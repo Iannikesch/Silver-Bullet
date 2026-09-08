@@ -1,0 +1,957 @@
+/* ==========================================================
+   Silver Bullet — shared site chrome
+
+   Extracted from index.html so every page gets the same header, nav,
+   bullet intro and hook banner from ONE source instead of a copy that
+   drifts. Load AFTER tokens.css and textures.css.
+
+   Bump ?v= on every change — see TEXTURES.md. Stale cached CSS has
+   already shipped on this project once.
+   ========================================================== */
+
+    /* ==========================================================
+       Silver Bullet — page styles
+       Colors come from tokens.css. No raw hex in here.
+       ========================================================== */
+
+    :root {
+      /* Layout */
+      --nav-h:      72px;
+      --wrap:       1180px;
+      --gutter:     clamp(20px, 4vw, 40px);
+
+      /* Vertical rhythm ladder */
+      --space-xl:   clamp(120px, 14vw, 200px);
+      --space-lg:   clamp(88px, 10vw, 144px);
+      --space-md:   clamp(56px, 6vw, 88px);
+      --space-sm:   clamp(28px, 3vw, 40px);
+
+      /* Intro timeline — every value the animation depends on */
+      --t-fire:     0.10s;  /* muzzle blip */
+      --t-fly:      1.00s;  /* bullet crosses the screen */
+      --t-glint:    0.55s;  /* light catches it, mid-screen */
+      --t-name:     0.60s;  /* wordmark wipes in */
+      --t-shift:    1.15s;  /* logo slides to the left */
+      --t-nav:      1.50s;  /* nav items arrive */
+      --t-page:     1.80s;  /* page fades up */
+
+      --ease-settle: cubic-bezier(.25, 1, .5, 1);
+      /* Hard launch, long decaying tail. The opening slope is y1/x1 = 4.25x
+         the average, which puts the first frames of the return at roughly the
+         bullet's own speed; it then bleeds that off into the marquee drift. */
+      --ease-recoil: cubic-bezier(.2, .85, .25, 1);
+
+      /* Slogan ticker.
+         The ride is deliberately a long way. The return has to cover this
+         distance in its first few hundred milliseconds to leave at anything
+         like the bullet's pace, and a short ride leaves the deceleration
+         nothing to be felt across — measured, 144px read as a flat crawl. */
+      --ticker-ride: clamp(280px, 42vw, 620px);
+      --ticker-rate: 62s;   /* one full loop. Slow on purpose. */
+
+      /* Work conveyors. Three bands run right-to-left on this page, so they
+         get three clearly different speeds — matched speeds would read as
+         one striped block rather than as separate systems. Roughly
+         45px/s for the creative slots, 18px/s for the logo band, against
+         the hook banner's 28px/s. */
+      --conveyor-rate: 43s;
+      --logo-rate:    100s;
+
+      /* Set by JS: how far left the logo must travel from centre */
+      --logo-shift: 0px;
+
+      /* Reactive chrome. 0-100. Drives the hard stop positions in the chrome
+         gradients via calc(). 50 = centred band, which is also the static
+         state when JS is off or motion is reduced. */
+      --light: 50;
+    }
+
+    * { box-sizing: border-box; }
+
+    /* No CSS smooth scrolling: Lenis owns scrolling when motion is on, and
+       the two fight if both are active. Under reduced motion Lenis never
+       initialises and anchors jump instantly, which is correct. */
+    html { scroll-behavior: auto; }
+
+    /* Lenis base styles (required by lenis 1.x). */
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+    .lenis.lenis-stopped { overflow: hidden; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: var(--wrap);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+    }
+
+    a { color: inherit; }
+
+    :where(a, button, input, textarea):focus-visible {
+      outline: 2px solid var(--amber);
+      outline-offset: 3px;
+    }
+
+    /* ---------- type ---------- */
+
+    h1, h2, h3 {
+      color: var(--text-strong);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(40px, 7vw, 86px);
+      line-height: 0.98;
+    }
+
+    h2 {
+      font-size: clamp(28px, 4vw, 46px);
+      line-height: 1.02;
+    }
+
+    h3 {
+      font-size: 18px;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+
+    p { margin: 0; }
+
+    .lead {
+      font-size: clamp(17px, 1.5vw, 20px);
+      line-height: 1.6;
+      color: var(--steel-300);
+      max-width: 62ch;
+    }
+
+    .meta {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* ---------- reactive chrome ----------
+       --light slides the hard stops. It never softens them: every band is
+       still a PAIR of stops at one position, the pair just moves together.
+       Applied to exactly three elements — the hero headline, the bullet,
+       and the machined bar above the contact heading.
+       Driving a gradient from a custom property repaints that element every
+       frame, so this deliberately does not scale. */
+
+    [data-chrome] { --lo: calc((var(--light) - 50) * 0.9%); }
+
+    /* The headline's metal is .tx-rim-text now: one soft band that leans
+       toward the cursor, rather than the hard stepped bands. And it is
+       hover-only - see textures.js. Previously it was driven by motion.js,
+       which blends scroll in, so it moved wherever you were on the page. */
+
+    /* The bullet sweeps less far — it is 20px tall, not 200px wide. */
+    .bullet[data-chrome] { --lo: calc((var(--light) - 50) * 0.42%); }
+
+    /* ---------- header ---------- */
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      height: var(--nav-h);
+      /* No fill of its own. .tx-frost supplies a translucent pane, and only
+         once the page has been scrolled - see textures.css. */
+    }
+
+    .site-header .wrap {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    /* The line the bullet leaves behind. It is the nav separator. */
+    .site-header__rule {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background: var(--border);
+      transform-origin: left center;
+    }
+
+    .logo {
+      display: inline-block;
+      line-height: 0;
+      text-decoration: none;
+      will-change: transform;
+    }
+
+    /* The wipe is applied to this wrapper, so it clips whatever sits inside —
+       it worked on text and it works on the image for the same reason. */
+    .logo__inner { display: block; }
+
+    .logo__img {
+      display: block;
+      /* A fixed width matters more than it looks. The intro measures this
+         element to work out how far it has to travel, and that measurement
+         happens before the image file has necessarily arrived. Without a
+         width reserved in CSS the box would still be empty at that moment
+         and the logo would fly to the wrong place. */
+      width: clamp(148px, 16vw, 196px);
+      height: auto;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: clamp(18px, 2.5vw, 34px);
+    }
+
+    .nav a {
+      font-size: 15px;
+      color: var(--steel-500);
+      text-decoration: none;
+      transition: color .18s ease;
+    }
+
+    .nav a:hover { color: var(--white); }
+
+    @media (max-width: 760px) {
+      .nav .nav-link { display: none; }
+    }
+
+    /* ---------- buttons (base classes live in tokens.css) ---------- */
+
+    .cta, .cta-secondary {
+      display: inline-block;
+      padding: 13px 22px;
+      font: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color .18s ease, color .18s ease, border-color .18s ease;
+    }
+
+    .nav .cta-secondary { padding: 9px 16px; font-size: 14px; }
+
+    /* ---------- sections ---------- */
+
+    section { padding: var(--space-xl) 0; }
+
+    .hero {
+      padding-top: var(--space-md);
+      padding-bottom: var(--space-xl);
+    }
+
+    /* The VSL. Separation is a lit top edge, not a drop shadow — the same
+       move as .panel in tokens.css. */
+    .hero__video {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      margin-bottom: var(--space-md);
+      background: var(--bg-raised);
+      border-top: 1px solid var(--border-lit);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--ink);
+      overflow: hidden;
+    }
+
+    .hero__video > iframe,
+    .hero__video > video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* Visible until a real embed replaces it. Loud on purpose. */
+    .hero__video-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 24px;
+      text-align: center;
+      color: var(--steel-700);
+    }
+
+    .hero__video-placeholder strong {
+      color: var(--steel-100);
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero h1 { max-width: 15ch; }
+
+    .hero .lead { margin-top: var(--space-sm); }
+
+    .cta-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: var(--space-md);
+    }
+
+    .section-head { max-width: 62ch; margin-bottom: var(--space-md); }
+    .section-head .lead { margin-top: 20px; }
+
+    /* Explicit columns, not auto-fit: both grids hold 3 or 6 cards, so a
+       fixed 3 / 2 / 1 ladder never leaves an empty cell showing the
+       hairline background as a solid block. */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+
+    /* Cards are separated by lit edges, not fills or shadows. */
+    .grid .panel {
+      border: none;
+      border-top: 1px solid var(--border-lit);
+      padding: var(--space-sm) 28px calc(var(--space-sm) + 8px);
+    }
+
+    .panel h3 + p { margin-top: 12px; }
+    .panel p { font-size: 15px; color: var(--steel-500); }
+
+    .index {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--steel-900);
+      margin-bottom: 14px;
+    }
+
+    /* ---------- stats ---------- */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--space-sm);
+      margin-top: var(--space-lg);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--border);
+    }
+
+    .stat .num {
+      display: block;
+      font-size: clamp(30px, 3.6vw, 44px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--steel-050);
+    }
+
+    .stat .label {
+      display: block;
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* ---------- contact ---------- */
+
+    .contact {
+      border-top: 1px solid var(--border-lit);
+      background: var(--bg-raised);
+    }
+
+    /* The thermal ground sits behind the hero and is clipped to it. */
+    .hero-ground { position: relative; }
+
+    /* The site's third and last metal moment. Thin on purpose: at this size
+       it reads as a machined part, and anything taller starts reading as
+       decoration. */
+    .contact__bar {
+      height: clamp(10px, 1.3vw, 15px);
+      width: 100%;
+      margin-bottom: var(--space-sm);
+    }
+
+    .contact h2 { max-width: 18ch; }
+    .contact .lead { margin-top: 20px; }
+
+    /* ---------- footer ---------- */
+
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: var(--space-md) 0;
+    }
+
+    .foot {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* ---------- slogan ticker ----------
+       A rotating strip of slogans in the slot under the nav rule. As with the
+       intro, the base state below is the FINISHED state: the marquee is simply
+       running and the strip is in place. .is-intro only adds the arrival.
+
+       Two nested transforms, deliberately:
+         .ticker__travel  intro only  — rides out with the bullet, comes back
+         .ticker__track   forever     — the constant-rate marquee
+       They compose. Through the return the travel layer is decelerating hard
+       while the track holds its steady pace, so the composite velocity runs
+       fast -> slow -> steady drift with no moment where one hands to the other. */
+
+    .ticker {
+      position: relative;
+      display: flex;
+      align-items: stretch;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+
+    /* Clipping moved off .ticker and onto this, so the pinned CTA is a
+       sibling of the scrolling area rather than something inside it that
+       would be carried away by the marquee. */
+    .ticker__viewport {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    /* The one persistent conversion path on the page. Amber, and the only
+       amber in this band — see the accent rule in DESIGN.md. */
+    .ticker__cta {
+      flex: none;
+      display: flex;
+      align-items: center;
+      padding: 0 clamp(16px, 2.2vw, 28px);
+      border-left: 1px solid var(--border);
+      background: var(--accent);
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background-color .18s ease;
+    }
+
+    .ticker__cta:hover  { background: var(--accent-hover); }
+    .ticker__cta:active { background: var(--accent-active); }
+
+    .ticker__travel { will-change: transform; }
+
+    .ticker__track {
+      display: flex;
+      width: max-content;
+      animation: marquee-left var(--ticker-rate) linear infinite;
+      /* Negative delay starts the loop already part-way through, so there is
+         always content off to the left. Without it the strip rides out and
+         drags an empty gap in behind itself. */
+      animation-delay: calc(var(--ticker-rate) * -0.55);
+      will-change: transform;
+    }
+
+    /* The bands are draggable. pan-y keeps vertical page scrolling working
+       on touch while horizontal drags come to us. */
+    [data-marquee-viewport] {
+      cursor: grab;
+      touch-action: pan-y;
+    }
+
+    [data-marquee-viewport].is-dragging { cursor: grabbing; }
+
+    /* Without this a drag selects the slogans instead of moving the band. */
+    [data-marquee-viewport].is-dragging,
+    [data-marquee-viewport].is-dragging * { user-select: none; }
+
+    /* The pinned CTA is a button, not a drag handle. */
+    .ticker__cta { cursor: pointer; }
+
+    /* Hover slows the drift to 0.4x rather than stopping it — that is done
+       in motion.js via playbackRate, because changing animation-duration
+       here would remap the loop's progress and make it jump.
+
+       Keyboard focus still stops it dead. Focus is an explicit "I am using
+       this" signal where hover is incidental, and someone tabbing through
+       needs the thing to actually hold still. This also keeps a real stop
+       available without a pointer. */
+    .ticker:focus-within .ticker__track { animation-play-state: paused; }
+
+    .ticker__set {
+      display: flex;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .ticker__set li {
+      position: relative;
+      flex: none;
+      padding: 13px clamp(22px, 3vw, 40px);
+      font-size: 14px;
+      color: var(--steel-500);
+      white-space: nowrap;
+    }
+
+    /* The hook — rev share / profit share / skin in the game — is the whole
+       pitch, so it opens the loop, returns at the halfway point, and carries
+       the emphasis value off the steel ramp. The supporting lines sit a step
+       down. Two bright items in ten is the ration; brighten them all and the
+       strip flattens into one grey band. */
+    .ticker__set li.is-hook {
+      color: var(--steel-100);
+      font-weight: 600;
+    }
+
+    /* Separator is a hairline, not a middle dot — see "Do not" in DESIGN.md. */
+    .ticker__set li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 1px;
+      height: 12px;
+      transform: translateY(-50%);
+      background: var(--slate);
+    }
+
+    /* Two identical sets sit side by side, so translating the track by exactly
+       -50% lands the second set where the first began. Shared by all three
+       bands — every one of them uses paired sets and no flex `gap`, which is
+       what keeps -50% exact. Put a gap on the track and this breaks. */
+    @keyframes marquee-left {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ---------- a glimpse at our work ---------- */
+
+    .work { padding: var(--space-xl) 0; }
+    .work__head { margin-bottom: var(--space-md); }
+
+    .conveyor,
+    .logo-band { overflow: hidden; }
+
+    .conveyor__track,
+    .logo-band__track {
+      display: flex;
+      width: max-content;
+      will-change: transform;
+    }
+
+    .conveyor__track  { animation: marquee-left var(--conveyor-rate) linear infinite; }
+    .logo-band__track { animation: marquee-left var(--logo-rate)     linear infinite; }
+
+    .conveyor__set,
+    .logo-band__set {
+      display: flex;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    /* Four in view. Width is derived from the viewport rather than set in
+       px, so the count stays exactly right at every width instead of
+       drifting to three-and-a-bit. No flex `gap` anywhere — the spacing is
+       margin on the item, because a gap on the track would break the -50%
+       loop. */
+    .conveyor {
+      --cols: 4;
+      --slot-gap: clamp(12px, 1.6vw, 24px);
+    }
+
+    .slot {
+      flex: none;
+      width: calc((100vw - var(--cols) * var(--slot-gap)) / var(--cols));
+      /* 3:2, because that is what the photographs are. Cropping 3:2 sources
+         into a 4:3 box threw away 11% of every frame for no reason. */
+      aspect-ratio: 3 / 2;
+      margin-right: var(--slot-gap);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* Lit top edge, per DESIGN.md. No drop shadow. */
+      background: var(--bg-raised);
+      border-top: 1px solid var(--border-lit);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .slot span {
+      color: var(--steel-700);
+      font-size: 14px;
+    }
+
+    /* cover, not contain: the slot is a window onto the photo, and the crop
+       was already chosen per image when the file was generated. */
+    .slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    @media (max-width: 900px) { .conveyor { --cols: 2; } }
+    @media (max-width: 560px) { .conveyor { --cols: 1; } }
+
+    .logo-band {
+      margin-top: var(--space-md);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo-band__set li img {
+      display: block;
+      height: 34px;              /* marks are matched by HEIGHT, never width */
+      width: auto;
+      opacity: .78;              /* they are context, not the subject */
+      transition: opacity var(--dur-base) var(--ease-metal);
+    }
+    .logo-band__set li:hover img { opacity: 1; }
+
+    .logo-band__set li {
+      flex: none;
+      padding: 22px clamp(28px, 4vw, 56px);
+      color: var(--steel-700);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+
+    /* ---------- capabilities ----------
+       Separation by hairline, not by a repeated rounded box. The 1px grid
+       gap lets the container colour through as the rules, so there is one
+       border to change rather than twenty-four. */
+
+    .capabilities {
+      padding: var(--space-xl) 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .cap-grid {
+      display: grid;
+      /* 300px puts three across the 1100px content column, so six items
+         land as a clean 3x2 instead of 4 + a ragged row of 2. Drops to two
+         then one on the way down. */
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1px;
+      margin: var(--space-md) 0 0;
+      padding: 0;
+      list-style: none;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .cap-grid > li {
+      background: var(--bg);
+      padding: var(--space-sm);
+    }
+
+    /* Subheads step down the steel ramp. --white is rationed to headlines;
+       six of them at full white would flatten the hierarchy. */
+    .cap-grid h3 {
+      color: var(--steel-050);
+      margin-bottom: 8px;
+    }
+
+    /* ==========================================================
+       INTRO — the bullet
+       Base state below is the FINISHED state. The animation only
+       runs while <body class="tx-grain"> carries .is-intro, which JS adds. No JS,
+       or reduced motion, and the page is simply already correct.
+       ========================================================== */
+
+    .intro-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      pointer-events: none;
+      display: none;
+      overflow: hidden;
+    }
+
+    body.is-intro .intro-layer { display: block; }
+
+    /* -- the muzzle blip: two hard bars crossing. no blur. -- */
+    .blip {
+      position: absolute;
+      top: var(--nav-h);
+      left: 0;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
+    .blip::before,
+    .blip::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      background: var(--white);
+      transform: translate(-50%, -50%);
+    }
+
+    .blip::before { width: 60px; height: 1px; }
+    .blip::after  { width: 1px;  height: 18px; }
+
+    /* -- the bullet: a tapered steel shard -- */
+    .bullet {
+      position: absolute;
+      top: calc(var(--nav-h) - 10px);
+      left: 0;
+      width: 150px;
+      height: 20px;
+      transform: translateX(-260px);
+      will-change: transform;
+    }
+
+    .bullet__body,
+    .bullet__glint {
+      position: absolute;
+      inset: 0;
+      clip-path: polygon(100% 50%, 76% 0, 0 0, 0 100%, 76% 100%);
+    }
+
+    /* Cylindrical metal: dark top, hot band at the centre line, dark base. */
+    /* Chrome, not plastic.
+
+       Every stop is PAIRED at an identical percentage, which produces a hard
+       edge with no blend between bands. Smooth gradients read as plastic;
+       abrupt value jumps read as metal, because real chrome reflects a
+       cut-up environment rather than a soft falloff.
+
+       Neutral --chrome-* ramp only (see "Two metal ramps" in DESIGN.md).
+       Tonal split is roughly 36% shadow / 46% midtone / 19% highlight, with
+       only 5% at the brightest band. Most of chrome is dark. */
+    .bullet__body {
+      background: linear-gradient(
+        to bottom,
+        var(--chrome-900) calc(  0% + var(--lo)), var(--chrome-900) calc(  5% + var(--lo)),
+        var(--chrome-700) calc(  5% + var(--lo)), var(--chrome-700) calc( 22% + var(--lo)),
+        var(--chrome-500) calc( 22% + var(--lo)), var(--chrome-500) calc( 33% + var(--lo)),
+        var(--chrome-400) calc( 33% + var(--lo)), var(--chrome-400) calc( 45% + var(--lo)),
+        var(--chrome-300) calc( 45% + var(--lo)), var(--chrome-300) calc( 51% + var(--lo)),
+        var(--chrome-100) calc( 51% + var(--lo)), var(--chrome-100) calc( 58% + var(--lo)),
+        var(--chrome-050) calc( 58% + var(--lo)), var(--chrome-050) calc( 63% + var(--lo)),
+        var(--chrome-100) calc( 63% + var(--lo)), var(--chrome-100) calc( 70% + var(--lo)),
+        var(--chrome-300) calc( 70% + var(--lo)), var(--chrome-300) calc( 78% + var(--lo)),
+        var(--chrome-500) calc( 78% + var(--lo)), var(--chrome-500) calc( 86% + var(--lo)),
+        var(--chrome-700) calc( 86% + var(--lo)), var(--chrome-700) calc( 96% + var(--lo)),
+        var(--chrome-900) calc( 96% + var(--lo)), var(--chrome-900) 100%
+      );
+    }
+
+    /* The airstream behind it. */
+    .bullet__wake {
+      position: absolute;
+      right: 88%;
+      top: 50%;
+      width: 260px;
+      height: 2px;
+      transform: translateY(-50%);
+      background: linear-gradient(
+        to right,
+        color-mix(in srgb, var(--steel-500) 0%, transparent),
+        color-mix(in srgb, var(--steel-500) 55%, transparent) 70%,
+        var(--steel-100)
+      );
+    }
+
+    /* Friction heat building at the nose. */
+    .bullet__heat {
+      position: absolute;
+      right: -1px;
+      top: 50%;
+      width: 72px;
+      height: 20px;
+      transform: translateY(-50%);
+      clip-path: polygon(100% 50%, 44% 0, 0 22%, 0 78%, 44% 100%);
+      background: linear-gradient(
+        to left,
+        var(--gold)        0%,
+        var(--amber)      30%,
+        var(--amber-burnt) 58%,
+        color-mix(in srgb, var(--amber-burnt) 0%, transparent) 100%
+      );
+      opacity: 0;
+    }
+
+    /* Hard specular band — a sharp edge of light, not a bloom. */
+    .bullet__glint {
+      background: linear-gradient(
+        112deg,
+        color-mix(in srgb, var(--gold) 0%, transparent) 42%,
+        var(--gold)  47%,
+        var(--amber) 53%,
+        color-mix(in srgb, var(--amber) 0%, transparent) 58%
+      );
+      opacity: 0;
+    }
+
+    /* ---------- intro: the animations ---------- */
+
+    body.is-intro .site-header__rule {
+      animation: rule-draw var(--t-fly) linear var(--t-fire) both;
+    }
+
+    body.is-intro .blip {
+      animation: blip .18s ease-out var(--t-fire) both;
+    }
+
+    body.is-intro .bullet {
+      animation: fly var(--t-fly) linear var(--t-fire) both;
+    }
+
+    body.is-intro .bullet__heat {
+      animation: heat .60s ease-in .34s both;
+    }
+
+    body.is-intro .bullet__glint {
+      animation: glint .2s linear var(--t-glint) both;
+    }
+
+    body.is-intro .logo {
+      animation: logo-home .70s var(--ease-settle) var(--t-shift) both;
+    }
+
+    /* Two phases, two animations, because each needs its own easing — a single
+       keyframe set with per-keyframe timing functions did not hold, and the
+       return measured flat instead of decelerating.
+
+       They never overlap, and the fill modes are what keep them apart:
+       ticker-home is `forwards` and deliberately NOT `backwards`, so through
+       its 1.15s delay it does not apply at all and ticker-ride owns the
+       transform. From --t-shift it is active and, being later in the list,
+       wins — which is the same instant the logo starts home. */
+    body.is-intro .ticker__travel {
+      animation:
+        ticker-ride var(--t-fly) linear var(--t-fire) both,
+        ticker-home 1.10s var(--ease-recoil) var(--t-shift) forwards;
+    }
+
+    body.is-intro .logo__inner {
+      animation: name-wipe .26s var(--ease-settle) var(--t-name) both;
+    }
+
+    /* The banner CTA arrives on the nav's beat rather than riding out with
+       the bullet — it is pinned, so travelling would read as a mistake. */
+    body.is-intro .ticker__cta {
+      animation: nav-in .40s ease both;
+      animation-delay: calc(var(--t-nav) + .24s);
+    }
+
+    body.is-intro .nav > * {
+      animation: nav-in .40s ease both;
+      animation-delay: var(--t-nav);
+    }
+    body.is-intro .nav > *:nth-child(2) { animation-delay: calc(var(--t-nav) + .06s); }
+    body.is-intro .nav > *:nth-child(3) { animation-delay: calc(var(--t-nav) + .12s); }
+    body.is-intro .nav > *:nth-child(4) { animation-delay: calc(var(--t-nav) + .18s); }
+
+    body.is-intro main,
+    body.is-intro .site-footer {
+      animation: page-in .55s var(--ease-settle) var(--t-page) both;
+    }
+
+    @keyframes rule-draw {
+      from { transform: scaleX(0); }
+      to   { transform: scaleX(1); }
+    }
+
+    @keyframes blip {
+      0%   { opacity: 0; transform: scale(.25); }
+      22%  { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.6); }
+    }
+
+    @keyframes fly {
+      from { transform: translateX(-260px); }
+      to   { transform: translateX(calc(100vw + 260px)); }
+    }
+
+    @keyframes heat {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes glint {
+      0%   { opacity: 0; transform: translateX(-70%); }
+      30%  { opacity: 1; }
+      100% { opacity: 0; transform: translateX(70%); }
+    }
+
+    /* Out with the bullet: same direction, same linear pace, fading up. */
+    @keyframes ticker-ride {
+      0%   { opacity: 0; transform: translateX(0); }
+      70%  { opacity: 1; }
+      100% { opacity: 1; transform: translateX(var(--ticker-ride)); }
+    }
+
+    /* Back with the logo. Leaves at the bullet's pace and decays for a full
+       second; that tail is what hands over to the marquee unnoticed. */
+    @keyframes ticker-home {
+      from { transform: translateX(var(--ticker-ride)); }
+      to   { transform: translateX(0); }
+    }
+
+    /* Logo starts centred on screen, then travels to its resting place. */
+    @keyframes logo-home {
+      from { transform: translateX(var(--logo-shift)); }
+      to   { transform: translateX(0); }
+    }
+
+    /* The name is wiped in left-to-right, in the bullet's direction. */
+    @keyframes name-wipe {
+      from { clip-path: inset(0 100% 0 0); }
+      to   { clip-path: inset(0 0 0 0); }
+    }
+
+    @keyframes nav-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes page-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ---------- reduced motion: no intro at all ---------- */
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .intro-layer { display: none !important; }
+      /* The marquees run off the base stylesheet, not off .is-intro, so the
+         blanket rule below does not reach them. Stop all three by attribute,
+         which also covers any band added later. */
+      [data-marquee-track] { animation: none !important; }
+      body.is-intro *,
+      body.is-intro *::before,
+      body.is-intro *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }

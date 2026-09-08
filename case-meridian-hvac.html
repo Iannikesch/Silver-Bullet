@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meridian HVAC — Silver Bullet</title>
+  <meta name="description" content="Meridian HVAC: $3.4M to $5.1M in 6 months on rev share.">
+
+  <!-- Bump ?v= whenever tokens.css changes. The hero headline is painted
+       with background-clip:text, so a stale palette that drops the
+       --chrome-* ramp would render it as invisible text. -->
+  <link rel="stylesheet" href="tokens.css?v=2">
+  <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
+  <link rel="stylesheet" href="textures.css?v=2">
+
+  <link rel="stylesheet" href="site.css?v=1">
+
+  <style>
+    .case-hero { padding: var(--space-lg) 0 var(--space-md); }
+    .case-hero .meta { margin-bottom: 18px; }
+    .case-hero h1 { max-width: 20ch; }
+
+    .case-art {
+      aspect-ratio: 21 / 9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: var(--space-md) 0 0;
+      background: var(--bg-raised);
+      border-top: 1px solid var(--border-lit);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--ink);
+      color: var(--steel-900);
+      font-size: 13px;
+    }
+
+    /* The headline figures, pulled out as display type. This is the part
+       anyone actually reads. */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1px;
+      margin: var(--space-md) 0;
+      padding: 0;
+      list-style: none;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .figures > li { background: var(--bg); padding: var(--space-sm); }
+
+    .figures .n {
+      display: block;
+      color: var(--white);
+      font-size: clamp(24px, 2.8vw, 36px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .figures p { margin-top: 8px; }
+
+    /* How the number was arrived at. On a page whose entire claim is that we
+       are paid on results, the method is the load-bearing part — and it is
+       the thing every agency case study we looked at leaves out. */
+    .attribution {
+      padding: var(--space-sm);
+      margin-bottom: var(--space-lg);
+      background: var(--bg-raised);
+      border-top: 1px solid var(--border-lit);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .attribution h3 { color: var(--steel-050); margin-bottom: 8px; }
+    .attribution p { color: var(--steel-500); font-size: 15px; max-width: 70ch; }
+
+    /* Three sections and no more: Situation, Strategy, Results. */
+    .case-body { max-width: 62ch; }
+    .case-body section { padding: 0 0 var(--space-md); }
+    .case-body h2 { font-size: clamp(22px, 2.4vw, 30px); margin-bottom: 14px; }
+
+    blockquote {
+      max-width: 62ch;
+      margin: 0 0 var(--space-md);
+      padding-left: var(--space-sm);
+      border-left: 1px solid var(--border-lit);
+    }
+
+    blockquote p {
+      color: var(--steel-050);
+      font-size: clamp(19px, 2vw, 25px);
+      line-height: 1.35;
+      letter-spacing: -0.02em;
+    }
+
+    blockquote footer { margin-top: 14px; color: var(--text-muted); font-size: 14px; }
+
+    .case-next { padding: var(--space-lg) 0; border-top: 1px solid var(--border); }
+    .case-next .back { display: inline-block; margin-left: 24px; color: var(--steel-500); font-size: 15px; }
+  </style>
+</head>
+
+<body>
+  <header class="site-header tx-frost">
+    <div class="wrap">
+      <a class="logo tx-halo tx-halo--lung" href="index.html#top" aria-label="Silver Bullet — home">
+        <span class="logo__inner">
+          <!-- width/height are the file's real pixels: they give the browser
+               the aspect ratio so the header never jumps as it loads.
+               alt is empty because the link above already carries the name. -->
+          <img class="logo__img" src="silver-bullet-logo-alpha.png"
+               width="1708" height="140" alt="">
+        </span>
+      </a>
+      <nav class="nav">
+        <a class="nav-link" href="work.html">Our work</a>
+        <a class="nav-link" href="index.html#capabilities">Capabilities</a>
+        <a class="cta-secondary tx-glare" href="index.html#contact" data-texture="rim">Talk to us</a>
+      </nav>
+    </div>
+    <div class="site-header__rule"></div>
+  </header>
+  <aside class="ticker" data-marquee aria-label="How we work">
+    <div class="ticker__viewport" data-marquee-viewport>
+      <div class="ticker__travel">
+        <div class="ticker__track" data-marquee-track>
+          <ul class="ticker__set">
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>No revenue, no invoice.</li>
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>We eat what we kill.</li>
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>Paid on performance.</li>
+          </ul>
+          <!-- Duplicate set is what makes the loop seamless. Hidden from the
+               accessibility tree so the hook is not announced twice. -->
+          <ul class="ticker__set" aria-hidden="true">
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>No revenue, no invoice.</li>
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>We eat what we kill.</li>
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>Paid on performance.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- Pinned outside the scrolling viewport, so it never drifts off. The
+         href is the one place a booking link needs to go when Calendly
+         exists; until then it drops to the contact section rather than
+         being a dead link on the front door. -->
+    <a class="ticker__cta tx-glare" href="index.html#contact" data-texture="rim">Book a call</a>
+  </aside>
+  <!-- The intro. Removed from the DOM once it has run. -->
+  <div class="intro-layer" aria-hidden="true">
+    <div class="blip"></div>
+    <div class="bullet" data-chrome="bullet">
+      <span class="bullet__wake"></span>
+      <span class="bullet__body"></span>
+      <span class="bullet__glint"></span>
+      <span class="bullet__heat"></span>
+    </div>
+  </div>
+
+  <main id="top">
+
+    <section class="wrap case-hero">
+      <p class="meta">Meridian HVAC / HVAC / Rev share</p>
+      <h1>Selling maintenance plans instead of chasing the next breakdown.</h1>
+      <div class="case-art">Placeholder creative</div>
+    </section>
+
+    <div class="wrap">
+      <ul class="figures">
+        <li><span class="n">$3.4M to $5.1M</span><p class="meta">Annual revenue</p></li>
+        <li><span class="n">+$1.7M</span><p class="meta">Added in 6 months</p></li>
+        <li><span class="n">Rev share</span><p class="meta">How we were paid</p></li>
+      </ul>
+
+      <div class="attribution">
+        <h3>How this was measured</h3>
+        <p>Plan revenue is recognised monthly as it is collected, not booked up front as contract value. Reactive repair revenue is excluded from the share entirely.</p>
+      </div>
+
+      <div class="case-body">
+        <section>
+          <h2>Situation</h2>
+          <p>All of Meridian's revenue was reactive. Something broke, someone called, a technician went out. No recurring revenue at all, which made the business impossible to plan around and, when they eventually come to sell it, hard to value.</p>
+        </section>
+
+        <section>
+          <h2>Strategy</h2>
+          <p>We moved the offer rather than the ad spend. Maintenance plans sold at the end of a repair visit, priced monthly, with the pitch scripted and the technicians paid on it. Advertising stayed roughly flat. What changed was what happened after the van arrived.</p>
+        </section>
+
+        <section>
+          <h2>Results</h2>
+          <p>Annual revenue moved from $3.4M to $5.1M across 6 months, an
+            increase of +$1.7M. We were paid a share of that increase and
+            nothing else &mdash; no retainer, and no fee for the months before
+            it moved.</p>
+        </section>
+
+        <blockquote>
+          <p>&ldquo;Nobody else who pitched us wanted to talk about what my technicians say at the door.&rdquo;</p>
+          <footer>Ray Okonkwo, owner, Meridian HVAC</footer>
+        </blockquote>
+      </div>
+    </div>
+
+    <div class="wrap case-next">
+      <a class="cta" href="index.html#contact">See if you qualify</a>
+      <a class="back" href="work.html">All work</a>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap foot">
+      <span>&copy; 2026 Silver Bullet</span>
+      <span>Placeholder copy — replace before launch.</span>
+    </div>
+  </footer>
+
+  <!-- First, and dependency-free: the intro must not wait on a CDN. -->
+  <script defer src="intro.js?v=1"></script>
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+  <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
+  <script defer src="motion.js?v=5"></script>
+  <script defer src="textures.js?v=2"></script>
+
+  <script defer src="boot.js?v=1"></script>
+
+</body>
+</html>
