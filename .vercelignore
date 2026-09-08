@@ -1,0 +1,15 @@
+# Internal docs. They belong in the repo, not on the domain — without this
+# they are served as plain text at silverbulletagency.com/CLAUDE.md and the
+# rest, and they discuss placeholder copy, open brand decisions and how the
+# site is built.
+#
+# This does not change the build, the routing or any Vercel setting. It only
+# says which files get uploaded. Delete the file to undo it.
+CLAUDE.md
+DESIGN.md
+TEXTURES.md
+
+# Never deployed anyway, listed so intent is explicit.
+reference-notes.md
+sandbox.html
+Assets/photos/
