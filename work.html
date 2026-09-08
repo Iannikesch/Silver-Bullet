@@ -167,11 +167,15 @@
   <main id="top">
 
     <section class="wrap work-hero">
-      <!-- The band rakes across once as the heading enters view. It is
-           above the fold here, so ScrollTrigger fires it on load. --gold,
-           because a specular highlight is environment light on the metal,
-           not the metal itself. -->
-      <h1 class="tx-sweep">Our work</h1>
+      <!-- Same treatment as the home hero headline: metal painted inside
+           the letterforms, with the ramp leaning toward the cursor. Move
+           the pointer across it and the highlight follows.
+
+           .tx-sweep came off. It is an ::after band over the whole box,
+           which is right on an object like the contact bar but wrong over
+           clipped text — it rakes a gold bar across the letters rather
+           than shimmering inside them. -->
+      <h1 class="tx-rim-text" data-texture="rim">Our work</h1>
       <p class="lead">
         Every number on this page is revenue or profit, not impressions. We get
         paid out of it, so it is the only measure that means anything — and each
