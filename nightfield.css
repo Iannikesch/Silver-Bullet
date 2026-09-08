@@ -1,0 +1,186 @@
+/* ==========================================================
+   Silver Bullet — .tx-nightfield
+
+   A dark cinematic lighting field: near-black petrol base, orchid-magenta
+   bloom upper-left and mid-right, plum falloff, scattered bokeh with a few
+   cool cyan accents, heavy vignette, film grain. No objects, no text.
+
+   READ THIS BEFORE USING IT. It deliberately breaks five rules in
+   DESIGN.md, and it was built that way on request:
+
+     1. "Gradient washes as decoration, especially purple-blue" — Do not list.
+        This is exactly that.
+     2. "Ambient glow is wrong ... reads as a template dark theme." The whole
+        effect is glow. Rim light this is not.
+     3. Magenta is specified as "<1% usage, a single small detail or an error
+        state, never as a theme." Here it is the theme.
+     4. Cyan #2DC8FF is not in the palette at all and has no token.
+     5. It drifts on a clock, which makes it a fourth ambient element. The
+        marquee bands hold the site's ambient exemption and DESIGN.md says a
+        second ambient element cancels the first.
+
+   Because of 5, the drift is switchable. `.tx-nightfield--scroll` takes the
+   clock out and drives the same movement from scroll position instead, which
+   is what `.hero-ground` already does and is the version that does not
+   spend the exemption.
+
+   Knobs follow the pack grammar: --tx-nightfield-<property>. Every derived
+   value carries a var() fallback, so this renders with no JS and no tokens.
+   ========================================================== */
+
+.tx-nightfield {
+  /* ---- palette ---- */
+  --tx-nightfield-base:  #0B0E10;   /* near-black petrol */
+  --tx-nightfield-char:  #1A1E20;   /* charcoal it fades toward */
+  --tx-nightfield-neon:  #A06090;   /* orchid-magenta bloom */
+  --tx-nightfield-plum:  #703050;   /* shadow the bloom falls off into */
+  --tx-nightfield-cyan:  #2DC8FF;   /* cool accent, rationed */
+
+  /* ---- intensity ---- */
+  --tx-nightfield-bloom:  0.55;     /* bloom opacity */
+  --tx-nightfield-bokeh:  0.40;     /* orb opacity */
+  --tx-nightfield-cyan-a: 0.30;     /* cyan orb opacity */
+  --tx-nightfield-grain:  0.05;
+  --tx-nightfield-vignette: 0.85;
+
+  /* ---- drift ---- */
+  --tx-nightfield-rate:   90s;      /* bloom layer */
+  --tx-nightfield-rate-2: 140s;     /* bokeh, slower = further away */
+  --tx-nightfield-rate-3: 200s;     /* cyan, slowest */
+  --tx-nightfield-throw:  4%;       /* how far a layer travels */
+
+  /* ---- pointer parallax ----
+     --mx / --my are the pack's shared pointer contract, published by
+     motion.js. Fallbacks keep this correct when nothing publishes them. */
+  --tx-nightfield-par: 1.4%;
+
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(120% 90% at 50% 120%,
+      var(--tx-nightfield-char, #1A1E20) 0%,
+      var(--tx-nightfield-base, #0B0E10) 70%),
+    var(--tx-nightfield-base, #0B0E10);
+}
+
+/* Every layer is oversized so a drifting transform never pulls an edge
+   into frame. */
+.tx-nightfield > * {
+  position: absolute;
+  inset: -18%;
+  display: block;
+  will-change: transform;
+}
+
+/* ---- the blooms: upper left and mid right ---- */
+.tx-nightfield__bloom {
+  background:
+    radial-gradient(46% 40% at 22% 18%,
+      color-mix(in srgb, var(--tx-nightfield-neon, #A06090) 88%, transparent) 0%,
+      color-mix(in srgb, var(--tx-nightfield-plum, #703050) 42%, transparent) 45%,
+      transparent 72%),
+    radial-gradient(40% 46% at 82% 54%,
+      color-mix(in srgb, var(--tx-nightfield-neon, #A06090) 74%, transparent) 0%,
+      color-mix(in srgb, var(--tx-nightfield-plum, #703050) 34%, transparent) 48%,
+      transparent 74%);
+  opacity: var(--tx-nightfield-bloom, 0.55);
+  filter: blur(38px);
+  transform:
+    translate3d(calc(var(--mx, 0.5) * var(--tx-nightfield-par, 1.4%) * -1),
+                calc(var(--my, 0.5) * var(--tx-nightfield-par, 1.4%) * -1), 0);
+  animation: nf-drift-a var(--tx-nightfield-rate, 90s) ease-in-out infinite alternate;
+}
+
+/* ---- bokeh: soft orbs in the same magenta ---- */
+.tx-nightfield__bokeh {
+  background:
+    radial-gradient(circle 90px at 14% 62%, color-mix(in srgb, var(--tx-nightfield-neon, #A06090) 80%, transparent) 0%, transparent 100%),
+    radial-gradient(circle 54px at 33% 30%, color-mix(in srgb, var(--tx-nightfield-neon, #A06090) 70%, transparent) 0%, transparent 100%),
+    radial-gradient(circle 120px at 58% 76%, color-mix(in srgb, var(--tx-nightfield-plum, #703050) 85%, transparent) 0%, transparent 100%),
+    radial-gradient(circle 40px at 71% 22%, color-mix(in srgb, var(--tx-nightfield-neon, #A06090) 75%, transparent) 0%, transparent 100%),
+    radial-gradient(circle 70px at 88% 68%, color-mix(in srgb, var(--tx-nightfield-neon, #A06090) 60%, transparent) 0%, transparent 100%),
+    radial-gradient(circle 34px at 46% 12%, color-mix(in srgb, var(--tx-nightfield-plum, #703050) 90%, transparent) 0%, transparent 100%);
+  opacity: var(--tx-nightfield-bokeh, 0.40);
+  filter: blur(14px);
+  transform:
+    translate3d(calc(var(--mx, 0.5) * var(--tx-nightfield-par, 1.4%) * -2),
+                calc(var(--my, 0.5) * var(--tx-nightfield-par, 1.4%) * -2), 0);
+  animation: nf-drift-b var(--tx-nightfield-rate-2, 140s) ease-in-out infinite alternate;
+}
+
+/* ---- cyan: a few, and only a few ---- */
+.tx-nightfield__cyan {
+  background:
+    radial-gradient(circle 46px at 26% 44%, color-mix(in srgb, var(--tx-nightfield-cyan, #2DC8FF) 85%, transparent) 0%, transparent 100%),
+    radial-gradient(circle 28px at 64% 34%, color-mix(in srgb, var(--tx-nightfield-cyan, #2DC8FF) 70%, transparent) 0%, transparent 100%),
+    radial-gradient(circle 62px at 79% 84%, color-mix(in srgb, var(--tx-nightfield-cyan, #2DC8FF) 55%, transparent) 0%, transparent 100%);
+  opacity: var(--tx-nightfield-cyan-a, 0.30);
+  filter: blur(18px);
+  transform:
+    translate3d(calc(var(--mx, 0.5) * var(--tx-nightfield-par, 1.4%) * -3),
+                calc(var(--my, 0.5) * var(--tx-nightfield-par, 1.4%) * -3), 0);
+  animation: nf-drift-c var(--tx-nightfield-rate-3, 200s) ease-in-out infinite alternate;
+}
+
+/* ---- vignette: static, and heavy ---- */
+.tx-nightfield__vignette {
+  inset: 0;
+  will-change: auto;
+  background: radial-gradient(120% 100% at 50% 45%,
+    transparent 38%,
+    color-mix(in srgb, var(--tx-nightfield-base, #0B0E10) 70%, transparent) 74%,
+    var(--tx-nightfield-base, #0B0E10) 100%);
+  opacity: var(--tx-nightfield-vignette, 0.85);
+}
+
+/* ---- grain: an SVG turbulence tile, so there is no image to ship ---- */
+.tx-nightfield__grain {
+  inset: 0;
+  will-change: auto;
+  opacity: var(--tx-nightfield-grain, 0.05);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* Layers travel in different directions at different rates. That difference
+   is the whole effect — matched movement reads as one sliding sheet. */
+@keyframes nf-drift-a {
+  from { translate: calc(var(--tx-nightfield-throw, 4%) * -1) calc(var(--tx-nightfield-throw, 4%) * 0.4); }
+  to   { translate: var(--tx-nightfield-throw, 4%) calc(var(--tx-nightfield-throw, 4%) * -0.5); }
+}
+@keyframes nf-drift-b {
+  from { translate: var(--tx-nightfield-throw, 4%) calc(var(--tx-nightfield-throw, 4%) * -0.3); }
+  to   { translate: calc(var(--tx-nightfield-throw, 4%) * -1.2) var(--tx-nightfield-throw, 4%); }
+}
+@keyframes nf-drift-c {
+  from { translate: calc(var(--tx-nightfield-throw, 4%) * 0.6) var(--tx-nightfield-throw, 4%); }
+  to   { translate: calc(var(--tx-nightfield-throw, 4%) * -0.8) calc(var(--tx-nightfield-throw, 4%) * -0.6); }
+}
+
+/* ---- the scroll-driven variant ----
+   Same movement, no clock. --nf-scroll is 0-1 from scroll position, so the
+   field is still when the visitor is. This is the version that does not
+   spend the site's ambient exemption. */
+.tx-nightfield--scroll > * { animation: none !important; }
+
+.tx-nightfield--scroll .tx-nightfield__bloom {
+  translate: calc((var(--nf-scroll, 0) - 0.5) * var(--tx-nightfield-throw, 4%) * 2)
+             calc((var(--nf-scroll, 0) - 0.5) * var(--tx-nightfield-throw, 4%) * -1);
+}
+.tx-nightfield--scroll .tx-nightfield__bokeh {
+  translate: calc((var(--nf-scroll, 0) - 0.5) * var(--tx-nightfield-throw, 4%) * -2.4)
+             calc((var(--nf-scroll, 0) - 0.5) * var(--tx-nightfield-throw, 4%) * 2);
+}
+.tx-nightfield--scroll .tx-nightfield__cyan {
+  translate: calc((var(--nf-scroll, 0) - 0.5) * var(--tx-nightfield-throw, 4%) * 1.6)
+             calc((var(--nf-scroll, 0) - 0.5) * var(--tx-nightfield-throw, 4%) * -2.2);
+}
+
+/* Reduced motion: the field stays, nothing in it moves. It is a still
+   photograph of the same lighting, which is the correct fallback. */
+@media (prefers-reduced-motion: reduce) {
+  .tx-nightfield > * { animation: none !important; }
+}
