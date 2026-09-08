@@ -479,3 +479,73 @@ function initHalo(selector) {
       .to({},   { duration: 2.6 });   // the rest
   });
 }
+
+
+/* ============================================================
+   Grid tracer. A beam that walks a hairline grid once, on
+   arrival, then leaves the cells faintly warm.
+
+   Route, matching the 3x2 capabilities grid:
+     down the left edge -> right along the middle line ->
+     four-way burst at the first vertical crossing.
+
+   Only transforms and opacity animate. Each segment is a 1px
+   line scaled from one end, so a growing line reads as a
+   travelling beam and the grid itself is never repainted.
+   ============================================================ */
+
+function initGridBeam(selector) {
+  'use strict';
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (typeof window.gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  Array.prototype.forEach.call(document.querySelectorAll(selector || '.cap-grid-wrap'), function (wrap) {
+    var beam  = wrap.querySelector('.cap-beam');
+    var cells = wrap.querySelectorAll('.cap-grid > li');
+    if (!beam) return;
+
+    function seg(cls) { return beam.querySelector('.' + cls); }
+
+    var tl = gsap.timeline({
+      paused: true,
+      defaults: { ease: 'none' }        // a beam travels at a constant rate
+    });
+
+    // 1. down the left edge
+    tl.to(seg('b-down'), { opacity: 1, duration: 0.25 }, 0)
+      .to(seg('b-down'), { scaleY: 1, duration: 1.7 }, 0)
+
+    // 2. right along the middle, from where it arrived
+      .to(seg('b-mid'), { opacity: 1, duration: 0.25 }, 1.7)
+      .to(seg('b-mid'), { scaleX: 1, duration: 1.2 }, 1.7)
+
+    // 3. the burst: all four at once, out of the crossing
+      .to([seg('b-up2'), seg('b-dn2'), seg('b-lf2'), seg('b-rt2')],
+          { opacity: 1, duration: 0.3 }, 2.9)
+      .to([seg('b-up2'), seg('b-dn2')], { scaleY: 1, duration: 1.5 }, 2.9)
+      .to([seg('b-lf2'), seg('b-rt2')], { scaleX: 1, duration: 1.5 }, 2.9);
+
+    // 4. the warmth left behind, cell by cell, trailing the beam
+    if (cells.length) {
+      tl.to(cells, {
+        '--cap-lit': 1,
+        duration: 1.6,
+        ease: 'power2.out',
+        stagger: { each: 0.22, from: 'start' }
+      }, 2.2);
+    }
+
+    // 5. the beam itself fades out once it has delivered. The warmth stays.
+    tl.to(beam, { opacity: 0, duration: 1.8, ease: 'power2.inOut' }, 4.6);
+
+    wrap.__beamTl = tl;         // exposed so the route can be scrubbed while tuning
+
+    ScrollTrigger.create({
+      trigger: wrap,
+      start: 'top 78%',
+      once: true,                 // one orchestrated moment, never a loop
+      onEnter: function () { tl.play(); }
+    });
+  });
+}

@@ -899,6 +899,82 @@
       margin-bottom: 8px;
     }
 
+
+    /* ---------- the capabilities tracer ----------
+       A dim gold beam that walks the grid's own hairlines once, when the
+       section arrives: down the left edge, right along the middle, then a
+       four-way burst at the first vertical crossing. Each cell warms very
+       slightly behind it.
+
+       Every segment animates transform only - a 1px line scaled from one
+       end - so the whole thing is compositor work and never repaints the
+       grid. The gradient is brighter at the leading end, which is what
+       makes a growing line read as a travelling beam rather than a bar. */
+
+    .cap-grid-wrap { position: relative; }
+
+    .cap-beam {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .cap-beam span {
+      position: absolute;
+      display: block;
+      opacity: 0;
+      /* --gold is the accent, so this is kept deliberately faint. A bright
+         beam here would be a second amber element competing with the CTA. */
+      background: linear-gradient(var(--beam-dir, to bottom),
+        color-mix(in srgb, var(--gold) 8%, transparent) 0%,
+        color-mix(in srgb, var(--gold) 34%, transparent) 62%,
+        color-mix(in srgb, var(--gold) 92%, transparent) 100%);
+    }
+
+    /* verticals: 1px wide, half the grid tall */
+    .cap-beam .b-down,
+    .cap-beam .b-up2,
+    .cap-beam .b-dn2 { width: 2px; height: 50%; }
+
+    /* horizontals: 1px tall, and a --beam-dir that points the bright end
+       the way the beam is actually travelling */
+    .cap-beam .b-mid,
+    .cap-beam .b-lf2,
+    .cap-beam .b-rt2 { height: 2px; }
+
+    .cap-beam .b-down { left: 0;      top: 0;   transform-origin: top;    transform: scaleY(0); }
+    .cap-beam .b-mid  { left: 0;      top: 50%; width: 33.333%; --beam-dir: to right;
+                        transform-origin: left;   transform: scaleX(0); }
+
+    /* the four-way burst, all anchored at the crossing */
+    .cap-beam .b-up2  { left: 33.333%; top: 0;   --beam-dir: to top;
+                        transform-origin: bottom; transform: scaleY(0); }
+    .cap-beam .b-dn2  { left: 33.333%; top: 50%; transform-origin: top;    transform: scaleY(0); }
+    .cap-beam .b-lf2  { left: 0;       top: 50%; width: 33.333%; --beam-dir: to left;
+                        transform-origin: right;  transform: scaleX(0); }
+    .cap-beam .b-rt2  { left: 33.333%; top: 50%; width: 66.667%; --beam-dir: to right;
+                        transform-origin: left;   transform: scaleX(0); }
+
+    /* The warmth left behind. Very low: six lit cells at any real strength
+       would be six amber elements, and the palette allows one. */
+    .cap-grid > li::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: var(--cap-lit, 0);
+      background: radial-gradient(ellipse 80% 70% at 30% 20%,
+        color-mix(in srgb, var(--gold) 11%, transparent) 0%,
+        color-mix(in srgb, var(--amber-burnt) 4%, transparent) 55%,
+        transparent 85%);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cap-beam { display: none; }
+      .cap-grid > li::after { opacity: 0; }
+    }
+
     /* ==========================================================
        INTRO — the bullet
        Base state below is the FINISHED state. The animation only
