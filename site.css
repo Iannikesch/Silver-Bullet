@@ -370,6 +370,42 @@
       color: var(--text-muted);
     }
 
+    /* ---------- punchline band ---------- */
+
+    /* The ground is .tx-bore, in bore.css. Everything here is just the
+       box it sits in and the type on top.
+
+       Type is the site's normal h2 stack on purpose. The sandbox demo
+       used a serif and it looked better, but a display face is a brand
+       decision still marked open in CLAUDE.md, so this does not quietly
+       make it. Swap it in one place when that call gets made. */
+
+    .punchline {
+      min-height: clamp(460px, 64vh, 720px);
+      display: grid;
+      place-items: center;
+      border-top: 1px solid var(--border);
+    }
+
+    .punchline .bore-content {
+      text-align: center;
+      padding-block: var(--space-md);
+    }
+
+    .punchline h2 {
+      /* Wider than .contact h2 — this line wants to break where it is
+         written, not where the measure runs out. */
+      max-width: 20ch;
+      margin: 0 auto;
+      color: var(--text-strong);
+      text-wrap: balance;
+    }
+
+    .punchline h2 em {
+      font-style: italic;
+      color: var(--steel-050);
+    }
+
     /* ---------- contact ---------- */
 
     .contact {

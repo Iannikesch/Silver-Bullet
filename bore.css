@@ -1,0 +1,493 @@
+/* ==========================================================
+   Silver Bullet — .tx-bore
+
+   Looking straight down a rifled barrel. A photographic subject built
+   entirely from gradients: no image request, no canvas, no JS required.
+
+   Why this subject. The punchline band needs a ground that is dark in
+   the middle and detailed at the edges, so a headline can sit in the
+   hole without a scrim over the art. A bore is exactly that shape. It
+   also happens to be the only object that says "silver bullet" without
+   drawing a bullet.
+
+   RING COUNT IS THE WHOLE BALLGAME. Ten rings turning 6deg each gave a
+   stair-stepped gear stack: consecutive land edges were offset far
+   enough to read as separate blocks. Twenty rings turning 2.2deg each
+   cover the same total twist, but adjacent edges nearly line up and the
+   grooves resolve into one continuous helix. Same rule as any raster —
+   the steps stop reading once they are small enough.
+
+   HOW IT READS AS A PHOTOGRAPH, in the order the eye buys it:
+
+     1. Depth by stacking, not by faking. Twenty concentric rings, each
+        inset further and rotated a few more degrees. That rotation is
+        the rifling twist, and following a groove inward is what makes
+        the barrel feel like it has length rather than being a printed
+        circle.
+     2. An asymmetric land profile. Each land rises slowly and falls
+        off a cliff — slow highlight, hard shadow edge. A symmetric
+        profile reads as a pie chart; the cliff reads as a cut edge.
+     3. One light, from up and to the left. Every ring is lit by the
+        same overlay, so the bright lands are bright on one side of the
+        bore and dead on the other. Lighting each ring evenly is the
+        single fastest way to make this look like a logo.
+     4. Falloff. Each ring is darker AND blurrier than the one outside
+        it. Depth of field is what a lens does and a diagram does not.
+     5. It is off-axis. The whole barrel is rotated a few degrees and
+        squashed a hair vertically. Nobody photographs anything dead on.
+
+   Knobs follow the pack grammar, --tx-bore-<property>. Every derived
+   value carries a var() fallback, so this renders with no JS, no
+   tokens.css, and no textures.css. Nothing here animates on a clock:
+   the only movement is the specular, and only if something drives
+   --light. Under prefers-reduced-motion even that is pinned.
+
+   Load AFTER tokens.css.
+   ========================================================== */
+
+
+.tx-bore {
+  /* ---- geometry ---- */
+  --tx-bore-size:   min(126vmin, 1400px); /* barrel diameter. Slightly wider */
+                            /* than the band, so the crown survives in the */
+                            /* corners — at 178vmin it fell off the frame */
+                            /* entirely and the metal went with it. */
+  --tx-bore-crown:  12%;    /* muzzle face width, inset from the edge */
+  --tx-bore-step:   1.3%;   /* how much further in each ring sits */
+  --tx-bore-throat: 38%;    /* inset where the rings stop and the dark starts. */
+                            /* MUST stay under 50% or the throat has negative */
+                            /* size and silently vanishes. Every inset here is */
+                            /* from all four sides, so 50% is zero diameter. */
+  /* ---- twist ----
+     Per-ring rotation, and the whole depth cue. Now an interactive range
+     rather than one value: --bore-aim (0–1) slides between them, written
+     by initBore() from how close the pointer is to the middle of the
+     band. Centre winds the barrel up, the far corners unwind it.
+
+     --tx-bore-aim-rest is the resting position with no pointer, and it
+     is the SINGLE source of truth for the static look — there is no
+     separate rest-twist value to keep in sync. At .32 between 0 and 7deg
+     it lands on 2.24deg, which is what the static version shipped at.
+
+     A note on --tx-bore-twist-far: 0deg is exactly what was asked for and
+     it does fully collapse the grooves into concentric rings at the far
+     corners. That flat state is the failure mode from the early passes,
+     reached deliberately here. Set it to ~.8deg if you want the barrel to
+     keep a trace of twist at the edges instead. */
+  --tx-bore-twist-near: 7deg;   /* pointer dead centre */
+  --tx-bore-twist-far:  0deg;   /* pointer at the far corner */
+  --tx-bore-aim-rest:   .32;    /* resting aim, and the no-JS render */
+
+  --tx-bore-lands:  6;      /* 6 grooves. Real, and it divides 360 cleanly. */
+
+  /* ---- light ---- */
+  --tx-bore-key-x:  34%;    /* where the key light sits when nothing */
+  --tx-bore-key-y:  24%;    /* is driving --light / --light-y */
+  --tx-bore-key:    .5;     /* key strength */
+  --tx-bore-fill:   .18;    /* bounce on the shadow side. Never 0 — */
+                            /* an unlit side with no bounce goes to */
+                            /* black and the ring loses its edge. */
+
+  /* ---- falloff ---- */
+  --tx-bore-depth:  .018;   /* darkening per ring, multiplicative. Spread */
+                            /* over twelve rings now, so the last one is */
+                            /* dim rather than deleted. */
+  --tx-bore-feather: 58%;   /* where a ring starts painting, as a share of */
+                            /* its own radius. See "the rings" below — this */
+                            /* is what stops them reading as stacked plates. */
+  --tx-bore-dof:     .14px; /* blur added per ring. Doubles as the */
+                            /* anti-alias on the ring steps — at .1 a */
+                            /* faint sawtooth survived on the land edges. */
+  --tx-bore-dof-max: 3px;   /* ceiling on that blur. Effectively a no-op at */
+                            /* 3px (the deepest ring reaches 2.66px) and it */
+                            /* stays that way deliberately. 1px was tried as */
+                            /* a cost control — it bought 4fps and brought */
+                            /* the sawtooth straight back onto the land */
+                            /* edges, because the blur IS the anti-alias on */
+                            /* the ring steps. The knob is kept for a future */
+                            /* low-power path; it is not a quality dial. */
+
+  /* ---- surface ---- */
+  --tx-bore-marks:  .05;    /* concentric machining, inside the bore */
+  --tx-bore-turn:   .035;   /* radial turning marks, on the crown. */
+                            /* Above ~.05 the crown reads as a turbine. */
+  --tx-bore-grain:  .055;   /* film grain over the whole frame */
+  --tx-bore-warm:   0;      /* 0–1. Warms the key toward --amber. */
+                            /* Ships at 0: metal is neutral, and the */
+                            /* band already spends its accent on a CTA. */
+
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;       /* keeps the blend modes off the page */
+  background: var(--ink, #010205);
+}
+
+
+/* ---- derived ---------------------------------------------------------
+   The pack's shared signal is --light / --light-y (0–100). Derive the
+   percentages here, on the element that uses them, because a custom
+   property resolves its var()s where it is DECLARED. Declaring these at
+   :root would freeze them at the root's value. */
+.tx-bore {
+  /* The fallbacks ARE the composed key position (mirroring --tx-bore-key-x
+     / -key-y), not a neutral 50/50. With no JS on the page --light is
+     never set, and the static render should be the good one rather than
+     a flat centred light that nobody chose. House rule 4: a texture must
+     render correctly with no JS, and "correctly" means composed. */
+  --bore-mx: calc(var(--light,   34) * 1%);
+  --bore-my: calc(var(--light-y, 24) * 1%);
+
+  /* The effective twist. --bore-aim is unitless 0–1; multiplying a deg
+     range by it is valid calc(). The var() fallback is the rest position,
+     so with no JS this resolves to the static look rather than to zero —
+     which would render the flat target, silently, and look like a bug. */
+  --bore-twist: calc(
+    var(--tx-bore-twist-far) +
+    (var(--tx-bore-twist-near) - var(--tx-bore-twist-far))
+      * var(--bore-aim, var(--tx-bore-aim-rest))
+  );
+}
+
+
+/* ---- the barrel ------------------------------------------------------
+   A square, centred, holding every other layer. Off-axis: rotated a few
+   degrees and squashed vertically, so the mouth is a slight ellipse. */
+.tx-bore .bore-barrel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width:  var(--tx-bore-size);
+  height: var(--tx-bore-size);
+  transform: translate(-50%, -50%) rotate(-3.2deg) scaleY(.962);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+
+/* ---- the crown -------------------------------------------------------
+   The muzzle face. Turned metal: the marks run radially because the part
+   was faced on a lathe, not sanded flat. Lit hardest at the top edge —
+   light falls from above, same rule as the .panel rim in tokens.css. */
+.tx-bore .bore-crown {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-image:
+    /* the lit top edge, and the bottom edge falling away */
+    linear-gradient(
+      178deg,
+      color-mix(in srgb, var(--chrome-050, #E1E1E1) 46%, transparent) 0%,
+      transparent 22%,
+      transparent 74%,
+      color-mix(in srgb, var(--chrome-900, #0C0C0C) 62%, transparent) 100%
+    ),
+    /* turning marks. Fine, uneven, and never countable. */
+    repeating-conic-gradient(
+      from 0deg,
+      color-mix(in srgb, var(--chrome-050, #E1E1E1)
+        calc(var(--tx-bore-turn) * 100%), transparent) 0deg .28deg,
+      transparent .28deg .74deg,
+      color-mix(in srgb, var(--chrome-050, #E1E1E1)
+        calc(var(--tx-bore-turn) * 62%), transparent) .74deg .92deg,
+      transparent .92deg 1.61deg
+    ),
+    /* the metal itself */
+    radial-gradient(
+      circle at 50% 50%,
+      var(--chrome-500, #4C4C4C) 62%,
+      var(--chrome-400, #666766) 78%,
+      var(--chrome-300, #7F7F7F) 90%,
+      var(--chrome-500, #4C4C4C) 100%
+    );
+}
+
+/* The outer edge of the crown. A real muzzle has a chamfer, which shows
+   as one bright hairline and a dark one immediately inside it. Two inset
+   shadows, zero blur — an edge, not a glow. */
+.tx-bore .bore-crown::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow:
+    inset 0  1px 0 color-mix(in srgb, var(--chrome-050, #E1E1E1) 54%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--chrome-900, #0C0C0C) 70%, transparent),
+    inset 0 0 0 3px color-mix(in srgb, var(--chrome-900, #0C0C0C) 34%, transparent);
+}
+
+
+/* ---- the rings -------------------------------------------------------
+   Six of them, each one --tx-bore-step further in and --tx-bore-twist
+   further round. Set --i on each in the markup.
+
+   The land profile is asymmetric on purpose: it climbs through four
+   stops and then drops in two degrees. That cliff is the edge of the
+   cut, and it is what stops the whole thing reading as a pie chart. */
+.tx-bore .bore-ring {
+  position: absolute;
+  inset: calc(var(--tx-bore-crown) + var(--i, 0) * var(--tx-bore-step));
+  border-radius: 50%;
+  transform: rotate(calc(var(--i, 0) * var(--bore-twist)));
+
+  /* Paint only the outer band, faded in. Each ring is a full disc, and
+     the first version let every one of them paint all the way to the
+     middle — so the ring inside it covered it with a hard circular
+     edge and the whole stack read as plates on a spindle rather than
+     one continuous tunnel. Masked to a feathered annulus, consecutive
+     rings overlap and blend, and the grooves run inward unbroken. */
+  -webkit-mask-image:
+    radial-gradient(circle at 50% 50%,
+      transparent var(--tx-bore-feather), #000 96%);
+          mask-image:
+    radial-gradient(circle at 50% 50%,
+      transparent var(--tx-bore-feather), #000 96%);
+  /* darker and softer the further down the barrel it sits */
+  filter:
+    brightness(calc(1 - var(--i, 0) * var(--tx-bore-depth)))
+    blur(min(calc(var(--i, 0) * var(--tx-bore-dof)), var(--tx-bore-dof-max)));
+  background-image:
+    /* concentric machining marks, left by the reamer */
+    repeating-radial-gradient(
+      circle at 50% 50%,
+      transparent 0 2px,
+      color-mix(in srgb, var(--chrome-050, #E1E1E1)
+        calc(var(--tx-bore-marks) * 100%), transparent) 2px 3px
+    ),
+    /* the rifling */
+    repeating-conic-gradient(
+      from 0deg,
+      var(--chrome-900, #0C0C0C)    0deg,  /* groove floor, in shadow, and it */
+      var(--chrome-900, #0C0C0C)   20deg,  /* stays there — most of a bore is */
+      var(--chrome-700, #343434)   34deg,  /* dark, and the first pass gave every */
+      var(--chrome-500, #4C4C4C)   44deg,  /* land a wide bright face and came */
+      var(--chrome-300, #7F7F7F)   49deg,  /* out looking like a pie chart. */
+      var(--chrome-100, #BDBDBD)   53deg,  /* the land face, wide enough to */
+      var(--chrome-050, #E1E1E1)   56deg,  /* actually catch the key — at 1.4deg */
+      var(--chrome-100, #BDBDBD) 57.2deg,  /* it was a sliver and vanished under */
+      var(--chrome-700, #343434) 58.2deg,  /* the blur. Then off the cliff. */
+      var(--chrome-900, #0C0C0C)   60deg
+    );
+}
+
+/* The throat. Past the last ring the barrel is simply unlit — this is
+   the darkest thing in the frame and it is where the headline goes. */
+.tx-bore .bore-throat {
+  position: absolute;
+  inset: var(--tx-bore-throat);
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      var(--ink, #010205) 34%,
+      color-mix(in srgb, var(--ink, #010205) 88%, var(--chrome-700, #343434)) 78%,
+      color-mix(in srgb, var(--ink, #010205) 62%, var(--chrome-500, #4C4C4C)) 100%
+    );
+  box-shadow:
+    inset 0 0 34px 12px color-mix(in srgb, var(--ink, #010205) 84%, transparent);
+}
+
+
+/* ---- the falloff ----------------------------------------------------
+   The single most important layer, and it was missing from the first
+   pass. Light entering a barrel does not come back out: the further in
+   a surface is, the less of it you see, until you see nothing.
+
+   Without this the rings stay evenly bright all the way to the middle
+   and the whole thing reads as a target — concentric bands, no hole.
+   With it, the rings visibly recede into black.
+
+   It doubles as the headline's bed. The type sits in the dark part of
+   the art rather than on a scrim laid over it, which is the difference
+   between a background and a background with a box on it. */
+.tx-bore .bore-fall {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 50% 47%,
+      var(--ink, #010205) 0%,
+      var(--ink, #010205) 9%,
+      color-mix(in srgb, var(--ink, #010205) 66%, transparent) 21%,
+      color-mix(in srgb, var(--ink, #010205) 34%, transparent) 37%,
+      color-mix(in srgb, var(--ink, #010205) 12%, transparent) 56%,
+      transparent 74%
+    );
+}
+
+
+/* ---- the light -------------------------------------------------------
+   One key, one bounce, laid over every ring at once. This is the layer
+   doing most of the work: without it each ring is evenly lit all the way
+   round, which is the difference between a photograph and a diagram.
+
+   soft-light rather than screen — screen washes the chrome out to white
+   and the land edges stop reading. */
+.tx-bore .bore-key {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  /* overlay, not soft-light. soft-light is gentle by design and on a
+     base this dark it did nothing at all — the lit side of the bore has
+     to actually be lit or there is no direction to the light. overlay
+     lifts the highlights and deepens the grooves at the same time. */
+  mix-blend-mode: overlay;
+  background:
+    radial-gradient(
+      ellipse 62% 58% at var(--bore-mx) var(--bore-my),
+      color-mix(in srgb,
+        color-mix(in srgb, var(--amber, #DFC38C)
+          calc(var(--tx-bore-warm) * 100%), #FFFFFF)
+        calc(var(--tx-bore-key) * 100%), transparent) 0%,
+      transparent 68%
+    );
+  transition: background-position var(--dur-base, .42s) var(--ease-metal, ease-out);
+}
+
+/* The shadow side. Mirrored across the centre from the key, multiply, so
+   the far wall of the bore falls off instead of staying evenly grey. */
+.tx-bore .bore-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  mix-blend-mode: multiply;
+  background:
+    radial-gradient(
+      ellipse 70% 66% at
+        calc(100% - var(--bore-mx)) calc(100% - var(--bore-my)),
+      color-mix(in srgb, var(--ink, #010205)
+        calc(var(--tx-bore-fill) * 320%), transparent) 0%,
+      transparent 72%
+    );
+}
+
+
+/* ---- the frame -------------------------------------------------------
+   Vignette and grain over everything, including the black around the
+   barrel. Both belong to the photograph, not to the object. */
+.tx-bore::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 74% 68% at 50% 48%,
+      transparent 42%,
+      color-mix(in srgb, var(--ink, #010205) 74%, transparent) 82%,
+      var(--ink, #010205) 100%
+    );
+}
+
+.tx-bore::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: var(--tx-bore-grain);
+  /* same generator as .tx-grain. Inline, so no second request. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+
+/* ---- content ---------------------------------------------------------
+   Anything you put inside sits above the frame. The throat is already
+   the darkest area, so a headline needs no scrim of its own. */
+.tx-bore > .bore-content {
+  position: relative;
+  z-index: 4;
+}
+
+
+/* ---- variants -------------------------------------------------------- */
+
+/* Shallower. Fewer degrees of twist and less falloff, so the bore reads
+   as a wide mouth rather than a long barrel. Use when the headline is
+   long and needs more dark in the middle. */
+.tx-bore--shallow {
+  --tx-bore-twist-near: 4.2deg;
+  --tx-bore-step:  1.9%;
+  --tx-bore-depth: .012;
+}
+
+/* Cold storage. Kills the key almost entirely — the object is barely
+   lit and reads as a shape in a dark room. Much easier to put text on. */
+.tx-bore--unlit {
+  --tx-bore-key:   .22;
+  --tx-bore-depth: .2;
+  --tx-bore-turn:  .04;
+}
+
+
+/* ---- narrow viewports ------------------------------------------------
+   The throat has to stay bigger than the headline, or the type lands on
+   lit metal and the whole point of the dark centre is lost. On a phone
+   the band is narrow but the headline is not much smaller, so the barrel
+   is scaled up hard and the ring span is compressed to keep the hole
+   ahead of the text.
+
+   Ring COUNT is untouched — same twenty spans, just packed tighter. The
+   markup does not change between breakpoints. */
+@media (max-width: 720px) {
+  .tx-bore {
+    --tx-bore-size:   min(170vmin, 1200px);
+    --tx-bore-crown:  8%;
+    --tx-bore-step:   1.25%;   /* 8% + 19 * 1.25% = 31.75%, clear of the throat */
+    --tx-bore-throat: 34%;     /* 32% of the barrel across, vs 24% at desktop. */
+                               /* 30% was tried and the hole swallowed the */
+                               /* rifling entirely — a black disc with grooves */
+                               /* only in the corners. The falloff carries the */
+                               /* darkness past the throat edge; the throat */
+                               /* itself does not have to be as wide as the type. */
+  }
+}
+
+
+/* ---- reduced motion --------------------------------------------------
+   Nothing here runs on a clock, so there is no animation to kill. The
+   one thing that could move is the key following the pointer, so pin it
+   to the composed position and drop the transition. */
+@media (prefers-reduced-motion: reduce) {
+  .tx-bore {
+    --bore-mx: var(--tx-bore-key-x);
+    --bore-my: var(--tx-bore-key-y);
+    --bore-aim: var(--tx-bore-aim-rest);   /* twist pinned, never driven */
+  }
+  .tx-bore .bore-key { transition: none; }
+}
+
+
+/* ---- cost, measured -------------------------------------------------
+   The static version was free: it composites once and never repaints.
+   Driving the twist from the pointer is NOT free, and the first version
+   of it ran at 19.8fps. Measured on this page, sweeping the pointer
+   across the band, mean frame time over 2s:
+
+     as first written .................. 50.5ms   19.8fps
+     without the per-ring blur ......... 29.6ms   33.8fps
+     without the per-ring mask ......... 51.3ms   19.5fps   (mask is free)
+     without either .................... 19.0ms   52.7fps
+     with will-change: transform ....... 19.7ms   50.8fps   <-- no visual cost
+     will-change + a 1px blur cap ...... 18.3ms   54.8fps   <-- rejected
+
+   So the blur was the whole problem, and promoting each ring to its own
+   compositor layer fixes it: the blur gets baked into the layer texture
+   once and the rotation becomes a compositor transform instead of a
+   re-render. The mask, it turns out, costs nothing at all.
+
+   will-change is applied by initBore() on pointer enter and REMOVED
+   after the twist settles on leave — twenty promoted layers is real GPU
+   memory and leaving it on permanently is exactly what the property
+   warns against. At rest this element carries no promotion at all.
+
+   The 1px blur cap is refused for the same reason as the ring count:
+   4fps is not worth the sawtooth reappearing on every land edge, since
+   that blur is what anti-aliases the ring steps in the first place.
+
+   Cutting to 14 rings would reach 59.4fps, and that trade is refused too:
+   ring count is the thing that makes the grooves read as a helix rather
+   than a stack of plates, and it is the last thing that should pay.
+
+   Still one per page. */

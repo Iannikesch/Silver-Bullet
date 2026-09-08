@@ -35,6 +35,7 @@ Four steps. Copy this into any new page and everything below is available.
       initTextures();                    // cursor-reactive textures
       initThermal();                     // any .tx-thermal on the page
       initFrost('.site-header', 24);     // if the page has a sticky bar
+      initBore();                        // any .tx-bore on the page
       initHalo();                        // only if you use .tx-halo--pulse
       initVideoGround();                 // only if you use .tx-video-ground
     });
@@ -124,7 +125,7 @@ fight over one variable.
 | `.tx-vignette--in` | ground | no | on site — hero |
 | `.tx-thermal` | ground | yes | on site — hero |
 | `.tx-video-ground` | ground | yes | sandbox only, no footage yet |
-| `.tx-bore` | ground | no | sandbox only |
+| `.tx-bore` | ground | for the twist | on site — punchline band |
 | `.tx-brushed` | surface | no | on site — contact bar |
 | `.tx-metal-text` | type | no | sandbox only |
 | `.tx-etched` | type | no | built, unused |
@@ -172,9 +173,12 @@ Cold ground with warmth rising underneath and receding.
 ### `.tx-bore`
 Looking straight down a rifled barrel, drawn entirely in gradients. No image
 request, no canvas, no JS. Built as the ground for the punchline band.
-- **Knobs:** `--tx-bore-size`, `-crown`, `-step`, `-throat`, `-twist`, `-feather`,
-  `-key` / `-key-x` / `-key-y` / `-fill`, `-depth`, `-dof`, `-marks`, `-turn`,
-  `-grain`, `-warm`
+- **Needs:** `initBore()` for the twist only. Everything else is pure CSS and
+  the whole thing renders composed with the script absent.
+- **Knobs:** `--tx-bore-size`, `-crown`, `-step`, `-throat`, `-feather`,
+  `-twist-near` / `-twist-far` / `-aim-rest`,
+  `-key` / `-key-x` / `-key-y` / `-fill`, `-depth`, `-dof` / `-dof-max`,
+  `-marks`, `-turn`, `-grain`, `-warm`
 - **Markup:** `.tx-bore` > `.bore-barrel` > `.bore-crown`, twenty
   `.bore-ring` spans carrying `--i:0`…`19`, then `.bore-throat`, `.bore-fall`,
   `.bore-key`, `.bore-fill`. Content goes in a sibling `.bore-content`.
@@ -197,9 +201,35 @@ request, no canvas, no JS. Built as the ground for the punchline band.
 - **Ships neutral.** `--tx-bore-warm` tints the key toward `--amber` and is
   nicer, but metal is neutral per `tokens.css` and the band spends its one accent
   on a CTA. Dial, not a default.
-- **One per page.** Twenty blurred layers plus two blend modes. It is static so
-  it composites once and never repaints — but do not animate anything that would
-  force the blurred rings to re-render.
+- **The twist is pointer-driven.** `--bore-aim` (0–1) is how close the pointer is
+  to the middle of the band, normalised against the half-diagonal so only the far
+  corners reach zero. It slides between `--tx-bore-twist-near` and
+  `--tx-bore-twist-far`. `--tx-bore-aim-rest` is the single source of truth for
+  the resting look — the CSS `var()` fallback is that same value, so with no JS
+  it renders composed rather than collapsing to the flat target.
+- **Ease the twist SLOWER than the light.** The light is a reflection and can be
+  quick; the twist is the barrel itself appearing to turn. Matched speeds made it
+  feel like a slider being dragged.
+- **One writer per variable.** `initTextures()` already drives `--light` for
+  anything carrying `data-texture`, so `initBore()` deliberately does not touch
+  it. Give the section `data-texture="bore"` and call both.
+- **`will-change` is the entire performance story, and it is applied only while
+  the pointer is in the band.** Rotating twenty blurred, masked rings forces the
+  blur to re-run every frame — measured at 19.8fps. Promoted to their own
+  compositor layers the blur is baked in once and the rotation is a compositor
+  transform: 50.8fps in isolation, ~46fps with the light tween running too. The
+  masks cost nothing. `initBore()` adds the promotion on enter and removes it a
+  second after leave, once the ease home has finished; twenty permanently
+  promoted layers is real GPU memory and is exactly what the property warns
+  against.
+- **Do not buy frames with ring count or blur.** 14 rings reaches 59fps and a 1px
+  blur cap reaches 55fps; both were tried and refused. Ring count is what makes
+  the grooves a helix instead of a stack of plates, and the per-ring blur is what
+  anti-aliases the ring steps — capping it put the sawtooth straight back.
+- **Narrow viewports get their own geometry.** Under 720px the barrel scales up
+  and the ring span compresses, because the throat has to stay bigger than the
+  headline or the type lands on lit metal. Ring count does not change.
+- **One per page.**
 
 ### `.tx-video-ground`
 Footage as a background, suppressed until it reads as a room.
@@ -338,6 +368,9 @@ re-attach; the pack itself is structure-agnostic.
 5. Before `</body>` — `textures.js` plus the boot script
 6. `<header class="site-header tx-frost">`, with its own `background` removed
 7. `<a class="logo tx-halo tx-halo--lung">`
+8. `<section id="punchline" class="punchline tx-bore" data-texture="bore">` —
+   the twenty `.bore-ring` spans are the effect, not decoration; `boot.js` calls
+   `initBore()`
 
 Plus in `motion.js`: `registerChrome()` for `[data-chrome="contact"]` and the
 bullet. The headline's registration was removed when it moved to the hover-only
