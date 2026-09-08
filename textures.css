@@ -422,3 +422,168 @@
     color-mix(in srgb, var(--maroon) 38%, transparent) 45%, transparent 74%);
   transform: scale(calc(1 + var(--heat) * 0.12));
 }
+
+
+/* ---- 11. frosted bar — .tx-frost -------------------------------------
+   A bar that is invisible over the top of the page and frosts once the
+   visitor scrolls, so content passes UNDER it, blurred rather than hidden.
+
+   Cost control, which is the whole reason this is written in two states:
+   backdrop-filter is one of the most expensive things a browser composites,
+   and it is worst over playing video. At the top of the page the property
+   is not applied AT ALL - not transparent, not zero-blur, absent. It only
+   exists while .is-lifted is on, which is only while you are scrolled.
+
+   Toned down from the reference: 7px rather than 10px, and the fill is the
+   page's own background rather than white, so it mutes instead of milking. */
+
+.tx-frost {
+  --frost-blur: 7px;
+  --frost-fill: 58%;        /* how much of --bg sits in the pane */
+
+  background-color: transparent;
+  transition:
+    background-color var(--dur-base) var(--ease-metal),
+    backdrop-filter  var(--dur-base) var(--ease-metal);
+}
+
+.tx-frost.is-lifted {
+  background-color: color-mix(in srgb, var(--bg) var(--frost-fill), transparent);
+  -webkit-backdrop-filter: blur(var(--frost-blur)) saturate(108%);
+  backdrop-filter: blur(var(--frost-blur)) saturate(108%);
+}
+
+/* The lit bottom edge appears with the pane. A hairline, not a shadow:
+   the bar is defined by its edge, the way every other surface here is. */
+.tx-frost::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--border);
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-metal);
+  pointer-events: none;
+}
+.tx-frost.is-lifted::after { opacity: 1; }
+
+/* Touch devices pay the most for a backdrop blur and benefit least, so they
+   get a plainer, more opaque pane instead of a blurred one. */
+@media (hover: none), (prefers-reduced-transparency: reduce) {
+  .tx-frost.is-lifted {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: color-mix(in srgb, var(--bg) 94%, transparent);
+  }
+}
+
+
+/* ---- 12. pulse — .tx-pulse -------------------------------------------
+   A contained heartbeat behind one element. Siloed on purpose: it is sized
+   from the element it sits on and fades out well inside its own box, so it
+   never becomes a glow spreading across the bar.
+
+   It is COLD. A warm pulse would be a second amber-ish element in the same
+   viewport as the ticker's CTA, and one warm element per viewport is the
+   rule. Cold also reads better here: a steel pulse is telemetry, a machine
+   with power in it, rather than a valentine.
+
+   Placed INSIDE a frosted bar it sits on top of the pane - backdrop-filter
+   blurs what is behind an element, never its own children. Placed behind
+   the bar it would be smeared by the frost instead. Inside is sharper. */
+
+.tx-pulse {
+  --beat: 0;                    /* 0-1, written by initPulse() */
+  --pulse-pad-x: 30px;          /* how far the halo reaches past the element */
+  --pulse-pad-y: 16px;
+  position: relative;
+}
+
+.tx-pulse::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--pulse-pad-y) * -1) calc(var(--pulse-pad-x) * -1);
+  z-index: -1;                  /* behind the logo, above the frosted pane */
+  pointer-events: none;
+  border-radius: 999px;
+  background: radial-gradient(
+    ellipse 50% 50% at 50% 50%,
+    color-mix(in srgb, var(--petrol) 92%, transparent) 0%,
+    color-mix(in srgb, var(--steel-900) 40%, transparent) 40%,
+    transparent 72%
+  );
+  opacity: calc(var(--beat) * 0.55);
+  transform: scale(calc(1 + var(--beat) * 0.07));
+  will-change: opacity, transform;
+}
+
+
+/* ---- 13. orbit — .tx-orbit -------------------------------------------
+   The same siloed halo as .tx-pulse, but the light travels instead of
+   beating. No rhythm, no event - a slow sweep you never catch starting.
+
+   IMPORTANT: the ELEMENT never rotates, only the gradient's angle does.
+   Rotating the element itself was the first attempt and it was wrong: this
+   halo is wide and short, so spinning it swung its corners far outside the
+   header and the light bled down over the ticker. Animating the conic's
+   `from` angle instead leaves the footprint exactly where it was put.
+
+   Two more details:
+   1. The conic origin sits OUTSIDE the box (50% 140%, below it). A conic
+      gradient converges to a hard pinch at its origin; keeping that point
+      off the element means you only ever see a broad sweep of it.
+   2. A radial mask fades it out well inside its own box. That is the silo. */
+
+/* Registering the property is what makes an angle animatable in CSS.
+   Without support the angle simply stays at 0deg and the halo sits still,
+   which still looks correct - it just stops moving. */
+@property --spin {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.tx-orbit {
+  --orbit-rate: 64s;            /* one full revolution */
+  --orbit-pad-x: 34px;
+  --orbit-pad-y: 16px;
+  --orbit-strength: 0.5;
+  position: relative;
+}
+
+.tx-orbit::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--orbit-pad-y) * -1) calc(var(--orbit-pad-x) * -1);
+  z-index: -1;                  /* behind the logo, above the frosted pane */
+  pointer-events: none;
+  opacity: var(--orbit-strength);
+
+  background: conic-gradient(
+    from var(--spin) at 50% 140%,
+    transparent 0%,
+    color-mix(in srgb, var(--petrol) 85%, transparent) 12%,
+    color-mix(in srgb, var(--steel-900) 45%, transparent) 26%,
+    transparent 46%,
+    color-mix(in srgb, var(--petrol) 55%, transparent) 68%,
+    transparent 88%,
+    transparent 100%
+  );
+
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%,
+    #000 0%, rgba(0,0,0,.7) 42%, transparent 74%);
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 50%,
+    #000 0%, rgba(0,0,0,.7) 42%, transparent 74%);
+
+  animation: tx-orbit-spin var(--orbit-rate) linear infinite;
+}
+
+@keyframes tx-orbit-spin {
+  to { --spin: 360deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tx-orbit::before { animation: none; }
+}

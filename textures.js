@@ -205,3 +205,65 @@ function initThermal() {
     });
   });
 }
+
+
+/* ============================================================
+   Frosted bar. Adds .is-lifted once the page is scrolled.
+
+   A plain scroll listener rather than ScrollTrigger: this has to
+   be right on the very first frame, and it is one boolean.
+   ============================================================ */
+
+function initFrost(selector, threshold) {
+  'use strict';
+  var el = document.querySelector(selector || '.tx-frost');
+  if (!el) return;
+  var trigger = threshold || 24;   // px of scroll before the pane appears
+  var queued = false;
+  var lifted = null;               // null so the first run always writes
+
+  function apply() {
+    queued = false;
+    var now = window.scrollY > trigger;
+    if (now === lifted) return;    // only touch the DOM when it actually changes
+    lifted = now;
+    el.classList.toggle('is-lifted', now);
+  }
+
+  // Scroll fires far more often than the state can change, so coalesce to
+  // one check per frame.
+  window.addEventListener('scroll', function () {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(apply);
+  }, { passive: true });
+
+  apply();   // a reload halfway down the page must start in the right state
+}
+
+
+/* ============================================================
+   Pulse. A cardiac rhythm on one element.
+
+   Two beats close together, then a rest four times longer than
+   either. The REST is what makes it read as a pulse; without it
+   the same two beats read as a throb.
+   ============================================================ */
+
+function initPulse(selector) {
+  'use strict';
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (typeof window.gsap === 'undefined') return;
+
+  Array.prototype.forEach.call(document.querySelectorAll(selector || '.tx-pulse'), function (el) {
+    var beat = { v: 0 };
+    function paint() { el.style.setProperty('--beat', beat.v.toFixed(3)); }
+
+    gsap.timeline({ repeat: -1 })
+      .to(beat, { v: 1.00, duration: 0.17, ease: 'power2.out',   onUpdate: paint })
+      .to(beat, { v: 0.28, duration: 0.24, ease: 'power2.in',    onUpdate: paint })
+      .to(beat, { v: 0.70, duration: 0.15, ease: 'power2.out',   onUpdate: paint })
+      .to(beat, { v: 0.00, duration: 0.55, ease: 'power2.inOut', onUpdate: paint })
+      .to({},   { duration: 2.6 });   // the rest
+  });
+}

@@ -125,6 +125,85 @@ video playing behind the text. The technique on profectusagency.com, sized down.
 
 ---
 
+## 11. Frosted bar — `.tx-frost`
+
+A bar that is invisible at the top of the page and frosts once scrolled, so
+content passes under it blurred rather than hidden.
+
+- **Needs JS:** `initFrost(selector, thresholdPx)`
+- **Knobs:** `--frost-blur` (7px), `--frost-fill` (58% of `--bg`)
+- **The cost control is the two states.** At the top of the page
+  `backdrop-filter` is not applied at all — not zero-blur, absent. It only
+  exists while `.is-lifted` is on. That matters most over a video hero.
+- Toned down from the profectusagency reference: 7px not 10px, and the fill
+  is `--bg` rather than white, so it mutes instead of milking.
+- **Touch and `prefers-reduced-transparency`** get an opaque pane and no blur.
+
+## 12. Pulse — `.tx-pulse`
+
+A contained heartbeat behind one element. Two beats, then a rest four times
+longer than either — the rest is what makes it a pulse rather than a throb.
+
+- **Needs JS:** `initPulse(selector)`
+- **Knobs:** `--pulse-pad-x` (30px), `--pulse-pad-y` (16px), the `0.55`
+  opacity and `0.07` scale multipliers
+- **It is cold, deliberately.** A warm pulse would be a second warm element in
+  the same viewport as the ticker's amber CTA. Cold also reads as telemetry
+  rather than as a valentine.
+- **Inside a frosted bar it sits on top of the pane.** `backdrop-filter` blurs
+  what is behind an element, never its own children. Behind the bar it would
+  be smeared instead.
+- **Currently unused.** The logo carries `.tx-orbit` instead; swapping back
+  is one class name plus re-enabling `initPulse('.logo')`.
+
+## 13. Orbit — `.tx-orbit`
+
+The same siloed halo as the pulse, but the light travels instead of beating.
+No rhythm and no event — a slow sweep you never catch starting.
+
+- **Needs JS:** no. A registered `@property` makes the angle animatable in
+  pure CSS. Without `@property` support the angle stays at 0deg and the halo
+  simply sits still, which still looks correct.
+- **Knobs:** `--orbit-rate` (64s), `--orbit-pad-x` / `-y`, `--orbit-strength`
+- **The element never rotates — only the gradient's angle does.** Rotating the
+  element was the first attempt and it was wrong: the halo is wide and short,
+  so spinning it swung the corners outside the header and the light bled down
+  over the ticker. Animating `from var(--spin)` leaves the footprint put.
+- Conic origin is outside the box (`at 50% 140%`) so its hard pinch is never
+  visible; a radial mask fades it out inside its own box. That is the silo.
+- **Currently on:** `.logo`
+
+## Where the pack touches index.html
+
+Five places, and nothing else. If the page is restructured, these are the only
+things to re-attach — the pack itself is structure-agnostic and survives a
+rebuild untouched.
+
+1. **`<head>`** — `<link href="textures.css">`, loaded after `tokens.css`
+2. **`<body class="tx-grain">`** — page-wide grain
+3. **`.hero-ground`** — a full-bleed wrapper AROUND `<section class="hero">`,
+   carrying `tx-thermal tx-vignette--in` plus two child spans
+   (`.th-cold`, `.th-warm`). Wrapped rather than applied to `.hero` directly,
+   because `.hero` is a `.wrap` and the ground would stop at the text column.
+4. **`.contact__bar`** — the machined bar above the contact heading:
+   `tx-brushed tx-rim tx-sweep`, `data-chrome="contact"`, `data-texture="rim"`
+5. **Before `</body>`** — `textures.js` plus a boot script calling
+   `initTextures({ drive: false })`, `initThermal()`, `initFrost('.site-header', 24)`
+   and `initPulse('.logo')`
+6. **`<header class="site-header tx-frost">`** — and its `background: var(--bg)`
+   removed, or it wins over the frost (the inline `<style>` loads after
+   `textures.css`)
+7. **`<a class="logo tx-orbit">`** — the travelling halo behind the wordmark
+
+Plus one line in `motion.js`: `registerChrome()` for `[data-chrome="contact"]`.
+
+### Rule while restructuring
+
+Do **not** sprinkle `tx-` classes into new markup as you build it. Get the
+structure and the real copy right first, then re-attach all five in one
+deliberate pass. Textures scattered during a rebuild is how a three-element
+metal budget quietly becomes twelve.
+
 ## House rules for the pack
 
 - **Ration the metal.** Two or three metallic moments per page, maximum. If
