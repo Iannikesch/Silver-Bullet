@@ -123,7 +123,7 @@ function initTextures(opts) {
 
       // Animating a plain number and writing it into a CSS variable is more
       // reliable than asking GSAP to interpolate a string like "-200%".
-      function paint() { el.style.setProperty('--sweep', band.pos); }
+      function paint() { el.style.setProperty('--tx-sweep-pos', band.pos); }
       paint();
 
       function sweep() {
@@ -210,7 +210,7 @@ function initThermal() {
            arrives, peaks as it fills the screen, and is gone by the time it
            leaves. A linear map would have it brightest at one edge. */
         var heat = Math.sin(self.progress * Math.PI);
-        el.style.setProperty('--heat', heat.toFixed(3));
+        el.style.setProperty('--tx-heat', heat.toFixed(3));
       }
     });
   });
@@ -253,21 +253,22 @@ function initFrost(selector, threshold) {
 
 
 /* ============================================================
-   Pulse. A cardiac rhythm on one element.
+   Halo. Only the --pulse variant needs JS; --lung and --orbit
+   are pure CSS and run without this being called.
 
    Two beats close together, then a rest four times longer than
    either. The REST is what makes it read as a pulse; without it
    the same two beats read as a throb.
    ============================================================ */
 
-function initPulse(selector) {
+function initHalo(selector) {
   'use strict';
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   if (typeof window.gsap === 'undefined') return;
 
-  Array.prototype.forEach.call(document.querySelectorAll(selector || '.tx-pulse'), function (el) {
+  Array.prototype.forEach.call(document.querySelectorAll(selector || '.tx-halo--pulse'), function (el) {
     var beat = { v: 0 };
-    function paint() { el.style.setProperty('--beat', beat.v.toFixed(3)); }
+    function paint() { el.style.setProperty('--tx-beat', beat.v.toFixed(3)); }
 
     gsap.timeline({ repeat: -1 })
       .to(beat, { v: 1.00, duration: 0.17, ease: 'power2.out',   onUpdate: paint })

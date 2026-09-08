@@ -14,7 +14,7 @@
    ============================================================ */
 
 
-/* ---- 0. motion tokens -------------------------------------------------
+/* ---- motion tokens -------------------------------------------------
    Three durations and two curves, shared by every texture. This is the
    thing that makes a pile of separate effects feel like one system: if
    two elements move at different speeds for no reason, the page reads as
@@ -94,7 +94,7 @@
 }
 
 
-/* ---- 1. film grain ----------------------------------------------------
+/* ---- film grain ----------------------------------------------------
    Put .tx-grain on <body>. Static, never animated: moving grain is
    ambient motion and repaints the whole viewport every frame. */
 
@@ -110,7 +110,7 @@
 }
 
 
-/* ---- 2. vignette ------------------------------------------------------
+/* ---- vignette ------------------------------------------------------
    Also on <body>. The same idea as the grain at a different scale: it
    stops the background reading as a flat screen and starts it reading as
    a lit object. Keep it below the threshold where you notice it. */
@@ -144,7 +144,7 @@
 }
 
 
-/* ---- 3. brushed metal -------------------------------------------------
+/* ---- brushed metal -------------------------------------------------
    Separation comes from a lit top edge, never a drop shadow. */
 
 .tx-brushed {
@@ -154,7 +154,7 @@
 }
 
 
-/* ---- 4. rim light on hover -------------------------------------------
+/* ---- rim light on hover -------------------------------------------
    The restrained sibling of the star. Nothing glows: the lit top edge
    gets brighter, and the bright band in the metal leans toward the
    cursor. Highlights define edges - they never bleed.
@@ -164,15 +164,15 @@
 .tx-rim, .tx-rim-text {
   /* How far the band leans. Half the cursor's travel, so it tracks
      without feeling stuck to the pointer. */
-  --rim-lean: calc((var(--light, 50) - 50) * 0.45%);
+  --tx-rim-lean: calc((var(--light, 50) - 50) * 0.45%);
 
   --tx-rim-ramp: linear-gradient(
     100deg,
-    var(--chrome-500) calc(0%  + var(--rim-lean)),
-    var(--chrome-300) calc(28% + var(--rim-lean)),
-    var(--chrome-100) calc(44% + var(--rim-lean)),
-    var(--chrome-050) calc(50% + var(--rim-lean)),
-    var(--chrome-300) calc(64% + var(--rim-lean)),
+    var(--chrome-500) calc(0%  + var(--tx-rim-lean)),
+    var(--chrome-300) calc(28% + var(--tx-rim-lean)),
+    var(--chrome-100) calc(44% + var(--tx-rim-lean)),
+    var(--chrome-050) calc(50% + var(--tx-rim-lean)),
+    var(--chrome-300) calc(64% + var(--tx-rim-lean)),
     var(--chrome-500) 100%
   );
 }
@@ -210,7 +210,7 @@
 }
 
 
-/* ---- 5. the star ------------------------------------------------------
+/* ---- the star ------------------------------------------------------
    A hot core, two crossed spikes, a small warm pool. Warm because it is
    the room reflecting off the surface, not the surface itself.
 
@@ -223,42 +223,42 @@
    invalid and silently kills background-image. */
 
 [data-texture="star"] {
-  --star-unit: 1em;              /* em in type, overridden to px on surfaces */
+  --tx-star-size: 1em;              /* em in type, overridden to px on surfaces */
 
   /* The light's colour, as four stops. Warm by default, because on cold
      metal the highlight is the room reflecting off the surface. A surface
      that is ALREADY warm has to restate these - see the amber CTA below. */
-  --star-hot:  var(--white);
-  --star-warm: var(--gold);
-  --star-mid:  var(--amber);
-  --star-pool: var(--amber-burnt);
+  --tx-star-hot:  var(--white);
+  --tx-star-warm: var(--gold);
+  --tx-star-mid:  var(--amber);
+  --tx-star-pool: var(--amber-burnt);
 
   --tx-star-layers:
     radial-gradient(
-      circle calc(var(--lit) * var(--star-unit) * 0.3) at var(--mx) var(--my),
-      var(--star-hot) 0%, var(--star-hot) 20%, var(--star-warm) 52%, transparent 82%
+      circle calc(var(--lit) * var(--tx-star-size) * 0.3) at var(--mx) var(--my),
+      var(--tx-star-hot) 0%, var(--tx-star-hot) 20%, var(--tx-star-warm) 52%, transparent 82%
     ),
     radial-gradient(
-      ellipse calc(var(--lit) * var(--star-unit) * 0.1)
-              calc(var(--lit) * var(--star-unit) * 5.6) at var(--mx) var(--my),
-      var(--star-hot) 0%, var(--star-warm) 9%,
-      color-mix(in srgb, var(--star-mid) 65%, transparent) 26%, transparent 68%
+      ellipse calc(var(--lit) * var(--tx-star-size) * 0.1)
+              calc(var(--lit) * var(--tx-star-size) * 5.6) at var(--mx) var(--my),
+      var(--tx-star-hot) 0%, var(--tx-star-warm) 9%,
+      color-mix(in srgb, var(--tx-star-mid) 65%, transparent) 26%, transparent 68%
     ),
     radial-gradient(
-      ellipse calc(var(--lit) * var(--star-unit) * 4.6)
-              calc(var(--lit) * var(--star-unit) * 0.13) at var(--mx) var(--my),
-      var(--star-hot) 0%, var(--star-warm) 9%,
-      color-mix(in srgb, var(--star-mid) 65%, transparent) 26%, transparent 68%
+      ellipse calc(var(--lit) * var(--tx-star-size) * 4.6)
+              calc(var(--lit) * var(--tx-star-size) * 0.13) at var(--mx) var(--my),
+      var(--tx-star-hot) 0%, var(--tx-star-warm) 9%,
+      color-mix(in srgb, var(--tx-star-mid) 65%, transparent) 26%, transparent 68%
     ),
     radial-gradient(
-      circle calc(var(--lit) * var(--star-unit) * 0.85) at var(--mx) var(--my),
-      color-mix(in srgb, var(--star-mid) 62%, transparent) 0%,
-      color-mix(in srgb, var(--star-pool) 30%, transparent) 45%, transparent 75%
+      circle calc(var(--lit) * var(--tx-star-size) * 0.85) at var(--mx) var(--my),
+      color-mix(in srgb, var(--tx-star-mid) 62%, transparent) 0%,
+      color-mix(in srgb, var(--tx-star-pool) 30%, transparent) 45%, transparent 75%
     );
 }
 
 .tx-brushed[data-texture="star"] {
-  --star-unit: 46px;
+  --tx-star-size: 46px;
   background-image: var(--tx-star-layers), var(--tx-brushed-grain), var(--tx-metal-ramp);
 }
 
@@ -276,7 +276,7 @@
 }
 
 
-/* ---- 6. specular sweep ------------------------------------------------
+/* ---- specular sweep ------------------------------------------------
    A band of light rakes across once, when the element scrolls into view.
    Not a loop: one orchestrated moment. Only a transform animates, so it
    is cheap enough for a real page. */
@@ -302,13 +302,13 @@
     color-mix(in srgb, var(--gold) 20%, transparent) 62%,
     transparent 100%
   );
-  /* --sweep is a plain number JS drives from -200 to 500. The skew makes
+  /* --tx-sweep-pos is a plain number JS drives from -200 to 500. The skew makes
      the light rake at an angle instead of crossing flat. */
-  transform: skewX(-18deg) translateX(calc(var(--sweep, -200) * 1%));
+  transform: skewX(-18deg) translateX(calc(var(--tx-sweep-pos, -200) * 1%));
 }
 
 
-/* ---- 7. etched type ---------------------------------------------------
+/* ---- etched type ---------------------------------------------------
    The inverse of metal type: letters pressed INTO the surface rather
    than made of it. Light from above means the top edge is in shadow and
    the bottom edge catches it.
@@ -331,7 +331,7 @@
 }
 
 
-/* ---- 9. video ground — .tx-video-ground ------------------------------
+/* ---- video ground — .tx-video-ground ------------------------------
    Footage as a background, suppressed until it reads as atmosphere
    rather than as a video playing behind the text.
 
@@ -348,9 +348,9 @@
    video at a third brightness with its edges deleted looks like a room. */
 
 .tx-video-ground {
-  --vg-bright: 0.32;   /* how much of the footage survives. Keep it low. */
-  --vg-sat:    0.55;   /* pulled toward neutral - the palette is cold */
-  --vg-blur:   2px;    /* hides compression artefacts in dark gradients */
+  --tx-video-brightness: 0.32;   /* how much of the footage survives. Keep it low. */
+  --tx-video-saturation:    0.55;   /* pulled toward neutral - the palette is cold */
+  --tx-video-blur:   2px;    /* hides compression artefacts in dark gradients */
 
   position: relative;
   overflow: hidden;
@@ -382,7 +382,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(var(--vg-bright)) saturate(var(--vg-sat)) blur(var(--vg-blur));
+  filter: brightness(var(--tx-video-brightness)) saturate(var(--tx-video-saturation)) blur(var(--tx-video-blur));
   /* Starts invisible and is faded in by JS only once it can actually play,
      so a slow or missing file never shows as a black rectangle. */
   opacity: 0;
@@ -405,7 +405,7 @@
 .tx-video-ground.is-raw > .vg-crush { display: none; }
 
 
-/* ---- 10. thermal ground — .tx-thermal --------------------------------
+/* ---- thermal ground — .tx-thermal --------------------------------
    Cold steel with warmth rising underneath and receding again.
 
    Driven by SCROLL POSITION, not by a clock. That is a deliberate choice,
@@ -413,10 +413,10 @@
    no input, and the ticker holds that slot. Bound to scroll, this is still
    when the visitor is - the same defence the reactive chrome already has.
 
-   --heat is a 0-1 value written by initThermal(). */
+   --tx-heat is a 0-1 value written by initThermal(). */
 
 .tx-thermal {
-  --heat: 0;
+  --tx-heat: 0;
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -435,21 +435,21 @@
   opacity: .55;
   background: radial-gradient(ellipse 55% 55% at 42% 45%,
     color-mix(in srgb, var(--petrol) 72%, transparent) 0%, transparent 72%);
-  transform: scale(calc(1 + var(--heat) * 0.06));
+  transform: scale(calc(1 + var(--tx-heat) * 0.06));
 }
 
 /* Never bright. This is the suggestion of heat, not a glow - the warm ramp
    because it is the environment, not the surface. */
 .tx-thermal > .th-warm {
-  opacity: calc(var(--heat) * 0.42);
+  opacity: calc(var(--tx-heat) * 0.42);
   background: radial-gradient(ellipse 40% 42% at 62% 66%,
     color-mix(in srgb, var(--amber-burnt) 58%, transparent) 0%,
     color-mix(in srgb, var(--maroon) 38%, transparent) 45%, transparent 74%);
-  transform: scale(calc(1 + var(--heat) * 0.12));
+  transform: scale(calc(1 + var(--tx-heat) * 0.12));
 }
 
 
-/* ---- 11. frosted bar — .tx-frost -------------------------------------
+/* ---- frosted bar — .tx-frost -------------------------------------
    A bar that is invisible over the top of the page and frosts once the
    visitor scrolls, so content passes UNDER it, blurred rather than hidden.
 
@@ -463,8 +463,8 @@
    page's own background rather than white, so it mutes instead of milking. */
 
 .tx-frost {
-  --frost-blur: 7px;
-  --frost-fill: 58%;        /* how much of --bg sits in the pane */
+  --tx-frost-blur: 7px;
+  --tx-frost-fill: 58%;        /* how much of --bg sits in the pane */
 
   background-color: transparent;
   transition:
@@ -473,9 +473,9 @@
 }
 
 .tx-frost.is-lifted {
-  background-color: color-mix(in srgb, var(--bg) var(--frost-fill), transparent);
-  -webkit-backdrop-filter: blur(var(--frost-blur)) saturate(108%);
-  backdrop-filter: blur(var(--frost-blur)) saturate(108%);
+  background-color: color-mix(in srgb, var(--bg) var(--tx-frost-fill), transparent);
+  -webkit-backdrop-filter: blur(var(--tx-frost-blur)) saturate(108%);
+  backdrop-filter: blur(var(--tx-frost-blur)) saturate(108%);
 }
 
 /* The lit bottom edge appears with the pane. A hairline, not a shadow:
@@ -505,89 +505,85 @@
 }
 
 
-/* ---- 12. pulse — .tx-pulse -------------------------------------------
-   A contained heartbeat behind one element. Siloed on purpose: it is sized
-   from the element it sits on and fades out well inside its own box, so it
-   never becomes a glow spreading across the bar.
+/* ---- halo — .tx-halo ------------------------------------------------
+   A contained field of light behind ONE element. Three characters share
+   the same body and differ only in how the light behaves:
 
-   It is COLD. A warm pulse would be a second amber-ish element in the same
-   viewport as the ticker's CTA, and one warm element per viewport is the
-   rule. Cold also reads better here: a steel pulse is telemetry, a machine
-   with power in it, rather than a valentine.
+     .tx-halo--lung    swells and subsides          CSS only
+     .tx-halo--orbit   light travels around it      CSS only
+     .tx-halo--pulse   a cardiac lub-dub            needs initHalo()
 
-   Placed INSIDE a frosted bar it sits on top of the pane - backdrop-filter
-   blurs what is behind an element, never its own children. Placed behind
-   the bar it would be smeared by the frost instead. Inside is sharper. */
+   Siloed by falling off, not by clipping: the field fades to nothing well
+   inside its own box, so it never becomes a glow spreading along a bar.
 
-.tx-pulse {
-  --beat: 0;                    /* 0-1, written by initPulse() */
-  --pulse-pad-x: 30px;          /* how far the halo reaches past the element */
-  --pulse-pad-y: 16px;
-  position: relative;
-}
+   All three are COLD. A warm halo would be a second warm element in the
+   same viewport as the ticker's amber CTA, and warmth appears once. Cold
+   also reads better here - steel light is telemetry, not a valentine.
 
-.tx-pulse::before {
-  content: "";
-  position: absolute;
-  inset: calc(var(--pulse-pad-y) * -1) calc(var(--pulse-pad-x) * -1);
-  z-index: -1;                  /* behind the logo, above the frosted pane */
-  pointer-events: none;
-  border-radius: 999px;
-  background: radial-gradient(
-    ellipse 50% 50% at 50% 50%,
-    color-mix(in srgb, var(--petrol) 92%, transparent) 0%,
-    color-mix(in srgb, var(--steel-900) 40%, transparent) 40%,
-    transparent 72%
-  );
-  opacity: calc(var(--beat) * 0.55);
-  transform: scale(calc(1 + var(--beat) * 0.07));
-  will-change: opacity, transform;
-}
+   Inside a frosted bar a halo sits ON TOP of the pane: backdrop-filter
+   blurs what is behind an element, never its own children. */
 
-
-/* ---- 13. orbit — .tx-orbit -------------------------------------------
-   The same siloed halo as .tx-pulse, but the light travels instead of
-   beating. No rhythm, no event - a slow sweep you never catch starting.
-
-   IMPORTANT: the ELEMENT never rotates, only the gradient's angle does.
-   Rotating the element itself was the first attempt and it was wrong: this
-   halo is wide and short, so spinning it swung its corners far outside the
-   header and the light bled down over the ticker. Animating the conic's
-   `from` angle instead leaves the footprint exactly where it was put.
-
-   Two more details:
-   1. The conic origin sits OUTSIDE the box (50% 140%, below it). A conic
-      gradient converges to a hard pinch at its origin; keeping that point
-      off the element means you only ever see a broad sweep of it.
-   2. A radial mask fades it out well inside its own box. That is the silo. */
-
-/* Registering the property is what makes an angle animatable in CSS.
-   Without support the angle simply stays at 0deg and the halo sits still,
-   which still looks correct - it just stops moving. */
-@property --spin {
+@property --tx-spin {
   syntax: '<angle>';
   initial-value: 0deg;
   inherits: false;
 }
 
-.tx-orbit {
-  --orbit-rate: 64s;            /* one full revolution */
-  --orbit-pad-x: 34px;
-  --orbit-pad-y: 16px;
-  --orbit-strength: 0.5;
+.tx-halo {
+  --tx-halo-pad-x: 34px;        /* how far the field reaches past the element */
+  --tx-halo-pad-y: 18px;        /* keep (height/2 + this) inside its container */
+  --tx-halo-rate: 9s;           /* one full cycle */
+  --tx-halo-low: 0.26;          /* opacity at rest */
+  --tx-halo-high: 0.60;         /* opacity at full */
+  --tx-beat: 0;                 /* 0-1, written by initHalo() for --pulse */
   position: relative;
 }
 
-.tx-orbit::before {
+.tx-halo::before {
   content: "";
   position: absolute;
-  inset: calc(var(--orbit-pad-y) * -1) calc(var(--orbit-pad-x) * -1);
-  z-index: -1;                  /* behind the logo, above the frosted pane */
+  inset: calc(var(--tx-halo-pad-y) * -1) calc(var(--tx-halo-pad-x) * -1);
+  z-index: -1;                  /* behind the element, above any frosted pane */
   pointer-events: none;
-  opacity: var(--orbit-strength);
+  border-radius: 999px;
+  will-change: opacity, transform;
 
+  /* Wide and shallow by default, matching a wordmark. Colour carries well
+     out before it falls away so the field belongs to the WHOLE element
+     rather than pooling under its middle. */
+  background: radial-gradient(
+    ellipse 60% 66% at 50% 50%,
+    color-mix(in srgb, var(--petrol) 88%, transparent) 0%,
+    color-mix(in srgb, var(--petrol) 55%, transparent) 34%,
+    color-mix(in srgb, var(--steel-900) 34%, transparent) 56%,
+    transparent 74%
+  );
+  opacity: var(--tx-halo-low);
+}
+
+/* -- lung: one breath. alternate means the exhale is the inhale reversed,
+      which is what stops the loop having a seam. -- */
+.tx-halo--lung::before {
+  animation: tx-halo-breathe var(--tx-halo-rate) ease-in-out infinite alternate;
+}
+@keyframes tx-halo-breathe {
+  from { opacity: var(--tx-halo-low);  transform: scale(1); }
+  to   { opacity: var(--tx-halo-high); transform: scale(1.07); }
+}
+
+/* -- orbit: the light travels. The ELEMENT never rotates, only the
+      gradient's angle - rotating a wide, short box swings its corners far
+      outside its container and the light escapes. The conic origin sits
+      outside the box so its hard pinch is never visible, and a radial mask
+      is what keeps it siloed. -- */
+.tx-halo--orbit {
+  --tx-halo-rate: 64s;
+  --tx-halo-strength: 0.5;
+}
+.tx-halo--orbit::before {
+  opacity: var(--tx-halo-strength);
   background: conic-gradient(
-    from var(--spin) at 50% 140%,
+    from var(--tx-spin) at 50% 140%,
     transparent 0%,
     color-mix(in srgb, var(--petrol) 85%, transparent) 12%,
     color-mix(in srgb, var(--steel-900) 45%, transparent) 26%,
@@ -596,85 +592,27 @@
     transparent 88%,
     transparent 100%
   );
-
   -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%,
     #000 0%, rgba(0,0,0,.7) 42%, transparent 74%);
   mask-image: radial-gradient(ellipse 50% 50% at 50% 50%,
     #000 0%, rgba(0,0,0,.7) 42%, transparent 74%);
-
-  animation: tx-orbit-spin var(--orbit-rate) linear infinite;
+  animation: tx-halo-spin var(--tx-halo-rate) linear infinite;
 }
+@keyframes tx-halo-spin { to { --tx-spin: 360deg; } }
 
-@keyframes tx-orbit-spin {
-  to { --spin: 360deg; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .tx-orbit::before { animation: none; }
-}
-
-
-/* ---- 14. lung — .tx-lung ---------------------------------------------
-   One mass behind an element, swelling and subsiding. The calmest of the
-   three halo treatments: no rhythm to read, no travelling light to track,
-   just a slow inhale you notice only by its absence.
-
-   Sized to cover the WHOLE element rather than pooling in the middle.
-   The wordmark is about 196x16 - a 12:1 box - so the halo is deliberately
-   wide and shallow, and its stops reach out to 74% of the radius so the
-   ends of the mark are still inside the light rather than beyond it.
-
-   Vertical padding is capped so that even at full swell the halo stays
-   inside the 72px header and never bleeds onto the ticker below.
-
-   Needs no JavaScript: an alternating CSS animation is exactly a breath. */
-
-.tx-lung {
-  --lung-rate: 9s;              /* one full inhale-and-out */
-  --lung-pad-x: 46px;           /* reach past the ends of the mark */
-  --lung-pad-y: 22px;           /* keep (16/2 + this) * swell inside --nav-h */
-  --lung-low: 0.26;             /* opacity at rest */
-  --lung-high: 0.60;            /* opacity at full swell */
-  position: relative;
-}
-
-.tx-lung::before {
-  content: "";
-  position: absolute;
-  inset: calc(var(--lung-pad-y) * -1) calc(var(--lung-pad-x) * -1);
-  z-index: -1;                  /* behind the mark, above the frosted pane */
-  pointer-events: none;
-  border-radius: 999px;
-
-  /* Wide and shallow, matching the mark. Colour is carried well out before
-     it falls away, so the halo belongs to the whole wordmark instead of
-     sitting under its middle. */
-  background: radial-gradient(
-    ellipse 60% 66% at 50% 50%,
-    color-mix(in srgb, var(--petrol) 88%, transparent) 0%,
-    color-mix(in srgb, var(--petrol) 55%, transparent) 34%,
-    color-mix(in srgb, var(--steel-900) 34%, transparent) 56%,
-    transparent 74%
-  );
-
-  opacity: var(--lung-low);
-  animation: tx-lung-breathe var(--lung-rate) ease-in-out infinite alternate;
-  will-change: opacity, transform;
-}
-
-/* alternate reverses it, so the exhale is the inhale played backwards -
-   which is what stops it having a seam you can hear. */
-@keyframes tx-lung-breathe {
-  from { opacity: var(--lung-low);  transform: scale(1); }
-  to   { opacity: var(--lung-high); transform: scale(1.07); }
+/* -- pulse: two beats, then a rest four times longer than either. The REST
+      is what makes it read as a pulse rather than a throb. -- */
+.tx-halo--pulse::before {
+  opacity: calc(var(--tx-beat) * var(--tx-halo-high));
+  transform: scale(calc(1 + var(--tx-beat) * 0.07));
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tx-lung::before { animation: none; }
+  .tx-halo::before { animation: none; }
 }
 
 
-/* ---- 15. glare — .tx-glare -------------------------------------------
+/* ---- glare — .tx-glare -------------------------------------------
    A moving specular band laid OVER an element, rather than replacing its
    surface. This is the version for anything that already has a colour it
    needs to keep - the amber CTAs especially. Applying .tx-rim to those
@@ -725,7 +663,7 @@
 
 .cta[data-texture="star"],
 .cta-secondary[data-texture="star"] {
-  --star-unit: 24px;
+  --tx-star-size: 24px;
   background-image: var(--tx-star-layers);
 }
 
@@ -734,14 +672,14 @@
    nearly invisible on it. Restating the light as cold gives it hue
    contrast as well as luminance, which is what makes it read. */
 .cta[data-texture="star"] {
-  --star-hot:  var(--white);
-  --star-warm: var(--steel-050);
-  --star-mid:  var(--steel-100);
-  --star-pool: var(--petrol);
+  --tx-star-hot:  var(--white);
+  --tx-star-warm: var(--steel-050);
+  --tx-star-mid:  var(--steel-100);
+  --tx-star-pool: var(--petrol);
 }
 
 
-/* ---- 16. torch — .tx-torch -------------------------------------------
+/* ---- torch — .tx-torch -------------------------------------------
    The pointer becomes a light source and the surface under it is lit.
    No hot core, no spikes, no rhythm - one soft pool that arrives slowly
    and leaves slowly.
@@ -756,8 +694,8 @@
    the markup rather than a value buried in here. */
 
 .tx-torch {
-  --torch-size: 120px;
-  --torch-col: var(--gold);
+  --tx-torch-size: 120px;
+  --tx-torch-color: var(--gold);
   position: relative;
   overflow: hidden;
 }
@@ -772,14 +710,14 @@
   /* A length, not a percentage: percentages are invalid for a circle
      radius and would silently kill the whole declaration. */
   background: radial-gradient(
-    circle var(--torch-size) at var(--mx) var(--my),
-    color-mix(in srgb, var(--torch-col) 50%, transparent) 0%,
-    color-mix(in srgb, var(--torch-col) 26%, transparent) 38%,
-    color-mix(in srgb, var(--torch-col) 8%, transparent) 66%,
+    circle var(--tx-torch-size) at var(--mx) var(--my),
+    color-mix(in srgb, var(--tx-torch-color) 50%, transparent) 0%,
+    color-mix(in srgb, var(--tx-torch-color) 26%, transparent) 38%,
+    color-mix(in srgb, var(--tx-torch-color) 8%, transparent) 66%,
     transparent 82%
   );
 }
 
 /* On the amber CTA the light has to be cold or it has nothing to contrast
    against - the surface is already bright and already warm. */
-.cta.tx-torch { --torch-col: var(--steel-050); }
+.cta.tx-torch { --tx-torch-color: var(--steel-050); }

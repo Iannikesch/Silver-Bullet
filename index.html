@@ -11,7 +11,7 @@
        --chrome-* ramp would render it as invisible text. -->
   <link rel="stylesheet" href="tokens.css?v=2">
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
-  <link rel="stylesheet" href="textures.css?v=1">
+  <link rel="stylesheet" href="textures.css?v=2">
 
   <style>
     /* ==========================================================
@@ -946,7 +946,7 @@
 <body>
   <header class="site-header tx-frost">
     <div class="wrap">
-      <a class="logo tx-lung" href="#top" aria-label="Silver Bullet — home">
+      <a class="logo tx-halo tx-halo--lung" href="#top" aria-label="Silver Bullet — home">
         <span class="logo__inner">
           <!-- width/height are the file's real pixels: they give the browser
                the aspect ratio so the header never jumps as it loads.
@@ -1196,7 +1196,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
   <script defer src="motion.js?v=5"></script>
-  <script defer src="textures.js?v=1"></script>
+  <script defer src="textures.js?v=2"></script>
 
   <script>
     /* Deferred scripts have all run by the time this fires, so both
@@ -1209,8 +1209,8 @@
          else with a data-texture (the CTAs) gets its own hover listeners. */
       if (typeof initThermal  === 'function') initThermal();
       if (typeof initFrost    === 'function') initFrost('.site-header', 24);
-      /* .tx-orbit needs no JS - it is a CSS animation. initPulse is kept
-         here, unused, because swapping back is one class name on the logo. */
+      /* The lung and orbit halos are pure CSS. initHalo() is only needed
+         for the --pulse variant, so it is not called here. */
     });
   </script>
 

@@ -1,307 +1,335 @@
-# Texture pack — catalogue
+# Texture pack
 
-Drop-in surface treatments for the Silver Bullet site. Files:
+Reusable surface treatments for the Silver Bullet site. Buildless — no bundler,
+no dependencies beyond GSAP, which the site already loads.
 
-- `textures.css` — every treatment. Load **after** `tokens.css`.
-- `textures.js` — behaviour for the three interactive ones. Call `initTextures()`.
-- `sandbox.html` — live demo of all of them. **Append-only**: new textures go
-  below the existing ones so the page stays a running reference.
+| File | What it is |
+|---|---|
+| `textures.css` | every treatment. Load **after** `tokens.css`. |
+| `textures.js` | behaviour for the treatments that need it. |
+| `sandbox.html` | live demo of all of them. **Append-only** — new demos go below. |
+| `TEXTURES.md` | this file. |
 
-No build step, no dependencies beyond GSAP (already on the site).
-Nothing here defines a colour of its own — every value comes from `tokens.css`.
-
----
-
-## 1. Film grain — `.tx-grain`
-
-Put it on `<body>`. Static noise over the whole page, drawn from an inline SVG
-data URI, so no request and no library.
-
-- **Needs JS:** no
-- **Knob:** `opacity` — the whole effect lives between `0.03` and `0.07`
-- **Why static:** moving grain is ambient motion, and it repaints the entire
-  viewport every frame
-
-## 2. Vignette — `.tx-vignette`
-
-Also on `<body>`. Darkens toward the edges. Same idea as the grain at a
-different scale: stops the background reading as a flat screen.
-
-- **Needs JS:** no
-- **Knob:** the `60%` ink mix in the radial gradient
-- **Pairs with:** grain. They're designed to be used together.
-
-## 3. Brushed metal — `.tx-brushed`
-
-Machined surface for panels, bars, blocks. Fine directional marks over a
-neutral chrome ramp, lit top edge, dark bottom edge, no drop shadow.
-
-- **Needs JS:** no
-- **Knobs:** `--tx-brushed-grain` alphas (3% / 11%) — marks should be felt,
-  not counted; `--tx-metal-ramp` stops
-- **Composes with:** the star, the sweep
-
-## 4. Rim light — `.tx-rim` + `data-texture="rim"`
-
-Cursor-reactive, restrained. The lit top edge brightens and the bright band in
-the metal leans toward the pointer. No hot spot, nothing bleeding past edges.
-
-- **Needs JS:** yes (edge transition is pure CSS and works without)
-- **Knob:** `--rim-lean` multiplier (`0.45%`) — how far the band travels
-- **Use it:** anywhere the star is too much, which is most places
-- **Degrades well:** renders correctly with no JS at all
-
-## 5. Star — `data-texture="star"`
-
-Hot core plus two crossed spikes, tracking the cursor. Warm because it is the
-room reflecting off the surface, not the surface itself.
-
-- **Needs JS:** yes — invisible until something drives `--lit`
-- **Finishes:** `.tx-brushed[data-texture="star"]` on a surface,
-  `.tx-metal-text[data-texture="star"]` clipped into letterforms
-- **Knobs:** `--star-unit` (em in type, px on surfaces), the `20%` white stop
-  in the core, spike lengths (`5.6` / `4.6`), `back.out(1.7)` snap on entry
-- **Status:** currently tuned aggressive. Power dial not yet built.
-
-## 6. Specular sweep — `.tx-sweep`
-
-A band of light rakes across once as the element scrolls into view. Not a loop.
-
-- **Needs JS:** yes, plus ScrollTrigger
-- **Knobs:** `--dur-slow`, the `75%` gold mid-stop, `skewX(-18deg)` rake angle,
-  `start: 'top 78%'` trigger point
-- **Cheap:** only a transform animates
-- **`once: true`** — a band that crosses on every scroll is ambient motion
-
-## 7. Etched type — `.tx-etched`
-
-Letters pressed *into* the surface: shadow on the top edge, light on the bottom.
-The inverse of `.tx-metal-text`.
-
-- **Needs JS:** no
-- **Rule:** both offsets have **zero blur**. A blurred text-shadow is glow,
-  which the brief rules out; a 1px hard offset is an edge, which it encourages.
-- **Use it:** labels, numbers, small caps. Not headlines.
-
-## 8. Motion tokens
-
-Three durations and two curves at `:root`, shared by everything.
-
-    --dur-quick .18s   a state change answering a click or hover
-    --dur-base  .42s   the default
-    --dur-slow  1.15s  one orchestrated moment, used sparingly
-    --ease-settle / --ease-metal
-
-`textures.js` **reads the durations back out of the CSS**, so they are a single
-source of truth. The easing curves cannot be shared this way — CSS wants
-`cubic-bezier()`, GSAP wants `"power3.out"`, neither parses the other — so those
-are mirrored by hand. Change one, change both.
-
-## 9. Video ground — `.tx-video-ground`
-
-Footage as a background, suppressed until it reads as a room rather than as a
-video playing behind the text. The technique on profectusagency.com, sized down.
-
-    <div class="tx-video-ground">
-      <span class="vg-css"></span>
-      <video class="vg-video" src="ground.mp4" loop muted playsinline preload="none"></video>
-      <span class="vg-crush"></span>
-    </div>
-
-- **Needs JS:** `initVideoGround()`
-- **Knobs:** `--vg-bright` (.32), `--vg-sat` (.55), `--vg-blur` (2px)
-- **Three layers:** `.vg-css` a drift ground that ALWAYS works, `.vg-video`
-  optional footage over it, `.vg-crush` the vignette and bottom fade
-- **The suppression is the technique.** Raw footage behind text looks cheap.
-  A third brightness with the edges deleted looks like a lit room.
-- **Never requests the file** under reduced-motion, under 780px wide, or with
-  the browser's save-data flag set. Footage is a luxury; a phone on cellular
-  should not pay for one.
-- **Fades in only on `canplay`** — a missing, slow or 404ing file leaves the
-  CSS ground standing. Nothing ever falls to black.
-- **Budget:** the reference site ships a 26MB loop. Aim for 3-4s and 1-2MB,
-  blurred enough that compression artefacts disappear.
-
+Nothing in the pack defines a colour of its own. Every value comes from
+`tokens.css`, so retheming the site retextures it too.
 
 ---
 
-## 11. Frosted bar — `.tx-frost`
+## Quickstart: the pack on a new page
 
-A bar that is invisible at the top of the page and frosts once scrolled, so
-content passes under it blurred rather than hidden.
+Four steps. Copy this into any new page and everything below is available.
 
-- **Needs JS:** `initFrost(selector, thresholdPx)`
-- **Knobs:** `--frost-blur` (7px), `--frost-fill` (58% of `--bg`)
-- **The cost control is the two states.** At the top of the page
-  `backdrop-filter` is not applied at all — not zero-blur, absent. It only
-  exists while `.is-lifted` is on. That matters most over a video hero.
-- Toned down from the profectusagency reference: 7px not 10px, and the fill
-  is `--bg` rather than white, so it mutes instead of milking.
-- **Touch and `prefers-reduced-transparency`** get an opaque pane and no blur.
+```html
+<head>
+  <link rel="stylesheet" href="tokens.css?v=2">
+  <link rel="stylesheet" href="textures.css?v=2">   <!-- AFTER tokens.css -->
+</head>
 
-## 12. Pulse — `.tx-pulse`
+<body class="tx-grain">                              <!-- page-wide grain -->
 
-A contained heartbeat behind one element. Two beats, then a rest four times
-longer than either — the rest is what makes it a pulse rather than a throb.
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+  <script defer src="textures.js?v=2"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      initTextures();                    // cursor-reactive textures
+      initThermal();                     // any .tx-thermal on the page
+      initFrost('.site-header', 24);     // if the page has a sticky bar
+      initHalo();                        // only if you use .tx-halo--pulse
+      initVideoGround();                 // only if you use .tx-video-ground
+    });
+  </script>
+</body>
+```
 
-- **Needs JS:** `initPulse(selector)`
-- **Knobs:** `--pulse-pad-x` (30px), `--pulse-pad-y` (16px), the `0.55`
-  opacity and `0.07` scale multipliers
-- **It is cold, deliberately.** A warm pulse would be a second warm element in
-  the same viewport as the ticker's amber CTA. Cold also reads as telemetry
-  rather than as a valentine.
-- **Inside a frosted bar it sits on top of the pane.** `backdrop-filter` blurs
-  what is behind an element, never its own children. Behind the bar it would
-  be smeared instead.
-- **Currently unused.** The logo carries `.tx-orbit` instead; swapping back
-  is one class name plus re-enabling `initPulse('.logo')`.
+**The one page-specific difference.** On `index.html`, `motion.js` also runs and
+publishes the same signals for its own elements, so the call there is
+`initTextures({ drive: false })` — see *Two engines* below. On a page **without**
+`motion.js`, call plain `initTextures()` so the pack drives everything itself.
 
-## 13. Orbit — `.tx-orbit`
+`defer` does nothing on an inline `<script>`, which is why the boot code waits
+for `DOMContentLoaded`. Deferred files have all run by the time it fires.
 
-The same siloed halo as the pulse, but the light travels instead of beating.
-No rhythm and no event — a slow sweep you never catch starting.
+---
 
-- **Needs JS:** no. A registered `@property` makes the angle animatable in
-  pure CSS. Without `@property` support the angle stays at 0deg and the halo
-  simply sits still, which still looks correct.
-- **Knobs:** `--orbit-rate` (64s), `--orbit-pad-x` / `-y`, `--orbit-strength`
-- **The element never rotates — only the gradient's angle does.** Rotating the
-  element was the first attempt and it was wrong: the halo is wide and short,
-  so spinning it swung the corners outside the header and the light bled down
-  over the ticker. Animating `from var(--spin)` leaves the footprint put.
-- Conic origin is outside the box (`at 50% 140%`) so its hard pinch is never
-  visible; a radial mask fades it out inside its own box. That is the silo.
-- **Currently unused.** The logo carries `.tx-lung`; swapping is one class name.
+## Conventions
 
-## 14. Lung — `.tx-lung`
+### Naming
 
-One mass behind an element, swelling and subsiding. The calmest of the three
-halo treatments — no rhythm to read, no travelling light to track.
+Every knob the pack owns is `--tx-<texture>-<property>`:
 
-- **Needs JS:** no. An `alternate` CSS animation is exactly a breath, and the
-  exhale is the inhale reversed, so there is no seam.
-- **Knobs:** `--lung-rate` (9s), `--lung-pad-x` (46px), `--lung-pad-y` (22px),
-  `--lung-low` / `--lung-high` opacity
-- **Sized to cover the whole element, not pool in its middle.** The wordmark is
-  a 12:1 box (~196x16), so the halo is wide and shallow and its stops reach to
-  74% of the radius — the ends of the mark sit inside the light.
-- **Vertical padding is capped** so that at full swell it still fits inside the
-  72px header and never bleeds onto the ticker.
-- **Currently on:** `.logo`
+```
+--tx-halo-pad-x     --tx-frost-blur      --tx-star-size
+--tx-halo-rate      --tx-frost-fill      --tx-torch-color
+```
 
-## 15. Glare — `.tx-glare`
+Shared concepts share a name across textures — `pad-x`, `pad-y`, `rate`,
+`size`, `strength`, `low`, `high`. You should be able to guess a knob rather
+than look it up.
 
-A moving specular band laid OVER an element instead of replacing its surface.
-For anything that already has a colour it must keep.
+### The shared signal contract
 
-- **Needs JS:** yes (hover listeners)
-- **Why not `.tx-rim` on a button:** rim replaces the fill with chrome, so an
-  amber CTA stops being amber and the viewport loses its accent entirely.
-- `--lit` fades it in (hover-only), `--light` slides it across.
-- **Currently on:** `Talk to us`, `Book a call`, `hello@example.com`
+Five variables are **not** prefixed, because they are the interface between the
+pack and `motion.js` rather than any one texture's setting:
 
-## 16. Torch — `.tx-torch`
+| Variable | Range | Meaning |
+|---|---|---|
+| `--light` | 0–100 | where the specular band sits horizontally |
+| `--light-y` | 0–100 | the same, vertically |
+| `--lit` | 0–1 | is this element currently lit |
+| `--mx` / `--my` | % | derived in CSS from the two above |
 
-The pointer becomes a light source and the surface under it is lit. No hot
-core, no spikes, no rhythm — one soft pool that arrives and leaves slowly.
+Anything that writes these must ease them. Instant tracking reads cheap; the
+lag is what gives light mass.
 
-- **Needs JS:** yes. Speed comes from `data-lit-in` / `data-lit-out` on the
-  element, in seconds, so "slowly illuminates" is visible in the markup.
-- **Knobs:** `--torch-size` (120px), `--torch-col` (`--gold`; `--steel-050`
-  on the amber CTA, which is too bright and too warm for a warm light)
-- **This is the gentle end of the cursor treatments.** The star announces
-  itself; the torch reveals what was already there. On something as small as
-  a button the star reads as an event, which is too much for a surface you
-  are only passing over on the way to clicking.
-- A slow ramp uses `power2.out`, not the star's `back.out` — an overshoot on
-  a slow light reads as a flicker.
-- **Currently on:** `See if you qualify`, `See our work`
+### Two engines, and which owns what
 
-## 17. Rim text — `.tx-rim-text`
-
-The rim ramp painted inside letterforms rather than on a surface. Shares
-`--tx-rim-ramp` with `.tx-rim`; no borders, because on text the band leaning
-toward the cursor is the whole effect.
-
-- **Needs JS:** yes (hover listeners)
-- **Currently on:** the hero `h1`, which previously used the hard stepped
-  chrome bands driven by `motion.js`. That engine blends scroll in, so the
-  headline moved wherever you were on the page. It is now hover-only.
-- **Consequence:** the headline no longer animates on touch at all. The old
-  path fell back to scroll there; the pack's hover driver skips no-hover
-  devices entirely.
-
-## Where the pack touches index.html
-
-Five places, and nothing else. If the page is restructured, these are the only
-things to re-attach — the pack itself is structure-agnostic and survives a
-rebuild untouched.
-
-1. **`<head>`** — `<link href="textures.css">`, loaded after `tokens.css`
-2. **`<body class="tx-grain">`** — page-wide grain
-3. **`.hero-ground`** — a full-bleed wrapper AROUND `<section class="hero">`,
-   carrying `tx-thermal tx-vignette--in` plus two child spans
-   (`.th-cold`, `.th-warm`). Wrapped rather than applied to `.hero` directly,
-   because `.hero` is a `.wrap` and the ground would stop at the text column.
-4. **`.contact__bar`** — the machined bar above the contact heading:
-   `tx-brushed tx-rim tx-sweep`, `data-chrome="contact"`, `data-texture="rim"`
-5. **Before `</body>`** — `textures.js` plus a boot script calling
-   `initTextures({ drive: false })`, `initThermal()`, `initFrost('.site-header', 24)`
-   and `initPulse('.logo')`
-6. **`<header class="site-header tx-frost">`** — and its `background: var(--bg)`
-   removed, or it wins over the frost (the inline `<style>` loads after
-   `textures.css`)
-7. **`<a class="logo tx-lung">`** — the breathing halo behind the wordmark
-   (`.tx-orbit` and `.tx-pulse` are the alternatives; swapping is one class name)
-
-Plus in `motion.js`: `registerChrome()` for `[data-chrome="contact"]`. The
-headline's registration was REMOVED when it moved to the hover-only driver —
-`motion.js` now owns only the bullet and the contact bar.
-
-### Which engine drives what
-
-- **`[data-chrome]`** — `motion.js`, one global per-frame loop, blends pointer
-  with scroll, always active. For a couple of always-on elements.
-- **`[data-texture]` without `data-chrome`** — the pack, per-element hover
+- **`[data-chrome]`** → `motion.js`. One global per-frame loop, blends pointer
+  *with scroll*, always active. Currently the intro bullet and the contact bar.
+- **`[data-texture]` without `data-chrome`** → the pack. Per-element hover
   listeners, active only while the pointer is on the element. Cheaper, and it
   is what "hover-only" actually means.
 
-The pack skips anything carrying `data-chrome` so the two can never fight over
-one variable.
+`initTextures()` skips any element carrying `data-chrome`, so the two can never
+fight over one variable.
+
+### House rules
+
+1. **Ration the metal.** Two or three metallic moments per page. If every panel
+   is chrome, none of them read as metal.
+2. **Metal is an object, never a text background.** Chrome runs to `#E1E1E1`
+   and steel type on it is unreadable.
+3. **Always give a derived variable a `var()` fallback** — `var(--light, 50)`.
+   An undefined variable makes the whole declaration invalid and the element
+   renders with *no background at all*, silently, with nothing in the console.
+   This has cost real time three separate times.
+4. **A texture must render correctly with no JS.** JavaScript only improves it.
+5. **Bump `?v=` on any file you change**, or returning visitors get a stale
+   cached copy. This was missed for four commits and shipped stale CSS.
+6. **Nothing reaches a page before it exists in `sandbox.html`.**
+7. **Percentages are invalid for a `circle` radius** — lengths only. `ellipse`
+   takes both.
+8. **A custom property resolves its `var()`s where it is DECLARED**, not where
+   it is used. Anything referencing a per-element value must be declared on
+   that element.
+
+---
+
+## Catalogue
+
+| Class | Category | Needs JS | Status |
+|---|---|---|---|
+| `.tx-grain` | ground | no | on site — `<body>` |
+| `.tx-vignette` | ground | no | sandbox only |
+| `.tx-vignette--in` | ground | no | on site — hero |
+| `.tx-thermal` | ground | yes | on site — hero |
+| `.tx-video-ground` | ground | yes | sandbox only, no footage yet |
+| `.tx-brushed` | surface | no | on site — contact bar |
+| `.tx-metal-text` | type | no | sandbox only |
+| `.tx-etched` | type | no | built, unused |
+| `.tx-rim` | cursor | yes | on site — contact bar |
+| `.tx-rim-text` | cursor | yes | on site — hero `h1` |
+| `.tx-glare` | cursor | yes | on site — 3 CTAs |
+| `.tx-torch` | cursor | yes | on site — 2 hero CTAs |
+| `[data-texture="star"]` | cursor | yes | sandbox only |
+| `.tx-sweep` | entrance | yes | on site — contact bar |
+| `.tx-frost` | bar | yes | on site — header |
+| `.tx-halo--lung` | halo | no | on site — logo |
+| `.tx-halo--orbit` | halo | no | built, unused |
+| `.tx-halo--pulse` | halo | yes | built, unused |
+
+---
+
+## Grounds
+
+### `.tx-grain`
+Static film grain over the whole page, from an inline SVG data URI — no request,
+no library. Put it on `<body>`.
+- **Knob:** `opacity`. The whole effect lives between `0.03` and `0.07`.
+- Sits at `z-index: 70`, just above `.intro-layer`.
+- **Never animate it.** Moving grain is ambient motion and repaints the entire
+  viewport every frame.
+
+### `.tx-vignette` / `.tx-vignette--in`
+Edge falloff. The plain class is `position: fixed` and darkens the whole
+viewport; the `--in` variant is absolute and darkens one section.
+- **Use `--in` near a sticky header.** The fixed version sits over the header
+  and dims the ticker's amber CTA, and a dimmed accent is no longer an accent.
+
+### `.tx-thermal`
+Cold ground with warmth rising underneath and receding.
+- **Needs:** `initThermal()`, GSAP + ScrollTrigger.
+- **Markup:** `<div class="tx-thermal"><span class="th-cold"></span><span class="th-warm"></span> … </div>`
+- **Bound to scroll, never to a clock.** `DESIGN.md` permits one element that
+  moves with no input and the ticker holds it. `--tx-heat` follows a sine arc
+  across the section's scroll range: nothing as it arrives, peak when it fills
+  the screen, gone as it leaves. A linear ramp would be brightest at one edge.
+- **Wrap, don't apply.** On `index.html` it wraps the hero rather than sitting
+  on `.hero`, which is a `.wrap` — the ground would have stopped at the text
+  column instead of running full width.
+
+### `.tx-video-ground`
+Footage as a background, suppressed until it reads as a room.
+- **Needs:** `initVideoGround()`.
+- **Knobs:** `--tx-video-brightness` (.32), `--tx-video-saturation` (.55),
+  `--tx-video-blur` (2px)
+- **Three layers:** `.vg-css` a drift ground that ALWAYS works, `.vg-video`
+  optional footage over it, `.vg-crush` the vignette and bottom fade.
+- **The suppression is the technique.** Raw footage behind text looks cheap; a
+  third brightness with the edges deleted looks like a lit room.
+- **Never requests the file** under reduced-motion, below 780px, or with
+  save-data set. Fades in only on `canplay`, so a missing or slow file leaves
+  the CSS ground standing. Nothing ever falls to black.
+- **Budget:** 3–4s and 1–2MB. The reference site ships a 26MB loop.
+
+## Surfaces and type
+
+### `.tx-brushed`
+Machined metal: fine directional marks over a neutral chrome ramp, lit top
+edge, dark bottom edge, no drop shadow.
+- Marks should be felt, not counted.
+- Composes with `.tx-rim` and `.tx-sweep`. Both set `background-image`, so
+  `.tx-brushed.tx-rim` is declared explicitly — without it the later rule wins
+  and the marks silently vanish.
+
+### `.tx-metal-text`
+Metal painted inside letterforms. Falls back to readable grey if
+`background-clip: text` is unsupported.
+
+### `.tx-etched`
+Type stamped *into* a surface: shadow on the top edge, light on the bottom.
+- **Both offsets have zero blur.** A blurred text-shadow is glow, which the
+  brief rules out; a 1px hard offset is an edge, which it encourages.
+- For labels and numbers, not headlines.
+
+## Cursor-reactive
+
+### `.tx-rim` / `.tx-rim-text`
+The restrained one. The lit top edge brightens and the bright band leans toward
+the cursor. No hot spot, nothing bleeding past the edge. `-text` paints the same
+ramp into letterforms and takes no borders.
+- **Knob:** `--tx-rim-lean` (0.45%)
+- Renders correctly with no JS at all — the ramp just stops leaning.
+
+### `[data-texture="star"]`
+Hot core plus two crossed spikes.
+- **Knobs:** `--tx-star-size` (em in type, px on surfaces), and four colours:
+  `--tx-star-hot` / `-warm` / `-mid` / `-pool`
+- **Invisible until something drives `--lit`.**
+- **Too aggressive for small elements.** On a button it reads as an event, on a
+  surface you are only passing over on the way to clicking.
+- **Restate the colours on a warm or bright surface.** White-and-gold on amber
+  is nearly invisible; cold gives hue contrast as well as luminance.
+
+### `.tx-glare`
+A moving specular band laid OVER an element instead of replacing its surface.
+- For anything with a colour it must keep. `.tx-rim` on an amber CTA replaces
+  the fill with chrome and the viewport loses its accent entirely.
+
+### `.tx-torch`
+The pointer becomes a light source. One soft pool, no core, no spikes.
+- **Knobs:** `--tx-torch-size` (120px), `--tx-torch-color`
+- **Speed lives in the markup:** `data-lit-in` / `data-lit-out`, in seconds.
+- A slow ramp automatically uses `power2.out`, not the star's `back.out` — an
+  overshoot on a slow light reads as a flicker.
+
+## Entrances
+
+### `.tx-sweep`
+A band of light rakes across once as the element enters view.
+- **Needs:** `initTextures()`, GSAP + ScrollTrigger.
+- `once: true`. A band that crosses on every scroll is ambient motion.
+- Only a transform animates, so it is cheap enough for a real page.
+
+## Bars
+
+### `.tx-frost`
+Invisible at the top of the page, frosts once scrolled, so content passes under
+it blurred rather than hidden.
+- **Needs:** `initFrost(selector, thresholdPx)`
+- **Knobs:** `--tx-frost-blur` (7px), `--tx-frost-fill` (58% of `--bg`)
+- **The two states are the cost control.** While unscrolled, `backdrop-filter`
+  is not applied at all — not zero-blur, absent. It is one of the most
+  expensive things a browser composites, and worst over playing video.
+- Touch and `prefers-reduced-transparency` get an opaque pane and no blur.
+- The bar must have no background of its own, or it wins over the pane.
+
+## Halos
+
+### `.tx-halo` + `--lung` / `--orbit` / `--pulse`
+A contained field of light behind one element. One body, three characters.
+- **Knobs:** `--tx-halo-pad-x` / `-pad-y`, `--tx-halo-rate`, `--tx-halo-low` /
+  `-high`, `--tx-halo-strength` (orbit)
+- **`--lung`** swells and subsides. CSS only. `alternate` makes the exhale the
+  inhale reversed, so the loop has no seam.
+- **`--orbit`** light travels around it. CSS only, via a registered
+  `@property`. **The element never rotates, only the gradient's angle** —
+  rotating a wide, short box swings its corners outside its container and the
+  light escapes.
+- **`--pulse`** a cardiac lub-dub. Needs `initHalo()`. The rest between beats is
+  what makes it a pulse rather than a throb.
+- **Sized to cover the whole element**, not pool under its middle. Colour carries
+  to 74% of the radius.
+- **All three are cold.** A warm halo would be a second warm element in the same
+  viewport as the ticker's amber CTA.
+- **Inside a frosted bar a halo sits on top of the pane** — `backdrop-filter`
+  blurs what is behind an element, never its own children.
+
+## Motion tokens
+
+```
+--dur-quick  .18s   a state change answering a click or hover
+--dur-base   .42s   the default
+--dur-slow   1.15s  one orchestrated moment, used sparingly
+--ease-settle / --ease-metal
+```
+
+`textures.js` reads the durations back out of CSS, so they are one source of
+truth. **The easing curves cannot be shared** — CSS wants `cubic-bezier()`,
+GSAP wants `"power3.out"`, neither parses the other — so those are mirrored by
+hand. Change one, change both.
+
+---
+
+## Where the pack touches index.html
+
+Seven places. If the page is restructured these are the only things to
+re-attach; the pack itself is structure-agnostic.
+
+1. `<head>` — `<link href="textures.css?v=2">`, after `tokens.css`
+2. `<body class="tx-grain">`
+3. `.hero-ground` — a full-bleed wrapper AROUND `<section class="hero">`, with
+   `tx-thermal tx-vignette--in` and two child spans (`.th-cold`, `.th-warm`)
+4. `.contact__bar` — `tx-brushed tx-rim tx-sweep`, `data-chrome="contact"`,
+   `data-texture="rim"`
+5. Before `</body>` — `textures.js` plus the boot script
+6. `<header class="site-header tx-frost">`, with its own `background` removed
+7. `<a class="logo tx-halo tx-halo--lung">`
+
+Plus in `motion.js`: `registerChrome()` for `[data-chrome="contact"]` and the
+bullet. The headline's registration was removed when it moved to the hover-only
+driver.
 
 ### Rule while restructuring
 
-Do **not** sprinkle `tx-` classes into new markup as you build it. Get the
-structure and the real copy right first, then re-attach all five in one
-deliberate pass. Textures scattered during a rebuild is how a three-element
-metal budget quietly becomes twelve.
+Do **not** sprinkle `tx-` classes into new markup as you build. Get the
+structure and the real copy right first, then re-attach in one deliberate pass.
+Textures scattered during a rebuild is how a three-element metal budget quietly
+becomes twelve.
 
-## House rules for the pack
-
-- **Ration the metal.** Two or three metallic moments per page, maximum. If
-  every panel is chrome, none of them read as metal. Same logic as the
-  one-amber-element-per-viewport rule in `DESIGN.md`.
-- **Performance.** Cursor textures repaint their whole background every frame
-  while the pointer is over them. Fine on two elements, stutters on twenty.
-- **Always give derived variables a `var()` fallback** — `var(--mx-n, 50)`.
-  An undefined variable makes the whole declaration invalid and the element
-  renders with *no background at all*, silently. This has bitten us three times.
-- **Reduced motion and touch** are handled centrally in `initTextures()`.
+---
 
 ## Open items
 
-- [ ] **Star power dial** — one `--star-power` scaling core, spikes and warmth
-      together, plus a `.tx-star--subtle` preset. Star is currently too hot.
+- [ ] **Star power dial** — one knob scaling core, spikes and warmth together,
+      plus a subtle preset. Currently tuned aggressive.
 - [ ] **Star reads weaker in type than on a surface** — the metal under the
-      letters is bright, so a warm highlight has less to beat. Darkening the
-      ramp for the text variant would fix it, at some cost to legibility.
-- [ ] **Supply a `ground.mp4`** to see texture 9 with real footage. Nothing in
-      the repo yet, so it currently shows its CSS fallback.
-- [ ] **Breathing backgrounds** (lung / drift / heartbeat / thermal / orbit)
-      live in `sandbox.html` only. Not in the pack: each is ambient, and
-      `DESIGN.md` permits one ambient element, currently the ticker.
+      letters is bright, so a warm highlight has less to beat.
+- [ ] **Supply a `ground.mp4`** to see `.tx-video-ground` with real footage.
+- [ ] **`.tx-etched` has no home** — the obvious one is eyebrow labels above
+      headings, which `DESIGN.md` bans. Needs a different use before it ships.
 - [ ] **Precision tick marks** — proposed, not built.
-- [ ] **Reticle cursor over metal** — proposed, parked as likely gimmick.
-- [ ] **Site bug, unrelated to the pack:** `index.html` overflows horizontally
-      on mobile. Pre-existing, confirmed against a pre-session backup. Likely
-      the four header nav items never collapsing.
+- [ ] **`DESIGN.md` Motion section is out of date** — it permits one ambient
+      element; the site now has the ticker and the breathing logo.
+- [ ] **Site bug:** `index.html` overflows horizontally on mobile. Pre-existing,
+      likely the four header nav items never collapsing.
