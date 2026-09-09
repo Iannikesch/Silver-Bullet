@@ -53,22 +53,31 @@
 
   /* ---- dots ------------------------------------------------------
      Built from the list rather than authored in the HTML, so adding
-     or removing an <li> is the whole edit. */
-  var dots = document.createElement('ul');
+     or removing a slide is the whole edit. */
+  /* A <div role="group">, not a <ul role="tablist">.
+     These are carousel dots, not tabs: there is no tabpanel for them to
+     control and no tab semantics for a screen reader to act on. The
+     tablist markup also failed three axe rules at once, because a tablist
+     must contain tabs DIRECTLY - the <li> wrappers broke the required
+     parent/child pair, and the <li>s themselves lost their list semantics
+     to the role on the <ul>:
+
+       aria-required-children | aria-required-parent | listitem
+
+     Buttons in a labelled group, with aria-current marking the one you are
+     on, says exactly what this is and validates clean. */
+  var dots = document.createElement('div');
   dots.className = 'tq-dots';
-  dots.setAttribute('role', 'tablist');
+  dots.setAttribute('role', 'group');
   dots.setAttribute('aria-label', 'Choose a testimonial');
 
   var buttons = slides.map(function (slide, i) {
-    var li = document.createElement('li');
     var b = document.createElement('button');
     b.type = 'button';
     b.className = 'tq-dot';
-    b.setAttribute('role', 'tab');
     b.setAttribute('aria-label', 'Testimonial ' + (i + 1) + ' of ' + slides.length);
     b.addEventListener('click', function () { surrender(); go(i); });
-    li.appendChild(b);
-    dots.appendChild(li);
+    dots.appendChild(b);
     return b;
   });
 
@@ -102,9 +111,10 @@
     });
 
     buttons.forEach(function (b, n) {
-      b.setAttribute('aria-selected', n === current ? 'true' : 'false');
+      if (n === current) b.setAttribute('aria-current', 'true');
+      else b.removeAttribute('aria-current');
       /* Only the active dot is a tab stop; arrow keys move between
-         them. Standard tablist behaviour, and it keeps the band from
+         them. Standard roving-tabindex behaviour, and it keeps the band from
          costing a keyboard user three tabs to get past. */
       b.tabIndex = n === current ? 0 : -1;
     });

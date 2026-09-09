@@ -1121,7 +1121,7 @@
     }
     .notfound__list li:hover a { color: var(--white); }
     .notfound__list a:focus-visible { outline: 2px solid var(--steel-100); outline-offset: 3px; }
-    .notfound__list span { color: var(--steel-700); font-size: 14px; }
+    .notfound__list span { color: var(--steel-500); font-size: 14px; }
 
 
     /* Inline links in body copy. The site sets `a { color: inherit }`
@@ -1957,10 +1957,13 @@
   text-transform: uppercase;
 }
 
-/* Meta, not body copy — which is the only place --steel-700 is
-   allowed to carry text at all. */
+/* Meta, not body copy. --steel-500 rather than the --steel-700 the ramp
+   would suggest, because this band is --bg-raised, not --bg: steel-700
+   clears WCAG AA against the page ground by 0.01 (4.51 against 4.50) and
+   fails against the raised one at 4.05. steel-500 is 5.75 there and still
+   reads a clear step below the attribution above it. */
 .tq-what {
-  color: var(--steel-700);
+  color: var(--steel-500);
   font-size: 14px;
 }
 
@@ -2029,7 +2032,7 @@
 
 .tq-dot:hover { background: var(--steel-300); }
 
-.tq-dot[aria-selected="true"] {
+.tq-dot[aria-current="true"] {
   background: var(--steel-050);
   transform: scale(1.4);
 }
