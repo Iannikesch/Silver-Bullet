@@ -784,9 +784,26 @@
     /* Full-bleed by design: it should read as a band across the page, not
        as a row sitting inside the content column. Separation is the usual
        rim-light move — lit top edge, ink bottom, no fill, no shadow. */
+    /* A real band, not a tint. Modelled on vaynermedia.com's footer social
+       strip, which works because it is a hard full-bleed colour change that
+       separates the page from the footer in one move. Ours was --bg-raised
+       on --bg: a 12-point step nobody sees, so the strip read as part of the
+       footer rather than as the seam above it.
+
+       --petrol, not the obvious --amber. DESIGN.md is explicit that amber
+       marks the primary action and nothing else, one per viewport, and the
+       footer's own CTA is already the action here - a 50px amber bar beside
+       it would cancel it. --paper was the other candidate and is deliberately
+       not used either: it is the only light surface on the site and the
+       full-colour platform logos are the reason it exists. --petrol is the
+       token for "cool depth behind steel elements", it is cold like the rest
+       of the page, and it costs nothing from the warm budget.
+
+       Rim light holds: lit top edge, ink bottom, mixed in-family so the
+       highlight belongs to the petrol rather than sitting on it as grey. */
     .foot-social {
-      background: var(--bg-raised);
-      border-top: 1px solid var(--border-lit);
+      background: var(--petrol);
+      border-top: 1px solid color-mix(in srgb, var(--petrol) 58%, var(--steel-100));
       border-bottom: 1px solid var(--ink);
     }
 
@@ -801,10 +818,12 @@
       gap: clamp(18px, 5vw, 56px);
     }
 
+    /* --steel-050 rather than --steel-500: on petrol the muted value sank
+       into the band and the icons stopped reading as marks. */
     .foot-social__link {
       display: block;
       padding: 6px;   /* touch target only — reads as no padding at all */
-      color: var(--steel-500);
+      color: var(--steel-050);
       transition: color .18s ease;
     }
 
