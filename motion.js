@@ -16,6 +16,25 @@
 (function () {
   'use strict';
 
+  /* ---- the libraries might not be there ----------------------------
+     GSAP, ScrollTrigger and Lenis all come from third-party CDNs. Any
+     of them can be missing — a CDN outage, a corporate network, an
+     aggressive blocker — and every reference below would then throw.
+     Until this guard existed, blocking both CDNs produced an uncaught
+     "ReferenceError: gsap is not defined" and left motion.js aborted
+     halfway through, with data-motion never set.
+
+     Bailing here costs nothing, because the stylesheet IS the finished
+     state: content, nav, CTAs and scrolling all work, and the marquees
+     keep running on their CSS animation precisely because bindMarquee
+     never gets to cancel it. Same doctrine as the reduced-motion path
+     below, which is why it sets the same attribute. */
+  if (typeof window.gsap === 'undefined' ||
+      typeof window.ScrollTrigger === 'undefined') {
+    document.documentElement.setAttribute('data-motion', 'none');
+    return;
+  }
+
   var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* Coarse pointer / no hover = touch. Scroll drives the chrome there. */
@@ -31,6 +50,9 @@
   var lenis = null;
 
   function initLenis() {
+    /* Lenis is optional in a way GSAP is not: without it the page simply
+       scrolls natively, and everything else in this file still works. */
+    if (typeof window.Lenis === 'undefined') return;
     lenis = new Lenis({
       duration: 1.1,
       easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
