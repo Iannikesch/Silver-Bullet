@@ -357,9 +357,6 @@
     }
 
     gsap.ticker.add(function (time, delta) {
-      /* Nothing to see, nothing to do. Dragging still wins, so a throw in
-         progress is never cut off by the band leaving the viewport. */
-      if (!onstage && !dragging && !fling) return;
       if (!dragging) {
         pos += (baseVel * rate.v + fling) * (delta / 1000);
         if (fling) {
@@ -370,6 +367,23 @@
           if (Math.abs(fling) < 2) fling = 0;
         }
       }
+      /* Off screen we skip the WRITE, not the maths.
+
+         The first version returned early out of the whole callback, which
+         froze pos as well — so the band stopped dead while it was out of
+         view and resumed exactly where it had stopped. Scroll down and back
+         up and it was visibly behind where continuous motion would have put
+         it: roughly 90px after a couple of seconds away, which reads as the
+         strip stalling and then a different part of the loop rotating in.
+         It showed up worst on the inner pages, where this is the only band
+         on screen and there is nothing else moving to mask it.
+
+         Advancing pos costs one multiply and an add. The expensive part is
+         gsap.set — a style write and a composite on a 3600px promoted layer
+         — and that is what stays gated. So the saving is kept and the band
+         is always where it should be when it comes back. */
+      if (!onstage && !dragging && !fling) return;
+
       gsap.set(track, { x: wrapX(pos) });
     });
 
