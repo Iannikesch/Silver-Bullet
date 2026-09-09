@@ -415,6 +415,20 @@
       area.classList.add('is-dragging');
     });
 
+    /* Images are draggable by default in every browser, and two of the three
+       bands are made of them. Pressing a conveyor photo therefore started a
+       NATIVE image drag, and the browser cancels the pointer gesture the
+       moment it does:
+
+         pointerdown -> pointermove -> dragstart -> pointercancel
+
+       pointercancel runs endDrag(), so the band let go after a single move
+       and the rest of the gesture was dropped on the floor. The ghost image
+       followed the cursor instead of the strip. Suppressing dragstart inside
+       the band is what keeps the pointer gesture the band's own; it is scoped
+       to [data-marquee] so ordinary images elsewhere still drag normally. */
+    area.addEventListener('dragstart', function (e) { e.preventDefault(); });
+
     area.addEventListener('pointermove', function (e) {
       if (!dragging) return;
       var dx = e.clientX - startX;
