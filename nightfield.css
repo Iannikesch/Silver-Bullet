@@ -200,7 +200,15 @@
   z-index: 0;
 }
 
-body.has-nightfield > *:not(.tx-nightfield--fixed) {
+/* The header is excluded deliberately. This rule sets position:relative,
+   which would beat .site-header's position:sticky (it is the more specific
+   selector and this file loads last) and stop the nav following you down
+   the page. The z-index:1 is just as damaging: it drops the header from 40
+   into a tie with .ticker and <main>, and a tie is broken by DOM order, so
+   those later siblings paint OVER the open Capabilities panel. The header
+   needs no lift from here anyway - it already carries z-index:40, which is
+   above the backdrop's 0. */
+body.has-nightfield > *:not(.tx-nightfield--fixed):not(.site-header) {
   position: relative;
   z-index: 1;
 }

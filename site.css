@@ -347,6 +347,39 @@
       border-bottom: 1px solid var(--ink);
     }
 
+    /* The panel hangs off the frosted bar, so it is frosted too - it reads as
+       the same pane of glass rather than a solid card stuck to the underside
+       of one. Same recipe as .tx-frost in textures.css, with more fill: the
+       bar carries three words, this carries seven rows of 14px type and has
+       to stay readable over whatever it happens to be covering.
+
+       This is NOT the accidental see-through it replaces. That was the
+       nightfield z-index tie letting .ticker and <main> paint over the panel;
+       this is a controlled blur of what sits behind it, and the rim-light
+       borders above still do the separating. Blur is a backdrop treatment,
+       not a box-shadow - DESIGN.md's no-glow rule is about light bleeding
+       OUT of an element, which this does not do.
+
+       Guarded on @supports because the fallback has to be the opaque fill:
+       without a working blur, a translucent menu is just hard to read. */
+    @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+      .nav-dd__panel {
+        background: color-mix(in srgb, var(--bg-raised) 82%, transparent);
+        -webkit-backdrop-filter: blur(14px) saturate(108%);
+        backdrop-filter: blur(14px) saturate(108%);
+      }
+
+      /* Touch pays most for a backdrop blur and gains least, exactly as the
+         bar reasons in textures.css. Same call, same numbers. */
+      @media (hover: none), (prefers-reduced-transparency: reduce) {
+        .nav-dd__panel {
+          -webkit-backdrop-filter: none;
+          backdrop-filter: none;
+          background: color-mix(in srgb, var(--bg-raised) 96%, transparent);
+        }
+      }
+    }
+
     /* Opening answers a click, which DESIGN.md allows — it shows what
        changed. Open only; <details> removes the panel on close, so there is
        nothing left to animate out and a fake close would need JS holding the
