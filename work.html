@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Our work — Silver Bullet</title>
+  <title>Performance marketing case studies — Silver Bullet</title>
   <meta name="description" content="Case studies from Silver Bullet. Revenue and gross profit growth for service businesses, on rev share and profit share.">
   <link rel="canonical" href="https://silverbulletagency.com/work.html">
 
@@ -40,25 +40,34 @@
   <meta property="og:url" content="https://silverbulletagency.com/work.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Silver Bullet">
-  <meta property="og:title" content="Our work — Silver Bullet">
+  <meta property="og:title" content="Performance marketing case studies — Silver Bullet">
   <meta property="og:description" content="Case studies from Silver Bullet. Revenue and gross profit growth for service businesses, on rev share and profit share.">
   <meta property="og:image" content="https://silverbulletagency.com/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Silver Bullet case studies — measured revenue growth for service businesses">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Our work — Silver Bullet">
+  <meta name="twitter:title" content="Performance marketing case studies — Silver Bullet">
   <meta name="twitter:description" content="Case studies from Silver Bullet. Revenue and gross profit growth for service businesses, on rev share and profit share.">
   <meta name="twitter:image" content="https://silverbulletagency.com/og-image.png">
+  <meta name="twitter:image:alt" content="Silver Bullet case studies — measured revenue growth for service businesses">
 
 
   <!-- Bump ?v= whenever tokens.css changes. The hero headline is painted
        with background-clip:text, so a stale palette that drops the
        --chrome-* ramp would render it as invisible text. -->
+  <!-- Both script origins, opened early. Every page pulls deferred JS from
+       cdnjs and jsDelivr; without this each origin pays a full DNS lookup
+       plus TLS handshake before its first byte, which is most of the cost
+       on mobile. crossorigin is required — these are CORS script fetches,
+       and without it the handshake is made twice rather than reused. -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="tokens.css?v=3">
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css?v=5">
 
-  <link rel="stylesheet" href="site.css?v=21">
+  <link rel="stylesheet" href="site.css?v=23">
   <link rel="stylesheet" href="nightfield.css?v=4">
 
 
@@ -414,7 +423,7 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
-  <script defer src="motion.js?v=11"></script>
+  <script defer src="motion.js?v=12"></script>
   <script defer src="textures.js?v=10"></script>
 
   <script defer src="boot.js?v=4"></script>

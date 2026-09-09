@@ -24,14 +24,23 @@
   <meta property="og:image" content="https://silverbulletagency.com/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Silver Bullet — see if you qualify for a performance deal">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Silver Bullet — See if you qualify">
   <meta name="twitter:description" content="Performance-based marketing for service businesses under $15M. Rev share or profit share, with skin in the game. Watch the 2-minute video and book a call.">
   <meta name="twitter:image" content="https://silverbulletagency.com/og-image.png">
+  <meta name="twitter:image:alt" content="Silver Bullet — see if you qualify for a performance deal">
 
   <!-- A VSL is a paid-traffic destination, not something to be found cold. -->
   <meta name="robots" content="noindex, follow">
 
+  <!-- Both script origins, opened early. Every page pulls deferred JS from
+       cdnjs and jsDelivr; without this each origin pays a full DNS lookup
+       plus TLS handshake before its first byte, which is most of the cost
+       on mobile. crossorigin is required — these are CORS script fetches,
+       and without it the handshake is made twice rather than reused. -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="tokens.css?v=3">
 
   <style>

@@ -24,7 +24,6 @@
   "image": "https://silverbulletagency.com/og-image.png",
   "description": "Performance-based marketing for service businesses. Paid on rev share or profit share rather than a retainer.",
   "areaServed": "US",
-  "priceRange": "Rev share or profit share",
   "knowsAbout": [
     "Paid acquisition",
     "Landing pages",
@@ -64,21 +63,30 @@
   <meta property="og:image" content="https://silverbulletagency.com/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Silver Bullet — performance marketing on rev share or profit share">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Silver Bullet — Performance Marketing">
   <meta name="twitter:description" content="Silver Bullet is a performance-based marketing firm. Rev share and profit share — a growth partner with skin in the game.">
   <meta name="twitter:image" content="https://silverbulletagency.com/og-image.png">
+  <meta name="twitter:image:alt" content="Silver Bullet — performance marketing on rev share or profit share">
 
 
   <!-- Bump ?v= whenever tokens.css changes. The hero headline is painted
        with background-clip:text, so a stale palette that drops the
        --chrome-* ramp would render it as invisible text. -->
+  <!-- Both script origins, opened early. Every page pulls deferred JS from
+       cdnjs and jsDelivr; without this each origin pays a full DNS lookup
+       plus TLS handshake before its first byte, which is most of the cost
+       on mobile. crossorigin is required — these are CORS script fetches,
+       and without it the handshake is made twice rather than reused. -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="tokens.css?v=3">
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css?v=5">
 
   <link rel="stylesheet" href="bore.css?v=5">
-  <link rel="stylesheet" href="site.css?v=21">
+  <link rel="stylesheet" href="site.css?v=23">
 </head>
 
 <body class="has-nightfield">
@@ -235,6 +243,18 @@
     <section id="work" class="work">
       <div class="wrap work__head">
         <h2>A glimpse at our work.</h2>
+        <!-- The homepage carried no link to a case study at all, which meant
+             the most-linked page on the site pointed at none of its proof.
+             The conveyor below is photography and the logo band is context;
+             neither can carry a link without breaking the drag. So the route
+             through is here, in the sentence, with the outcome as the anchor
+             text rather than "read more". -->
+        <p class="lead work__cases">
+          The numbers behind it, and how each one was measured:
+          <a href="case-nsp.html">NSP Plumbing, +50% revenue in two months</a>,
+          <a href="case-vitality.html">Vitality Mechanical, +25% in two months</a>, and
+          <a href="case-mantis.html">Mantis Moving &amp; Storage, ~$60k booked from ~$2,000 of ad spend</a>.
+        </p>
       </div>
 
       <!-- Four in view at desktop widths, dropping to two then one.
@@ -302,24 +322,24 @@
       <div class="logo-band" data-marquee data-marquee-speed="16" data-marquee-viewport aria-label="Clients">
         <div class="logo-band__track" data-marquee-track>
         <ul class="logo-band__set">
-          <li><img src="Assets/web/oakmont-roofing.svg" alt="Oakmont Roofing" height="34"></li>
-          <li><img src="Assets/web/logo-mantis.png" alt="Mantis Moving &amp; Storage" height="34"></li>
-          <li><img src="Assets/web/meridian-auto-group.svg" alt="Meridian Auto Group" height="34"></li>
-          <li><img src="Assets/web/evertrail-landscaping.svg" alt="Evertrail Landscaping" height="34"></li>
-          <li><img src="Assets/web/logo-lansing.webp" alt="Lansing Moving Pros" height="128"></li>
-          <li><img src="Assets/web/westbrook-wellness.svg" alt="Westbrook Wellness" height="34"></li>
-          <li><img class="is-stacked" src="Assets/web/logo-vitality.png" alt="Vitality Mechanical" height="34"></li>
-          <li><img src="Assets/web/blackridge-construction.svg" alt="Blackridge Construction" height="34"></li>
+          <li><img width="521" height="128" src="Assets/web/oakmont-roofing.svg" alt="Oakmont Roofing"></li>
+          <li><img width="130" height="180" src="Assets/web/logo-mantis.png" alt="Mantis Moving &amp; Storage"></li>
+          <li><img width="581" height="128" src="Assets/web/meridian-auto-group.svg" alt="Meridian Auto Group"></li>
+          <li><img width="599" height="128" src="Assets/web/evertrail-landscaping.svg" alt="Evertrail Landscaping"></li>
+          <li><img width="127" height="128" src="Assets/web/logo-lansing.webp" alt="Lansing Moving Pros"></li>
+          <li><img width="569" height="128" src="Assets/web/westbrook-wellness.svg" alt="Westbrook Wellness"></li>
+          <li><img width="150" height="144" class="is-stacked" src="Assets/web/logo-vitality.png" alt="Vitality Mechanical"></li>
+          <li><img width="650" height="128" src="Assets/web/blackridge-construction.svg" alt="Blackridge Construction"></li>
         </ul>
         <ul class="logo-band__set" aria-hidden="true">
-          <li><img src="Assets/web/oakmont-roofing.svg" alt="" height="34"></li>
-          <li><img src="Assets/web/logo-mantis.png" alt="" height="34"></li>
-          <li><img src="Assets/web/meridian-auto-group.svg" alt="" height="34"></li>
-          <li><img src="Assets/web/evertrail-landscaping.svg" alt="" height="34"></li>
-          <li><img src="Assets/web/logo-lansing.webp" alt="" height="128"></li>
-          <li><img src="Assets/web/westbrook-wellness.svg" alt="" height="34"></li>
-          <li><img class="is-stacked" src="Assets/web/logo-vitality.png" alt="" height="34"></li>
-          <li><img src="Assets/web/blackridge-construction.svg" alt="" height="34"></li>
+          <li><img width="521" height="128" src="Assets/web/oakmont-roofing.svg" alt=""></li>
+          <li><img width="130" height="180" src="Assets/web/logo-mantis.png" alt=""></li>
+          <li><img width="581" height="128" src="Assets/web/meridian-auto-group.svg" alt=""></li>
+          <li><img width="599" height="128" src="Assets/web/evertrail-landscaping.svg" alt=""></li>
+          <li><img width="127" height="128" src="Assets/web/logo-lansing.webp" alt=""></li>
+          <li><img width="569" height="128" src="Assets/web/westbrook-wellness.svg" alt=""></li>
+          <li><img width="150" height="144" class="is-stacked" src="Assets/web/logo-vitality.png" alt=""></li>
+          <li><img width="650" height="128" src="Assets/web/blackridge-construction.svg" alt=""></li>
         </ul>
         </div>
       </div>
@@ -346,11 +366,11 @@
         </div>
 
         <ul class="client-wall">
-          <li><img class="is-wide" src="Assets/web/client-openai.png" alt="OpenAI" loading="lazy" decoding="async"></li>
-          <li><img class="is-tall" src="Assets/web/client-smoothie-king.png" alt="Smoothie King" loading="lazy" decoding="async"></li>
-          <li><img class="is-wide" src="Assets/web/client-essentials-provisions.png" alt="Essentials Provisions" loading="lazy" decoding="async"></li>
-          <li><img class="is-mid" src="Assets/web/client-skyrizi.png" alt="Skyrizi" loading="lazy" decoding="async"></li>
-          <li><img class="is-tall" src="Assets/web/logo-vitality.png" alt="Vitality Mechanical" loading="lazy" decoding="async"></li>
+          <li><img width="1008" height="200" class="is-wide" src="Assets/web/client-openai.png" alt="OpenAI" loading="lazy" decoding="async"></li>
+          <li><img width="268" height="200" class="is-tall" src="Assets/web/client-smoothie-king.png" alt="Smoothie King" loading="lazy" decoding="async"></li>
+          <li><img width="894" height="200" class="is-wide" src="Assets/web/client-essentials-provisions.png" alt="Essentials Provisions" loading="lazy" decoding="async"></li>
+          <li><img width="442" height="200" class="is-mid" src="Assets/web/client-skyrizi.png" alt="Skyrizi" loading="lazy" decoding="async"></li>
+          <li><img width="150" height="144" class="is-tall" src="Assets/web/logo-vitality.png" alt="Vitality Mechanical" loading="lazy" decoding="async"></li>
         </ul>
       </div>
     </section>
@@ -736,7 +756,7 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
-  <script defer src="motion.js?v=11"></script>
+  <script defer src="motion.js?v=12"></script>
   <script defer src="textures.js?v=10"></script>
 
   <script defer src="boot.js?v=4"></script>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Capabilities — Silver Bullet</title>
+  <title>Capabilities — paid search to retention — Silver Bullet</title>
   <meta name="description" content="Paid acquisition, landing pages, offer and positioning, and more — each running on its own or as part of the whole, all paid on a share of revenue or profit.">
   <link rel="canonical" href="https://silverbulletagency.com/capabilities.html">
 
@@ -40,25 +40,34 @@
   <meta property="og:url" content="https://silverbulletagency.com/capabilities.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Silver Bullet">
-  <meta property="og:title" content="Capabilities — Silver Bullet">
+  <meta property="og:title" content="Capabilities — paid search to retention — Silver Bullet">
   <meta property="og:description" content="Every capability Silver Bullet runs, under one incentive: rev share and profit share.">
   <meta property="og:image" content="https://silverbulletagency.com/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Silver Bullet capabilities — paid acquisition, landing pages, tracking">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Capabilities — Silver Bullet">
+  <meta name="twitter:title" content="Capabilities — paid search to retention — Silver Bullet">
   <meta name="twitter:description" content="Every capability Silver Bullet runs, under one incentive: rev share and profit share.">
   <meta name="twitter:image" content="https://silverbulletagency.com/og-image.png">
+  <meta name="twitter:image:alt" content="Silver Bullet capabilities — paid acquisition, landing pages, tracking">
 
 
   <!-- Bump ?v= whenever tokens.css changes. The hero headline is painted
        with background-clip:text, so a stale palette that drops the
        --chrome-* ramp would render it as invisible text. -->
+  <!-- Both script origins, opened early. Every page pulls deferred JS from
+       cdnjs and jsDelivr; without this each origin pays a full DNS lookup
+       plus TLS handshake before its first byte, which is most of the cost
+       on mobile. crossorigin is required — these are CORS script fetches,
+       and without it the handshake is made twice rather than reused. -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="tokens.css?v=3">
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css?v=5">
 
-  <link rel="stylesheet" href="site.css?v=21">
+  <link rel="stylesheet" href="site.css?v=23">
   <link rel="stylesheet" href="nightfield.css?v=4">
 
 
@@ -149,8 +158,18 @@
       margin-bottom: 6px;
     }
 
+    /* An h2, not a span, since v22. These six phrases carry the page's whole
+       commercial intent — paid acquisition, landing pages, tracking and
+       attribution — and as spans they had no structural weight at all: the
+       page went from one h1 straight to the footer. Each row already has an
+       id and the nav deep-links to it, so they were being treated as
+       addressable sections with nothing to address.
+
+       margin is the only thing a heading brings that a span did not, so it
+       is the only thing reset. Rendered output is unchanged. */
     .cap-row__title {
       display: block;
+      margin: 0;
       color: var(--steel-050);
       font-size: clamp(22px, 2.9vw, 38px);
       font-weight: 800;
@@ -316,44 +335,44 @@
     <div class="wrap">
       <ul class="cap-list">
         <li id="paid-acquisition">
-          <a class="cap-row" href="work.html">
+          <a class="cap-row" href="case-mantis.html">
             <span class="cap-row__plate"><img src="Assets/web/cap-paid-acquisition.webp" width="800" height="534" loading="lazy" decoding="async" alt="A team reviewing a rising performance chart"></span>
             <span>
               <span class="cap-row__num">01</span>
-              <span class="cap-row__title">Paid acquisition</span>
+              <h2 class="cap-row__title">Paid acquisition</h2>
               <span class="cap-row__desc">Search and social managed to pipeline and profit, not impressions.</span>
             </span>
             <span class="cap-row__go" aria-hidden="true"></span>
           </a>
         </li>
         <li id="landing-pages">
-          <a class="cap-row" href="work.html">
+          <a class="cap-row" href="case-vitality.html">
             <span class="cap-row__plate"><img src="Assets/web/cap-landing-pages.webp" width="800" height="530" loading="lazy" decoding="async" alt="A laptop beside a printed set of performance charts"></span>
             <span>
               <span class="cap-row__num">02</span>
-              <span class="cap-row__title">Landing pages</span>
+              <h2 class="cap-row__title">Landing pages</h2>
               <span class="cap-row__desc">Fast pages built to convert the traffic you are already paying for.</span>
             </span>
             <span class="cap-row__go" aria-hidden="true"></span>
           </a>
         </li>
         <li id="offer-positioning">
-          <a class="cap-row" href="work.html">
+          <a class="cap-row" href="case-mantis.html">
             <span class="cap-row__plate"><img src="Assets/web/cap-offer-positioning.webp" width="800" height="600" loading="lazy" decoding="async" alt="A team working through strategy documents around a table"></span>
             <span>
               <span class="cap-row__num">03</span>
-              <span class="cap-row__title">Offer and positioning</span>
+              <h2 class="cap-row__title">Offer and positioning</h2>
               <span class="cap-row__desc">Often the cheapest fix. What you sell and how you frame it beats ad spend.</span>
             </span>
             <span class="cap-row__go" aria-hidden="true"></span>
           </a>
         </li>
         <li id="tracking-attribution">
-          <a class="cap-row" href="work.html">
+          <a class="cap-row" href="case-nsp.html">
             <span class="cap-row__plate"><img src="Assets/web/cap-tracking-attribution.webp" width="800" height="530" loading="lazy" decoding="async" alt="A hand marking up a printed performance report"></span>
             <span>
               <span class="cap-row__num">04</span>
-              <span class="cap-row__title">Tracking and attribution</span>
+              <h2 class="cap-row__title">Tracking and attribution</h2>
               <span class="cap-row__desc">Clean measurement. Our compensation depends on it being honest.</span>
             </span>
             <span class="cap-row__go" aria-hidden="true"></span>
@@ -364,18 +383,18 @@
             <span class="cap-row__plate"><img src="Assets/web/cap-creative-production.webp" width="800" height="450" loading="lazy" decoding="async" alt="Social platform icons on a phone screen"></span>
             <span>
               <span class="cap-row__num">05</span>
-              <span class="cap-row__title">Creative production</span>
+              <h2 class="cap-row__title">Creative production</h2>
               <span class="cap-row__desc">Photo, video and ad creative built for the platform it runs on.</span>
             </span>
             <span class="cap-row__go" aria-hidden="true"></span>
           </a>
         </li>
         <li id="lifecycle-retention">
-          <a class="cap-row" href="work.html">
+          <a class="cap-row" href="case-nsp.html">
             <span class="cap-row__plate"><img src="Assets/web/cap-lifecycle-retention.webp" width="800" height="533" loading="lazy" decoding="async" alt="A mailbox with its flag raised"></span>
             <span>
               <span class="cap-row__num">06</span>
-              <span class="cap-row__title">Lifecycle and retention</span>
+              <h2 class="cap-row__title">Lifecycle and retention</h2>
               <span class="cap-row__desc">Email and follow-up, so acquisition spend compounds instead of leaking.</span>
             </span>
             <span class="cap-row__go" aria-hidden="true"></span>
@@ -470,7 +489,7 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
-  <script defer src="motion.js?v=11"></script>
+  <script defer src="motion.js?v=12"></script>
   <script defer src="textures.js?v=10"></script>
 
   <script defer src="boot.js?v=4"></script>
