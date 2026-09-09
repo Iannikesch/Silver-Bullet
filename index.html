@@ -78,7 +78,7 @@
   <link rel="stylesheet" href="textures.css?v=4">
 
   <link rel="stylesheet" href="bore.css?v=5">
-  <link rel="stylesheet" href="site.css?v=14">
+  <link rel="stylesheet" href="site.css?v=17">
 </head>
 
 <body class="has-nightfield">
@@ -338,9 +338,8 @@
     <section id="capabilities" class="capabilities">
       <div class="wrap">
         <h2>Capabilities</h2>
-        <!-- Wrapper exists so the beam overlay can be a sibling of the grid:
-             a <ul> may only contain <li>, so the tracer cannot live inside it. -->
-        <div class="cap-grid-wrap">
+        <!-- The arrival sweep needs no overlay and no wrapper: it lights each
+             cell's own top edge, so the grid is the only element involved. -->
         <ul class="cap-grid">
           <li>
             <span class="cap-num tx-etched">01</span>
@@ -373,23 +372,9 @@
             <p class="meta">Email and follow-up, so acquisition spend compounds instead of leaking.</p>
           </li>
         </ul>
-
         <!-- Same six as the capabilities tab. This is the route through to
              the fuller treatment, not a different list. -->
         <p class="cap-more"><a class="cta-secondary" href="capabilities.html">More on each capability</a></p>
-
-        <!-- The tracer. Percentages, so it follows the grid's own hairlines
-             at any width. Order matters only for readability; the timeline
-             drives them. -->
-        <div class="cap-beam" aria-hidden="true">
-          <span class="b-down"></span>
-          <span class="b-mid"></span>
-          <span class="b-up2"></span>
-          <span class="b-dn2"></span>
-          <span class="b-lf2"></span>
-          <span class="b-rt2"></span>
-        </div>
-        </div><!-- /.cap-grid-wrap -->
       </div>
     </section>
 
@@ -467,6 +452,136 @@
       </div>
     </section>
 
+
+    <!-- ============================================================
+         Testimonials — structure mapped from inboundmedia.co's
+         .testimonials-sec, which on their site sits in exactly this
+         position: the last band before the footer.
+
+         Copied: the full-bleed dark band, one quote at a time centred
+         at 860px, the circular author mark, the small tracked
+         attribution beneath it, the row of dots, and their cross-fade
+         timing (500ms, ease-in-out).
+
+         Not copied: pure #FFFFFF on navy. Colour comes from tokens.css,
+         so the band is --bg-raised and the quote sits on the steel ramp
+         rather than at peak white — a paragraph this long in --white
+         breaks the "white is light, not surface" rule in DESIGN.md.
+         Their slider also autoplays every 4s; this one waits to be
+         asked, because DESIGN.md allows three ambient movers and names
+         all three, and this is not one of them.
+
+         With JS off, or if the file 404s, this is a plain stacked list
+         and every quote is readable. testimonial-slider.js is only what
+         turns it into one-at-a-time.
+         ============================================================ -->
+    <section id="testimonials" class="testimonials" aria-label="What clients say">
+      <div class="wrap">
+        <div class="tq" data-testimonials>
+
+          <ul class="tq-list" data-tq-list>
+
+            <!-- NSP first, same running order as testimonials.html: it opens
+                 by admitting the work was not worth paying for at the start,
+                 which is the one thing a testimonial can say that an agency
+                 cannot say about itself. Do not reorder this to lead with a
+                 number. -->
+            <li class="tq-item">
+              <figure class="tq-fig">
+                <blockquote class="tq-quote">
+                  <p>&ldquo;I&rsquo;ll be straight with you: the commercial side wasn&rsquo;t worth
+                  anything at the start, and I knew it. Six weeks in I was ready to call
+                  it off. If the full bill had been due every month regardless, I&rsquo;d
+                  have pulled the plug before it ever turned &mdash; and that&rsquo;s not me
+                  talking tough, I&rsquo;ve done exactly that to two other agencies. The only
+                  reason I let it run was that it wasn&rsquo;t costing me anything it hadn&rsquo;t
+                  already made. Somewhere around week eight the commercial calls started,
+                  and they were the right kind &mdash; property managers, buildings that
+                  call you back, not one-off drain clogs at eleven at night. We&rsquo;re up
+                  about fifty percent and I&rsquo;m not the one chasing it anymore. I still
+                  think most marketing companies are full of it. These ones just happened
+                  not to be.&rdquo;</p>
+                </blockquote>
+                <figcaption class="tq-by">
+                  <!-- The reference puts a 73px round author photo here. We
+                       have no headshots, so the slot holds initials and keeps
+                       the vertical rhythm. Company initials rather than the
+                       person's, because two of the four are attributed to a
+                       role rather than a name. Swap the <span> for an <img> of
+                       the same size and nothing else in this block moves. -->
+                  <span class="tq-mark" aria-hidden="true">NSP</span>
+                  <span class="tq-who">Owner, NSP Plumbing</span>
+                  <span class="tq-what">+50% revenue growth in two months</span>
+                </figcaption>
+              </figure>
+            </li>
+
+            <li class="tq-item">
+              <figure class="tq-fig">
+                <blockquote class="tq-quote">
+                  <p>&ldquo;For years we were completely at the mercy of Local Services Ads.
+                  Google would change something on their end, or somebody would outbid us,
+                  and the phone would go quiet for a week &mdash; and there was nothing I
+                  could do about it except wait it out. The paid search account they built
+                  is the first channel that&rsquo;s actually mine. I can see what a booked
+                  move costs me to get, I know roughly what&rsquo;s coming next week, and
+                  when I want more of it I turn it up. Nobody tells you that the
+                  predictability is the part worth paying for. I thought I was buying
+                  leads. I was buying the ability to plan.&rdquo;</p>
+                </blockquote>
+                <figcaption class="tq-by">
+                  <span class="tq-mark" aria-hidden="true">MM</span>
+                  <span class="tq-who">Dana, owner, Mantis Moving &amp; Storage</span>
+                  <!-- Real figure from case-mantis.html. Do not round it up. -->
+                  <span class="tq-what">~$60k booked from ~$2,000 of attributable ad spend</span>
+                </figcaption>
+              </figure>
+            </li>
+
+            <li class="tq-item">
+              <figure class="tq-fig">
+                <blockquote class="tq-quote">
+                  <p>&ldquo;We had never really done marketing. Thirty years of word of mouth
+                  and a website somebody&rsquo;s nephew built that just sat there doing
+                  nothing. This was the first time we deliberately spent money to go and
+                  get work, and I&rsquo;ll admit I dragged my feet on it for a long while.
+                  The new site is the whole difference. Same trucks, same guys, same phone
+                  number &mdash; people land on it now and they actually call. The only
+                  thing I&rsquo;d change is the ten years I spent assuming referrals would
+                  keep being enough.&rdquo;</p>
+                </blockquote>
+                <figcaption class="tq-by">
+                  <span class="tq-mark" aria-hidden="true">VM</span>
+                  <span class="tq-who">Robert Ainsley, president, Vitality Mechanical</span>
+                  <span class="tq-what">+25% revenue growth in two months</span>
+                </figcaption>
+              </figure>
+            </li>
+
+            <li class="tq-item">
+              <figure class="tq-fig">
+                <blockquote class="tq-quote">
+                  <p>&ldquo;We doubled revenue in seven months with the same number of
+                  people, which is not what I expected to happen. I came in asking for more
+                  traffic. What I got was somebody sitting me down and telling me which
+                  products were worth advertising and which ones to stop running entirely
+                  &mdash; two of what I thought were my best sellers were losing money once
+                  you counted the ad spend against them. Nobody in four years had shown me
+                  that. The growth is nice. Knowing which half of it to feed is the part
+                  I&rsquo;d pay for again.&rdquo;</p>
+                </blockquote>
+                <figcaption class="tq-by">
+                  <span class="tq-mark" aria-hidden="true">GW</span>
+                  <span class="tq-who">Founder, Galway</span>
+                  <span class="tq-what">2x revenue in seven months</span>
+                </figcaption>
+              </figure>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- Footer. Structure follows vaynermedia.com: a full-bleed social strip
@@ -555,6 +670,9 @@
   <script defer src="intro.js?v=3"></script>
   <!-- Dropdown enhancement. The menu works without it. -->
   <script defer src="nav.js?v=2"></script>
+  <!-- Testimonial slider. Self-initialising and GSAP-free, same as
+       nav.js — the band is a readable stack of quotes without it. -->
+  <script defer src="testimonial-slider.js?v=2"></script>
 
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
@@ -562,9 +680,9 @@
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
   <script defer src="motion.js?v=11"></script>
-  <script defer src="textures.js?v=8"></script>
+  <script defer src="textures.js?v=10"></script>
 
-  <script defer src="boot.js?v=3"></script>
+  <script defer src="boot.js?v=4"></script>
 
 </body>
 </html>
