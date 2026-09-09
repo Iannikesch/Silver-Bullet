@@ -1678,6 +1678,100 @@
 }
 
 /* ==========================================================
+   As featured in
+   Structure mapped from inboundmedia.co's press band: centred
+   head, then a 3-up grid that wraps to two rows.
+
+   Their band sits on cream with full-colour brand logos. This
+   one cannot. The client wall runs directly above it and has
+   already set the house treatment for a row of marks - one
+   value, one weight, lifted on hover - and six brand palettes
+   immediately under five keyed silhouettes would read as two
+   different sites stitched together. So the marks take the
+   wall's treatment rather than the reference's.
+
+   Centred rather than left-aligned like .clients__head, which
+   is the one thing kept from the reference's own layout: the
+   band is a head and a grid with no third column of content,
+   and centring is what stops the grid reading as hung off the
+   left edge.
+   ========================================================== */
+
+.press {
+  padding: var(--space-xl, 96px) 0;
+  border-top: 1px solid var(--border);
+}
+
+.press__head {
+  max-width: 62ch;
+  margin: 0 auto var(--space-lg, 72px);
+  text-align: center;
+}
+
+/* .lead caps itself at 62ch and is left-aligned by default; both
+   have to be undone or the line sits off-centre under a centred
+   heading. */
+.press__head .lead {
+  max-width: none;
+  margin-top: var(--space-sm, 28px);
+  color: var(--steel-500);
+}
+
+/* Explicit columns, same ladder as .grid and .cap-grid. Six marks
+   divide cleanly by 3, 2 and 1, so no breakpoint ever leaves a row
+   with a hole in it. */
+.press-wall {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  justify-items: center;
+  gap: clamp(30px, 4vw, 52px) clamp(38px, 6vw, 86px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Set as type until real logo files land. Headline weight and
+   tracking, so a wordmark reads as a mark rather than as a
+   sentence, at the wall's .48 and lifting on hover exactly as the
+   logos above it do. */
+.press-mark {
+  display: block;
+  font-size: clamp(19px, 2.2vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  text-align: center;
+  color: var(--text-strong);
+  opacity: .48;
+  transition: opacity .3s ease;
+}
+
+/* Ready for the swap: an <img> dropped in place of a <span> gets
+   the wall's optical caps without another edit. */
+.press-wall img {
+  display: block;
+  width: auto;
+  opacity: .48;
+  transition: opacity .3s ease;
+}
+
+.press-wall .is-wide { max-height: clamp(20px, 2.2vw, 28px); }
+.press-wall .is-mid  { max-height: clamp(26px, 2.8vw, 34px); }
+.press-wall .is-tall { max-height: clamp(40px, 4.4vw, 54px); }
+
+.press-wall li:hover .press-mark,
+.press-wall li:hover img { opacity: 1; }
+
+@media (max-width: 900px) {
+  .press-wall { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .press-wall { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================
    Testimonials band
    Structure mapped from inboundmedia.co's .testimonials-sec.
 
