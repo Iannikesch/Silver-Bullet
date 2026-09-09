@@ -1689,19 +1689,21 @@
 }
 
 /* ==========================================================
-   As featured in
+   Proficient in
    Structure mapped from inboundmedia.co's press band: centred
    head, one line under it, then a 3-up grid of marks wrapping
-   to two rows.
+   to two rows. The band now carries ad platforms rather than
+   publications; the class names still say press (see the note
+   in index.html).
 
    This is the only light band on the site, and the logos are
-   the reason. They are full-colour brand marks - TikTok's
-   cyan/magenta, Shopify's green, Yahoo's purple - which cannot
-   be keyed to one value the way the client wall's are without
-   destroying the thing that identifies them. On --bg each one
-   would need its own light box, which is six boxes and no
-   band. One light surface for the whole section is the cheaper
-   answer, and it is what the reference does.
+   the reason. They are full-colour brand marks - Meta's blue,
+   Google's four, YouTube red, TikTok's cyan/magenta - which
+   cannot be keyed to one value the way the client wall's are
+   without destroying the thing that identifies them. On --bg
+   each one would need its own light box, which is six boxes
+   and no band. One light surface for the whole section is the
+   cheaper answer, and it is what the reference does.
 
    The colour change is also what separates this band from the
    sections either side, so it carries no hairline border - the
@@ -1745,20 +1747,28 @@
   list-style: none;
 }
 
-/* Sized by width, not height. The six crops are all within 276-322px of
-   each other, so one width cap reproduces the reference's even rhythm,
-   and capping BELOW the natural size means every mark is downscaled and
-   none is ever soft. width/height on the <img> hold the aspect ratio so
-   the band does not jump while the images load.
+/* Sized by HEIGHT, with width only as an upper bound. This used to cap
+   width alone, which worked while all six crops sat within a narrow band
+   of aspect ratios. The current marks do not: Meta is 4.96:1 and Google
+   is 2.96:1, so one width cap renders Google about 68% taller than Meta
+   and the row stops reading as a set. Capping the height is how a logo
+   wall is normally balanced - it is what .client-wall already does - and
+   it makes optical size independent of how long each wordmark happens
+   to be.
+
+   Both caps stay below natural size, so every mark is still downscaled
+   and none is ever soft. width/height on the <img> hold the aspect ratio
+   so the band does not jump while the images load.
 
    No opacity dimming and no hover lift here. That treatment belongs to
    the client wall, where the marks are one keyed value; dimming a
    full-colour logo just makes it look faded. */
 .press-wall img {
   display: block;
-  width: 100%;
-  max-width: clamp(160px, 19vw, 250px);
+  width: auto;
   height: auto;
+  max-width: clamp(150px, 18vw, 230px);
+  max-height: clamp(32px, 3.4vw, 46px);
 }
 
 @media (max-width: 900px) {
