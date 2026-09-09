@@ -78,7 +78,7 @@
   <link rel="stylesheet" href="textures.css?v=5">
 
   <link rel="stylesheet" href="bore.css?v=5">
-  <link rel="stylesheet" href="site.css?v=21">
+  <link rel="stylesheet" href="site.css?v=22">
 </head>
 
 <body class="has-nightfield">
@@ -384,55 +384,75 @@
     </section>
 
     <!-- ============================================================
-         Capabilities — placeholder.
+         Who we work with.
 
-         Deliberately static. Three marquee bands is the ceiling set in
-         DESIGN.md, so this one does not move.
+         This replaced the capabilities grid. Capabilities are still the
+         six things we run — they just are not the thing to lead with on
+         the front door. An owner-operator does not arrive looking for
+         "paid acquisition"; they arrive looking for someone who already
+         understands why their phone rings the way it does.
 
-         The grid is hairline-divided rather than a row of identical
-         rounded cards; swap the copy, add or remove <li>s and the columns
-         reflow on their own.
+         So each card names the vertical and the ONE problem that vertical
+         has, and stops. No service list here — that belongs on the
+         vertical page, next to copy written for that reader.
+
+         Deliberately static, same as the grid it replaced: three marquee
+         bands is the ceiling DESIGN.md sets, so this does not move.
+
+         The cards are not links yet, because the six pages do not exist.
+         A card linking nowhere is worse than a card that plainly does not
+         link — same rule as the footer's social icons. When the pages
+         land, wrap the contents of each <li> in an <a class="vert-card">
+         and the styles are already waiting for it.
          ============================================================ -->
-    <section id="capabilities" class="capabilities">
+    <section id="verticals" class="verticals">
       <div class="wrap">
-        <h2>Capabilities</h2>
-        <!-- The arrival sweep needs no overlay and no wrapper: it lights each
-             cell's own top edge, so the grid is the only element involved. -->
-        <ul class="cap-grid">
+        <h2>Who we work with</h2>
+        <p class="lead">
+          Six industries where we already know what the demand looks like,
+          what a lead is actually worth, and where the money leaks.
+        </p>
+        <!-- Shares .cap-grid's rules rather than restating them, so the two
+             grids cannot drift apart. The arrival sweep needs no wrapper: it
+             lights each cell's own top edge. -->
+        <ul class="cap-grid vert-grid">
           <li>
             <span class="cap-num tx-etched">01</span>
-            <h3>Paid acquisition</h3>
-            <p class="meta">Search and social managed to pipeline and profit, not impressions.</p>
+            <h3>Home services</h3>
+            <p class="vert-line">The work arrives as an emergency and goes to whoever answers first, so most of the spend is lost between the click and the booked job.</p>
+            <p class="meta vert-scope">HVAC, plumbing, electrical, roofing, restoration</p>
           </li>
           <li>
             <span class="cap-num tx-etched">02</span>
-            <h3>Landing pages</h3>
-            <p class="meta">Fast pages built to convert the traffic you are already paying for.</p>
+            <h3>Moving &amp; storage</h3>
+            <p class="vert-line">Violently seasonal, and the lead you just paid for was sold to four other movers at the same moment.</p>
+            <p class="meta vert-scope">Local and long distance, containers, storage</p>
           </li>
           <li>
             <span class="cap-num tx-etched">03</span>
-            <h3>Offer and positioning</h3>
-            <p class="meta">Often the cheapest fix. What you sell and how you frame it beats ad spend.</p>
+            <h3>Remodeling</h3>
+            <p class="vert-line">High ticket and long deliberation, with a pipeline clogged by people who want a number before there is anything to price.</p>
+            <p class="meta vert-scope">Kitchen and bath, windows, siding</p>
           </li>
           <li>
             <span class="cap-num tx-etched">04</span>
-            <h3>Tracking and attribution</h3>
-            <p class="meta">Clean measurement. Our compensation depends on it being honest.</p>
+            <h3>Health &amp; aesthetics</h3>
+            <p class="vert-line">The first appointment rarely covers what it cost to book, so the economics live in the second one and in the no-show rate.</p>
+            <p class="meta vert-scope">Med spa, dental, chiropractic</p>
           </li>
           <li>
             <span class="cap-num tx-etched">05</span>
-            <h3>Creative production</h3>
-            <p class="meta">Photo, video and ad creative built for the platform it runs on.</p>
+            <h3>Legal</h3>
+            <p class="vert-line">The most expensive clicks in search, where one signed case is worth more than a hundred submitted forms.</p>
+            <p class="meta vert-scope">Personal injury, family, estate</p>
           </li>
           <li>
             <span class="cap-num tx-etched">06</span>
-            <h3>Lifecycle and retention</h3>
-            <p class="meta">Email and follow-up, so acquisition spend compounds instead of leaking.</p>
+            <h3>Auto</h3>
+            <p class="vert-line">Local, immediate intent, and a bay that earns nothing standing empty.</p>
+            <p class="meta vert-scope">Collision, repair, detailing</p>
           </li>
         </ul>
-        <!-- Same six as the capabilities tab. This is the route through to
-             the fuller treatment, not a different list. -->
-        <p class="cap-more"><a class="cta-secondary" href="capabilities.html">More on each capability</a></p>
       </div>
     </section>
 

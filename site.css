@@ -1186,7 +1186,8 @@
        gap lets the container colour through as the rules, so there is one
        border to change rather than twenty-four. */
 
-    .capabilities {
+    .capabilities,
+    .verticals {
       padding: var(--space-xl) 0;
       border-top: 1px solid var(--border);
     }
@@ -1265,6 +1266,56 @@
     .cap-grid h3 {
       color: var(--steel-050);
       margin-bottom: 8px;
+    }
+
+
+    /* ---------- who we work with ----------
+       The verticals grid IS .cap-grid — same hairline lattice, same rim-lit
+       hover, same 3/2/1 ladder, same arrival sweep, because initGridSweep()
+       keys off .cap-grid and the element carries both classes. Only the
+       things this grid has and that one does not are declared here.
+
+       Six items divide cleanly by 3, 2 and 1, so no breakpoint leaves a
+       hole in the lattice - the same property the capabilities grid was
+       built around. */
+
+    .verticals .lead { margin-top: 20px; }
+
+    /* The problem line is BODY COPY, not meta, so it sits at --text on the
+       steel ramp. It reads as a caption in this slot and the temptation is
+       to hand it .meta, but DESIGN.md puts --steel-700 and darker off
+       limits for anything you actually have to read - it is for labels. */
+    .vert-line {
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.55;
+      margin-bottom: 12px;
+    }
+
+    /* The problem lines run to two or three lines depending on the vertical,
+       which left the scope rules sitting at three different heights across a
+       row - a lattice with a ragged inner edge. Making the cell a column and
+       pushing the scope down with margin-top:auto lands every rule on the
+       same line, so the grid reads as one ruled surface rather than six
+       independently sized boxes. */
+    .vert-grid > li { display: flex; flex-direction: column; }
+
+    /* The sub-verticals underneath ARE meta - scanned, not read - so this
+       one is correctly on --text-muted. Commas rather than middle dots:
+       the brief rules dotted meta strings out by name. */
+    .vert-scope {
+      margin-top: auto;
+      color: var(--text-muted);
+      line-height: 1.5;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+    }
+
+    /* At 1-up the cards are full width, so the problem line would run to
+       the ~90ch the viewport allows. Body copy is capped at 62ch site-wide
+       for the same reason. */
+    @media (max-width: 600px) {
+      .vert-line { max-width: 62ch; }
     }
 
 
