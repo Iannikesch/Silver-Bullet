@@ -11,10 +11,17 @@
    it builds the dots itself for the same reason — a row of
    dots that cannot do anything is worse than no dots.
 
-   Deliberately NOT autoplaying. The reference rotates every
-   4s; DESIGN.md permits three ambient movers, names all three,
-   and says nothing else moves on its own. This advances when
-   asked: dot, arrow key, or swipe.
+   Autoplays, but on a short leash. This is the fourth thing
+   on the page that moves unasked, which DESIGN.md warned would
+   need re-examining - see "The fourth mover" there for why it
+   is allowed and what holds it in place.
+
+   The leash, in short: 7s rather than the reference's 4s,
+   because a quote is read rather than glanced at; it holds
+   still while hovered or focused; it never runs off screen or
+   in a background tab; and the first deliberate advance - dot,
+   arrow key or swipe - ends it for good. Reduced motion never
+   starts it at all.
 
    Self-initialising rather than routed through boot.js, so it
    does not wait on GSAP and keeps working if the CDN is
@@ -24,7 +31,11 @@
 (function () {
   'use strict';
 
-  var SWIPE_MIN = 40;   /* px before a drag counts as a swipe */
+  var SWIPE_MIN = 40;     /* px before a drag counts as a swipe */
+  var AUTO_MS  = 7000;    /* dwell per quote. Long: this is body copy. */
+
+  var REDUCED   = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var CAN_HOVER = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   var root = document.querySelector('[data-testimonials]');
   if (!root) return;
@@ -55,7 +66,7 @@
     b.className = 'tq-dot';
     b.setAttribute('role', 'tab');
     b.setAttribute('aria-label', 'Testimonial ' + (i + 1) + ' of ' + slides.length);
-    b.addEventListener('click', function () { go(i); });
+    b.addEventListener('click', function () { surrender(); go(i); });
     li.appendChild(b);
     dots.appendChild(li);
     return b;
@@ -108,6 +119,7 @@
     var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
     if (!d) return;
     e.preventDefault();
+    surrender();
     go(current + d);
     buttons[current].focus();
   });
@@ -131,6 +143,7 @@
     var dx = e.clientX - startX;
     var dy = e.clientY - startY;
     if (Math.abs(dx) < SWIPE_MIN || Math.abs(dx) < Math.abs(dy)) return;
+    surrender();
     go(current + (dx < 0 ? 1 : -1));
   });
 
@@ -159,6 +172,68 @@
     });
   }
 
+  /* ---- autoplay --------------------------------------------------
+     Four separate reasons to hold still, resolved in one place rather
+     than each handler clearing the timer itself. Same shape as
+     applyRate() in motion.js and for the same reason: these overlap
+     constantly - hovering a dot also focuses it - and a handler that
+     owns the timer directly will cancel the other one's stop.
+
+     `stopped` is the one-way door. Once a visitor has worked the dots,
+     the arrows or a swipe they have said which quote they want, and
+     the band must never take it away from them again. Under reduced
+     motion it starts closed. */
+  var timer = null;
+  var stopped = REDUCED;
+  var hovered = false, focused = false, onScreen = false;
+
+  function autoplayWanted() {
+    return !stopped && onScreen && !hovered && !focused && !document.hidden;
+  }
+
+  function applyAutoplay() {
+    var want = autoplayWanted();
+    if (want && !timer) {
+      timer = setInterval(function () { go(current + 1); }, AUTO_MS);
+    } else if (!want && timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+  }
+
+  function surrender() {
+    stopped = true;
+    applyAutoplay();
+  }
+
+  /* Hover only where hovering is real. On touch, pointerenter fires on
+     tap and the matching pointerleave often never does, which would
+     wedge the band paused for the rest of the visit. */
+  if (CAN_HOVER) {
+    root.addEventListener('pointerenter', function () { hovered = true;  applyAutoplay(); });
+    root.addEventListener('pointerleave', function () { hovered = false; applyAutoplay(); });
+  }
+
+  /* Focus outranks nothing here - it is simply a fifth reason to stop -
+     but it is what gives a keyboard user the pause WCAG 2.2.2 asks for,
+     since they cannot hover to get one. */
+  root.addEventListener('focusin',  function () { focused = true;  applyAutoplay(); });
+  root.addEventListener('focusout', function () { focused = false; applyAutoplay(); });
+
+  document.addEventListener('visibilitychange', applyAutoplay);
+
+  /* Off screen it must not advance. Otherwise the band burns through
+     quotes nobody is reading and the visitor scrolls down to find it
+     already three in, having missed the one that opens the set. */
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      onScreen = entries[0].isIntersecting;
+      applyAutoplay();
+    }, { threshold: 0.4 }).observe(root);
+  } else {
+    onScreen = true;
+  }
+
   /* ---- boot ------------------------------------------------------
      The class goes on last. Until it does, the stacked list is what
      is on screen, so a throw anywhere above this leaves the band in
@@ -166,4 +241,5 @@
   root.appendChild(dots);
   root.classList.add('is-slider');
   go(0);
+  applyAutoplay();
 })();

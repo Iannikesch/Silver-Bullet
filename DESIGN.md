@@ -180,7 +180,9 @@ a template. What keeps it on the right side of that line:
   needs its own speed, and at that point the whole idea should be re-examined
   instead.
 - **One direction.** All three run right to left. Mixed directions read as chaos.
-- **Nothing else moves ambiently.** Not sections, not cards, not backgrounds.
+- **Nothing else moves ambiently** except the testimonial band, which is the
+  fourth mover this section warned about. Not sections, not cards, not
+  backgrounds. See below.
 - **The bands answer the pointer.** Hovering one slows it to 0.4x rather than
   stopping it dead, so it yields to a reader without snapping. You can grab any
   band and drag it, and a throw carries and decays back into the drift. This is
@@ -191,6 +193,33 @@ a template. What keeps it on the right side of that line:
 
 The speeds live in `:root` as `--ticker-rate`, `--conveyor-rate` and
 `--logo-rate`. Keep them far apart.
+
+### The fourth mover: the testimonial band
+
+This section said a fourth self-moving thing would mean re-examining the whole
+idea. One was added anyway - the testimonial band advances on its own - so here
+is the re-examination.
+
+It is a weaker case than the three bands and it is treated as one. The bands
+carry a slogan, thumbnails and logos: things you take in at a glance, where
+movement costs the reader nothing. A testimonial is a paragraph. Moving it is
+the one case where ambient motion fights the content, because it can pull a
+sentence away mid-read. What keeps it on the right side of the line:
+
+- **7s, not the reference's 4s.** Long enough to finish the longest quote.
+- **It yields to attention.** Hover holds it; keyboard focus holds it. Both are
+  the same argument the bands make - it moves because you are not.
+- **It stops for good on the first deliberate advance.** Dot, arrow or swipe
+  means the visitor has chosen a quote, and it is never taken away again. None
+  of the bands has this, because none of them holds something you can choose.
+- **It does not run unseen.** Off screen or in a background tab it holds, so
+  nobody arrives to find the set already three quotes in.
+- **It never starts under `prefers-reduced-motion`**, and the band stays a
+  readable stack of every quote when it does not.
+
+There is no fifth. The next thing that wants to move on its own should be
+refused, and if it cannot be, this document is wrong and needs rewriting rather
+than another entry.
 
 ## Floor
 

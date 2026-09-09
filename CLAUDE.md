@@ -32,8 +32,15 @@ framework, say so and ask before doing it.
 
 Movement is a priority for this site, but it is rationed. What moves: the bullet
 intro, the reactive chrome on two elements, three marquee bands — the hook
-banner, the creative conveyor and the logo band — and one scroll-triggered
-reveal on the client wall. Nothing else does.
+banner, the creative conveyor and the logo band — one scroll-triggered
+reveal on the client wall, and the testimonial band, which advances itself
+on a 7s dwell. Nothing else does.
+
+The testimonial band is the fourth ambient mover, which DESIGN.md said would
+force a re-examination of the whole ambient rule. That re-examination is
+written up under "The fourth mover" — it is allowed because it yields to
+hover and focus, holds off screen, and stops permanently the moment the
+visitor picks a quote. There is no fifth.
 
 The client wall reveal is the "one orchestrated moment" DESIGN.md allows, and it
 is now spent: heading drops in from above, logos rise from below, once, on
