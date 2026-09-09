@@ -156,7 +156,7 @@ of that line:
 - **It survives a mid-page reload.** Loading already scrolled past the section
   lands the timeline finished rather than leaving a permanently blank wall.
 
-Precedent, not a new category: `initGridBeam()` already runs an arrival effect
+Precedent, not a new category: `initGridSweep()` already runs an arrival effect
 on the capabilities grid.
 
 ### The ambient exception: three bands, three speeds
