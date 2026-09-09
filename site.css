@@ -1680,26 +1680,27 @@
 /* ==========================================================
    As featured in
    Structure mapped from inboundmedia.co's press band: centred
-   head, then a 3-up grid that wraps to two rows.
+   head, one line under it, then a 3-up grid of marks wrapping
+   to two rows.
 
-   Their band sits on cream with full-colour brand logos. This
-   one cannot. The client wall runs directly above it and has
-   already set the house treatment for a row of marks - one
-   value, one weight, lifted on hover - and six brand palettes
-   immediately under five keyed silhouettes would read as two
-   different sites stitched together. So the marks take the
-   wall's treatment rather than the reference's.
+   This is the only light band on the site, and the logos are
+   the reason. They are full-colour brand marks - TikTok's
+   cyan/magenta, Shopify's green, Yahoo's purple - which cannot
+   be keyed to one value the way the client wall's are without
+   destroying the thing that identifies them. On --bg each one
+   would need its own light box, which is six boxes and no
+   band. One light surface for the whole section is the cheaper
+   answer, and it is what the reference does.
 
-   Centred rather than left-aligned like .clients__head, which
-   is the one thing kept from the reference's own layout: the
-   band is a head and a grid with no third column of content,
-   and centring is what stops the grid reading as hung off the
-   left edge.
+   The colour change is also what separates this band from the
+   sections either side, so it carries no hairline border - the
+   same trade the spacing comment at the top of this file
+   describes the reference making.
    ========================================================== */
 
 .press {
   padding: var(--space-xl, 96px) 0;
-  border-top: 1px solid var(--border);
+  background: var(--paper, #F2F0EA);
 }
 
 .press__head {
@@ -1708,60 +1709,46 @@
   text-align: center;
 }
 
-/* .lead caps itself at 62ch and is left-aligned by default; both
-   have to be undone or the line sits off-centre under a centred
-   heading. */
+/* Dark type on the light band. --charcoal rather than --ink, which
+   DESIGN.md reserves for linework on light. */
+.press h2 { color: var(--charcoal, #202222); }
+
+/* .lead is capped at 62ch and left-aligned by default; both have to be
+   undone or the line sits off-centre under a centred heading. */
 .press__head .lead {
   max-width: none;
   margin-top: var(--space-sm, 28px);
-  color: var(--steel-500);
+  color: var(--steel-900, #50636E);
 }
 
-/* Explicit columns, same ladder as .grid and .cap-grid. Six marks
-   divide cleanly by 3, 2 and 1, so no breakpoint ever leaves a row
-   with a hole in it. */
+/* Explicit columns, same ladder as .grid and .cap-grid. Six marks divide
+   cleanly by 3, 2 and 1, so no breakpoint leaves a row with a hole. */
 .press-wall {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
   justify-items: center;
-  gap: clamp(30px, 4vw, 52px) clamp(38px, 6vw, 86px);
+  gap: clamp(22px, 2.6vw, 36px) clamp(38px, 6vw, 86px);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-/* Set as type until real logo files land. Headline weight and
-   tracking, so a wordmark reads as a mark rather than as a
-   sentence, at the wall's .48 and lifting on hover exactly as the
-   logos above it do. */
-.press-mark {
-  display: block;
-  font-size: clamp(19px, 2.2vw, 28px);
-  font-weight: 800;
-  letter-spacing: -0.035em;
-  line-height: 1.1;
-  text-align: center;
-  color: var(--text-strong);
-  opacity: .48;
-  transition: opacity .3s ease;
-}
+/* Sized by width, not height. The six crops are all within 276-322px of
+   each other, so one width cap reproduces the reference's even rhythm,
+   and capping BELOW the natural size means every mark is downscaled and
+   none is ever soft. width/height on the <img> hold the aspect ratio so
+   the band does not jump while the images load.
 
-/* Ready for the swap: an <img> dropped in place of a <span> gets
-   the wall's optical caps without another edit. */
+   No opacity dimming and no hover lift here. That treatment belongs to
+   the client wall, where the marks are one keyed value; dimming a
+   full-colour logo just makes it look faded. */
 .press-wall img {
   display: block;
-  width: auto;
-  opacity: .48;
-  transition: opacity .3s ease;
+  width: 100%;
+  max-width: clamp(160px, 19vw, 250px);
+  height: auto;
 }
-
-.press-wall .is-wide { max-height: clamp(20px, 2.2vw, 28px); }
-.press-wall .is-mid  { max-height: clamp(26px, 2.8vw, 34px); }
-.press-wall .is-tall { max-height: clamp(40px, 4.4vw, 54px); }
-
-.press-wall li:hover .press-mark,
-.press-wall li:hover img { opacity: 1; }
 
 @media (max-width: 900px) {
   .press-wall { grid-template-columns: repeat(2, 1fr); }

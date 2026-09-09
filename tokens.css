@@ -8,6 +8,12 @@
   --bg:             #0A0D0E;  /* page background */
   --bg-raised:      #161A1B;  /* section separation without a border */
   --charcoal:       #202222;  /* input fields, inactive states */
+
+  /* The one light surface. Everything else on this site is dark, and the
+     press band is why this exists: its marks are full-colour brand logos,
+     and on --bg every one of them would need its own light box, which is
+     six boxes and no band. Sampled from the reference's own band. */
+  --paper:          #F2F0EA;
   --slate:          #323738;  /* hairline borders, dividers */
   --grey:           #4A4C4D;  /* rim-light edge, disabled text */
 
