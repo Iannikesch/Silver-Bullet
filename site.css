@@ -821,7 +821,15 @@
     .ticker__cta:hover  { background: var(--accent-hover); }
     .ticker__cta:active { background: var(--accent-active); }
 
-    [data-marquee].is-onstage .ticker__travel { will-change: transform; }
+    /* Promoted unconditionally. This used to be gated on .is-onstage to save
+       texture, but adding and removing will-change CREATES AND DESTROYS the
+       compositor layer, and tearing one down while the band is mid-motion
+       leaves the last painted frame behind as a ghost - a still copy sitting
+       over the moving one. Worst on the inner pages, where the band is the
+       only thing on screen. A stable layer costs memory; a thrashing one
+       costs correctness. The off-screen saving that actually mattered is the
+       skipped gsap.set in bindMarquee(), which is untouched. */
+    .ticker__travel { will-change: transform; }
 
     .ticker__track {
       display: flex;
@@ -927,14 +935,11 @@
       width: max-content;
     }
 
-    /* Promoted only while the band is on screen — see bindMarquee() in
-       motion.js, which also stops writing to it when it is not. A track
-       is as wide as its content (7200px on the conveyor), so leaving it
-       promoted off screen is megabytes of texture for something nobody
-       is looking at. */
-    [data-marquee].is-onstage .conveyor__track,
-    [data-marquee].is-onstage .logo-band__track,
-    [data-marquee].is-onstage .ticker__track { will-change: transform; }
+    /* Promoted for the life of the page — see the note on .ticker__travel
+       above. Gating this on .is-onstage was the cause of the ghosting. */
+    .conveyor__track,
+    .logo-band__track,
+    .ticker__track { will-change: transform; }
 
     .conveyor__track  { animation: marquee-left var(--conveyor-rate) linear infinite; }
     .logo-band__track { animation: marquee-left var(--logo-rate)     linear infinite; }

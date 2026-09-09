@@ -345,13 +345,27 @@
        Pausing off screen is invisible by definition, and the band simply
        resumes from where it stopped. The class it toggles is also what
        gates will-change and the ticker's CSS animation, in site.css. */
+    /* Starts TRUE and stays true until the observer positively says the band
+       is off screen. It used to start false, which means the band does not
+       move until a callback arrives - so anything that delays or drops that
+       first callback leaves a permanently frozen strip. Failing open costs a
+       few frames of writing to something off screen; failing closed costs a
+       band that never runs. */
     var onstage = true;
     if (typeof IntersectionObserver !== 'undefined') {
-      onstage = false;
-      new IntersectionObserver(function (entries) {
-        onstage = entries[0].isIntersecting;
-        strip.classList.toggle('is-onstage', onstage);
-      }, { rootMargin: '200px 0px' }).observe(strip);
+      /* Held in a variable deliberately. The observer was previously created
+         inline and never referenced by anything, which leaves its lifetime
+         resting on the spec's "keep alive while it has observed targets"
+         rule and nothing else. One band that never comes back on stage is a
+         band that never moves again, so it is not worth the gamble. */
+      var io = new IntersectionObserver(function (entries) {
+        for (var k = 0; k < entries.length; k++) {
+          onstage = entries[k].isIntersecting;
+          strip.classList.toggle('is-onstage', onstage);
+        }
+      }, { rootMargin: '200px 0px' });
+      io.observe(strip);
+      strip.__io = io;
     } else {
       strip.classList.add('is-onstage');
     }
