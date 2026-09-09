@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Capabilities — Silver Bullet</title>
-  <meta name="description" content="Paid acquisition, landing pages, offer and positioning, and more — each running on its own or as part of the whole, all paid on a share of revenue or profit.">
-  <link rel="canonical" href="https://silverbulletagency.com/capabilities.html">
+  <title>Testimonials — Silver Bullet</title>
+  <meta name="description" content="What Silver Bullet clients say about being on rev share — in their own words, with the numbers the arrangement produced.">
+  <link rel="canonical" href="https://silverbulletagency.com/testimonials.html">
 
   <script type="application/ld+json">
 {
@@ -21,7 +21,7 @@
     {
       "@type": "ListItem",
       "position": 2,
-      "name": "Capabilities"
+      "name": "Testimonials"
     }
   ]
 }
@@ -37,17 +37,17 @@
   <link rel="manifest" href="/site.webmanifest">
   <meta name="theme-color" content="#0A0D0E">
   <!-- Social card. Absolute URLs, as the OG spec requires. -->
-  <meta property="og:url" content="https://silverbulletagency.com/capabilities.html">
+  <meta property="og:url" content="https://silverbulletagency.com/testimonials.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Silver Bullet">
-  <meta property="og:title" content="Capabilities — Silver Bullet">
-  <meta property="og:description" content="Every capability Silver Bullet runs, under one incentive: rev share and profit share.">
+  <meta property="og:title" content="Testimonials — Silver Bullet">
+  <meta property="og:description" content="Clients on what changes when the agency is paid out of the result.">
   <meta property="og:image" content="https://silverbulletagency.com/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Capabilities — Silver Bullet">
-  <meta name="twitter:description" content="Every capability Silver Bullet runs, under one incentive: rev share and profit share.">
+  <meta name="twitter:title" content="Testimonials — Silver Bullet">
+  <meta name="twitter:description" content="Clients on what changes when the agency is paid out of the result.">
   <meta name="twitter:image" content="https://silverbulletagency.com/og-image.png">
 
 
@@ -64,148 +64,90 @@
 
 
   <style>
-    /* ---------- capabilities ----------
-       Modelled on the Profectus capabilities page: a flat, uncategorised
-       list where each service offering is one wide row, small label above a
-       large title, with a hairline circle at the end. No cards, no icons,
-       no grouping.
+    /* Testimonials. The quote treatment is the case pages' blockquote —
+       lit left edge, no card, no shadow — set larger because here the quote
+       is the content rather than a break in it. */
 
-       Two deliberate departures. Their eyebrow is tracked-out all caps,
-       which DESIGN.md rules out, so ours is sentence case in the meta
-       value. And the circle holds a plus rather than an arrow, because an
-       arrow appended to link text is on the Do-not list. */
+    .tm-hero { padding: var(--space-lg) 0 var(--space-md); }
+    .tm-hero .lead { max-width: 58ch; margin-top: 20px; }
 
-    .cap-hero {
-      padding: var(--space-lg) 0 var(--space-md);
-      text-align: center;
-    }
-
-    .cap-hero h1 { max-width: 14ch; margin: 0 auto; }
-
-    .cap-hero .lead {
-      margin: var(--space-sm) auto 0;
-      text-align: center;
-      max-width: 54ch;
-    }
-
-    .cap-list {
-      margin: 0 0 var(--space-xl);
-      padding: 0;
+    .tm-list {
+      margin: 0;
+      padding: 0 0 var(--space-xl);
       list-style: none;
+    }
+
+    .tm {
+      margin: 0;
+      padding: var(--space-md) 0;
       border-top: 1px solid var(--border);
     }
 
-    .cap-row {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: clamp(18px, 3vw, 40px);
-      padding: clamp(18px, 2.4vw, 26px) 0;
-      border-bottom: 1px solid var(--border);
-      text-decoration: none;
-      transition: padding-left .35s var(--ease-settle), border-color .25s ease;
+    .tm blockquote {
+      max-width: 30ch;
+      margin: 0;
+      padding-left: var(--space-sm);
+      border-left: 1px solid var(--border-lit);
     }
 
-    /* The row itself moves rather than anything inside it lighting up.
-       Slower than a normal state change because it is a large object. */
-    .cap-row:hover {
-      padding-left: clamp(10px, 1.6vw, 22px);
-      border-bottom-color: var(--border-lit);
-    }
-
-    .cap-row__plate {
-      width: clamp(96px, 13vw, 168px);
-      aspect-ratio: 3 / 2;
-      overflow: hidden;
-      background: var(--bg-raised);
-      border-top: 1px solid var(--border-lit);
-      border-left: 1px solid var(--border);
-      border-right: 1px solid var(--border);
-      border-bottom: 1px solid var(--ink);
-    }
-
-    .cap-row__plate img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      /* Held well back so a bright stock photo cannot outshout the type,
-         which is what the page is actually made of. */
-      opacity: .55;
-      filter: saturate(.7) contrast(1.05);
-      transition: opacity .3s ease, filter .3s ease, transform .6s ease;
-    }
-
-    .cap-row:hover .cap-row__plate img {
-      opacity: .9;
-      filter: saturate(.95) contrast(1);
-      transform: scale(1.04);
-    }
-
-    .cap-row__num {
-      display: block;
-      font-size: 13px;
-      color: var(--steel-900);
-      margin-bottom: 6px;
-    }
-
-    .cap-row__title {
-      display: block;
+    .tm blockquote p {
+      margin: 0;
       color: var(--steel-050);
-      font-size: clamp(22px, 2.9vw, 38px);
-      font-weight: 800;
-      line-height: 1.04;
-      letter-spacing: -0.035em;
-      transition: color .25s ease;
+      font-size: clamp(21px, 2.6vw, 32px);
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+      text-wrap: pretty;
     }
 
-    .cap-row__desc {
-      display: block;
-      margin-top: 8px;
-      max-width: 52ch;
-      font-size: 15px;
-      color: var(--steel-700);
-      transition: color .25s ease;
+    /* Stacked, not joined with dots — DESIGN.md rules those out, and at
+       three parts a run-on line stops being readable anyway. */
+    .tm figcaption {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      margin-top: 22px;
+      padding-left: calc(var(--space-sm) + 1px);
     }
 
-    .cap-row:hover .cap-row__title { color: var(--white); }
-    .cap-row:hover .cap-row__desc  { color: var(--steel-300); }
+    .tm__who   { color: var(--steel-100); font-size: 15px; font-weight: 600; }
+    .tm__what  { color: var(--text-muted); font-size: 14px; }
 
-    /* Hairline circle. Fills with the accent on hover — the only warm thing
-       on the page, and only one is ever lit at a time. */
-    .cap-row__go {
-      position: relative;
-      width: clamp(34px, 3.6vw, 48px);
-      height: clamp(34px, 3.6vw, 48px);
-      border: 1px solid var(--border-lit);
-      border-radius: 50%;
-      transition: background-color .25s ease, border-color .25s ease;
+    .tm__case {
+      margin-top: 6px;
+      color: var(--steel-500);
+      font-size: 14px;
+      text-decoration: none;
+      border-bottom: 1px solid var(--border-lit);
+      padding-bottom: 2px;
+      transition: color .18s ease, border-color .18s ease;
+    }
+    .tm__case:hover { color: var(--white); border-color: var(--steel-500); }
+
+    /* Wide enough and the quote sits beside its attribution rather than
+       above it — the same two-column move the case figures use. */
+    @media (min-width: 900px) {
+      .tm {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+        gap: var(--space-sm) clamp(32px, 6vw, 88px);
+        align-items: start;
+      }
+      .tm blockquote { max-width: none; }
+      .tm figcaption { margin-top: 6px; padding-left: 0; }
     }
 
-    .cap-row__go::before,
-    .cap-row__go::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      background: var(--steel-300);
-      transform: translate(-50%, -50%);
-      transition: background-color .25s ease;
+    .tm-end {
+      padding: var(--space-lg) 0;
+      border-top: 1px solid var(--border);
     }
+    .tm-end h2 { max-width: 20ch; }
+    .tm-end .lead { max-width: 54ch; margin-top: 18px; }
+    .tm-end .cta-row { margin-top: 32px; }
 
-    .cap-row__go::before { width: 12px; height: 1px; }
-    .cap-row__go::after  { width: 1px;  height: 12px; }
-
-    .cap-row:hover .cap-row__go { background: var(--accent); border-color: var(--accent); }
-    .cap-row:hover .cap-row__go::before,
-    .cap-row:hover .cap-row__go::after { background: var(--ink); }
-
-    @media (max-width: 620px) {
-      .cap-row { grid-template-columns: auto 1fr; }
-      .cap-row__go { display: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .tm__case { transition: none; }
     }
-
-    .cap-foot { padding: 0 0 var(--space-xl); }
   </style>
 </head>
 
@@ -300,89 +242,73 @@
 
   <main id="top">
 
-    <section class="wrap cap-hero">
-      <h1 class="tx-rim-text" data-texture="rim">Every capability. One incentive.</h1>
+    <section class="wrap tm-hero">
+      <h1 class="tx-rim-text" data-texture="rim">What clients make of the deal.</h1>
       <p class="lead">
-        Each of these runs on its own or as part of the whole. What does not
-        change from one to the next is how we are paid for it &mdash; a share
-        of the revenue or profit it produces.
+        Both of these are rev share. Neither client was paying a flat fee to
+        stay pleased with us &mdash; which is the only reason the first quote
+        exists at all.
       </p>
     </section>
 
     <div class="wrap">
-      <ul class="cap-list">
-        <li id="paid-acquisition">
-          <a class="cap-row" href="work.html">
-            <span class="cap-row__plate"><img src="Assets/web/cap-paid-acquisition.webp" width="800" height="534" loading="lazy" decoding="async" alt="A team reviewing a rising performance chart"></span>
-            <span>
-              <span class="cap-row__num">01</span>
-              <span class="cap-row__title">Paid acquisition</span>
-              <span class="cap-row__desc">Search and social managed to pipeline and profit, not impressions.</span>
-            </span>
-            <span class="cap-row__go" aria-hidden="true"></span>
-          </a>
+      <ul class="tm-list">
+
+        <!-- NSP first, deliberately. It opens by admitting the work was not
+             worth paying for at the start, which is the one thing a
+             testimonial can say that an agency cannot say about itself. -->
+        <li>
+          <figure class="tm">
+            <blockquote>
+              <p>&ldquo;The commercial side was not worth anything at the start, and I
+              knew it. If the full bill had been due every month regardless, I would
+              have pulled the plug before it ever turned.&rdquo;</p>
+            </blockquote>
+            <figcaption>
+              <span class="tm__who">Owner, NSP Plumbing</span>
+              <span class="tm__what">+50% revenue growth in two months</span>
+              <span class="tm__what">A single-digit share of tracked new revenue</span>
+              <a class="tm__case" href="case-nsp.html">Read the NSP case study</a>
+            </figcaption>
+          </figure>
         </li>
-        <li id="landing-pages">
-          <a class="cap-row" href="work.html">
-            <span class="cap-row__plate"><img src="Assets/web/cap-landing-pages.webp" width="800" height="530" loading="lazy" decoding="async" alt="A laptop beside a printed set of performance charts"></span>
-            <span>
-              <span class="cap-row__num">02</span>
-              <span class="cap-row__title">Landing pages</span>
-              <span class="cap-row__desc">Fast pages built to convert the traffic you are already paying for.</span>
-            </span>
-            <span class="cap-row__go" aria-hidden="true"></span>
-          </a>
+
+        <li>
+          <figure class="tm">
+            <blockquote>
+              <p>&ldquo;Two agencies before this one sent me a report every month.
+              These guys sent me an invoice that only went up when my revenue did.
+              That is a completely different conversation.&rdquo;</p>
+            </blockquote>
+            <figcaption>
+              <span class="tm__who">Robert Ainsley, president, Vitality Mechanical</span>
+              <span class="tm__what">+25% revenue growth in two months</span>
+              <span class="tm__what">A single-digit share of tracked new revenue</span>
+              <a class="tm__case" href="case-vitality.html">Read the Vitality case study</a>
+            </figcaption>
+          </figure>
         </li>
-        <li id="offer-positioning">
-          <a class="cap-row" href="work.html">
-            <span class="cap-row__plate"><img src="Assets/web/cap-offer-positioning.webp" width="800" height="600" loading="lazy" decoding="async" alt="A team working through strategy documents around a table"></span>
-            <span>
-              <span class="cap-row__num">03</span>
-              <span class="cap-row__title">Offer and positioning</span>
-              <span class="cap-row__desc">Often the cheapest fix. What you sell and how you frame it beats ad spend.</span>
-            </span>
-            <span class="cap-row__go" aria-hidden="true"></span>
-          </a>
-        </li>
-        <li id="tracking-attribution">
-          <a class="cap-row" href="work.html">
-            <span class="cap-row__plate"><img src="Assets/web/cap-tracking-attribution.webp" width="800" height="530" loading="lazy" decoding="async" alt="A hand marking up a printed performance report"></span>
-            <span>
-              <span class="cap-row__num">04</span>
-              <span class="cap-row__title">Tracking and attribution</span>
-              <span class="cap-row__desc">Clean measurement. Our compensation depends on it being honest.</span>
-            </span>
-            <span class="cap-row__go" aria-hidden="true"></span>
-          </a>
-        </li>
-        <li id="creative-production">
-          <a class="cap-row" href="work.html">
-            <span class="cap-row__plate"><img src="Assets/web/cap-creative-production.webp" width="800" height="450" loading="lazy" decoding="async" alt="Social platform icons on a phone screen"></span>
-            <span>
-              <span class="cap-row__num">05</span>
-              <span class="cap-row__title">Creative production</span>
-              <span class="cap-row__desc">Photo, video and ad creative built for the platform it runs on.</span>
-            </span>
-            <span class="cap-row__go" aria-hidden="true"></span>
-          </a>
-        </li>
-        <li id="lifecycle-retention">
-          <a class="cap-row" href="work.html">
-            <span class="cap-row__plate"><img src="Assets/web/cap-lifecycle-retention.webp" width="800" height="533" loading="lazy" decoding="async" alt="A mailbox with its flag raised"></span>
-            <span>
-              <span class="cap-row__num">06</span>
-              <span class="cap-row__title">Lifecycle and retention</span>
-              <span class="cap-row__desc">Email and follow-up, so acquisition spend compounds instead of leaking.</span>
-            </span>
-            <span class="cap-row__go" aria-hidden="true"></span>
-          </a>
-        </li>
+
+        <!-- THIRD SLOT: Mantis. Dana's original quote was pulled from
+             case-mantis.html on purpose - it argued against revenue as the
+             metric, and the profit-share framing it leaned on is gone. It
+             needs a real replacement from her. Do not write one for her, and
+             do not restore the old one to fill this space. -->
+
       </ul>
     </div>
 
-    <div class="wrap cap-foot">
-      <a class="cta" href="index.html#contact">See if you qualify</a>
-    </div>
+    <section class="wrap tm-end">
+      <h2>Two clients is not a wall of proof.</h2>
+      <p class="lead">
+        It is what we have said out loud so far, and we would rather show two
+        real ones than pad the page. The numbers behind both are on the case
+        studies, including how they were measured.
+      </p>
+      <div class="cta-row">
+        <a class="cta-secondary" href="work.html">See the work</a>
+      </div>
+    </section>
 
   </main>
 

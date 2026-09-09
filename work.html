@@ -58,7 +58,7 @@
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css?v=4">
 
-  <link rel="stylesheet" href="site.css?v=10">
+  <link rel="stylesheet" href="site.css?v=11">
   <link rel="stylesheet" href="nightfield.css?v=3">
 
 
@@ -211,7 +211,25 @@
       </a>
       <nav class="nav">
         <a class="nav-link" href="work.html">Our work</a>
-        <a class="nav-link" href="capabilities.html">Capabilities</a>
+
+        <!-- A <details>, not a div with a click handler: it opens, closes and
+             takes the keyboard on its own if nav.js never arrives. -->
+        <details class="nav-dd">
+          <summary class="nav-dd__toggle">Capabilities<span class="nav-dd__sign" aria-hidden="true"></span></summary>
+          <div class="nav-dd__panel">
+            <ul class="nav-dd__list">
+            <li><a href="capabilities.html#paid-acquisition"><span class="nav-dd__num">01</span>Paid acquisition</a></li>
+            <li><a href="capabilities.html#landing-pages"><span class="nav-dd__num">02</span>Landing pages</a></li>
+            <li><a href="capabilities.html#offer-positioning"><span class="nav-dd__num">03</span>Offer and positioning</a></li>
+            <li><a href="capabilities.html#tracking-attribution"><span class="nav-dd__num">04</span>Tracking and attribution</a></li>
+            <li><a href="capabilities.html#creative-production"><span class="nav-dd__num">05</span>Creative production</a></li>
+            <li><a href="capabilities.html#lifecycle-retention"><span class="nav-dd__num">06</span>Lifecycle and retention</a></li>
+            </ul>
+            <a class="nav-dd__all" href="capabilities.html">All capabilities</a>
+          </div>
+        </details>
+
+        <a class="nav-link" href="testimonials.html">Testimonials</a>
         <a class="cta-secondary tx-glare" href="index.html#contact" data-texture="rim">Talk to us</a>
       </nav>
     </div>
@@ -356,6 +374,7 @@
         <a class="foot-link" href="index.html">Home</a>
         <a class="foot-link" href="work.html">Our work</a>
         <a class="foot-link" href="capabilities.html">Capabilities</a>
+        <a class="foot-link" href="testimonials.html">Testimonials</a>
         <a class="foot-link" href="index.html#contact">Contact</a>
       </nav>
 
@@ -384,6 +403,8 @@
   </footer>
   <!-- First, and dependency-free: the intro must not wait on a CDN. -->
   <script defer src="intro.js?v=3"></script>
+  <!-- Dropdown enhancement. The menu works without it. -->
+  <script defer src="nav.js?v=1"></script>
 
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>

@@ -263,8 +263,149 @@
 
     .nav a:hover { color: var(--white); }
 
+    /* ---------- nav dropdown ----------
+       Built on <details> so the thing works with the script absent: click
+       opens it, the keyboard gets it for free, and nav.js only adds the
+       enhancements — hover-open on a fine pointer, Escape, close on an
+       outside click.
+
+       Inbound's version holds seventeen services in three named groups. We
+       have six capabilities and no groups, so this stays a single numbered
+       column. Inventing a taxonomy to fill a wider panel would be inventing
+       information. */
+
+    /* Stretching to the header's full height is what lets the panel sit at
+       top:100% and land exactly on the nav rule, instead of guessing an
+       offset from the summary's own text height. */
+    .nav-dd {
+      position: relative;
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-dd__toggle {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 15px;
+      color: var(--steel-500);
+      cursor: pointer;
+      list-style: none;          /* kills the disclosure triangle … */
+      transition: color .18s ease;
+    }
+    .nav-dd__toggle::-webkit-details-marker { display: none; }  /* … and again for WebKit */
+
+    .nav-dd__toggle:hover,
+    .nav-dd[open] .nav-dd__toggle { color: var(--white); }
+
+    /* Drawn rather than typed. A + character would sit on the text baseline
+       and jump as the font resolves; two 1px bars do not. The upright bar is
+       what leaves when the panel opens, so it reads + closed, - open. */
+    .nav-dd__sign {
+      position: relative;
+      flex: none;
+      width: 9px;
+      height: 9px;
+    }
+    .nav-dd__sign::before,
+    .nav-dd__sign::after {
+      content: "";
+      position: absolute;
+      inset: 50% 0 auto 0;
+      height: 1px;
+      background: currentColor;
+    }
+    .nav-dd__sign::after {
+      transform: rotate(90deg);
+      transition: transform .18s ease, opacity .18s ease;
+    }
+    .nav-dd[open] .nav-dd__sign::after {
+      transform: rotate(0deg);
+      opacity: 0;
+    }
+
+    /* Separation is the rim-light move, same as .panel in tokens.css: lit top
+       edge, ink bottom, no fill beyond bg-raised and no shadow. DESIGN.md
+       rules out box-shadow for depth and this is the case it would be most
+       tempting in. */
+    .nav-dd__panel {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      z-index: 50;
+      min-width: 292px;
+      padding: 8px;
+      background: var(--bg-raised);
+      border-top: 1px solid var(--border-lit);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--ink);
+    }
+
+    /* Opening answers a click, which DESIGN.md allows — it shows what
+       changed. Open only; <details> removes the panel on close, so there is
+       nothing left to animate out and a fake close would need JS holding the
+       element in the DOM for no gain. */
+    .nav-dd[open] .nav-dd__panel {
+      animation: dd-open .14s var(--ease-settle) both;
+    }
+
+    @keyframes dd-open {
+      from { opacity: 0; transform: translateY(-2px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .nav-dd__list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .nav-dd__list a {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      padding: 9px 12px;
+      font-size: 14px;
+      color: var(--steel-300);
+    }
+
+    .nav-dd__list a:hover,
+    .nav-dd__list a:focus-visible {
+      color: var(--white);
+      background: var(--charcoal);
+    }
+
+    .nav-dd__num {
+      flex: none;
+      font-size: 11px;
+      color: var(--steel-700);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .nav-dd__all {
+      display: block;
+      margin-top: 6px;
+      padding: 11px 12px;
+      border-top: 1px solid var(--border);
+      font-size: 14px;
+      color: var(--steel-100);
+    }
+
+    .nav-dd__all:hover { color: var(--white); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .nav-dd[open] .nav-dd__panel { animation: none; }
+      .nav-dd__sign::after { transition: none; }
+    }
+
+    /* Under 760px the header is logo + one action. The dropdown goes with
+       the links rather than becoming a second, differently-behaved menu —
+       a real mobile nav is its own job, not a side effect of this one. */
     @media (max-width: 760px) {
-      .nav .nav-link { display: none; }
+      .nav .nav-link,
+      .nav .nav-dd { display: none; }
     }
 
     /* ---------- buttons (base classes live in tokens.css) ---------- */
