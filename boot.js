@@ -15,9 +15,9 @@ window.addEventListener('DOMContentLoaded', function () {
      else with a data-texture (the CTAs) gets its own hover listeners. */
   if (typeof initThermal  === 'function') initThermal();
   if (typeof initFrost    === 'function') initFrost('.site-header', 24);
-  /* The capabilities tracer: one beam that walks the grid's hairlines when
-     the section arrives, then leaves the cells faintly warm. */
-  if (typeof initGridBeam === 'function') initGridBeam('.cap-grid-wrap');
+  /* The capabilities sweep: each cell's top edge lights in turn when the
+     section arrives, then lets go, leaving the cells faintly warm. */
+  if (typeof initGridSweep === 'function') initGridSweep('.cap-grid');
   /* The bore's key light comes from initTextures above (the section
      carries data-texture); initBore only drives the rifling twist. */
   if (typeof initBore     === 'function') initBore();
