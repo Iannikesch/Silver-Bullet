@@ -48,10 +48,12 @@
     :root {
       --wrap:     980px;   /* narrower than the site: this page is a column */
       --gutter:   clamp(20px, 4vw, 40px);
-      --space-xl: clamp(96px, 11vw, 160px);
-      --space-lg: clamp(64px, 8vw, 112px);
-      --space-md: clamp(44px, 5vw, 72px);
-      --space-sm: clamp(24px, 3vw, 36px);
+      /* Kept in step with site.css by hand: this page is standalone and does
+         not load it. If the shared scale moves, move these too. */
+      --space-xl: clamp(72px, 7.5vw, 108px);
+      --space-lg: clamp(56px, 6vw, 88px);
+      --space-md: clamp(40px, 4.5vw, 64px);
+      --space-sm: clamp(24px, 2.5vw, 32px);
     }
 
     * { box-sizing: border-box; }
