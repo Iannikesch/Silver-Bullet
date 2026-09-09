@@ -78,7 +78,7 @@
   <link rel="stylesheet" href="textures.css?v=5">
 
   <link rel="stylesheet" href="bore.css?v=5">
-  <link rel="stylesheet" href="site.css?v=27">
+  <link rel="stylesheet" href="site.css?v=28">
 </head>
 
 <body class="has-nightfield">
@@ -549,15 +549,15 @@
               <input id="cf-site" name="website" type="text" inputmode="url"
                      autocomplete="url" placeholder="yourbusiness.com" required>
             </p>
+            <!-- Typed, not a range picker. Buckets make an owner round
+                 themselves into someone else's brackets, and the number
+                 that matters here is the real one. Free text also lets
+                 them answer "roughly 3m" or decline, which a required
+                 <select> cannot. -->
             <p class="cform__field">
               <label for="cf-rev">Annual revenue</label>
-              <select id="cf-rev" name="revenue" required>
-                <option value="" selected disabled>Pick a range</option>
-                <option>Under $1M</option>
-                <option>$1M to $5M</option>
-                <option>$5M to $15M</option>
-                <option>Over $15M</option>
-              </select>
+              <input id="cf-rev" name="revenue" type="text"
+                     placeholder="e.g. $2.5M" required>
             </p>
           </div>
 

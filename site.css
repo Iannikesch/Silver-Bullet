@@ -806,7 +806,6 @@
     }
 
     .cform__field input,
-    .cform__field select,
     .cform__field textarea {
       font: inherit;
       font-size: 15px;
@@ -827,22 +826,7 @@
     .cform__field input::placeholder { color: var(--steel-900); }
 
     .cform__field input:hover,
-    .cform__field select:hover,
     .cform__field textarea:hover { border-top-color: var(--steel-900); }
-
-    /* The native control paints its own arrow in the OS colour, which on
-       --charcoal is either invisible or a light-mode artefact. Drawn here
-       instead, in the same steel as the label. */
-    .cform__field select {
-      appearance: none;
-      -webkit-appearance: none;
-      padding-right: 38px;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%2383979F' stroke-width='1.5' d='M1 1.5 6 6.5 11 1.5'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 14px center;
-    }
-
-    .cform__field select:invalid { color: var(--steel-900); }
 
     .cform__actions {
       display: flex;
@@ -868,7 +852,6 @@
 
     @media (prefers-reduced-motion: reduce) {
       .cform__field input,
-      .cform__field select,
       .cform__field textarea { transition: none; }
     }
 
