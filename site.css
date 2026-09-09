@@ -1327,3 +1327,78 @@
     /* The crew shot is a group portrait, so it gets a squarer frame than the
        21:9 hero - five faces in a letterbox lose their heads. */
     .case-art--wide { aspect-ratio: 3 / 2; }
+
+
+/* ---------- companies who trust us ----------
+   Structure follows inboundmedia.co: a heading, one line of copy, then a
+   flat wall of client logos. Ours is monochrome — the logos are held back
+   in grey and only come up on hover, so the wall reads as one texture
+   instead of twenty competing brand colours.
+
+   Flex rather than a hairline grid on purpose. An odd count in a grid
+   leaves an empty cell, and an empty cell in a hairline construction is a
+   slab of grey. This list is explicitly going to grow. */
+
+.clients { padding: var(--space-xl) 0; border-top: 1px solid var(--border); }
+.clients__head { margin-bottom: var(--space-md); }
+.clients__head .lead { margin-top: var(--space-sm); }
+
+.client-wall {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.client-wall > li {
+  flex: 1 1 clamp(160px, 24%, 260px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(96px, 11vw, 132px);
+  padding: 20px clamp(16px, 2.4vw, 30px);
+  background: var(--bg);
+  transition: background-color .25s ease;
+}
+
+.client-wall > li:hover { background: var(--bg-raised); }
+
+/* One treatment for every mark, whether it is a supplied file or a
+   wordmark we set ourselves: desaturated, held back, and brought up on
+   hover. Uniform height is what stops a logo wall looking like a jumble. */
+.client-wall img {
+  max-width: 100%;
+  max-height: clamp(26px, 3vw, 38px);
+  width: auto;
+  height: auto;
+  display: block;
+  filter: grayscale(1) brightness(1.7) contrast(.9);
+  opacity: .5;
+  transition: opacity .25s ease, filter .25s ease;
+}
+
+/* Taller marks that stack a symbol over type need more room or they read
+   as smaller than the wordmarks beside them. */
+.client-wall img.is-stacked { max-height: clamp(46px, 5.2vw, 66px); }
+
+.client-wall > li:hover img { opacity: .95; filter: grayscale(1) brightness(1.9) contrast(.95); }
+
+/* Set wordmark, for brands whose logo file we do not have yet. Sized and
+   weighted to sit level with the supplied logos rather than shout over
+   them. Swap the <span> for an <img> and nothing else changes. */
+.client-wall .mark {
+  color: var(--steel-100);
+  font-size: clamp(15px, 1.6vw, 19px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  opacity: .62;
+  transition: opacity .25s ease, color .25s ease;
+}
+
+.client-wall > li:hover .mark { opacity: 1; color: var(--white); }
