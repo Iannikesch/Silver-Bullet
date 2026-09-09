@@ -78,7 +78,7 @@
   <link rel="stylesheet" href="textures.css?v=5">
 
   <link rel="stylesheet" href="bore.css?v=5">
-  <link rel="stylesheet" href="site.css?v=25">
+  <link rel="stylesheet" href="site.css?v=27">
 </head>
 
 <body class="has-nightfield">
@@ -514,9 +514,67 @@
           We'll look at your numbers and tell you honestly whether a performance
           deal makes sense. If it doesn't, we'll say so.
         </p>
-        <div class="cta-row">
-          <a class="cta tx-glare" href="mailto:hello@example.com" data-texture="rim">hello@example.com</a>
-        </div>
+        <!-- ============================================================
+             Inline enquiry form. Patterned on the one at the bottom of
+             vaynermedia.com, deliberately much shorter.
+
+             Theirs asks ten required questions including job title,
+             region and annual marketing budget, which suits an enterprise
+             lead desk. This visitor is an owner-operator who is already
+             suspicious of agencies, so the form asks the five things that
+             actually decide whether a performance deal is possible and
+             nothing else. Revenue is in because it is the qualifier - the
+             target is service businesses at $15M and under - not because
+             forms usually ask.
+
+             NO ENDPOINT YET. action is an obvious placeholder for the same
+             reason the VSL booking link is: a plausible-looking wrong URL
+             fails silently on live traffic, and a form that appears to
+             send while dropping enquiries is worse than one that clearly
+             does not work. Wiring it needs a decision on where posts go,
+             which touches deploy config - so it is left for that call.
+             ============================================================ -->
+        <form class="cform" action="REPLACE_WITH_FORM_ENDPOINT" method="post">
+          <div class="cform__grid">
+            <p class="cform__field">
+              <label for="cf-name">Your name</label>
+              <input id="cf-name" name="name" type="text" autocomplete="name" required>
+            </p>
+            <p class="cform__field">
+              <label for="cf-email">Email</label>
+              <input id="cf-email" name="email" type="email" autocomplete="email" required>
+            </p>
+            <p class="cform__field">
+              <label for="cf-site">Business website</label>
+              <input id="cf-site" name="website" type="text" inputmode="url"
+                     autocomplete="url" placeholder="yourbusiness.com" required>
+            </p>
+            <p class="cform__field">
+              <label for="cf-rev">Annual revenue</label>
+              <select id="cf-rev" name="revenue" required>
+                <option value="" selected disabled>Pick a range</option>
+                <option>Under $1M</option>
+                <option>$1M to $5M</option>
+                <option>$5M to $15M</option>
+                <option>Over $15M</option>
+              </select>
+            </p>
+          </div>
+
+          <p class="cform__field">
+            <label for="cf-goal">What are you trying to grow?</label>
+            <textarea id="cf-goal" name="goal" rows="4" required></textarea>
+          </p>
+
+          <div class="cform__actions">
+            <button class="cta" type="submit">Send it</button>
+            <span class="cform__note">
+              We read every one. If a performance deal doesn't make sense for you,
+              we'll tell you that instead of pitching. Or just email
+              <a href="mailto:hello@example.com">hello@example.com</a>.
+            </span>
+          </div>
+        </form>
       </div>
     </section>
 
