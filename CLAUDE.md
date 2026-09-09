@@ -32,9 +32,9 @@ framework, say so and ask before doing it.
 
 Movement is a priority for this site, but it is rationed. What moves: the bullet
 intro, the reactive chrome on two elements, three marquee bands — the hook
-banner, the creative conveyor and the logo band — one scroll-triggered
-reveal on the client wall, and the testimonial band, which advances itself
-on a 7s dwell. Nothing else does.
+banner, the creative conveyor and the logo band — two scroll-triggered
+reveals (the client wall, and the platform band under "Proficient in"), and
+the testimonial band, which advances itself on a 7s dwell. Nothing else does.
 
 The testimonial band is the fourth ambient mover, which DESIGN.md said would
 force a re-examination of the whole ambient rule. That re-examination is
@@ -42,11 +42,17 @@ written up under "The fourth mover" — it is allowed because it yields to
 hover and focus, holds off screen, and stops permanently the moment the
 visitor picks a quote. There is no fifth.
 
-The client wall reveal is the "one orchestrated moment" DESIGN.md allows, and it
-is now spent: heading drops in from above, logos rise from below, once, on
-scroll. It is deliberately not a pattern — do not add a second one without
-re-opening the argument. Recorded in DESIGN.md under "The one orchestrated
-moment".
+There are two scroll reveals, and they sit on consecutive sections. The client
+wall drops its heading in and rises its logos; the platform band slides its head
+down and then converges three pairs of marks from opposite viewport edges,
+Meta/Google, then YouTube/TikTok, then LinkedIn/Shopify. Both are once-only, both
+set their start state from JS so a no-JS or reduced-motion load is simply
+visible, and both are in `motion.js` (`initClientReveal`, `initPlatformReveal`).
+
+The ceiling was one, and the second was added deliberately. The argument is
+re-opened and recorded in DESIGN.md under "The orchestrated moments" — including
+the standing recommendation: if the page reads busy, drop the client wall reveal
+rather than adding anything. Do not add a third.
 
 ### What's loaded
 

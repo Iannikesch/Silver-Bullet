@@ -114,8 +114,9 @@ display and body is the point.
 - Tracked-out all-caps eyebrow labels above headings
 - Identical rounded cards with one border-radius applied to everything
 - An arrow appended to link or button text
-- Fade-and-slide-up entrance animations on each section — the client wall is
-  the single exception, and it is spent. See "The one orchestrated moment" below.
+- Fade-and-slide-up entrance animations on each section — there are now TWO
+  scroll reveals, and they are adjacent. See "The orchestrated moments" below,
+  which records the cost rather than pretending the ceiling held.
 - Monospace for small labels
 - Meta strings joined with middle dots
 
@@ -131,10 +132,35 @@ does — so it is in scope. Its scroll-scrubbed half is bound to scroll position
 rather than to a clock: it is still when you are, and it reverses when you go
 back up.
 
-### The one orchestrated moment: the client wall
+### The orchestrated moments: the client wall, and the platform band
 
-"One orchestrated moment, if any" is spent on the `.clients` section, and this
-is the record of spending it. Scrolling into it plays a two-beat reveal once:
+This section used to say there was one, that it was spent on the client wall,
+and that a second should not be added without re-opening the argument. A second
+was added. This is the re-opened argument, written down honestly rather than
+edited to look consistent.
+
+**What is there now.** Two scroll reveals, on `.clients` and on `.press`, in
+that order — and they are consecutive sections, so a visitor scrolling the home
+page gets one immediately after the other. That adjacency is the actual cost.
+Either reveal alone reads as an accent; back to back they start to read as "this
+site animates its sections", which is the template look the "do not" list above
+exists to prevent.
+
+**Why it was allowed anyway.** The platform band's choreography is specific
+rather than generic: three pairs converge from opposite viewport edges to meet
+at their rows, which is a statement about the marks meeting in the middle, not a
+fade-and-rise applied to whatever happens to be there. It was asked for
+deliberately, with the beats specified.
+
+**The standing recommendation.** If the page ever reads as too busy, the fix is
+to drop `initClientReveal()` and let the platform band carry the single moment —
+it is the more distinctive of the two, and the client wall survives fine as a
+static wall. Do not add a third. There is no version of this document that
+makes a third defensible.
+
+**The original entry, kept for the reasoning:** "One orchestrated moment, if
+any" was spent on the `.clients` section, and this is the record of spending
+it. Scrolling into it plays a two-beat reveal once:
 the heading drops in from above, then the logos rise in from below, staggered.
 Built in `motion.js` as `initClientReveal()`.
 
