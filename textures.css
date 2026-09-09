@@ -497,14 +497,35 @@
 .tx-frost {
   --tx-frost-blur: 7px;
   --tx-frost-fill: 58%;        /* how much of --bg sits in the pane */
+}
 
+/* The pane is a pseudo-element, and that is load-bearing - do NOT move the
+   backdrop-filter back onto .tx-frost itself.
+
+   An element carrying backdrop-filter becomes a BACKDROP ROOT: any nested
+   backdrop-filter can then only sample what is painted inside that root,
+   which is nothing. The bar contains the Capabilities dropdown, which is
+   frosted in its own right, so with the filter on the bar the panel's blur
+   silently became a no-op the moment the bar lifted - frosted at the top of
+   the page, plain glass everywhere else. Same content, same panel CSS; the
+   only difference was .is-lifted.
+
+   Painting the pane on ::before keeps the filter off the bar, so the bar is
+   no longer a backdrop root and the panel samples the page normally. The
+   pseudo has no descendants, so it roots nothing that matters. */
+.tx-frost::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;                 /* behind the nav's own content */
+  pointer-events: none;
   background-color: transparent;
   transition:
     background-color var(--dur-base) var(--ease-metal),
     backdrop-filter  var(--dur-base) var(--ease-metal);
 }
 
-.tx-frost.is-lifted {
+.tx-frost.is-lifted::before {
   background-color: color-mix(in srgb, var(--bg) var(--tx-frost-fill), transparent);
   -webkit-backdrop-filter: blur(var(--tx-frost-blur)) saturate(108%);
   backdrop-filter: blur(var(--tx-frost-blur)) saturate(108%);
@@ -529,7 +550,7 @@
 /* Touch devices pay the most for a backdrop blur and benefit least, so they
    get a plainer, more opaque pane instead of a blurred one. */
 @media (hover: none), (prefers-reduced-transparency: reduce) {
-  .tx-frost.is-lifted {
+  .tx-frost.is-lifted::before {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
     background-color: color-mix(in srgb, var(--bg) 94%, transparent);

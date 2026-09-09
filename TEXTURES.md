@@ -344,6 +344,15 @@ it blurred rather than hidden.
   expensive things a browser composites, and worst over playing video.
 - Touch and `prefers-reduced-transparency` get an opaque pane and no blur.
 - The bar must have no background of its own, or it wins over the pane.
+- **The pane lives on `::before`, and that is load-bearing.** Do not move the
+  `backdrop-filter` back onto `.tx-frost` itself. An element carrying
+  `backdrop-filter` becomes a *backdrop root*, and any nested `backdrop-filter`
+  can then only sample what is painted inside that root — nothing. The bar
+  contains the Capabilities dropdown, which is frosted in its own right, so
+  with the filter on the bar the panel's blur silently became a no-op the
+  moment the bar lifted: frosted at the top of the page, plain glass every
+  other scroll position. Keeping the filter on the pseudo leaves the bar a
+  normal element, and nested panes work at any scroll position.
 
 ## Halos
 
