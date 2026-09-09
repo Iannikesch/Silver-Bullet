@@ -58,7 +58,7 @@
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css?v=4">
 
-  <link rel="stylesheet" href="site.css?v=17">
+  <link rel="stylesheet" href="site.css?v=18">
   <link rel="stylesheet" href="nightfield.css?v=4">
 
 
@@ -77,9 +77,10 @@
       list-style: none;
     }
 
+    /* Top and bottom both, so this is half the gap between two quotes. */
     .tm {
       margin: 0;
-      padding: var(--space-md) 0;
+      padding: var(--space-sm) 0;
       border-top: 1px solid var(--border);
     }
 
@@ -125,12 +126,22 @@
     .tm__case:hover { color: var(--white); border-color: var(--steel-500); }
 
     /* Wide enough and the quote sits beside its attribution rather than
-       above it — the same two-column move the case figures use. */
+       above it — the same two-column move the case figures use.
+
+       The attribution column is sized to its CONTENT, not to a share of the
+       page. At 1.35fr / 1fr it took 42% of a 1264px column to hold a name
+       and three short meta lines, which left roughly 460px of empty column
+       running the full height of every quote — and the taller the quote,
+       the bigger the void. Worse, it squeezed the quote into ~460px, so the
+       long ones ran to sixteen lines and made the void taller still.
+
+       Capping the right column near its natural width fixes both ends at
+       once: the quote gets the remaining ~870px and loses half its lines. */
     @media (min-width: 900px) {
       .tm {
         display: grid;
-        grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-        gap: var(--space-sm) clamp(32px, 6vw, 88px);
+        grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+        gap: var(--space-sm) clamp(32px, 5vw, 72px);
         align-items: start;
       }
       .tm blockquote { max-width: none; }
@@ -452,7 +463,7 @@
   <script defer src="motion.js?v=11"></script>
   <script defer src="textures.js?v=10"></script>
 
-  <script defer src="boot.js?v=1"></script>
+  <script defer src="boot.js?v=4"></script>
 
 </body>
 </html>

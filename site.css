@@ -95,8 +95,18 @@
 
     /* No CSS smooth scrolling: Lenis owns scrolling when motion is on, and
        the two fight if both are active. Under reduced motion Lenis never
-       initialises and anchors jump instantly, which is correct. */
-    html { scroll-behavior: auto; }
+       initialises and anchors jump instantly, which is correct.
+
+       scroll-padding-top is what keeps the sticky header off the top of a
+       section the browser jumps to on its own: landing on a URL that already
+       carries a hash, a reload while deep-linked, reduced motion, or JS off.
+       Lenis handles in-page CLICKS itself with its own -72 offset in
+       motion.js, so this covers only the cases Lenis never sees - which is
+       exactly the set that was landing section headings under the nav. */
+    html {
+      scroll-behavior: auto;
+      scroll-padding-top: var(--nav-h);
+    }
 
     /* Lenis base styles (required by lenis 1.x). */
     html.lenis, html.lenis body { height: auto; }
@@ -1691,7 +1701,12 @@
    ========================================================== */
 
 .testimonials {
-  padding: var(--space-xl) 0;
+  /* --space-lg, not the --space-xl every other section gets. This band is a
+     single centred block rather than a heading plus content, so the same
+     padding reads as far more air around far less structure - 109px top and
+     bottom against one paragraph. --space-lg also lands on the reference's
+     own 90px. */
+  padding: var(--space-lg) 0;
   /* Panel doctrine from tokens.css, run full-bleed: lit top edge,
      bottom edge falls away into the page. No shadow. */
   background: var(--bg-raised);
@@ -1708,9 +1723,11 @@
 /* Stacked fallback: quotes need air between them, and a hairline so
    two centred paragraphs do not read as one run-on. The slider state
    below strips both, because then only one is ever on screen. */
+/* Applied twice over - margin and padding - so this is the gap between two
+   stacked quotes, not half of it. At --space-lg that was 176px. */
 .tq-item + .tq-item {
-  margin-top: var(--space-lg);
-  padding-top: var(--space-lg);
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
   border-top: 1px solid var(--border);
 }
 
@@ -1738,12 +1755,16 @@
   text-wrap: pretty;
 }
 
+/* The attribution belongs to the quote above it, so it sits close enough to
+   read as attached to it. At --space-md the 73px mark floated alone in the
+   middle of the band with 64px of nothing on either side, which is what made
+   the section feel empty rather than composed. */
 .tq-by {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  margin-top: var(--space-md);
+  margin-top: var(--space-sm);
 }
 
 /* The reference's round author photo. Holding initials until real
@@ -1755,7 +1776,7 @@
   justify-content: center;
   width: 73px;
   height: 73px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   border-radius: 50%;
   background: var(--charcoal);
   /* Rim light, not glow: a lit top edge tight to the form. */
@@ -1831,7 +1852,7 @@
   align-items: center;
   justify-content: center;
   gap: 16px;          /* the reference's 5px dot on 8px margins */
-  margin: var(--space-md) 0 0;
+  margin: var(--space-sm) 0 0;
   padding: 0;
   list-style: none;
 }
