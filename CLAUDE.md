@@ -55,7 +55,6 @@ never `@latest`, all `defer`red so they never block first paint.
 
 - **GSAP 3.13.0** — core, from cdnjs
 - **ScrollTrigger 3.13.0** — from cdnjs
-- **SplitText 3.13.0** — from cdnjs. Loaded and available, currently **unused**.
 - **Lenis 1.1.20** — smooth scroll, from jsDelivr. Not on cdnjs; the
   `dist/lenis.min.js` build sets `globalThis.Lenis`, so it works from a plain
   script tag.

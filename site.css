@@ -1524,9 +1524,20 @@
     body.is-intro .nav > *:nth-child(3) { animation-delay: calc(var(--t-nav) + .12s); }
     body.is-intro .nav > *:nth-child(4) { animation-delay: calc(var(--t-nav) + .18s); }
 
+    /* `backwards`, not `both`. The two are visually identical here, because
+       page-in's `to` state (opacity 1) is already the base state — backwards
+       still holds opacity 0 through the --t-page delay, which is the only
+       part of the fill that is doing any work.
+
+       `both` costs 1.6s of LCP. A forwards-filling animation never leaves its
+       active phase, so as far as Chrome is concerned <main> has an opacity
+       animation running on it right up until .is-intro comes off at 2400ms,
+       and it will not report a largest-contentful-paint underneath one.
+       LCP landed at ~2470ms — the moment the class was removed — rather than
+       when the text actually became legible at ~900ms. */
     body.is-intro main,
     body.is-intro .site-footer {
-      animation: page-in .55s var(--ease-settle) var(--t-page) both;
+      animation: page-in .55s var(--ease-settle) var(--t-page) backwards;
     }
 
     @keyframes rule-draw {

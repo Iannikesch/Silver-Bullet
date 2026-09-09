@@ -3,8 +3,8 @@
 
    Deliberately free of dependencies, and loaded BEFORE the motion
    libraries so it never waits on a CDN. As a deferred script placed
-   after them it would only start once GSAP, ScrollTrigger, SplitText
-   and Lenis had all downloaded — the page would sit in its finished
+   after them it would only start once GSAP, ScrollTrigger and Lenis
+   had all downloaded — the page would sit in its finished
    state and then suddenly play the intro.
 
    The sequence itself is CSS, orchestrated by .is-intro on <body>.

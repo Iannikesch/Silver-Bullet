@@ -1,6 +1,6 @@
 /* ==========================================================================
    Silver Bullet — motion
-   Loaded deferred, after GSAP / ScrollTrigger / SplitText / Lenis.
+   Loaded deferred, after GSAP / ScrollTrigger / Lenis.
 
    Scope, deliberately narrow:
      - Lenis smooth scroll
@@ -10,7 +10,6 @@
    The bullet intro sequence is CSS-only and lives in index.html. It does
    not touch GSAP and is not orchestrated from here.
 
-   SplitText is loaded but intentionally unused.
    ========================================================================== */
 
 (function () {
