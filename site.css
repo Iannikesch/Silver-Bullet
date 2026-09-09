@@ -17,8 +17,12 @@
     :root {
       /* Layout */
       --nav-h:      72px;
-      --wrap:       1180px;
-      --gutter:     clamp(20px, 4vw, 40px);
+      /* Widened from 1180px. On a 1440px screen the old cap left 130px of
+         dead margin each side on top of the gutter, which read as a narrow
+         column floating on a wide dark page. The reference site fills its
+         width and lets full-bleed bands run edge to edge. */
+      --wrap:       1360px;
+      --gutter:     clamp(20px, 4vw, 48px);
 
       /* Vertical rhythm ladder */
       /* Tightened against inboundmedia.co, measured rather than eyeballed.
