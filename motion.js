@@ -482,7 +482,61 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * 4. Boot
+   * 4. The client wall arrives
+   *
+   * A two-beat reveal on ONE section, fired once when you scroll into it:
+   * the heading drops in from above, the logos rise in from below. The
+   * opposed directions are the point — the heading and the wall read as
+   * two separate things meeting in the middle, rather than one block
+   * sliding.
+   *
+   * DESIGN.md's "do not" list rules out fade-and-slide entrances *on each
+   * section*, and that still stands: this is the one orchestrated moment
+   * the same document allows, and it is spent here. It is not a pattern to
+   * reach for on the next section — see the note recorded in DESIGN.md.
+   *
+   * Nothing is hidden in CSS. The initial state is set from here, so with
+   * JS off, a blocked CDN, or reduced motion (all of which return before
+   * this runs) the wall is simply visible — the stylesheet stays the
+   * finished state, same doctrine as the marquees and the intro.
+   * ------------------------------------------------------------------ */
+
+  function initClientReveal() {
+    var section = document.querySelector('.clients');
+    if (!section) return;
+
+    var head  = section.querySelector('.clients__head');
+    var items = section.querySelectorAll('.client-wall li');
+    if (!head || !items.length) return;
+
+    /* Set from JS, never from the stylesheet — see the note above. */
+    gsap.set(head,  { opacity: 0, y: -26 });
+    gsap.set(items, { opacity: 0, y: 30 });
+
+    /* power3.out is the JS twin of --ease-settle, cubic-bezier(.25,1,.5,1):
+       fast out, long settle. Weight on the way in, no overshoot. */
+    var tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+
+    tl.to(head,  { opacity: 1, y: 0, duration: 0.7 })
+      /* Overlapped rather than sequential. A hard stop between the two beats
+         reads as two animations; this reads as one move handed off. */
+      .to(items, { opacity: 1, y: 0, duration: 0.6, stagger: 0.08 }, '-=0.28');
+
+    var st = ScrollTrigger.create({
+      trigger: section,
+      start: 'top 78%',
+      once: true,
+      onEnter: function () { tl.play(); }
+    });
+
+    /* Reload with the scroll position restored below this section and the
+       crossing has already happened, so onEnter never fires and the wall
+       would stay invisible for good. Land it finished instead. */
+    if (st.scroll() > st.start) tl.progress(1);
+  }
+
+  /* ------------------------------------------------------------------ *
+   * 5. Boot
    * ------------------------------------------------------------------ */
 
   if (REDUCED) {
@@ -503,6 +557,7 @@
   initLenis();
   initChrome();
   initMarquees();
+  initClientReveal();
   document.documentElement.setAttribute('data-motion', 'full');
 
   /* Exposed for verification only. */

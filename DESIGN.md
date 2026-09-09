@@ -114,7 +114,8 @@ display and body is the point.
 - Tracked-out all-caps eyebrow labels above headings
 - Identical rounded cards with one border-radius applied to everything
 - An arrow appended to link or button text
-- Fade-and-slide-up entrance animations on each section
+- Fade-and-slide-up entrance animations on each section — the client wall is
+  the single exception, and it is spent. See "The one orchestrated moment" below.
 - Monospace for small labels
 - Meta strings joined with middle dots
 
@@ -129,6 +130,34 @@ the hero headline and the bullet never moves on its own — only when the visito
 does — so it is in scope. Its scroll-scrubbed half is bound to scroll position
 rather than to a clock: it is still when you are, and it reverses when you go
 back up.
+
+### The one orchestrated moment: the client wall
+
+"One orchestrated moment, if any" is spent on the `.clients` section, and this
+is the record of spending it. Scrolling into it plays a two-beat reveal once:
+the heading drops in from above, then the logos rise in from below, staggered.
+Built in `motion.js` as `initClientReveal()`.
+
+The opposed directions carry the idea — the heading and the wall read as two
+things meeting in the middle rather than one block sliding up, which is the
+generic pattern the "do not" list rules out. What keeps this on the right side
+of that line:
+
+- **Once, and only here.** `once: true`. It does not replay on the way back up,
+  and no second section gets one. A reveal on every section is the template
+  look; a reveal on exactly one is an accent. If a second is ever proposed,
+  this whole idea should be re-examined instead — the same test the fourth
+  marquee band gets.
+- **It answers scroll**, which is input, not a clock. Consistent with the
+  reactive chrome: it is still until you move.
+- **Nothing is hidden in CSS.** The start state is set from JS, so with the
+  script blocked, the CDN down, or reduced motion on, the wall is simply
+  visible. The stylesheet stays the finished state.
+- **It survives a mid-page reload.** Loading already scrolled past the section
+  lands the timeline finished rather than leaving a permanently blank wall.
+
+Precedent, not a new category: `initGridBeam()` already runs an arrival effect
+on the capabilities grid.
 
 ### The ambient exception: three bands, three speeds
 

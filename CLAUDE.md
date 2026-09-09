@@ -31,8 +31,15 @@ framework, say so and ask before doing it.
 ## Motion
 
 Movement is a priority for this site, but it is rationed. What moves: the bullet
-intro, the reactive chrome on two elements, and three marquee bands — the hook
-banner, the creative conveyor and the logo band. Nothing else does.
+intro, the reactive chrome on two elements, three marquee bands — the hook
+banner, the creative conveyor and the logo band — and one scroll-triggered
+reveal on the client wall. Nothing else does.
+
+The client wall reveal is the "one orchestrated moment" DESIGN.md allows, and it
+is now spent: heading drops in from above, logos rise from below, once, on
+scroll. It is deliberately not a pattern — do not add a second one without
+re-opening the argument. Recorded in DESIGN.md under "The one orchestrated
+moment".
 
 ### What's loaded
 
