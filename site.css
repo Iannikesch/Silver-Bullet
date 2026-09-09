@@ -1269,6 +1269,183 @@
     }
 
 
+    /* ---------- who we work with: the vertical cards ----------
+       Each card is one <a>. The whole tile is the target, so there is no
+       second click target inside it and nothing to miss on a phone.
+
+       Built on .panel's rule, not a fill: lit top edge, --border down the
+       sides, --ink along the bottom so it falls away into the page. Square
+       corners, because the only border-radius on this site is the 50% on
+       two circles and DESIGN.md rules out a single radius applied to
+       everything. */
+
+    .vgrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--space-sm);
+      margin: var(--space-md) 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    /* auto-fit does the fluid work from 300px up, but it cannot count. The
+       content column is 1264px, which fits FOUR 300px tracks, so six cards
+       land as a row of 4 and a row of 2 stretched to ~632px each. This is
+       the exact failure recorded against .cap-grid further down, which was
+       auto-fit once for the same reason and was changed back.
+
+       Capping the track count at 3 keeps auto-fit's behaviour everywhere it
+       helps and takes it away at the one width where it goes wrong. Six
+       divides by 3, 2 and 1, so no breakpoint can leave a short row. */
+    @media (min-width: 1000px) {
+      .vgrid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .vcard {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: var(--bg-raised);
+      border-top: 1px solid var(--border-lit);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--ink);
+    }
+
+    /* No hover state, and no cursor change: these cards do not go anywhere
+       yet. A tile that lights up under the pointer promises a click it
+       cannot honour, which is the same rule the footer's social icons are
+       waiting on. When the vertical pages exist, wrap each card's contents
+       in an <a> and the hover treatment comes back with it. */
+
+    /* ---- media: photo and icon share every dimension ----
+       The two treatments have to read as one system, so the box is defined
+       here once and the children differ, never the frame. */
+    .vcard__media {
+      display: block;
+      aspect-ratio: 16 / 9;
+      border-bottom: 1px solid var(--border);
+      background: var(--charcoal);
+      overflow: hidden;
+    }
+
+    .vcard__media img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* The no-photo treatment. Same box, same hairline, one centred outline
+       mark. Deliberately not a placeholder: nothing here is waiting on an
+       asset. */
+    .vcard__media--mark {
+      display: grid;
+      place-items: center;
+    }
+
+    .vcard__mark {
+      width: 84px;
+      height: 84px;
+      /* Thinner as it scales up: 2 is Tabler's weight at 24px, and holding
+         it at 84px turns a line drawing into a slab. */
+      stroke-width: 1;
+      color: var(--steel-500);
+    }
+
+    .vcard__body {
+      display: block;
+      /* The bottom padding lives here, not on the footer's margin, because
+         the footer's top margin is auto and auto collapses to 0 the moment
+         the copy fills the card - which would butt the tags into the rule. */
+      padding: var(--space-sm) 24px var(--space-sm);
+    }
+
+    .vcard__name {
+      display: block;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--steel-050);
+      margin-bottom: 10px;
+    }
+
+    /* Problem and fix are both body copy, so both sit on the text ramp.
+       The fix is the one that has to land, so it takes the brighter step. */
+    .vcard__problem {
+      display: block;
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .vcard__fix {
+      display: block;
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--steel-100);
+    }
+
+    /* ---- capability tags ----
+       Steel, not amber: warmth is spent once per viewport and the page
+       already spends it on the CTA. Sentence case, because the brief rules
+       out tracked-out all-caps labels. */
+    .vcard__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 16px;
+    }
+
+    .vtag {
+      font-size: 12px;
+      line-height: 1;
+      color: var(--steel-500);
+      border: 1px solid var(--border);
+      padding: 6px 9px;
+    }
+
+    /* ---- footer row ----
+       margin-top:auto pins it to the bottom edge, so the hairline lands on
+       the same line across a row however long the copy above it runs. */
+    /* margin-top:auto pins this to the bottom of the card. The grid already
+       stretches every card in a row to the same height, but without this the
+       footer floats up behind whichever card has the shortest copy, and the
+       hairline lands at three different heights across the row. */
+    .vcard__foot {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin: auto 24px 0;
+      padding: 14px 0 calc(var(--space-sm) - 6px);
+      border-top: 1px solid var(--border);
+    }
+
+    .vcard__scope {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 380px) {
+      .vcard__body,
+      .vcard__foot { padding-left: 0; padding-right: 0; }
+      .vcard__body { padding: var(--space-sm) 18px 0; }
+      .vcard__foot { margin-left: 18px; margin-right: 18px; }
+    }
+
+    /* The line under the grid. Not a card and deliberately not styled as
+       one: it widens the frame rather than adding a seventh vertical. */
+    .vgrid-note {
+      margin: var(--space-md) 0 0;
+      padding-top: var(--space-sm);
+      border-top: 1px solid var(--border);
+      font-size: clamp(15px, 1.2vw, 17px);
+      line-height: 1.6;
+      color: var(--steel-100);
+      max-width: 72ch;
+    }
+    .vgrid-note a { color: var(--white); }
+
     /* ---------- who we work with ----------
        The verticals grid IS .cap-grid — same hairline lattice, same rim-lit
        hover, same 3/2/1 ladder, same arrival sweep, because initGridSweep()
