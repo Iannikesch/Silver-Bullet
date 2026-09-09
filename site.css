@@ -407,9 +407,117 @@
     /* Under 760px the header is logo + one action. The dropdown goes with
        the links rather than becoming a second, differently-behaved menu —
        a real mobile nav is its own job, not a side effect of this one. */
+    /* ---------- the hamburger ----------
+       Two bars, not three: at this weight a third reads as clutter, and the
+       pair rotate into a cross without needing one of them to vanish. */
+
+    .nav-burger {
+      display: none;              /* desktop has room for the real nav */
+      appearance: none;
+      background: none;
+      border: 0;
+      padding: 10px;
+      margin-right: -10px;        /* optical: the bars sit on the gutter */
+      cursor: pointer;
+      color: var(--steel-100);
+    }
+    .nav-burger:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+    .nav-burger__box {
+      display: block;
+      position: relative;
+      width: 22px;
+      height: 14px;
+    }
+    .nav-burger__box span {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 1px;               /* a hairline, like every other edge here */
+      background: currentColor;
+      transition: transform var(--dur-base) var(--ease-metal),
+                  opacity   var(--dur-quick) linear;
+    }
+    .nav-burger__box span:first-child { top: 0; }
+    .nav-burger__box span:last-child  { bottom: 0; }
+
+    /* open: the two bars meet in the middle and cross */
+    [aria-expanded="true"] .nav-burger__box span:first-child {
+      transform: translateY(6.5px) rotate(45deg);
+    }
+    [aria-expanded="true"] .nav-burger__box span:last-child {
+      transform: translateY(-6.5px) rotate(-45deg);
+    }
+
     @media (max-width: 760px) {
-      .nav .nav-link,
-      .nav .nav-dd { display: none; }
+      .nav-burger { display: block; }
+
+      /* The panel IS the nav element - the same links, restyled. Nothing is
+         duplicated into a second menu, so the two can never drift apart. */
+      .nav {
+        position: fixed;
+        top: var(--nav-h);
+        left: 0;
+        right: 0;
+        z-index: 39;              /* under the header, over the page */
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: var(--space-sm) var(--gutter) var(--space-md);
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        max-height: calc(100dvh - var(--nav-h));
+        overflow-y: auto;
+
+        /* Closed. visibility keeps it out of the tab order while still
+           allowing the slide to animate. */
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(-8px);
+        transition: opacity var(--dur-base) var(--ease-metal),
+                    transform var(--dur-base) var(--ease-metal),
+                    visibility 0s linear var(--dur-base);
+      }
+
+      body.nav-open .nav {
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0s;
+      }
+
+      /* Links become rows with a lit top edge, matching the panels. */
+      .nav > a,
+      .nav .nav-dd {
+        border-top: 1px solid var(--border);
+      }
+      .nav > a { padding: 16px 0; font-size: 17px; }
+      .nav .nav-link { color: var(--steel-050); }
+
+      /* The capabilities dropdown stays a <details> here - tapping it opens
+         the list in place rather than flying out a panel with nowhere to go. */
+      .nav-dd { width: 100%; }
+      .nav-dd__toggle { padding: 16px 0; font-size: 17px; }
+      .nav-dd__panel {
+        position: static;
+        width: auto;
+        padding: 0 0 8px;
+        background: none;
+        border: 0;
+      }
+
+      /* The one amber element stays the CTA, and it goes full width. */
+      .nav .cta-secondary {
+        margin-top: var(--space-sm);
+        text-align: center;
+        padding: 15px 22px;
+      }
+
+      body.nav-open { overflow: hidden; }
+    }
+
+    @media (max-width: 760px) and (prefers-reduced-motion: reduce) {
+      .nav { transition: none; }
     }
 
     /* ---------- buttons (base classes live in tokens.css) ---------- */

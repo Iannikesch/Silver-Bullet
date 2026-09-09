@@ -71,3 +71,57 @@
     }
   });
 })();
+
+
+/* ==========================================================
+   Silver Bullet — mobile nav
+
+   The burger toggles one class on <body>; CSS owns everything
+   visual. Kept in this file rather than boot.js for the same
+   reason the dropdown is: it does not need GSAP, so it should
+   not wait on it.
+
+   Without JS the panel stays closed and the links are
+   unreachable below 760px — which is exactly where the site
+   already was, so this is not a regression. It is the reason
+   the CAPABILITIES dropdown is a <details> and this is not:
+   that one had a no-JS story worth keeping, this one is the
+   no-JS story being improved.
+   ========================================================== */
+
+(function () {
+  'use strict';
+
+  var burger = document.querySelector('.nav-burger');
+  var nav    = document.getElementById('site-nav');
+  if (!burger || !nav) return;
+
+  var MOBILE = window.matchMedia('(max-width: 760px)');
+
+  function setOpen(open) {
+    document.body.classList.toggle('nav-open', open);
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  function isOpen() { return document.body.classList.contains('nav-open'); }
+
+  burger.addEventListener('click', function () { setOpen(!isOpen()); });
+
+  /* Any navigation closes it. Includes the in-page anchors, which would
+     otherwise scroll behind a panel that is still covering the page. */
+  nav.addEventListener('click', function (e) {
+    if (e.target.closest('a')) setOpen(false);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && isOpen()) {
+      setOpen(false);
+      burger.focus();          /* hand focus back rather than dropping it */
+    }
+  });
+
+  /* Rotating a phone or dragging a window past the breakpoint must not
+     leave body.nav-open stuck on a layout that has no burger to undo it. */
+  function onBreakpoint(e) { if (!e.matches) setOpen(false); }
+  if (MOBILE.addEventListener) MOBILE.addEventListener('change', onBreakpoint);
+  else if (MOBILE.addListener) MOBILE.addListener(onBreakpoint);
+})();

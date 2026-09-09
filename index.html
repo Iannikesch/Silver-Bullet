@@ -78,7 +78,7 @@
   <link rel="stylesheet" href="textures.css?v=4">
 
   <link rel="stylesheet" href="bore.css?v=5">
-  <link rel="stylesheet" href="site.css?v=12">
+  <link rel="stylesheet" href="site.css?v=13">
 </head>
 
 <body class="has-nightfield">
@@ -102,7 +102,11 @@
                width="1708" height="140" alt="">
         </span>
       </a>
-      <nav class="nav">
+      <button class="nav-burger" type="button"
+                aria-label="Menu" aria-expanded="false" aria-controls="site-nav">
+          <span class="nav-burger__box" aria-hidden="true"><span></span><span></span></span>
+        </button>
+        <nav class="nav" id="site-nav">
         <a class="nav-link" href="work.html">Our work</a>
 
         <!-- A <details>, not a div with a click handler: it opens, closes and
@@ -550,7 +554,7 @@
   <!-- First, and dependency-free: the intro must not wait on a CDN. -->
   <script defer src="intro.js?v=3"></script>
   <!-- Dropdown enhancement. The menu works without it. -->
-  <script defer src="nav.js?v=1"></script>
+  <script defer src="nav.js?v=2"></script>
 
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
