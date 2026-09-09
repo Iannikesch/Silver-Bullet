@@ -21,10 +21,19 @@
       --gutter:     clamp(20px, 4vw, 40px);
 
       /* Vertical rhythm ladder */
-      --space-xl:   clamp(120px, 14vw, 200px);
-      --space-lg:   clamp(88px, 10vw, 144px);
-      --space-md:   clamp(56px, 6vw, 88px);
-      --space-sm:   clamp(28px, 3vw, 40px);
+      /* Tightened against inboundmedia.co, measured rather than eyeballed.
+         Their largest vertical gap is ~215px; ours were 431px and 366px,
+         because --space-xl is applied as BOTH top and bottom padding on
+         every section, so the old 200px ceiling meant 400px between two
+         sections. Halving the ceiling puts the biggest gap in their range.
+         They can also stack tighter than we can because they alternate
+         background colours between sections - the colour change does the
+         separating. This site is dark-only, so the hairline section borders
+         and the space have to do that work together. */
+      --space-xl:   clamp(72px, 7.5vw, 108px);
+      --space-lg:   clamp(56px, 6vw, 88px);
+      --space-md:   clamp(40px, 4.5vw, 64px);
+      --space-sm:   clamp(24px, 2.5vw, 32px);
 
       /* Intro timeline — every value the animation depends on */
       --t-fire:     0.10s;  /* muzzle blip */
