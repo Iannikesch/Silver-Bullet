@@ -784,9 +784,26 @@
     /* Full-bleed by design: it should read as a band across the page, not
        as a row sitting inside the content column. Separation is the usual
        rim-light move — lit top edge, ink bottom, no fill, no shadow. */
+    /* A real band, not a tint. Modelled on vaynermedia.com's footer social
+       strip, which works because it is a hard full-bleed colour change that
+       separates the page from the footer in one move. Ours was --bg-raised
+       on --bg: a 12-point step nobody sees, so the strip read as part of the
+       footer rather than as the seam above it.
+
+       --petrol, not the obvious --amber. DESIGN.md is explicit that amber
+       marks the primary action and nothing else, one per viewport, and the
+       footer's own CTA is already the action here - a 50px amber bar beside
+       it would cancel it. --paper was the other candidate and is deliberately
+       not used either: it is the only light surface on the site and the
+       full-colour platform logos are the reason it exists. --petrol is the
+       token for "cool depth behind steel elements", it is cold like the rest
+       of the page, and it costs nothing from the warm budget.
+
+       Rim light holds: lit top edge, ink bottom, mixed in-family so the
+       highlight belongs to the petrol rather than sitting on it as grey. */
     .foot-social {
-      background: var(--bg-raised);
-      border-top: 1px solid var(--border-lit);
+      background: var(--petrol);
+      border-top: 1px solid color-mix(in srgb, var(--petrol) 58%, var(--steel-100));
       border-bottom: 1px solid var(--ink);
     }
 
@@ -801,10 +818,12 @@
       gap: clamp(18px, 5vw, 56px);
     }
 
+    /* --steel-050 rather than --steel-500: on petrol the muted value sank
+       into the band and the icons stopped reading as marks. */
     .foot-social__link {
       display: block;
       padding: 6px;   /* touch target only — reads as no padding at all */
-      color: var(--steel-500);
+      color: var(--steel-050);
       transition: color .18s ease;
     }
 
@@ -1689,19 +1708,21 @@
 }
 
 /* ==========================================================
-   As featured in
+   Proficient in
    Structure mapped from inboundmedia.co's press band: centred
    head, one line under it, then a 3-up grid of marks wrapping
-   to two rows.
+   to two rows. The band now carries ad platforms rather than
+   publications; the class names still say press (see the note
+   in index.html).
 
    This is the only light band on the site, and the logos are
-   the reason. They are full-colour brand marks - TikTok's
-   cyan/magenta, Shopify's green, Yahoo's purple - which cannot
-   be keyed to one value the way the client wall's are without
-   destroying the thing that identifies them. On --bg each one
-   would need its own light box, which is six boxes and no
-   band. One light surface for the whole section is the cheaper
-   answer, and it is what the reference does.
+   the reason. They are full-colour brand marks - Meta's blue,
+   Google's four, YouTube red, TikTok's cyan/magenta - which
+   cannot be keyed to one value the way the client wall's are
+   without destroying the thing that identifies them. On --bg
+   each one would need its own light box, which is six boxes
+   and no band. One light surface for the whole section is the
+   cheaper answer, and it is what the reference does.
 
    The colour change is also what separates this band from the
    sections either side, so it carries no hairline border - the
@@ -1712,6 +1733,10 @@
 .press {
   padding: var(--space-xl, 96px) 0;
   background: var(--paper, #F2F0EA);
+  /* The marks fly in from off the viewport edges. Clipping here rather than
+     leaning on body{overflow-x:hidden} keeps the travel contained to this
+     band, so nothing can widen the document mid-flight. */
+  overflow: hidden;
 }
 
 .press__head {
@@ -1732,39 +1757,55 @@
   color: var(--steel-900, #50636E);
 }
 
-/* Explicit columns, same ladder as .grid and .cap-grid. Six marks divide
-   cleanly by 3, 2 and 1, so no breakpoint leaves a row with a hole. */
+/* TWO columns, not three, and the reveal is the reason. The marks arrive in
+   pairs that converge from opposite edges, so each pair has to be a row - on
+   a 3-up grid the pairs straddle rows and the two halves cross the full width
+   past each other, which reads as a mistake rather than as a meeting.
+
+   Six marks still divide cleanly by 2 and 1, so no breakpoint leaves a hole.
+   Row gap is wider than it was: three rows of evenly-capped marks need more
+   air between them than two rows of mixed heights did. */
 .press-wall {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   align-items: center;
   justify-items: center;
-  gap: clamp(22px, 2.6vw, 36px) clamp(38px, 6vw, 86px);
-  margin: 0;
+  gap: clamp(30px, 3.6vw, 52px) clamp(30px, 4vw, 64px);
+  /* Held well inside .wrap. On the full 1360px column the two marks in a row
+     finish about 690px apart with nothing between them, which reads as two
+     separate lists rather than as a pair that just met. */
+  max-width: 940px;
+  margin: 0 auto;
   padding: 0;
   list-style: none;
 }
 
-/* Sized by width, not height. The six crops are all within 276-322px of
-   each other, so one width cap reproduces the reference's even rhythm,
-   and capping BELOW the natural size means every mark is downscaled and
-   none is ever soft. width/height on the <img> hold the aspect ratio so
-   the band does not jump while the images load.
+/* Sized by HEIGHT, with width only as an upper bound. This used to cap
+   width alone, which worked while all six crops sat within a narrow band
+   of aspect ratios. The current marks do not: Meta is 4.96:1 and Google
+   is 2.96:1, so one width cap renders Google about 68% taller than Meta
+   and the row stops reading as a set. Capping the height is how a logo
+   wall is normally balanced - it is what .client-wall already does - and
+   it makes optical size independent of how long each wordmark happens
+   to be.
+
+   Both caps stay below natural size, so every mark is still downscaled
+   and none is ever soft. width/height on the <img> hold the aspect ratio
+   so the band does not jump while the images load.
 
    No opacity dimming and no hover lift here. That treatment belongs to
    the client wall, where the marks are one keyed value; dimming a
    full-colour logo just makes it look faded. */
 .press-wall img {
   display: block;
-  width: 100%;
-  max-width: clamp(160px, 19vw, 250px);
+  width: auto;
   height: auto;
+  max-width: clamp(150px, 18vw, 230px);
+  max-height: clamp(32px, 3.4vw, 46px);
 }
 
-@media (max-width: 900px) {
-  .press-wall { grid-template-columns: repeat(2, 1fr); }
-}
-
+/* One column below 560px. The pairs stop being pairs there, but the reveal
+   still alternates sides item by item, so it keeps reading as deliberate. */
 @media (max-width: 560px) {
   .press-wall { grid-template-columns: 1fr; }
 }

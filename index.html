@@ -78,7 +78,7 @@
   <link rel="stylesheet" href="textures.css?v=5">
 
   <link rel="stylesheet" href="bore.css?v=5">
-  <link rel="stylesheet" href="site.css?v=21">
+  <link rel="stylesheet" href="site.css?v=25">
 </head>
 
 <body class="has-nightfield">
@@ -356,29 +356,39 @@
     </section>
 
     <!-- ============================================================
-         As featured in. Structure is inboundmedia.co's press band:
-         centred head, one line under it, then a 3-up grid of marks
-         that wraps to two rows.
+         Proficient in. Structure is still inboundmedia.co's press
+         band: centred head, one line under it, then a 3-up grid of
+         marks that wraps to two rows.
 
-         The marks are TYPE, not images, because no press logo files
-         exist in Assets/web/ yet. Dropping a real one in is replacing
-         the <span> with an <img class="is-wide">, which picks up the
-         same optical-sizing caps the client wall uses.
+         What it carries changed. These are the platforms the work
+         runs on, not publications that covered us - so the claim is
+         "we know these", not "these endorsed us". The four press
+         marks that used to sit here (Business Insider, Yahoo News,
+         Associated Press, Digital Journal) are gone with their files.
+
+         The id and .press* class names are unchanged on purpose:
+         nothing links to #press, renaming would touch eight CSS
+         rules for no user-visible gain, and this branch is being
+         merged against others. Worth renaming later, in isolation.
+
+         Ordered by how much of a budget they usually take, which is
+         also roughly descending recognition. Six marks divide
+         cleanly by 3, 2 and 1 so no breakpoint leaves a hole.
          ============================================================ -->
     <section id="press" class="press">
       <div class="wrap">
         <div class="press__head">
-          <h2>As featured in.</h2>
-          <p class="lead">Press &amp; recognition.</p>
+          <h2>Proficient in.</h2>
+          <p class="lead">The platforms we run every day.</p>
         </div>
 
         <ul class="press-wall">
+          <li><img src="Assets/web/press-meta.svg" alt="Meta" width="948" height="191" loading="lazy" decoding="async"></li>
+          <li><img src="Assets/web/press-google.svg" alt="Google" width="272" height="92" loading="lazy" decoding="async"></li>
+          <li><img src="Assets/web/press-youtube.svg" alt="YouTube" width="512" height="114" loading="lazy" decoding="async"></li>
           <li><img src="Assets/web/press-tiktok.png" alt="TikTok" width="161" height="51" loading="lazy" decoding="async"></li>
-          <li><img src="Assets/web/press-business-insider.png" alt="Business Insider" width="138" height="52" loading="lazy" decoding="async"></li>
+          <li><img src="Assets/web/press-linkedin.svg" alt="LinkedIn" width="568" height="144" loading="lazy" decoding="async"></li>
           <li><img src="Assets/web/press-shopify.png" alt="Shopify" width="157" height="51" loading="lazy" decoding="async"></li>
-          <li><img src="Assets/web/press-associated-press.png" alt="Associated Press" width="159" height="34" loading="lazy" decoding="async"></li>
-          <li><img src="Assets/web/press-yahoo-news.png" alt="Yahoo News" width="158" height="30" loading="lazy" decoding="async"></li>
-          <li><img src="Assets/web/press-digital-journal.png" alt="Digital Journal" width="150" height="24" loading="lazy" decoding="async"></li>
         </ul>
       </div>
     </section>
@@ -646,6 +656,11 @@
        across the top, two link columns, wordmark plus one action on the
        right, copyright line underneath.
 
+       The strip is a hard colour band on purpose - that is the whole reason
+       theirs works, and ours previously used --bg-raised on --bg, a step too
+       small to see. It is --petrol rather than an accent colour; the
+       reasoning is in site.css next to .foot-social.
+
        Social hrefs are "#" placeholders — swap in the real profile URLs and
        delete any platform we're not actually on. An icon linking to nothing
        is worse than no icon. -->
@@ -736,7 +751,7 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
-  <script defer src="motion.js?v=11"></script>
+  <script defer src="motion.js?v=12"></script>
   <script defer src="textures.js?v=10"></script>
 
   <script defer src="boot.js?v=4"></script>
