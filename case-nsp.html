@@ -64,7 +64,7 @@
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css?v=5">
 
-  <link rel="stylesheet" href="site.css?v=25">
+  <link rel="stylesheet" href="site.css?v=28">
   <link rel="stylesheet" href="nightfield.css?v=4">
 
 
@@ -231,7 +231,7 @@
         </details>
 
         <a class="nav-link" href="testimonials.html">Testimonials</a>
-        <a class="cta-secondary tx-glare" href="index.html#contact" data-texture="rim">Talk to us</a>
+        <a class="cta-secondary tx-glare" href="#contact" data-texture="rim">Talk to us</a>
       </nav>
     </div>
     <div class="site-header__rule"></div>
@@ -265,7 +265,7 @@
          href is the one place a booking link needs to go when Calendly
          exists; until then it drops to the contact section rather than
          being a dead link on the front door. -->
-    <a class="ticker__cta tx-glare" href="index.html#contact" data-texture="rim">Book a call</a>
+    <a class="ticker__cta tx-glare" href="#contact" data-texture="rim">Book a call</a>
   </aside>
   <!-- The intro. Removed from the DOM once it has run. -->
   <div class="intro-layer" aria-hidden="true">
@@ -360,9 +360,86 @@
     </div>
 
     <div class="wrap case-next">
-      <a class="cta" href="index.html#contact">See if you qualify</a>
+      <a class="cta" href="#contact">See if you qualify</a>
       <a class="back" href="work.html">All work</a>
     </div>
+
+    <section id="contact" class="contact">
+      <div class="wrap">
+        <!-- A machined component, not a background. Metal behind text would
+             be unreadable — chrome is far too light for steel type to sit on.
+             So the metal is an OBJECT above the heading: brushed, rim-lit on
+             hover, and it catches the light once as the section arrives. -->
+        <div class="contact__bar tx-brushed tx-rim tx-sweep"
+             data-chrome="contact" data-texture="rim" aria-hidden="true"></div>
+        <h2>Tell us what you're trying to grow.</h2>
+        <p class="lead">
+          We'll look at your numbers and tell you honestly whether a performance
+          deal makes sense. If it doesn't, we'll say so.
+        </p>
+        <!-- ============================================================
+             Inline enquiry form. Patterned on the one at the bottom of
+             vaynermedia.com, deliberately much shorter.
+
+             Theirs asks ten required questions including job title,
+             region and annual marketing budget, which suits an enterprise
+             lead desk. This visitor is an owner-operator who is already
+             suspicious of agencies, so the form asks the five things that
+             actually decide whether a performance deal is possible and
+             nothing else. Revenue is in because it is the qualifier - the
+             target is service businesses at $15M and under - not because
+             forms usually ask.
+
+             NO ENDPOINT YET. action is an obvious placeholder for the same
+             reason the VSL booking link is: a plausible-looking wrong URL
+             fails silently on live traffic, and a form that appears to
+             send while dropping enquiries is worse than one that clearly
+             does not work. Wiring it needs a decision on where posts go,
+             which touches deploy config - so it is left for that call.
+             ============================================================ -->
+        <form class="cform" action="REPLACE_WITH_FORM_ENDPOINT" method="post">
+          <div class="cform__grid">
+            <p class="cform__field">
+              <label for="cf-name">Your name</label>
+              <input id="cf-name" name="name" type="text" autocomplete="name" required>
+            </p>
+            <p class="cform__field">
+              <label for="cf-email">Email</label>
+              <input id="cf-email" name="email" type="email" autocomplete="email" required>
+            </p>
+            <p class="cform__field">
+              <label for="cf-site">Business website</label>
+              <input id="cf-site" name="website" type="text" inputmode="url"
+                     autocomplete="url" placeholder="yourbusiness.com" required>
+            </p>
+            <!-- Typed, not a range picker. Buckets make an owner round
+                 themselves into someone else's brackets, and the number
+                 that matters here is the real one. Free text also lets
+                 them answer "roughly 3m" or decline, which a required
+                 <select> cannot. -->
+            <p class="cform__field">
+              <label for="cf-rev">Annual revenue</label>
+              <input id="cf-rev" name="revenue" type="text"
+                     placeholder="e.g. $2.5M" required>
+            </p>
+          </div>
+
+          <p class="cform__field">
+            <label for="cf-goal">What are you trying to grow?</label>
+            <textarea id="cf-goal" name="goal" rows="4" required></textarea>
+          </p>
+
+          <div class="cform__actions">
+            <button class="cta" type="submit">Send it</button>
+            <span class="cform__note">
+              We read every one. If a performance deal doesn't make sense for you,
+              we'll tell you that instead of pitching. Or just email
+              <a href="mailto:hello@example.com">hello@example.com</a>.
+            </span>
+          </div>
+        </form>
+      </div>
+    </section>
 
   </main>
 
@@ -411,7 +488,7 @@
         <a class="foot-link" href="work.html">Our work</a>
         <a class="foot-link" href="capabilities.html">Capabilities</a>
         <a class="foot-link" href="testimonials.html">Testimonials</a>
-        <a class="foot-link" href="index.html#contact">Contact</a>
+        <a class="foot-link" href="#contact">Contact</a>
       </nav>
 
       <!-- Legal column removed until there is copy: Privacy policy, Terms and
@@ -430,7 +507,7 @@
       <div class="foot-brand">
         <img class="foot-brand__logo" src="silver-bullet-logo-alpha.png"
              width="1708" height="140" alt="Silver Bullet">
-        <a class="cta-secondary" href="index.html#contact">Connect with us</a>
+        <a class="cta-secondary" href="#contact">Connect with us</a>
       </div>
 
       <p class="foot-copy">&copy; 2026 Silver Bullet Agency. Rev share and profit share. Skin in the game.</p>

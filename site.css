@@ -761,6 +761,100 @@
     .contact h2 { max-width: 18ch; }
     .contact .lead { margin-top: 20px; }
 
+    /* ---------- inline enquiry form ----------
+       Fields are --charcoal, which tokens.css nominates for exactly this
+       job. Separation is the rim-light move the whole site uses - lit top
+       edge, --border sides, --ink bottom - so an input reads as the same
+       kind of surface as .panel and .hero__video rather than as a widget
+       borrowed from somewhere else. No radius, no inset shadow.
+
+       Labels sit above their field in sentence case. DESIGN.md rules out
+       tracked-out all-caps eyebrows, and a form is where that habit
+       usually creeps back in.
+
+       Focus needs nothing here: the global :focus-visible rule already
+       puts an amber outline on input and textarea. */
+
+    /* One column with a gap rather than margins on each field. The margin
+       version left the textarea's label crowding the row above it, because
+       the grid children had their margin zeroed and the grid itself carried
+       none - the classic collapse this avoids entirely. */
+    .cform {
+      margin-top: var(--space-md);
+      max-width: 760px;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .cform__grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-sm) clamp(16px, 2.4vw, 28px);
+    }
+
+    .cform__field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 0;
+    }
+
+    .cform__field label {
+      font-size: 14px;
+      color: var(--steel-500);
+    }
+
+    .cform__field input,
+    .cform__field textarea {
+      font: inherit;
+      font-size: 15px;
+      width: 100%;
+      padding: 12px 14px;
+      color: var(--steel-050);
+      background: var(--charcoal);
+      border-top: 1px solid var(--border-lit);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--ink);
+      border-radius: 0;
+      transition: border-color .18s ease, background-color .18s ease;
+    }
+
+    .cform__field textarea { resize: vertical; min-height: 118px; }
+
+    .cform__field input::placeholder { color: var(--steel-900); }
+
+    .cform__field input:hover,
+    .cform__field textarea:hover { border-top-color: var(--steel-900); }
+
+    .cform__actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px clamp(18px, 2.4vw, 28px);
+      margin-top: 4px;
+    }
+
+    .cform__note {
+      flex: 1 1 320px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--steel-700);
+    }
+
+    .cform__note a { color: var(--steel-100); text-decoration: underline; }
+    .cform__note a:hover { color: var(--white); }
+
+    @media (max-width: 640px) {
+      .cform__grid { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cform__field input,
+      .cform__field textarea { transition: none; }
+    }
+
     /* ---------- footer ----------
        Modeled on the vaynermedia.com footer: a full-bleed social strip
        across the top, then a block of two link columns with the wordmark
@@ -769,10 +863,11 @@
 
        Two deliberate departures from the reference:
 
-       1. Vayner's social strip is a saturated accent field. Here it's a
-          lit-edge band instead. A strip of amber that size would spend the
-          page's one warm accent on a row of icons, and the contact CTA
-          directly above the footer is the element that needs it.
+       1. Vayner's social strip is a saturated accent field. Ours is too,
+          but in --petrol rather than an accent colour: a strip of amber
+          that size would spend the page's one warm accent on a row of
+          icons, and the contact CTA above the footer is what needs it.
+          Full reasoning sits on .foot-social below.
        2. Vayner's left column is partner badges — Google, Meta, TikTok,
           Snap. We don't hold those, so that slot is a site nav column. If
           real partner badges ever land, this is where they go. */
@@ -782,8 +877,7 @@
     }
 
     /* Full-bleed by design: it should read as a band across the page, not
-       as a row sitting inside the content column. Separation is the usual
-       rim-light move — lit top edge, ink bottom, no fill, no shadow. */
+       as a row sitting inside the content column. */
     /* A real band, not a tint. Modelled on vaynermedia.com's footer social
        strip, which works because it is a hard full-bleed colour change that
        separates the page from the footer in one move. Ours was --bg-raised
