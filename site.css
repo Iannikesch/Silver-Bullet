@@ -1125,6 +1125,64 @@
       color: var(--steel-700);
     }
 
+    /* ---- legal links, on the copyright line ----
+       Modelled on inboundmedia.co, which runs "© INBOUND 2026 | PRIVACY
+       POLICY" as one line of small print. theinfiniteagency.com goes further
+       and carries no legal links at all, which is not an option here.
+
+       So: the copyright's own 13px, the copyright's own --steel-700, no
+       underline, no column heading, no tap-target padding. They read as part
+       of the small print rather than as somewhere to go, which is exactly
+       what small print is for.
+
+       WHAT WAS DELIBERATELY NOT DONE, and why the brief stopped here:
+       they are not styled to look unclickable. --steel-700 on --bg measures
+       4.51:1, just over the 4.5 floor AA sets for small text; the hover lift
+       stays; and the global :focus-visible outline still finds them. Quiet
+       is a style choice. Inconspicuous is a legal one, and it runs straight
+       into the reason these pages exist - CCPA wants a "clear and
+       conspicuous" privacy link, courts decline to enforce terms nobody
+       could reasonably find, and Google Ads and Meta both check for a
+       reachable policy before they will run traffic. A link too dead to
+       click is a link that costs you the ad account.
+
+       A hairline divider rather than a middle dot: DESIGN.md rules those
+       out, and a rule is this site's own way of separating things anyway. */
+    .foot-legal {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 0 14px;
+      margin-left: 14px;
+      padding-left: 14px;
+      border-left: 1px solid var(--slate);
+    }
+
+    .foot-legal a {
+      color: inherit;              /* same value as the copyright beside it */
+      text-decoration: none;
+      transition: color .18s ease;
+    }
+
+    .foot-legal a:hover,
+    .foot-legal a:focus-visible { color: var(--steel-050); }
+
+    /* Once the copyright wraps, a left rule on a new line reads as a stray
+       mark. Below that it sits under the line instead, still quiet. */
+    @media (max-width: 560px) {
+      .foot-legal {
+        display: flex;
+        margin-left: 0;
+        padding-left: 0;
+        border-left: 0;
+        margin-top: 8px;
+        justify-content: flex-end;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .foot-legal a { transition: none; }
+    }
+
     /* Brand block leads once the three columns stop fitting — the wordmark
        is the thing worth seeing first on a phone, not the nav list. */
     @media (max-width: 860px) {

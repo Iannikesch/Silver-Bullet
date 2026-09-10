@@ -67,7 +67,7 @@
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css?v=5">
 
-  <link rel="stylesheet" href="site.css?v=40">
+  <link rel="stylesheet" href="site.css?v=41">
   <link rel="stylesheet" href="nightfield.css?v=4">
 
 
@@ -513,25 +513,18 @@
         <a class="foot-link" href="#contact">Contact</a>
       </nav>
 
-      <!-- Live now that the three pages exist. "Cookie policy", not "Cookie
-           settings": the site sets no cookies, so a settings panel would be a
-           control with nothing behind it. Google Ads and Meta both want a
-           reachable privacy policy on the landing domain before they will run
-           traffic, which is why privacy.html is indexable. -->
-      <nav class="foot-col" aria-labelledby="foot-legal-head">
-        <h2 class="foot-col__head" id="foot-legal-head">Legal</h2>
-        <a class="foot-link" href="privacy.html">Privacy policy</a>
-        <a class="foot-link" href="terms.html">Terms</a>
-        <a class="foot-link" href="cookies.html">Cookie policy</a>
-      </nav>
-
       <div class="foot-brand">
         <img class="foot-brand__logo" src="silver-bullet-logo-alpha.png"
              width="1708" height="140" alt="Silver Bullet">
         <a class="cta-secondary" href="#contact">Connect with us</a>
       </div>
 
-      <p class="foot-copy">&copy; 2026 Silver Bullet Agency. Rev share and profit share. Skin in the game.</p>
+      <!-- Legal lives on the copyright line, not in a column of its own —
+           the treatment inboundmedia.co uses. Small print, in the small
+           print's own size and colour, reading as metadata rather than as
+           somewhere to go. Still real links: see the note in site.css for
+           the one thing that was NOT done to them. -->
+      <p class="foot-copy">&copy; 2026 Silver Bullet Agency. Rev share and profit share. Skin in the game.<span class="foot-legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="cookies.html">Cookies</a></span></p>
 
     </div>
   </footer>
