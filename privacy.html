@@ -3,30 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Performance marketing case studies — Silver Bullet</title>
-  <meta name="description" content="Case studies from Silver Bullet. Revenue and gross profit growth for service businesses, on rev share and profit share.">
-  <link rel="canonical" href="https://silverbulletagency.com/work.html">
-
-  <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": "https://silverbulletagency.com/"
-    },
-    {
-      "@type": "ListItem",
-      "position": 2,
-      "name": "Our work"
-    }
-  ]
-}
-  </script>
-
+  <title>Privacy policy — Silver Bullet</title>
+  <meta name="description" content="What Silver Bullet collects, what it does not, and who else touches it. No analytics, no advertising pixels, no cookies.">
+  <link rel="canonical" href="https://silverbulletagency.com/privacy.html">
   <!-- Icons. The mark is the bullet, drawn with the same hard-stopped chrome
        ramp as the site: paired stops at identical offsets, so every band is
        an edge. The .svg is what modern browsers use; the .ico is the
@@ -37,17 +16,17 @@
   <link rel="manifest" href="/site.webmanifest">
   <meta name="theme-color" content="#0A0D0E">
   <!-- Social card. Absolute URLs, as the OG spec requires. -->
-  <meta property="og:url" content="https://silverbulletagency.com/work.html">
+  <meta property="og:url" content="https://silverbulletagency.com/404.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Silver Bullet">
-  <meta property="og:title" content="Performance marketing case studies — Silver Bullet">
+  <meta property="og:title" content="Page not found — Silver Bullet">
   <meta property="og:description" content="Case studies from Silver Bullet. Revenue and gross profit growth for service businesses, on rev share and profit share.">
   <meta property="og:image" content="https://silverbulletagency.com/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Silver Bullet case studies — measured revenue growth for service businesses">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Performance marketing case studies — Silver Bullet">
+  <meta name="twitter:title" content="Page not found — Silver Bullet">
   <meta name="twitter:description" content="Case studies from Silver Bullet. Revenue and gross profit growth for service businesses, on rev share and profit share.">
   <meta name="twitter:image" content="https://silverbulletagency.com/og-image.png">
   <meta name="twitter:image:alt" content="Silver Bullet case studies — measured revenue growth for service businesses">
@@ -69,144 +48,31 @@
 
   <link rel="stylesheet" href="site.css?v=40">
   <link rel="stylesheet" href="nightfield.css?v=4">
+  <meta property="og:url" content="https://silverbulletagency.com/privacy.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Silver Bullet">
+  <meta property="og:title" content="Privacy policy — Silver Bullet">
+  <meta property="og:description" content="What we collect, what we do not, and who else touches it.">
+  <meta property="og:image" content="https://silverbulletagency.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Silver Bullet — performance marketing on rev share and profit share">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Privacy policy — Silver Bullet">
+  <meta name="twitter:description" content="What we collect, what we do not, and who else touches it.">
+  <meta name="twitter:image" content="https://silverbulletagency.com/og-image.png">
+  <meta name="twitter:image:alt" content="Silver Bullet — performance marketing on rev share and profit share">
 
-
-  <style>
-    .work-hero { padding: var(--space-lg) 0 var(--space-md); }
-    .work-hero .lead { margin-top: var(--space-sm); }
-
-    /* Flex rather than grid, deliberately.
-
-       The hairline-divided grid used elsewhere paints the container in
-       --border and lets a 1px gap show through as the rules. That is right
-       when the cells always fill the row. With three cards it does not: drop
-       to two columns and the last row is one card and one EMPTY cell, and
-       that empty cell is a slab of grey.
-
-       Flex has no cells to leave empty. justify-content centres a short last
-       row, so the third card sits in the middle of the row instead of hanging
-       off the left with a hole beside it. Each card carries its own lit top
-       edge, which is the panel treatment from DESIGN.md anyway. */
-    .case-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: clamp(14px, 1.6vw, 22px);
-      margin: 0 0 var(--space-xl);
-      padding: 0;
-      list-style: none;
-    }
-
-    /* Basis rather than a fixed width: three sit across at full width, then
-       two, then one, and a lone card never stretches to fill the row. */
-    .case-grid > li {
-      display: flex;
-      flex: 0 1 clamp(300px, 31%, 380px);
-    }
-
-    .case-card {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: var(--bg);
-      text-decoration: none;
-      border-top: 1px solid var(--border-lit);
-      border-left: 1px solid var(--border);
-      border-right: 1px solid var(--border);
-      border-bottom: 1px solid var(--ink);
-      transition: background-color .2s ease, border-color .2s ease;
-    }
-
-    .case-card:hover { border-top-color: var(--steel-500); }
-
-    .case-card:hover { background: var(--bg-raised); }
-
-    .case-card__art {
-      aspect-ratio: 16 / 10;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg-raised);
-      border-bottom: 1px solid var(--border);
-      color: var(--steel-900);
-      font-size: 13px;
-    }
-
-    .case-card:hover .case-card__art { background: var(--charcoal); }
-
-    .case-card__body { padding: var(--space-sm); }
-
-    .case-card__meta {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      font-size: 13px;
-      color: var(--steel-700);
-    }
-
-    /* h2, not h3: these are the page's primary content, and they used to sit
-       before the first h2 on the page, which made the outline read
-       h1 -> h3 -> h2. Promoted a level; the selector moved with the tag so
-       the rendered size is unchanged. */
-    .case-card h2 {
-      margin: 10px 0 14px;
-      color: var(--steel-050);
-      font-size: clamp(19px, 1.7vw, 23px);
-      line-height: 1.2;
-    }
-
-    /* The number goes on the card. Vayner's index carries none, and the index
-       is the highest-traffic page on the site. */
-    .case-card__figure {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      flex-wrap: wrap;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
-      color: var(--white);
-      font-size: clamp(20px, 1.9vw, 26px);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-    }
-
-    .case-card__figure .to { color: var(--steel-700); font-weight: 400; }
-    .case-card__figure .in { color: var(--steel-500); font-size: 14px; font-weight: 500; letter-spacing: 0; }
-
-    /* Real project photography in the slot. The card art keeps its aspect
-       box so a missing or slow image cannot collapse the grid row. */
-    .case-card__art img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      /* Held slightly back so the card reads as one surface rather than a
-         photo with a caption stapled under it; full strength on hover. */
-      opacity: .82;
-      filter: saturate(.85);
-      transition: opacity .25s ease, filter .25s ease, transform .5s ease;
-    }
-
-    .case-card:hover .case-card__art img {
-      opacity: 1;
-      filter: saturate(1);
-      transform: scale(1.02);
-    }
-
-    .case-card__art { overflow: hidden; }
-  </style>
+  <!-- ============================================================
+       Privacy policy. Indexable on purpose: Google Ads and Meta both require a
+       reachable privacy policy on the landing domain before they will run
+       traffic, and a noindex page still counts as reachable but is harder to
+       verify. The REPLACE_WITH_* strings are the same convention as the form
+       endpoint - obviously unfinished rather than plausibly wrong, because a
+       legal page with an invented address is worse than one with a blank.
+       ============================================================ -->
 </head>
-
 <body class="has-nightfield">
-  <!-- Full-page lighting field. See nightfield.css — this deliberately
-       departs from DESIGN.md and is here to be looked at. -->
-  <div class="tx-nightfield tx-nightfield--fixed" aria-hidden="true">
-    <span class="tx-nightfield__bloom"></span>
-    <span class="tx-nightfield__bokeh"></span>
-    <span class="tx-nightfield__cyan"></span>
-    <span class="tx-nightfield__vignette"></span>
-    <span class="tx-nightfield__grain"></span>
-  </div>
   <header class="site-header tx-frost">
     <div class="wrap">
       <a class="logo tx-halo tx-halo--lung" href="index.html#top" aria-label="Silver Bullet — home">
@@ -243,7 +109,7 @@
         </details>
 
         <a class="nav-link" href="testimonials.html">Testimonials</a>
-        <a class="cta-secondary tx-glare" href="#contact" data-texture="rim">Talk to us</a>
+        <a class="cta-secondary tx-glare" href="index.html#contact" data-texture="rim">Talk to us</a>
       </nav>
     </div>
     <div class="site-header__rule"></div>
@@ -277,147 +143,117 @@
          href is the one place a booking link needs to go when Calendly
          exists; until then it drops to the contact section rather than
          being a dead link on the front door. -->
-    <a class="ticker__cta tx-glare" href="#contact" data-texture="rim">Book a call</a>
+    <a class="ticker__cta tx-glare" href="index.html#contact" data-texture="rim">Book a call</a>
   </aside>
-  <!-- The intro. Removed from the DOM once it has run. -->
-  <div class="intro-layer" aria-hidden="true">
-    <div class="blip"></div>
-    <div class="bullet" data-chrome="bullet">
-      <span class="bullet__wake"></span>
-      <span class="bullet__body"></span>
-      <span class="bullet__glint"></span>
-      <span class="bullet__heat"></span>
-    </div>
-  </div>
 
   <main id="top">
+    <section class="wrap legal">
+      <p class="meta legal__eyebrow">Legal</p>
+      <h1>Privacy policy</h1>
+      <p class="legal__date">Effective REPLACE_WITH_EFFECTIVE_DATE. Last updated REPLACE_WITH_EFFECTIVE_DATE.</p>
 
-    <section class="wrap work-hero">
-      <h1 class="tx-rim-text" data-texture="rim">Our work</h1>
-      <p class="lead">
-        A meaningful part of our fee comes out of what we generate &mdash; rev
-        share or profit share. So every figure below is revenue or gross profit,
-        never impressions. Growth is stated as a percentage rather than a
-        dollar pair because these are private books, and every case says how
-        the number was arrived at.
-      </p>
-    </section>
-
-    <div class="wrap">
-      <ul class="case-grid">
-        <li>
-          <a class="case-card" href="case-vitality.html">
-            <span class="case-card__art"><img src="Assets/web/work-vitality-meter.webp" width="1200" height="800" loading="lazy" decoding="async" alt="A Vitality Mechanical technician metering a motor"></span>
-            <span class="case-card__body">
-              <span class="case-card__meta"><span>Vitality Mechanical</span><span>Rev share</span></span>
-              <h2>Turning a service department that ran on callbacks into a booked calendar.</h2>
-              <span class="case-card__figure">+25%
-                <span class="in">revenue growth, 2 months</span></span>
-            </span>
-          </a>
-        </li>
-        <li>
-          <a class="case-card" href="case-mantis.html">
-            <span class="case-card__art"><img src="Assets/web/work-mantis-dolly.webp" width="1200" height="800" loading="lazy" decoding="async" alt="A Mantis Moving crew member loading a truck"></span>
-            <span class="case-card__body">
-              <span class="case-card__meta"><span>Mantis Moving &amp; Storage</span><span>Profit share</span></span>
-              <h2>Getting paid for the moves worth doing instead of every move going.</h2>
-              <span class="case-card__figure">~$60k
-                <span class="in">from ~$2k of attributable ad spend, 3 days</span></span>
-            </span>
-          </a>
-        </li>
-        <li>
-          <a class="case-card" href="case-nsp.html">
-            <span class="case-card__art"><img src="Assets/web/work-nsp-van.webp" width="1280" height="853" loading="lazy" decoding="async" alt="An NSP Plumbing service van"></span>
-            <span class="case-card__body">
-              <span class="case-card__meta"><span>NSP Plumbing</span><span>Rev share</span></span>
-              <h2>A commercial book built on top of a business that only rang when something burst.</h2>
-              <span class="case-card__figure">+50%
-                <span class="in">revenue growth, 2 months</span></span>
-            </span>
-          </a>
-        </li>
-      </ul>
-    </div>
-
-    <section id="contact" class="contact">
-      <div class="wrap">
-        <!-- A machined component, not a background. Metal behind text would
-             be unreadable — chrome is far too light for steel type to sit on.
-             So the metal is an OBJECT above the heading: brushed, rim-lit on
-             hover, and it catches the light once as the section arrives. -->
-        <div class="contact__bar tx-brushed tx-rim tx-sweep"
-             data-chrome="contact" data-texture="rim" aria-hidden="true"></div>
-        <h2>Tell us what you're trying to grow.</h2>
-        <p class="lead">
-          We'll look at your numbers and tell you honestly whether a performance
-          deal makes sense. If it doesn't, we'll say so.
-        </p>
-        <!-- ============================================================
-             Inline enquiry form. Patterned on the one at the bottom of
-             vaynermedia.com, deliberately much shorter.
-
-             Theirs asks ten required questions including job title,
-             region and annual marketing budget, which suits an enterprise
-             lead desk. This visitor is an owner-operator who is already
-             suspicious of agencies, so the form asks the five things that
-             actually decide whether a performance deal is possible and
-             nothing else. Revenue is in because it is the qualifier - the
-             target is service businesses at $15M and under - not because
-             forms usually ask.
-
-             NO ENDPOINT YET. action is an obvious placeholder for the same
-             reason the VSL booking link is: a plausible-looking wrong URL
-             fails silently on live traffic, and a form that appears to
-             send while dropping enquiries is worse than one that clearly
-             does not work. Wiring it needs a decision on where posts go,
-             which touches deploy config - so it is left for that call.
-             ============================================================ -->
-        <form class="cform" action="REPLACE_WITH_FORM_ENDPOINT" method="post">
-          <div class="cform__grid">
-            <p class="cform__field">
-              <label for="cf-name">Your name</label>
-              <input id="cf-name" name="name" type="text" autocomplete="name" required>
-            </p>
-            <p class="cform__field">
-              <label for="cf-email">Email</label>
-              <input id="cf-email" name="email" type="email" autocomplete="email" required>
-            </p>
-            <p class="cform__field">
-              <label for="cf-site">Business website</label>
-              <input id="cf-site" name="website" type="text" inputmode="url"
-                     autocomplete="url" placeholder="yourbusiness.com" required>
-            </p>
-            <!-- Typed, not a range picker. Buckets make an owner round
-                 themselves into someone else's brackets, and the number
-                 that matters here is the real one. Free text also lets
-                 them answer "roughly 3m" or decline, which a required
-                 <select> cannot. -->
-            <p class="cform__field">
-              <label for="cf-rev">Annual revenue</label>
-              <input id="cf-rev" name="revenue" type="text"
-                     placeholder="e.g. $2.5M" required>
-            </p>
-          </div>
-
-          <p class="cform__field">
-            <label for="cf-goal">What are you trying to grow?</label>
-            <textarea id="cf-goal" name="goal" rows="4" required></textarea>
-          </p>
-
-          <div class="cform__actions">
-            <button class="cta" type="submit">Send it</button>
-            <span class="cform__note">
-              We read every one. If a performance deal doesn't make sense for you,
-              we'll tell you that instead of pitching. Or just email
-              <a href="mailto:hello@example.com">hello@example.com</a>.
-            </span>
-          </div>
-        </form>
+      <div class="panel legal__summary">
+        <h2>The short version</h2>
+        <p>We do not track you. This site sets no cookies, runs no analytics, and
+          carries no advertising pixels. The only personal information we hold is
+          what you type into the enquiry form and send us. We do not sell it, and
+          we do not share it for anyone else&rsquo;s advertising.</p>
       </div>
-    </section>
 
+      <h2>Who we are</h2>
+      <p>This site is operated by REPLACE_WITH_LEGAL_ENTITY (&ldquo;Silver Bullet&rdquo;,
+        &ldquo;we&rdquo;, &ldquo;us&rdquo;), REPLACE_WITH_BUSINESS_ADDRESS. If you want to
+        reach a person about anything on this page, email
+        <a href="mailto:REPLACE_WITH_PRIVACY_EMAIL">REPLACE_WITH_PRIVACY_EMAIL</a>.</p>
+
+      <h2>What we collect</h2>
+
+      <h3>When you send us an enquiry</h3>
+      <p>The form at the bottom of most pages asks for five things: your name, your
+        email address, your business website, your annual revenue, and a description
+        of what you are trying to grow. You choose what to put in each. All five are
+        used for one purpose &mdash; working out whether a performance deal makes
+        sense for your business, and replying to you about it.</p>
+      <p>Revenue is asked because our model is a share of revenue or profit, and the
+        figure decides whether the arrangement is possible at all. It is not passed
+        to anyone outside the business.</p>
+
+      <h3>Automatically, when you load a page</h3>
+      <p>Our host records standard server logs: your IP address, the page requested,
+        the time, and your browser&rsquo;s user agent string. Every web server does
+        this, and it is how the site is kept available and secure. We do not use
+        those logs to build a profile of you.</p>
+      <p>The site loads three JavaScript libraries from two public content delivery
+        networks, cdnjs (operated by Cloudflare) and jsDelivr. Making that request
+        necessarily discloses your IP address and user agent to them. We do not
+        control those networks and receive nothing back from them.</p>
+
+      <h3>What we do not collect</h3>
+      <p>To be specific rather than reassuring:</p>
+      <ul>
+        <li>No analytics of any kind. There is no Google Analytics, no Meta Pixel,
+          no LinkedIn or TikTok tag, no session recording, no heatmaps.</li>
+        <li>No advertising or retargeting trackers. Nothing on this site follows you
+          to another one.</li>
+        <li>No cookies. See the <a href="cookies.html">cookie policy</a> for the one
+          small thing the site does store in your browser, and why it is not a cookie.</li>
+        <li>No accounts, so no passwords.</li>
+        <li>No payment details. Nothing is sold through this site.</li>
+      </ul>
+
+      <h2>Why we are allowed to use it</h2>
+      <p>For enquiries: because you sent them to us and asked for a reply. For server
+        logs: because we have a legitimate interest in keeping the site up and
+        defending it from abuse. If you are covered by a law that requires a specific
+        legal basis or consent &mdash; the UK or EU GDPR, for example &mdash; treat
+        this section as the plain-English version and email us for the formal one.</p>
+
+      <h2>Who else handles it</h2>
+      <p>We keep the list of companies that touch your data as short as we can. Today
+        it is:</p>
+      <ul>
+        <li><strong>Vercel</strong> &mdash; hosts the site and produces the server logs
+          described above.</li>
+        <li><strong>REPLACE_WITH_FORM_PROCESSOR</strong> &mdash; receives enquiry form
+          submissions and passes them to our inbox.</li>
+        <li><strong>REPLACE_WITH_EMAIL_PROVIDER</strong> &mdash; where the resulting
+          email lives once it reaches us.</li>
+        <li><strong>Cloudflare (cdnjs) and jsDelivr</strong> &mdash; serve the
+          JavaScript libraries, and so see the IP address making the request.</li>
+      </ul>
+      <p>None of them is permitted to use your information for their own marketing.
+        We do not sell personal information, and we do not share it for
+        cross-context behavioural advertising.</p>
+
+      <h2>How long we keep it</h2>
+      <p>Enquiries are kept for REPLACE_WITH_RETENTION_PERIOD, so we can pick up a
+        conversation that goes quiet and restart later. Server logs are kept for as
+        long as our host retains them. If you ask us to delete your enquiry, we will,
+        unless we are required to keep it.</p>
+
+      <h2>Your choices</h2>
+      <p>You can ask us what we hold about you, ask for it to be corrected, or ask
+        for it to be deleted. Email
+        <a href="mailto:REPLACE_WITH_PRIVACY_EMAIL">REPLACE_WITH_PRIVACY_EMAIL</a>
+        and we will answer. Depending on where you live you may have further rights
+        &mdash; under the UK or EU GDPR, or the California Consumer Privacy Act
+        &mdash; and we will honour them whether or not they strictly apply to us.</p>
+      <p>You can also simply not use the form. Nothing on this site requires you to
+        identify yourself in order to read it.</p>
+
+      <h2>Children</h2>
+      <p>This site sells business services and is not directed at children. We do not
+        knowingly collect information from anyone under 16.</p>
+
+      <h2>Changes</h2>
+      <p>If we add anything that collects data &mdash; an analytics tool, an
+        advertising pixel, a booking widget &mdash; this page gets updated before it
+        goes live, and the date at the top changes with it.</p>
+
+      <h2>Contact</h2>
+      <p>REPLACE_WITH_LEGAL_ENTITY, REPLACE_WITH_BUSINESS_ADDRESS.
+        <a href="mailto:REPLACE_WITH_PRIVACY_EMAIL">REPLACE_WITH_PRIVACY_EMAIL</a>.</p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -465,7 +301,7 @@
         <a class="foot-link" href="work.html">Our work</a>
         <a class="foot-link" href="capabilities.html">Capabilities</a>
         <a class="foot-link" href="testimonials.html">Testimonials</a>
-        <a class="foot-link" href="#contact">Contact</a>
+        <a class="foot-link" href="index.html#contact">Contact</a>
       </nav>
 
       <!-- Live now that the three pages exist. "Cookie policy", not "Cookie
@@ -483,7 +319,7 @@
       <div class="foot-brand">
         <img class="foot-brand__logo" src="silver-bullet-logo-alpha.png"
              width="1708" height="140" alt="Silver Bullet">
-        <a class="cta-secondary" href="#contact">Connect with us</a>
+        <a class="cta-secondary" href="index.html#contact">Connect with us</a>
       </div>
 
       <p class="foot-copy">&copy; 2026 Silver Bullet Agency. Rev share and profit share. Skin in the game.</p>
