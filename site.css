@@ -840,7 +840,12 @@
       flex: 1 1 320px;
       font-size: 14px;
       line-height: 1.6;
-      color: var(--steel-700);
+      /* --steel-500, not --steel-700. On the homepage the contact section is
+         --bg-raised, where steel-700 measures 4.05 and fails WCAG AA; on the
+         inner pages the section is transparent and it scrapes past on --bg at
+         4.51. One token that passes on both grounds beats one that depends on
+         which page it landed on. */
+      color: var(--steel-500);
     }
 
     .cform__note a { color: var(--steel-100); text-decoration: underline; }
@@ -1632,7 +1637,13 @@
       padding: 22px 20px 20px;
     }
 
+    /* An <h3>, not a <span>, since the merge. Six industry names is six
+       commercial-intent phrases, and as spans they carried no structural
+       weight under the section's h2 - the same finding as the capability
+       titles. margin is the only thing a heading adds that a span did not,
+       so it is the only thing reset. Rendered output is unchanged. */
     .vcard__name {
+      margin: 0;
       display: block;
       font-size: 15px;
       font-weight: 500;
@@ -1683,6 +1694,23 @@
        stretches every card in a row to the same height, but without this the
        footer floats up behind whichever card has the shortest copy, and the
        hairline lands at three different heights across the row. */
+    /* Sits beside .vcard__scope in the foot's existing flex row, which
+       already had the gap for a second child. A lit underline rather than a
+       colour change: the rim-light move, so the amber stays on the CTA. */
+    .vcard__case {
+      flex: none;
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--steel-100);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border-lit);
+      padding-bottom: 1px;
+      transition: color var(--dur-base) var(--ease-metal),
+                  border-color var(--dur-base) var(--ease-metal);
+    }
+    .vcard__case:hover { color: var(--white); border-color: var(--steel-500); }
+    .vcard__case:focus-visible { outline: 2px solid var(--steel-100); outline-offset: 3px; }
+
     .vcard__foot {
       display: flex;
       align-items: baseline;
@@ -1694,7 +1722,11 @@
 
     .vcard__scope {
       font-size: 12px;
-      color: var(--text-muted);
+      /* --steel-500, not --text-muted (= --steel-700). The cards sit on
+         --bg-raised, where steel-700 measures 4.05 and fails WCAG AA. Same
+         step as .tq-what and .cform__note: a token that clears AA on the
+         page ground by 0.01 does not clear it on the raised one. */
+      color: var(--steel-500);
     }
 
     @media (max-width: 380px) {

@@ -86,7 +86,7 @@
   <link rel="stylesheet" href="textures.css?v=5">
 
   <link rel="stylesheet" href="bore.css?v=5">
-  <link rel="stylesheet" href="site.css?v=32">
+  <link rel="stylesheet" href="site.css?v=35">
 </head>
 
 <body class="has-nightfield">
@@ -451,7 +451,13 @@
              the rest of the time - the same argument the reactive chrome
              makes. Without JS it is a plain scroll-snap strip and every
              card is full size and legible. -->
-        <ul class="vrail" data-vrail tabindex="0" role="group" aria-label="Industries we work with, scrollable">
+        <!-- Three of the six carry a case-study link, because three of them
+             have one: plumbing is NSP, HVAC is Vitality, moving is Mantis.
+             Roofing, restoration and insurance get none rather than a forced
+             pointer at work.html — the same call made on the capability rows.
+             These are the industry terms buyers actually search, so they are
+             the right anchors to spend on the proof pages. -->
+        <ul class="vrail" data-vrail tabindex="0" role="list" aria-label="Industries we work with, scrollable">
 
           <li class="vcard">
               <span class="vcard__media">
@@ -462,7 +468,7 @@
                      alt="An NSP Plumbing technician on an emergency service call">
               </span>
               <span class="vcard__body">
-                <span class="vcard__name">Plumbing</span>
+                <h3 class="vcard__name">Plumbing</h3>
                 <span class="vcard__problem">Demand arrives as an emergency and goes to whoever picks up first, so the money is lost in the gap between the click and the booked job.</span>
                 <span class="vcard__fix">We run the emergency terms separately from the planned work, route the calls to a tracked line, and feed booked jobs back into the ad platforms so bidding optimizes on work won rather than forms filled.</span>
                 <span class="vcard__tags">
@@ -473,6 +479,7 @@
               </span>
               <span class="vcard__foot">
                 <span class="vcard__scope">Service, repair, drains, water heaters</span>
+                <a class="vcard__case" href="case-nsp.html">NSP Plumbing case study</a>
               </span>
           </li>
 
@@ -485,7 +492,7 @@
                      alt="Two Vitality Mechanical technicians carrying cylinders across a rooftop">
               </span>
               <span class="vcard__body">
-                <span class="vcard__name">HVAC</span>
+                <h3 class="vcard__name">HVAC</h3>
                 <span class="vcard__problem">Demand swings with the weather and thins out in the shoulder months, so spend that pays for itself in July is dead weight in October.</span>
                 <span class="vcard__fix">We move budget between replacement and repair as the season turns, and put a maintenance-plan offer behind the quiet months so the account still earns when nobody is sweating.</span>
                 <span class="vcard__tags">
@@ -496,6 +503,7 @@
               </span>
               <span class="vcard__foot">
                 <span class="vcard__scope">Repair, replacement, maintenance plans</span>
+                <a class="vcard__case" href="case-vitality.html">Vitality Mechanical case study</a>
               </span>
           </li>
 
@@ -508,7 +516,7 @@
                      alt="A Mantis Moving crew member wheeling a loaded dolly up a truck ramp">
               </span>
               <span class="vcard__body">
-                <span class="vcard__name">Moving and storage</span>
+                <h3 class="vcard__name">Moving and storage</h3>
                 <span class="vcard__problem">Violently seasonal, and the lead you just paid for was sold to four other movers at the same moment.</span>
                 <span class="vcard__fix">We build the quote request around the survey rather than the price, and follow up on a schedule that assumes the mover is being shopped, so the second conversation is ours instead of the cheapest bid.</span>
                 <span class="vcard__tags">
@@ -519,6 +527,7 @@
               </span>
               <span class="vcard__foot">
                 <span class="vcard__scope">Local, long distance, containers, storage</span>
+                <a class="vcard__case" href="case-mantis.html">Mantis Moving case study</a>
               </span>
           </li>
 
@@ -532,7 +541,7 @@
                 </svg>
               </span>
               <span class="vcard__body">
-                <span class="vcard__name">Roofing</span>
+                <h3 class="vcard__name">Roofing</h3>
                 <span class="vcard__problem">Storm work and planned replacement look identical in the ad account, so budget follows whichever is cheaper that week instead of whichever is worth having.</span>
                 <span class="vcard__fix">We split storm response from planned replacement into separate campaigns with their own budgets and landing pages, so one stops quietly eating the other when the weather turns.</span>
                 <span class="vcard__tags">
@@ -554,7 +563,7 @@
                 </svg>
               </span>
               <span class="vcard__body">
-                <span class="vcard__name">Restoration</span>
+                <h3 class="vcard__name">Restoration</h3>
                 <span class="vcard__problem">The job is bought in the first hour of a flood or a fire, on a phone, usually by someone who has never needed the service before and has no idea who to call.</span>
                 <span class="vcard__fix">We hold the emergency terms at the hours they actually convert, put the phone number above everything else on the page, and measure to the dispatched job rather than the form fill.</span>
                 <span class="vcard__tags">
@@ -576,7 +585,7 @@
                 </svg>
               </span>
               <span class="vcard__body">
-                <span class="vcard__name">Insurance</span>
+                <h3 class="vcard__name">Insurance</h3>
                 <span class="vcard__problem">Carriers outbid every independent agency on the obvious terms, and the clicks cheap enough to win are shopping on price and nothing else.</span>
                 <span class="vcard__fix">We go after the coverage situations a call center handles badly, bundled, high-value and hard-to-place, and build the quote form to qualify on that instead of chasing the cheapest click.</span>
                 <span class="vcard__tags">
