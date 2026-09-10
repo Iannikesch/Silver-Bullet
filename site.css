@@ -1588,13 +1588,19 @@
        weight under the section's h2 - the same finding as the capability
        titles. margin is the only thing a heading adds that a span did not,
        so it is the only thing reset. Rendered output is unchanged. */
+    /* The name is what the card is scanned for, so it takes the house
+       heading treatment rather than overriding it down to something
+       lighter than the body copy underneath it. 800 and --text-strong are
+       what every other h1/h2/h3 on the site carries; this was the only
+       heading opting out. */
     .vcard__name {
-      margin: 0;
+      margin: 0 0 12px;
       display: block;
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--steel-050);
-      margin-bottom: 10px;
+      font-size: clamp(18px, 1.7vw, 22px);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      line-height: 1.1;
+      color: var(--text-strong);
     }
 
     /* Problem and fix are both body copy, so both sit on the text ramp.
