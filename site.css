@@ -855,6 +855,22 @@
       .cform__grid { grid-template-columns: 1fr; }
     }
 
+    /* 16px is a hard floor on touch, not a preference. iOS Safari zooms the
+       whole page in when a field with a computed font-size under 16px is
+       focused, and it does not zoom back out - so tapping "Your name" on an
+       iPhone would leave the visitor scrolled sideways inside a magnified
+       page for the rest of the form. 15px everywhere else keeps the field
+       text matched to the labels beside it.
+
+       Keyed to pointer:coarse rather than a width, because the zoom is a
+       property of the input method: a touch tablet in landscape is well past
+       any mobile breakpoint and still does it. Same reasoning the texture
+       pack uses for its (hover: none) branch. */
+    @media (pointer: coarse) {
+      .cform__field input,
+      .cform__field textarea { font-size: 16px; }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       .cform__field input,
       .cform__field textarea { transition: none; }
