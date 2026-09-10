@@ -221,6 +221,7 @@ body.has-nightfield > *:not(.tx-nightfield--fixed):not(.site-header) {
 body.has-nightfield .site-header,
 body.has-nightfield .ticker,
 body.has-nightfield .capabilities,
+body.has-nightfield .verticals,
 body.has-nightfield .contact { background: transparent; }
 
 
