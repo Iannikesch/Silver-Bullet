@@ -1279,44 +1279,136 @@
        two circles and DESIGN.md rules out a single radius applied to
        everything. */
 
-    .vgrid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    /* ---- the rail ----------------------------------------------------
+       A scroll-snap strip, not a grid. Native scrolling does the dragging,
+       the momentum and the touch handling, which means no pointer maths to
+       get wrong and no library to load: trackpad, touch, shift-wheel and
+       the keyboard all work because the browser already knows how.
+
+       With JS off this is the whole component - six readable cards you can
+       scroll. vertical-rail.js only adds the depth falloff and the arrows. */
+    .vrail {
+      display: flex;
       gap: var(--space-sm);
       margin: var(--space-md) 0 0;
       padding: 0;
       list-style: none;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      /* proximity, NOT mandatory. Mandatory has to land on a snap point at
+         all times, so on load it immediately ate the centring padding below
+         and pulled a single card to the middle - the exact thing the
+         padding exists to prevent. Proximity leaves the two-card straddle a
+         stable resting position and still settles a near-miss. */
+      scroll-snap-type: x proximity;
+      /* No leading pad. Centring a pair inside the rail meant 232px of
+         dead space before the first card, which read as a broken margin
+         rather than as a carousel. The cards start on the same line as the
+         heading; what moves instead is the point the falloff measures from,
+         which vertical-rail.js puts over the leading pair. See --k there.
+
+         The trailing pad is what lets the LAST pair reach that point. */
+      padding-inline-start: 0;
+      padding-inline-end: max(0px, calc(100% - 2 * var(--vcard-w) - var(--space-sm)));
+      scrollbar-width: none;
+      /* Room for the lifted centre cards to rise into without clipping. */
+      padding-block: 18px;
+    }
+    .vrail::-webkit-scrollbar { display: none; }
+
+    .vrail > li {
+      flex: 0 0 var(--vcard-w);
+      scroll-snap-align: center;
+      display: flex;
     }
 
-    /* auto-fit does the fluid work from 300px up, but it cannot count. The
-       content column is 1264px, which fits FOUR 300px tracks, so six cards
-       land as a row of 4 and a row of 2 stretched to ~632px each. This is
-       the exact failure recorded against .cap-grid further down, which was
-       auto-fit once for the same reason and was changed back.
+    /* Sized down from the grid it replaced: two of these sit in the middle
+       at 1440 with the neighbour showing at the edge, which is what makes it
+       read as a rail rather than a row that happens to scroll.
 
-       Capping the track count at 3 keeps auto-fit's behaviour everywhere it
-       helps and takes it away at the one width where it goes wrong. Six
-       divides by 3, 2 and 1, so no breakpoint can leave a short row. */
-    @media (min-width: 1000px) {
-      .vgrid { grid-template-columns: repeat(3, 1fr); }
-    }
+       Declared on the component, not :root. :root is the site's token
+       layer; a card width is this component's business, the same way
+       .conveyor keeps --cols and --slot-gap to itself. */
+    .verticals { --vcard-w: clamp(258px, 27vw, 384px); }
 
+    /* --k is published per card by vertical-rail.js: 0 in the middle of the
+       rail, 1 out at the edges. Everything below is that one number spent
+       three ways - the centre pair sit forward, full strength and lifted;
+       everything else sinks, dims and steps back.
+
+       transform and opacity only, so the whole falloff runs on the
+       compositor and a drag never touches layout. */
     .vcard {
+      --k: 0;
       display: flex;
       flex-direction: column;
-      height: 100%;
+      width: 100%;
       background: var(--bg-raised);
+      transform: scale(calc(1 - 0.11 * var(--k, 0)))
+                 translateY(calc(14px * var(--k, 0)));
+      opacity: calc(1 - 0.58 * var(--k, 0));
+      /* --dur-base, not --dur-slow. textures.css reserves --dur-slow (1.15s)
+         for "one orchestrated moment, used sparingly", and this is the
+         opposite kind of motion: --k is retargeted every frame the rail
+         scrolls, so a 1.15s transition damps the cards a full second behind
+         the drag. 0.42s tracks the pointer with just enough lag to read as
+         weight - the same argument the reactive chrome makes at 0.3s. */
+      transition: transform var(--dur-base, .42s) var(--ease-metal, ease-out),
+                  opacity var(--dur-base, .42s) var(--ease-metal, ease-out),
+                  border-top-color var(--dur-base, .42s) var(--ease-metal, ease-out);
+      will-change: transform, opacity;
       border-top: 1px solid var(--border-lit);
       border-left: 1px solid var(--border);
       border-right: 1px solid var(--border);
       border-bottom: 1px solid var(--ink);
     }
 
+    /* The lit top edge is the one thing that gets BRIGHTER at the centre
+       rather than just less dim. Rim light, per DESIGN.md - a 1px edge, no
+       blur, nothing bleeding into the space around it. */
+    .vrail .vcard { border-top-color: color-mix(in srgb, var(--border-lit), var(--steel-100) calc((1 - var(--k, 0)) * 100%)); }
+
     /* No hover state, and no cursor change: these cards do not go anywhere
        yet. A tile that lights up under the pointer promises a click it
        cannot honour, which is the same rule the footer's social icons are
        waiting on. When the vertical pages exist, wrap each card's contents
        in an <a> and the hover treatment comes back with it. */
+
+    /* Reduced motion gets the rail and none of the depth: every card at
+       full size and full strength, scrolling and nothing else. */
+    @media (prefers-reduced-motion: reduce) {
+      .vcard {
+        transform: none;
+        opacity: 1;
+        transition: none;
+      }
+      .vrail { scroll-behavior: auto; }
+    }
+
+    /* ---- arrows ----
+       Steel, not amber. Secondary actions do not get warmth, and the page
+       spends its one amber element on the CTA. */
+    .vrail-nav {
+      display: flex;
+      gap: 8px;
+      margin-top: var(--space-sm);
+    }
+
+    .vrail-btn {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      background: transparent;
+      color: var(--steel-100);
+      border: 1px solid var(--border-lit);
+      cursor: pointer;
+      transition: color var(--dur-base) var(--ease-metal),
+                  border-color var(--dur-base) var(--ease-metal);
+    }
+    .vrail-btn svg { width: 20px; height: 20px; stroke-width: 1.5; }
+    .vrail-btn:hover:not(:disabled) { color: var(--white); border-color: var(--steel-700); }
+    .vrail-btn:disabled { color: var(--steel-900); border-color: var(--border); cursor: default; }
 
     /* ---- media: photo and icon share every dimension ----
        The two treatments have to read as one system, so the box is defined
@@ -1345,8 +1437,8 @@
     }
 
     .vcard__mark {
-      width: 84px;
-      height: 84px;
+      width: 68px;
+      height: 68px;
       /* Thinner as it scales up: 2 is Tabler's weight at 24px, and holding
          it at 84px turns a line drawing into a slab. */
       stroke-width: 1;
@@ -1358,7 +1450,7 @@
       /* The bottom padding lives here, not on the footer's margin, because
          the footer's top margin is auto and auto collapses to 0 the moment
          the copy fills the card - which would butt the tags into the rule. */
-      padding: var(--space-sm) 24px var(--space-sm);
+      padding: 22px 20px 20px;
     }
 
     .vcard__name {
@@ -1416,8 +1508,8 @@
       display: flex;
       align-items: baseline;
       gap: 16px;
-      margin: auto 24px 0;
-      padding: 14px 0 calc(var(--space-sm) - 6px);
+      margin: auto 20px 0;
+      padding: 13px 0 20px;
       border-top: 1px solid var(--border);
     }
 
