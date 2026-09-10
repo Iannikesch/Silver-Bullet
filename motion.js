@@ -415,6 +415,20 @@
       area.classList.add('is-dragging');
     });
 
+    /* Images are draggable by default in every browser, and two of the three
+       bands are made of them. Pressing a conveyor photo therefore started a
+       NATIVE image drag, and the browser cancels the pointer gesture the
+       moment it does:
+
+         pointerdown -> pointermove -> dragstart -> pointercancel
+
+       pointercancel runs endDrag(), so the band let go after a single move
+       and the rest of the gesture was dropped on the floor. The ghost image
+       followed the cursor instead of the strip. Suppressing dragstart inside
+       the band is what keeps the pointer gesture the band's own; it is scoped
+       to [data-marquee] so ordinary images elsewhere still drag normally. */
+    area.addEventListener('dragstart', function (e) { e.preventDefault(); });
+
     area.addEventListener('pointermove', function (e) {
       if (!dragging) return;
       var dx = e.clientX - startX;
@@ -549,7 +563,77 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * 5. Boot
+   * 5. The platform band converges
+   *
+   * Head slides down from above and fades. Then the six marks arrive in
+   * three beats, a pair at a time, each pair entering from opposite
+   * viewport edges and meeting at its row: Meta/Google, then YouTube/
+   * TikTok, then LinkedIn/Shopify.
+   *
+   * Even DOM index = left column = enters from the left edge; odd = right.
+   * That is why .press-wall is a 2-up grid - see the note in site.css.
+   *
+   * The travel distance is measured per mark rather than guessed at a
+   * fraction of the viewport, so each one starts genuinely off screen
+   * whatever column it lands in. .press clips, so nothing widens the page
+   * on the way in.
+   *
+   * Same doctrine as initClientReveal: the start state is set from here,
+   * never from the stylesheet, so with JS off, the CDN blocked or reduced
+   * motion on (all of which return before this runs) the band is simply
+   * visible. once:true, and the same guard for a reload that lands below
+   * the section.
+   *
+   * This is the SECOND scroll reveal on the page and it sits directly
+   * after the client wall's. DESIGN.md had recorded one as the ceiling;
+   * that note is updated rather than quietly broken.
+   * ------------------------------------------------------------------ */
+
+  function initPlatformReveal() {
+    var section = document.querySelector('.press');
+    if (!section) return;
+
+    var head  = section.querySelector('.press__head');
+    var items = Array.prototype.slice.call(section.querySelectorAll('.press-wall li'));
+    if (!head || !items.length) return;
+
+    var vw = window.innerWidth;
+    var offsets = items.map(function (li, i) {
+      var r = li.getBoundingClientRect();
+      /* Fully clear of the edge it comes from, plus a margin so the mark is
+         never half-born when the timeline starts. */
+      return (i % 2 === 0) ? -(r.right + 80) : (vw - r.left + 80);
+    });
+
+    gsap.set(head, { opacity: 0, y: -34 });
+    items.forEach(function (li, i) { gsap.set(li, { opacity: 0, x: offsets[i] }); });
+
+    var tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+
+    tl.to(head, { opacity: 1, y: 0, duration: 0.7 });
+
+    /* Three beats, one per pair. 0.16s between them - far enough apart to
+       read as three arrivals rather than one scatter, close enough that the
+       band is not still assembling once you have scrolled past it. */
+    for (var pair = 0; pair * 2 < items.length; pair++) {
+      var members = items.slice(pair * 2, pair * 2 + 2);
+      tl.to(members, {
+        opacity: 1, x: 0, duration: 0.85
+      }, 0.42 + pair * 0.16);
+    }
+
+    var st = ScrollTrigger.create({
+      trigger: section,
+      start: 'top 80%',
+      once: true,
+      onEnter: function () { tl.play(); }
+    });
+
+    if (st.scroll() > st.start) tl.progress(1);
+  }
+
+  /* ------------------------------------------------------------------ *
+   * 6. Boot
    * ------------------------------------------------------------------ */
 
   if (REDUCED) {
@@ -571,6 +655,7 @@
   initChrome();
   initMarquees();
   initClientReveal();
+  initPlatformReveal();
   document.documentElement.setAttribute('data-motion', 'full');
 
   /* Exposed for verification only. */
