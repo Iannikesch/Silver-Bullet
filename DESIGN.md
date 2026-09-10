@@ -182,8 +182,10 @@ of that line:
 - **It survives a mid-page reload.** Loading already scrolled past the section
   lands the timeline finished rather than leaving a permanently blank wall.
 
-Precedent, not a new category: `initGridSweep()` already runs an arrival effect
-on the capabilities grid.
+This once cited `initGridSweep()` on the capabilities grid as precedent. That
+section was replaced on the home page by the verticals rail, `.cap-grid` went
+with it, and the sweep was deleted rather than re-pointed at a rail it was not
+shaped for. The reveal stands on the five conditions above, not on precedent.
 
 ### The ambient exception: three bands, three speeds
 
