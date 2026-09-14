@@ -42,6 +42,9 @@
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="tokens.css?v=3">
+  <!-- Calendly popup chrome. Its own stylesheet - the popup renders in
+       Calendly's iframe and cannot take our tokens. -->
+  <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
 
   <style>
     /* ==========================================================
@@ -412,7 +415,7 @@
              obviously broken on purpose: a plausible-looking wrong link
              would fail silently on live traffic.
              ============================================================ -->
-        <a class="cta" href="REPLACE_WITH_CALENDLY_URL">Book a call</a>
+        <a data-book class="cta" href="https://calendly.com/inikesch-theprofectusagency/30min">Book a call</a>
         <p class="meta cta-note">Free, 30 minutes, no pitch deck.</p>
       </div>
     </div>
@@ -489,7 +492,7 @@
       <div class="wrap">
         <h2 class="section-head" style="margin: 0 auto var(--space-sm);">
           See if you qualify.</h2>
-        <a class="cta" href="REPLACE_WITH_CALENDLY_URL">Book a call</a>
+        <a data-book class="cta" href="https://calendly.com/inikesch-theprofectusagency/30min">Book a call</a>
         <p class="meta cta-note">If we don't think we can move your numbers,
           we'll tell you on the call.</p>
       </div>
@@ -516,6 +519,8 @@
       <span>Placeholder copy — replace before launch.</span>
     </div>
   </footer>
+
+  <script defer src="booking.js?v=1"></script>
 
 </body>
 </html>

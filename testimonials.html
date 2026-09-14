@@ -67,6 +67,9 @@
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css?v=5">
 
+  <!-- Calendly popup chrome. Its own stylesheet - the popup renders in
+     Calendly's iframe and cannot take our tokens. -->
+  <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
   <link rel="stylesheet" href="site.css?v=42">
   <link rel="stylesheet" href="nightfield.css?v=4">
 
@@ -217,7 +220,7 @@
         </details>
 
         <a class="nav-link" href="testimonials.html">Testimonials</a>
-        <a class="cta-secondary tx-glare" href="#contact" data-texture="rim">Talk to us</a>
+        <a data-book class="cta-secondary tx-glare" href="https://calendly.com/inikesch-theprofectusagency/30min" data-texture="rim">Talk to us</a>
       </nav>
     </div>
     <div class="site-header__rule"></div>
@@ -251,7 +254,7 @@
          href is the one place a booking link needs to go when Calendly
          exists; until then it drops to the contact section rather than
          being a dead link on the front door. -->
-    <a class="ticker__cta tx-glare" href="#contact" data-texture="rim">Book a call</a>
+    <a data-book class="ticker__cta tx-glare" href="https://calendly.com/inikesch-theprofectusagency/30min" data-texture="rim">Book a call</a>
   </aside>
   <!-- The intro. Removed from the DOM once it has run. -->
   <div class="intro-layer" aria-hidden="true">
@@ -516,7 +519,7 @@
       <div class="foot-brand">
         <img class="foot-brand__logo" src="silver-bullet-logo-alpha.png?v=2"
              width="732" height="60" alt="Silver Bullet">
-        <a class="cta-secondary" href="#contact">Connect with us</a>
+        <a data-book class="cta-secondary" href="https://calendly.com/inikesch-theprofectusagency/30min">Connect with us</a>
       </div>
 
       <!-- Legal lives on the copyright line, not in a column of its own —
@@ -531,6 +534,7 @@
   <!-- First, and dependency-free: the intro must not wait on a CDN. -->
   <script defer src="intro.js?v=3"></script>
   <!-- Dropdown enhancement. The menu works without it. -->
+  <script defer src="booking.js?v=1"></script>
   <script defer src="nav.js?v=2"></script>
 
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
