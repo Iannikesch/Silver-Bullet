@@ -3,30 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Performance marketing case studies — Silver Bullet</title>
-  <meta name="description" content="Case studies from Silver Bullet. Revenue and gross profit growth for service businesses, on rev share and profit share.">
-  <link rel="canonical" href="https://silverbulletagency.com/work.html">
-
-  <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": "https://silverbulletagency.com/"
-    },
-    {
-      "@type": "ListItem",
-      "position": 2,
-      "name": "Our work"
-    }
-  ]
-}
-  </script>
-
+  <title>Cookie policy — Silver Bullet</title>
+  <meta name="description" content="Silver Bullet sets no cookies. One session storage flag stops the intro animation replaying, and that is the whole story.">
+  <link rel="canonical" href="https://silverbulletagency.com/cookies.html">
   <!-- Icons. The mark is the bullet, drawn with the same hard-stopped chrome
        ramp as the site: paired stops at identical offsets, so every band is
        an edge. The .svg is what modern browsers use; the .ico is the
@@ -37,17 +16,17 @@
   <link rel="manifest" href="/site.webmanifest">
   <meta name="theme-color" content="#0A0D0E">
   <!-- Social card. Absolute URLs, as the OG spec requires. -->
-  <meta property="og:url" content="https://silverbulletagency.com/work.html">
+  <meta property="og:url" content="https://silverbulletagency.com/404.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Silver Bullet">
-  <meta property="og:title" content="Performance marketing case studies — Silver Bullet">
+  <meta property="og:title" content="Page not found — Silver Bullet">
   <meta property="og:description" content="Case studies from Silver Bullet. Revenue and gross profit growth for service businesses, on rev share and profit share.">
   <meta property="og:image" content="https://silverbulletagency.com/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Silver Bullet case studies — measured revenue growth for service businesses">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Performance marketing case studies — Silver Bullet">
+  <meta name="twitter:title" content="Page not found — Silver Bullet">
   <meta name="twitter:description" content="Case studies from Silver Bullet. Revenue and gross profit growth for service businesses, on rev share and profit share.">
   <meta name="twitter:image" content="https://silverbulletagency.com/og-image.png">
   <meta name="twitter:image:alt" content="Silver Bullet case studies — measured revenue growth for service businesses">
@@ -69,144 +48,29 @@
 
   <link rel="stylesheet" href="site.css?v=41">
   <link rel="stylesheet" href="nightfield.css?v=4">
+  <meta property="og:url" content="https://silverbulletagency.com/cookies.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Silver Bullet">
+  <meta property="og:title" content="Cookie policy — Silver Bullet">
+  <meta property="og:description" content="We set no cookies. One session flag stops the intro replaying.">
+  <meta property="og:image" content="https://silverbulletagency.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Silver Bullet — performance marketing on rev share and profit share">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cookie policy — Silver Bullet">
+  <meta name="twitter:description" content="We set no cookies. One session flag stops the intro replaying.">
+  <meta name="twitter:image" content="https://silverbulletagency.com/og-image.png">
+  <meta name="twitter:image:alt" content="Silver Bullet — performance marketing on rev share and profit share">
 
-
-  <style>
-    .work-hero { padding: var(--space-lg) 0 var(--space-md); }
-    .work-hero .lead { margin-top: var(--space-sm); }
-
-    /* Flex rather than grid, deliberately.
-
-       The hairline-divided grid used elsewhere paints the container in
-       --border and lets a 1px gap show through as the rules. That is right
-       when the cells always fill the row. With three cards it does not: drop
-       to two columns and the last row is one card and one EMPTY cell, and
-       that empty cell is a slab of grey.
-
-       Flex has no cells to leave empty. justify-content centres a short last
-       row, so the third card sits in the middle of the row instead of hanging
-       off the left with a hole beside it. Each card carries its own lit top
-       edge, which is the panel treatment from DESIGN.md anyway. */
-    .case-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: clamp(14px, 1.6vw, 22px);
-      margin: 0 0 var(--space-xl);
-      padding: 0;
-      list-style: none;
-    }
-
-    /* Basis rather than a fixed width: three sit across at full width, then
-       two, then one, and a lone card never stretches to fill the row. */
-    .case-grid > li {
-      display: flex;
-      flex: 0 1 clamp(300px, 31%, 380px);
-    }
-
-    .case-card {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: var(--bg);
-      text-decoration: none;
-      border-top: 1px solid var(--border-lit);
-      border-left: 1px solid var(--border);
-      border-right: 1px solid var(--border);
-      border-bottom: 1px solid var(--ink);
-      transition: background-color .2s ease, border-color .2s ease;
-    }
-
-    .case-card:hover { border-top-color: var(--steel-500); }
-
-    .case-card:hover { background: var(--bg-raised); }
-
-    .case-card__art {
-      aspect-ratio: 16 / 10;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg-raised);
-      border-bottom: 1px solid var(--border);
-      color: var(--steel-900);
-      font-size: 13px;
-    }
-
-    .case-card:hover .case-card__art { background: var(--charcoal); }
-
-    .case-card__body { padding: var(--space-sm); }
-
-    .case-card__meta {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      font-size: 13px;
-      color: var(--steel-700);
-    }
-
-    /* h2, not h3: these are the page's primary content, and they used to sit
-       before the first h2 on the page, which made the outline read
-       h1 -> h3 -> h2. Promoted a level; the selector moved with the tag so
-       the rendered size is unchanged. */
-    .case-card h2 {
-      margin: 10px 0 14px;
-      color: var(--steel-050);
-      font-size: clamp(19px, 1.7vw, 23px);
-      line-height: 1.2;
-    }
-
-    /* The number goes on the card. Vayner's index carries none, and the index
-       is the highest-traffic page on the site. */
-    .case-card__figure {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      flex-wrap: wrap;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
-      color: var(--white);
-      font-size: clamp(20px, 1.9vw, 26px);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-    }
-
-    .case-card__figure .to { color: var(--steel-700); font-weight: 400; }
-    .case-card__figure .in { color: var(--steel-500); font-size: 14px; font-weight: 500; letter-spacing: 0; }
-
-    /* Real project photography in the slot. The card art keeps its aspect
-       box so a missing or slow image cannot collapse the grid row. */
-    .case-card__art img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      /* Held slightly back so the card reads as one surface rather than a
-         photo with a caption stapled under it; full strength on hover. */
-      opacity: .82;
-      filter: saturate(.85);
-      transition: opacity .25s ease, filter .25s ease, transform .5s ease;
-    }
-
-    .case-card:hover .case-card__art img {
-      opacity: 1;
-      filter: saturate(1);
-      transform: scale(1.02);
-    }
-
-    .case-card__art { overflow: hidden; }
-  </style>
+  <!-- ============================================================
+       Cookie policy. The footer link says "Cookie policy" rather than "Cookie
+       settings": there are no cookies, so a settings panel would be a control
+       with nothing behind it. If analytics or a pixel is ever added, this page
+       and that link both need revisiting - and probably a real consent tool.
+       ============================================================ -->
 </head>
-
 <body class="has-nightfield">
-  <!-- Full-page lighting field. See nightfield.css — this deliberately
-       departs from DESIGN.md and is here to be looked at. -->
-  <div class="tx-nightfield tx-nightfield--fixed" aria-hidden="true">
-    <span class="tx-nightfield__bloom"></span>
-    <span class="tx-nightfield__bokeh"></span>
-    <span class="tx-nightfield__cyan"></span>
-    <span class="tx-nightfield__vignette"></span>
-    <span class="tx-nightfield__grain"></span>
-  </div>
   <header class="site-header tx-frost">
     <div class="wrap">
       <a class="logo tx-halo tx-halo--lung" href="index.html#top" aria-label="Silver Bullet — home">
@@ -243,7 +107,7 @@
         </details>
 
         <a class="nav-link" href="testimonials.html">Testimonials</a>
-        <a class="cta-secondary tx-glare" href="#contact" data-texture="rim">Talk to us</a>
+        <a class="cta-secondary tx-glare" href="index.html#contact" data-texture="rim">Talk to us</a>
       </nav>
     </div>
     <div class="site-header__rule"></div>
@@ -277,147 +141,57 @@
          href is the one place a booking link needs to go when Calendly
          exists; until then it drops to the contact section rather than
          being a dead link on the front door. -->
-    <a class="ticker__cta tx-glare" href="#contact" data-texture="rim">Book a call</a>
+    <a class="ticker__cta tx-glare" href="index.html#contact" data-texture="rim">Book a call</a>
   </aside>
-  <!-- The intro. Removed from the DOM once it has run. -->
-  <div class="intro-layer" aria-hidden="true">
-    <div class="blip"></div>
-    <div class="bullet" data-chrome="bullet">
-      <span class="bullet__wake"></span>
-      <span class="bullet__body"></span>
-      <span class="bullet__glint"></span>
-      <span class="bullet__heat"></span>
-    </div>
-  </div>
 
   <main id="top">
+    <section class="wrap legal">
+      <p class="meta legal__eyebrow">Legal</p>
+      <h1>Cookie policy</h1>
+      <p class="legal__date">Effective REPLACE_WITH_EFFECTIVE_DATE. Last updated REPLACE_WITH_EFFECTIVE_DATE.</p>
 
-    <section class="wrap work-hero">
-      <h1 class="tx-rim-text" data-texture="rim">Our work</h1>
-      <p class="lead">
-        A meaningful part of our fee comes out of what we generate &mdash; rev
-        share or profit share. So every figure below is revenue or gross profit,
-        never impressions. Growth is stated as a percentage rather than a
-        dollar pair because these are private books, and every case says how
-        the number was arrived at.
-      </p>
-    </section>
-
-    <div class="wrap">
-      <ul class="case-grid">
-        <li>
-          <a class="case-card" href="case-vitality.html">
-            <span class="case-card__art"><img src="Assets/web/work-vitality-meter.webp" width="1200" height="800" loading="lazy" decoding="async" alt="A Vitality Mechanical technician metering a motor"></span>
-            <span class="case-card__body">
-              <span class="case-card__meta"><span>Vitality Mechanical</span><span>Rev share</span></span>
-              <h2>Turning a service department that ran on callbacks into a booked calendar.</h2>
-              <span class="case-card__figure">+25%
-                <span class="in">revenue growth, 2 months</span></span>
-            </span>
-          </a>
-        </li>
-        <li>
-          <a class="case-card" href="case-mantis.html">
-            <span class="case-card__art"><img src="Assets/web/work-mantis-dolly.webp" width="1200" height="800" loading="lazy" decoding="async" alt="A Mantis Moving crew member loading a truck"></span>
-            <span class="case-card__body">
-              <span class="case-card__meta"><span>Mantis Moving &amp; Storage</span><span>Profit share</span></span>
-              <h2>Getting paid for the moves worth doing instead of every move going.</h2>
-              <span class="case-card__figure">~$60k
-                <span class="in">from ~$2k of attributable ad spend, 3 days</span></span>
-            </span>
-          </a>
-        </li>
-        <li>
-          <a class="case-card" href="case-nsp.html">
-            <span class="case-card__art"><img src="Assets/web/work-nsp-van.webp" width="1280" height="853" loading="lazy" decoding="async" alt="An NSP Plumbing service van"></span>
-            <span class="case-card__body">
-              <span class="case-card__meta"><span>NSP Plumbing</span><span>Rev share</span></span>
-              <h2>A commercial book built on top of a business that only rang when something burst.</h2>
-              <span class="case-card__figure">+50%
-                <span class="in">revenue growth, 2 months</span></span>
-            </span>
-          </a>
-        </li>
-      </ul>
-    </div>
-
-    <section id="contact" class="contact">
-      <div class="wrap">
-        <!-- A machined component, not a background. Metal behind text would
-             be unreadable — chrome is far too light for steel type to sit on.
-             So the metal is an OBJECT above the heading: brushed, rim-lit on
-             hover, and it catches the light once as the section arrives. -->
-        <div class="contact__bar tx-brushed tx-rim tx-sweep"
-             data-chrome="contact" data-texture="rim" aria-hidden="true"></div>
-        <h2>Tell us what you're trying to grow.</h2>
-        <p class="lead">
-          We'll look at your numbers and tell you honestly whether a performance
-          deal makes sense. If it doesn't, we'll say so.
-        </p>
-        <!-- ============================================================
-             Inline enquiry form. Patterned on the one at the bottom of
-             vaynermedia.com, deliberately much shorter.
-
-             Theirs asks ten required questions including job title,
-             region and annual marketing budget, which suits an enterprise
-             lead desk. This visitor is an owner-operator who is already
-             suspicious of agencies, so the form asks the five things that
-             actually decide whether a performance deal is possible and
-             nothing else. Revenue is in because it is the qualifier - the
-             target is service businesses at $15M and under - not because
-             forms usually ask.
-
-             NO ENDPOINT YET. action is an obvious placeholder for the same
-             reason the VSL booking link is: a plausible-looking wrong URL
-             fails silently on live traffic, and a form that appears to
-             send while dropping enquiries is worse than one that clearly
-             does not work. Wiring it needs a decision on where posts go,
-             which touches deploy config - so it is left for that call.
-             ============================================================ -->
-        <form class="cform" action="REPLACE_WITH_FORM_ENDPOINT" method="post">
-          <div class="cform__grid">
-            <p class="cform__field">
-              <label for="cf-name">Your name</label>
-              <input id="cf-name" name="name" type="text" autocomplete="name" required>
-            </p>
-            <p class="cform__field">
-              <label for="cf-email">Email</label>
-              <input id="cf-email" name="email" type="email" autocomplete="email" required>
-            </p>
-            <p class="cform__field">
-              <label for="cf-site">Business website</label>
-              <input id="cf-site" name="website" type="text" inputmode="url"
-                     autocomplete="url" placeholder="yourbusiness.com" required>
-            </p>
-            <!-- Typed, not a range picker. Buckets make an owner round
-                 themselves into someone else's brackets, and the number
-                 that matters here is the real one. Free text also lets
-                 them answer "roughly 3m" or decline, which a required
-                 <select> cannot. -->
-            <p class="cform__field">
-              <label for="cf-rev">Annual revenue</label>
-              <input id="cf-rev" name="revenue" type="text"
-                     placeholder="e.g. $2.5M" required>
-            </p>
-          </div>
-
-          <p class="cform__field">
-            <label for="cf-goal">What are you trying to grow?</label>
-            <textarea id="cf-goal" name="goal" rows="4" required></textarea>
-          </p>
-
-          <div class="cform__actions">
-            <button class="cta" type="submit">Send it</button>
-            <span class="cform__note">
-              We read every one. If a performance deal doesn't make sense for you,
-              we'll tell you that instead of pitching. Or just email
-              <a href="mailto:hello@example.com">hello@example.com</a>.
-            </span>
-          </div>
-        </form>
+      <div class="panel legal__summary">
+        <h2>The short version</h2>
+        <p>This site sets no cookies at all. There is no consent banner because there
+          is nothing to consent to, and no settings panel because there is nothing to
+          switch off.</p>
       </div>
-    </section>
 
+      <h2>The one thing we store in your browser</h2>
+      <p>When you first arrive, a short animation plays: a bullet crosses the screen
+        and draws the line under the navigation. It is meant to be seen once, not
+        replayed every time you click through to another page.</p>
+      <p>So the site writes a single entry called <code>sb-intro-seen</code> to
+        <strong>session storage</strong>, which records that the animation has played.
+        That is the whole content &mdash; a flag. It holds no identifier, nothing about
+        you, and nothing that could be joined to anything else.</p>
+      <p>Session storage is not a cookie. It is never sent to our server, it cannot be
+        read by any other site, and the browser discards it the moment you close the
+        tab. If your browser blocks it, the site notices and carries on; you simply
+        see the intro again.</p>
+
+      <h2>What other companies see</h2>
+      <p>The site loads three JavaScript libraries from two public content delivery
+        networks, cdnjs (operated by Cloudflare) and jsDelivr. Requesting a file from
+        them discloses your IP address and user agent, as any web request does. We do
+        not set cookies through them and receive nothing back. Their own policies
+        govern what they do with that request.</p>
+
+      <h2>Why there is nothing to configure</h2>
+      <p>Cookie settings panels exist to let you turn off analytics and advertising
+        trackers. This site runs neither, so a panel would be a control with nothing
+        behind it. The <a href="privacy.html">privacy policy</a> sets out what little
+        we do collect.</p>
+
+      <h2>If this changes</h2>
+      <p>Adding analytics or an advertising pixel would change this page and, most
+        likely, require a real consent mechanism before it went live. We would update
+        this page first, not afterwards.</p>
+
+      <h2>Contact</h2>
+      <p>REPLACE_WITH_LEGAL_ENTITY, REPLACE_WITH_BUSINESS_ADDRESS.
+        <a href="mailto:REPLACE_WITH_PRIVACY_EMAIL">REPLACE_WITH_PRIVACY_EMAIL</a>.</p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -465,13 +239,13 @@
         <a class="foot-link" href="work.html">Our work</a>
         <a class="foot-link" href="capabilities.html">Capabilities</a>
         <a class="foot-link" href="testimonials.html">Testimonials</a>
-        <a class="foot-link" href="#contact">Contact</a>
+        <a class="foot-link" href="index.html#contact">Contact</a>
       </nav>
 
       <div class="foot-brand">
         <img class="foot-brand__logo" src="silver-bullet-logo-alpha.png"
              width="1708" height="140" alt="Silver Bullet">
-        <a class="cta-secondary" href="#contact">Connect with us</a>
+        <a class="cta-secondary" href="index.html#contact">Connect with us</a>
       </div>
 
       <!-- Legal lives on the copyright line, not in a column of its own —

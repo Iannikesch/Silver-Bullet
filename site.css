@@ -761,7 +761,100 @@
     .contact h2 { max-width: 18ch; }
     .contact .lead { margin-top: 20px; }
 
-    /* ---------- inline enquiry form ----------
+    /* ---------- legal pages ----------
+   Privacy, terms and cookies. One shared block rather than a <style> in each
+   of the three, which is how the case studies do it - they differ from each
+   other, these do not.
+
+   Measure is the whole job here. Body copy elsewhere on the site is short
+   enough that .lead's 62ch cap carries it; a policy is the one place someone
+   reads several hundred words in a row, so the column is capped at 68ch and
+   the headings get real space above them to give the eye somewhere to rest. */
+
+.legal {
+  padding: var(--space-lg) 0 var(--space-xl);
+  max-width: 68ch;
+}
+
+.legal__eyebrow { margin: 0 0 12px; }
+
+.legal h1 { margin: 0 0 12px; }
+
+.legal__date {
+  margin: 0 0 var(--space-md);
+  font-size: 14px;
+  color: var(--steel-700);
+}
+
+.legal h2 {
+  margin: var(--space-md) 0 14px;
+  font-size: clamp(20px, 2.4vw, 26px);
+}
+
+/* The summary is a real panel, so the reader can take the gist without the
+   rest. Reuses .panel from tokens.css: lit top edge, ink bottom, no shadow.
+
+   Declared AFTER .legal h2 on purpose. Both selectors are one class and one
+   type, so they carry identical specificity and source order is the only
+   tie-break - written the other way round, the general rule won and the
+   summary heading picked up a --space-md top margin it should not have.
+
+   margin-bottom is --space-sm, not --space-lg: the next h2 brings its own
+   --space-md above it, and the two stacked read as a hole in the page. */
+.legal__summary {
+  padding: clamp(20px, 2.4vw, 30px);
+  margin-bottom: var(--space-sm);
+}
+
+.legal__summary h2 {
+  margin: 0 0 10px;
+  font-size: clamp(17px, 1.9vw, 20px);
+  color: var(--steel-050);
+}
+
+.legal__summary p { margin: 0; color: var(--steel-100); }
+
+.legal h3 {
+  margin: var(--space-sm) 0 10px;
+  font-size: clamp(15px, 1.6vw, 17px);
+  color: var(--steel-050);
+}
+
+.legal p,
+.legal li {
+  color: var(--steel-300);
+  line-height: 1.75;
+}
+
+.legal p { margin: 0 0 16px; }
+
+.legal ul {
+  margin: 0 0 16px;
+  padding-left: 20px;
+}
+
+.legal li { margin-bottom: 10px; }
+
+.legal strong { color: var(--steel-050); font-weight: 600; }
+
+.legal code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .9em;
+  padding: 2px 6px;
+  color: var(--steel-050);
+  background: var(--charcoal);
+  border: 1px solid var(--border);
+}
+
+.legal a {
+  color: var(--steel-100);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.legal a:hover { color: var(--white); }
+
+/* ---------- inline enquiry form ----------
        Fields are --charcoal, which tokens.css nominates for exactly this
        job. Separation is the rim-light move the whole site uses - lit top
        edge, --border sides, --ink bottom - so an input reads as the same
@@ -853,6 +946,22 @@
 
     @media (max-width: 640px) {
       .cform__grid { grid-template-columns: 1fr; }
+    }
+
+    /* 16px is a hard floor on touch, not a preference. iOS Safari zooms the
+       whole page in when a field with a computed font-size under 16px is
+       focused, and it does not zoom back out - so tapping "Your name" on an
+       iPhone would leave the visitor scrolled sideways inside a magnified
+       page for the rest of the form. 15px everywhere else keeps the field
+       text matched to the labels beside it.
+
+       Keyed to pointer:coarse rather than a width, because the zoom is a
+       property of the input method: a touch tablet in landscape is well past
+       any mobile breakpoint and still does it. Same reasoning the texture
+       pack uses for its (hover: none) branch. */
+    @media (pointer: coarse) {
+      .cform__field input,
+      .cform__field textarea { font-size: 16px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1014,6 +1123,64 @@
       line-height: 1.7;
       text-align: right;
       color: var(--steel-700);
+    }
+
+    /* ---- legal links, on the copyright line ----
+       Modelled on inboundmedia.co, which runs "© INBOUND 2026 | PRIVACY
+       POLICY" as one line of small print. theinfiniteagency.com goes further
+       and carries no legal links at all, which is not an option here.
+
+       So: the copyright's own 13px, the copyright's own --steel-700, no
+       underline, no column heading, no tap-target padding. They read as part
+       of the small print rather than as somewhere to go, which is exactly
+       what small print is for.
+
+       WHAT WAS DELIBERATELY NOT DONE, and why the brief stopped here:
+       they are not styled to look unclickable. --steel-700 on --bg measures
+       4.51:1, just over the 4.5 floor AA sets for small text; the hover lift
+       stays; and the global :focus-visible outline still finds them. Quiet
+       is a style choice. Inconspicuous is a legal one, and it runs straight
+       into the reason these pages exist - CCPA wants a "clear and
+       conspicuous" privacy link, courts decline to enforce terms nobody
+       could reasonably find, and Google Ads and Meta both check for a
+       reachable policy before they will run traffic. A link too dead to
+       click is a link that costs you the ad account.
+
+       A hairline divider rather than a middle dot: DESIGN.md rules those
+       out, and a rule is this site's own way of separating things anyway. */
+    .foot-legal {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 0 14px;
+      margin-left: 14px;
+      padding-left: 14px;
+      border-left: 1px solid var(--slate);
+    }
+
+    .foot-legal a {
+      color: inherit;              /* same value as the copyright beside it */
+      text-decoration: none;
+      transition: color .18s ease;
+    }
+
+    .foot-legal a:hover,
+    .foot-legal a:focus-visible { color: var(--steel-050); }
+
+    /* Once the copyright wraps, a left rule on a new line reads as a stray
+       mark. Below that it sits under the line instead, still quiet. */
+    @media (max-width: 560px) {
+      .foot-legal {
+        display: flex;
+        margin-left: 0;
+        padding-left: 0;
+        border-left: 0;
+        margin-top: 8px;
+        justify-content: flex-end;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .foot-legal a { transition: none; }
     }
 
     /* Brand block leads once the three columns stop fitting — the wordmark
