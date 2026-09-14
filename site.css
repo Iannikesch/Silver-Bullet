@@ -258,8 +258,15 @@
          happens before the image file has necessarily arrived. Without a
          width reserved in CSS the box would still be empty at that moment
          and the logo would fly to the wrong place. */
-      width: clamp(148px, 16vw, 196px);
+      /* The lockup is 3.3:1, so width drives height: at the old 196px cap it
+         stood 59px tall inside a 72px bar, which left 6px of air. Capped to
+         152px it lands at 46px and the bar breathes again. The width stays
+         declared for the reason above - the intro measures it before the
+         file lands - and height is now declared too, so the box is fully
+         reserved and nothing reflows when the image arrives. */
+      width: clamp(118px, 13vw, 152px);
       height: auto;
+      aspect-ratio: 800 / 242;
     }
 
     .nav {
