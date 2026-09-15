@@ -219,10 +219,31 @@
     form.addEventListener('input', function () { lead(); });
 
     if (FORM_HANDOFF) {
+      /* Send the enquiry FIRST, then offer the booking. The naive version
+         - preventDefault and open the popup - never posts the form at all,
+         which is the silent-loss failure this flag exists to prevent. So
+         the form is posted with fetch to its own action, and the popup only
+         opens once the endpoint has accepted it. If the post fails the
+         browser's normal submit runs instead, so nothing is ever lost to
+         this script. */
       form.addEventListener('submit', function (e) {
-        window.dataLayer.push({ event: 'contact_form_submit' });
         e.preventDefault();
-        open(e);
+        var btn = form.querySelector('[type="submit"]');
+        if (btn) btn.disabled = true;
+
+        fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        }).then(function (res) {
+          if (!res.ok) throw new Error('form endpoint returned ' + res.status);
+          window.dataLayer.push({ event: 'contact_form_submit' });
+          open(e);
+        }).catch(function () {
+          /* Fall back to a plain submit so the enquiry still goes somewhere. */
+          if (btn) btn.disabled = false;
+          form.submit();
+        });
       });
     }
   }
