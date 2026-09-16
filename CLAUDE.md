@@ -33,7 +33,7 @@ framework, say so and ask before doing it.
 Movement is a priority for this site, but it is rationed. What moves: the bullet
 intro, the reactive chrome on two elements, four marquee bands — the word band's
 two rows, the creative conveyor and the logo band — two scroll-triggered
-reveals (the client wall, and the platform band under "Proficient in"), and
+reveals (the client wall, and the platform band under "Platforms we work on"), and
 the testimonial band, which advances itself on a 7s dwell. Nothing else does.
 
 The testimonial band is the fourth ambient mover, which DESIGN.md said would
@@ -44,8 +44,11 @@ visitor picks a quote. There is no fifth.
 
 There are two scroll reveals, and they sit on consecutive sections. The client
 wall drops its heading in and rises its logos; the platform band slides its head
-down and then converges three pairs of marks from opposite viewport edges,
-Meta/Google, then YouTube/TikTok, then LinkedIn/Shopify. Both are once-only, both
+down and then converges sixteen marks a row at a time, each row in two stages:
+the outer pair sweeps in from the two viewport edges, and as it lands the inner
+pair chases in behind it from the same edges. Rows are grouped by rendered
+position, not index, so the four-across grid can drop to two or one and every
+mark still enters from the edge it is nearer to. Both are once-only, both
 set their start state from JS so a no-JS or reduced-motion load is simply
 visible, and both are in `motion.js` (`initClientReveal`, `initPlatformReveal`).
 

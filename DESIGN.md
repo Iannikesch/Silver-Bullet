@@ -165,8 +165,9 @@ site animates its sections", which is the template look the "do not" list above
 exists to prevent.
 
 **Why it was allowed anyway.** The platform band's choreography is specific
-rather than generic: three pairs converge from opposite viewport edges to meet
-at their rows, which is a statement about the marks meeting in the middle, not a
+rather than generic: each row's outer pair converges from opposite viewport
+edges, and the inner pair chases in behind it from the same edges, which is a
+statement about the marks meeting in the middle, not a
 fade-and-rise applied to whatever happens to be there. It was asked for
 deliberately, with the beats specified.
 
