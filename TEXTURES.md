@@ -335,8 +335,13 @@ A band of light rakes across once as the element enters view.
 ## Bars
 
 ### `.tx-frost`
-Invisible at the top of the page, frosts once scrolled, so content passes under
-it blurred rather than hidden.
+A soft cold field at the top of the page, which frosts once scrolled so content
+passes under it blurred rather than hidden. The field is always on: a petrol
+radial anchored above the bar's top edge, densest there and gone before the
+rule. It is a gradient, so it costs nothing; only the blur waits for scroll.
+It was fully transparent at the top before, which read as a hard slab the
+moment it lifted - the field is what makes the bar a surface rather than a
+line.
 - **Needs:** `initFrost(selector, thresholdPx)`
 - **Knobs:** `--tx-frost-blur` (7px), `--tx-frost-fill` (58% of `--bg`)
 - **The two states are the cost control.** While unscrolled, `backdrop-filter`
@@ -374,6 +379,18 @@ A contained field of light behind one element. One body, three characters.
   viewport as the ticker's amber CTA.
 - **Inside a frosted bar a halo sits on top of the pane** — `backdrop-filter`
   blurs what is behind an element, never its own children.
+- **The plain `.tx-halo` answers the pointer.** Rests at `--low`, lifts to
+  `--high` and swells 6% under hover or keyboard focus. That is input-driven,
+  so it is in scope where the three animated characters are ambient. Under
+  reduced motion the lift is instant and the swell is dropped.
+- **It isolates.** The field is drawn at `z-index:-1`, meaning the bottom of
+  the nearest stacking context. On a button inside a section with its own
+  fill that is the section's context, and the field paints under the fill and
+  vanishes. `isolation: isolate` on the element makes it its own context, so
+  the field sits behind its content and above everything else, anywhere.
+- **Sizing is per context, in site.css, not here.** The defaults are cut for
+  a wordmark. A button in a 72px bar takes `pad-y: 11px` or the field leaves
+  the bar; a button on open ground can take more.
 
 ## Motion tokens
 

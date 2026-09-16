@@ -570,6 +570,30 @@
       .nav { transition: none; }
     }
 
+    /* ---------- halos behind the CTAs ----------
+       Each button carries .tx-halo: a contained cold field, resting low and
+       lifting under the pointer. The pack's defaults are cut for a wordmark
+       (34px x 18px reach); a button in a 72px bar needs less or the field
+       leaves the bar, and a button on open ground can take more.
+
+       Not on the ticker CTA. It is an opaque amber slab pinned inside a band
+       that clips, so a field behind it is either hidden or cut off. */
+    .nav .tx-halo {
+      --tx-halo-pad-x: 28px;
+      --tx-halo-pad-y: 11px;    /* 37px button + 22px = 59px, inside 72px */
+      --tx-halo-low: 0.34;      /* present at rest, not only under the pointer */
+      --tx-halo-high: 0.80;
+    }
+
+    .cta-row .tx-halo,
+    .cform__actions .tx-halo,
+    .foot-brand .tx-halo {
+      --tx-halo-pad-x: 40px;
+      --tx-halo-pad-y: 22px;
+      --tx-halo-low: 0.30;
+      --tx-halo-high: 0.68;
+    }
+
     /* ---------- buttons (base classes live in tokens.css) ---------- */
 
     .cta, .cta-secondary {
