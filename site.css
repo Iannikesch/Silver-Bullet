@@ -2581,6 +2581,12 @@
   max-height: clamp(32px, 3.4vw, 46px);
 }
 
+/* Optical sizing, same move as .client-wall. A mark that is nearly square
+   - the Salesforce cloud, the Zapier lockup - capped to the same HEIGHT as
+   a long wordmark renders at a third of its width and reads as a dot beside
+   Meta. A taller cap for those two puts them at the same visual weight. */
+.press-wall img.is-tall { max-height: clamp(44px, 4.6vw, 62px); }
+
 /* Two across under 900px, one under 560px. The reveal reads each mark's
    rendered position rather than its column index, so at every width a
    mark still enters from whichever edge it is nearer to. */
