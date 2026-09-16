@@ -70,7 +70,7 @@
   <!-- Calendly popup chrome. Its own stylesheet - the popup renders in
      Calendly's iframe and cannot take our tokens. -->
   <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
-  <link rel="stylesheet" href="site.css?v=42">
+  <link rel="stylesheet" href="site.css?v=47">
   <link rel="stylesheet" href="nightfield.css?v=4">
 
 
@@ -267,7 +267,7 @@
         <details class="nav-dd">
           <summary class="nav-dd__toggle">Capabilities<span class="nav-dd__sign" aria-hidden="true"></span></summary>
           <div class="nav-dd__panel" data-cap-menu>
-            <noscript><a class="nav-dd__all" href="index.html#capabilities">All capabilities</a></noscript>
+            <noscript><a class="nav-dd__all" href="capabilities.html">All capabilities</a></noscript>
           </div>
         </details>
 
@@ -342,6 +342,26 @@
         change from one to the next is how we are paid for it &mdash; a share
         of the revenue or profit it produces.
       </p>
+    </section>
+
+    <!-- ============================================================
+         The two groups. Rendered here by capabilities.js from the one data
+         object it holds - the same object the nav dropdown on every page
+         reads - so the group names, their descriptors and which capabilities
+         sit under each are never written twice. To rename the groups, edit
+         `label` in capabilities.js. Nothing in this file names them.
+
+         Every capability carries an anchor per group (cap-b2b-landing-pages,
+         cap-b2c-landing-pages), so a dropdown link lands in the column it
+         was clicked from. Each name then links on to its fuller row below.
+
+         With scripts blocked the panels do not render; the rows below are
+         the whole page, which is what it was before the groups existed.
+         ============================================================ -->
+    <section id="capabilities" class="capabilities">
+      <div class="wrap">
+        <div class="cap-panels" data-cap-panels></div>
+      </div>
     </section>
 
     <div class="wrap">
@@ -541,7 +561,7 @@
         <h2 class="foot-col__head" id="foot-site-head">Site</h2>
         <a class="foot-link" href="index.html">Home</a>
         <a class="foot-link" href="work.html">Our work</a>
-        <a class="foot-link" href="index.html#capabilities">Capabilities</a>
+        <a class="foot-link" href="capabilities.html">Capabilities</a>
         <a class="foot-link" href="blog.html">Blog</a>
         <a class="foot-link" href="resources.html">Guides and e-books</a>
         <a class="foot-link" href="testimonials.html">Testimonials</a>
@@ -572,7 +592,7 @@
        BEFORE nav.js: deferred scripts execute in document order, and nav.js
        decides on load whether the columns are open (desktop) or collapsed
        (phone), which it can only do if they exist. -->
-  <script defer src="capabilities.js?v=1"></script>
+  <script defer src="capabilities.js?v=2"></script>
   <script defer src="nav.js?v=3"></script>
 
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>

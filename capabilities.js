@@ -4,7 +4,7 @@
    Two things read from this file and nothing else does:
 
      - the Capabilities dropdown in the nav, on every page
-     - the two-panel Capabilities section on the home page
+     - the two-panel Capabilities section on capabilities.html
 
    Change a group's name, its one-line descriptor, or which
    capabilities sit under it HERE and both update. Nothing about
@@ -18,7 +18,7 @@
    The capability names and descriptions are the six the site
    already carried, unchanged. Do not add a seventh here without
    also giving it a page on capabilities.html, which is where the
-   section links each one.
+   section links each one (further down the same page).
 
    No GSAP, no dependencies. Self-initialising, same doctrine as
    nav.js and testimonial-slider.js.
@@ -62,9 +62,10 @@
 
   window.SB_CAPS = CAPS;
 
-  /* The section lives on the home page. From any other page the
-     dropdown has to cross to it first. */
-  var HOME = /(^|\/)index\.html$|\/$/.test(location.pathname) ? '' : 'index.html';
+  /* The section lives on capabilities.html. From any other page the
+     dropdown has to cross to it first; on that page the links are
+     in-page anchors and Lenis carries them. */
+  var SECTION_PAGE = /(^|\/)capabilities\.html$/.test(location.pathname) ? '' : 'capabilities.html';
 
   function esc(s) {
     return String(s).replace(/[&<>"]/g, function (c) {
@@ -90,7 +91,7 @@
       g.items.forEach(function (slug, i) {
         var c = CAPS.capabilities[slug];
         if (!c) return;
-        html += '<li><a href="' + HOME + '#cap-' + esc(g.key) + '-' + esc(slug) + '"' +
+        html += '<li><a href="' + SECTION_PAGE + '#cap-' + esc(g.key) + '-' + esc(slug) + '"' +
                   ' data-track="nav-capability-' + esc(g.key) + '-' + esc(slug) + '">' +
                   '<span class="nav-dd__num">' + pad(i + 1) + '</span>' + esc(c.name) + '</a></li>';
       });
@@ -111,15 +112,15 @@
       html += '<div class="cap-panel" data-group="' + esc(g.key) + '">' +
                 '<h3 class="cap-panel__label">' + esc(g.label) + '</h3>' +
                 '<p class="cap-panel__tag">' + esc(g.tagline) + '</p>' +
-                '<ol class="cap-list">';
+                '<ol class="cap-panel__list">';
       g.items.forEach(function (slug, i) {
         var c = CAPS.capabilities[slug];
         if (!c) return;
         html += '<li id="cap-' + esc(g.key) + '-' + esc(slug) + '">' +
                   '<span class="cap-num tx-etched">' + pad(i + 1) + '</span>' +
-                  '<a class="cap-list__name" href="capabilities.html#' + esc(slug) + '"' +
+                  '<a class="cap-panel__name" href="#' + esc(slug) + '"' +
                     ' data-track="capability-' + esc(g.key) + '-' + esc(slug) + '">' + esc(c.name) + '</a>' +
-                  '<p class="cap-list__desc">' + esc(c.desc) + '</p>' +
+                  '<p class="cap-panel__desc">' + esc(c.desc) + '</p>' +
                 '</li>';
       });
       html += '</ol></div>';

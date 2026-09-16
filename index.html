@@ -97,7 +97,7 @@
   <!-- Calendly popup chrome. Its own stylesheet - the popup renders in
      Calendly's iframe and cannot take our tokens. -->
   <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
-  <link rel="stylesheet" href="site.css?v=46">
+  <link rel="stylesheet" href="site.css?v=47">
 </head>
 
 <body class="has-nightfield">
@@ -136,7 +136,7 @@
         <details class="nav-dd">
           <summary class="nav-dd__toggle">Capabilities<span class="nav-dd__sign" aria-hidden="true"></span></summary>
           <div class="nav-dd__panel" data-cap-menu>
-            <noscript><a class="nav-dd__all" href="index.html#capabilities">All capabilities</a></noscript>
+            <noscript><a class="nav-dd__all" href="capabilities.html">All capabilities</a></noscript>
           </div>
         </details>
 
@@ -507,33 +507,6 @@
         </ul>
       </div>
     </section>
-
-    <!-- ============================================================
-         Capabilities, in two groups.
-
-         The panels are rendered here by capabilities.js from the one data
-         object it holds - the same object the nav dropdown reads - so the
-         group names, their one-line descriptors and which capabilities sit
-         under each are never written twice. To rename the groups, edit
-         `label` in capabilities.js. Nothing in this file names them.
-
-         Each capability carries an anchor per group (cap-b2b-landing-pages,
-         cap-b2c-landing-pages), so a dropdown link lands in the column it
-         was clicked from, and every name links on to its fuller treatment
-         on capabilities.html.
-
-         Deliberately static, same as every section that is not one of the
-         three bands. With scripts blocked the panels do not render and the
-         fallback line below shows instead.
-         ============================================================ -->
-    <section id="capabilities" class="capabilities">
-      <div class="wrap">
-        <h2>What we do.</h2>
-        <div class="cap-panels" data-cap-panels></div>
-        <p class="cap-fallback lead">Every capability, in full, is on the <a href="capabilities.html">capabilities page</a>.</p>
-      </div>
-    </section>
-
 
     <!-- ============================================================
          Who we work with.
@@ -1052,7 +1025,7 @@
         <h2 class="foot-col__head" id="foot-site-head">Site</h2>
         <a class="foot-link" href="index.html">Home</a>
         <a class="foot-link" href="work.html">Our work</a>
-        <a class="foot-link" href="index.html#capabilities">Capabilities</a>
+        <a class="foot-link" href="capabilities.html">Capabilities</a>
         <a class="foot-link" href="blog.html">Blog</a>
         <a class="foot-link" href="resources.html">Guides and e-books</a>
         <a class="foot-link" href="testimonials.html">Testimonials</a>
@@ -1087,7 +1060,7 @@
        BEFORE nav.js: deferred scripts execute in document order, and nav.js
        decides on load whether the columns are open (desktop) or collapsed
        (phone), which it can only do if they exist. -->
-  <script defer src="capabilities.js?v=1"></script>
+  <script defer src="capabilities.js?v=2"></script>
   <script defer src="nav.js?v=3"></script>
   <!-- Testimonial slider. Self-initialising and GSAP-free, same as
        nav.js — the band is a readable stack of quotes without it. -->

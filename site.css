@@ -1677,29 +1677,29 @@
       max-width: 34ch;
     }
 
-    .cap-list {
+    .cap-panel__list {
       list-style: none;
       margin: var(--space-md) 0 0;
       padding: 0;
     }
 
-    .cap-list li {
+    .cap-panel__list li {
       position: relative;
       padding: 22px 0 22px 52px;
       border-top: 1px solid var(--border);
       /* Anchor landings from the dropdown sit clear of the fixed header. */
       scroll-margin-top: calc(var(--nav-h, 72px) + 24px);
     }
-    .cap-list li:last-child { border-bottom: 1px solid var(--border); }
+    .cap-panel__list li:last-child { border-bottom: 1px solid var(--border); }
 
-    .cap-list .cap-num {
+    .cap-panel__list .cap-num {
       position: absolute;
       left: 0;
       top: 26px;
       margin: 0;
     }
 
-    .cap-list__name {
+    .cap-panel__name {
       font-size: clamp(22px, 2.2vw, 30px);
       font-weight: 600;
       line-height: 1.15;
@@ -1707,10 +1707,10 @@
       color: var(--steel-050);
       text-decoration: none;
     }
-    .cap-list__name:hover,
-    .cap-list__name:focus-visible { color: var(--white); }
+    .cap-panel__name:hover,
+    .cap-panel__name:focus-visible { color: var(--white); }
 
-    .cap-list__desc {
+    .cap-panel__desc {
       margin: 8px 0 0;
       font-size: 15px;
       line-height: 1.55;
@@ -1719,7 +1719,7 @@
     }
 
     /* Deep-link landing: the row you were sent to takes the lit edge. */
-    .cap-list li:target { border-top-color: var(--border-lit); }
+    .cap-panel__list li:target { border-top-color: var(--border-lit); }
 
     @media (max-width: 900px) {
       .cap-panels { grid-template-columns: 1fr; }
