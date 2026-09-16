@@ -988,8 +988,15 @@
       .cform__grid { grid-template-columns: 1fr; }
     }
 
-    .cform-wrap { margin-top: var(--space-md); }
+    /* Centred as a column, like theirs: heading, lead and the 800px form
+       all on the page's centre line. Labels stay left-aligned INSIDE the
+       form - the block is centred, its contents are not. */
+    .contact .wrap { text-align: center; }
+    .contact h2 { margin-left: auto; margin-right: auto; }
+    .contact .lead { margin-left: auto; margin-right: auto; }
+    .cform-wrap { margin: var(--space-md) auto 0; max-width: 800px; text-align: left; }
     .cform-wrap > .cform { margin-top: 0; }
+    .cform__done, .cform__fail { margin-left: auto; margin-right: auto; }
 
     /* ---------- the pick rows ----------
        The device from badmarketing.com: full-width rows you tap to select,
