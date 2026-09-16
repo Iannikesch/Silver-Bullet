@@ -988,47 +988,8 @@
       .cform__grid { grid-template-columns: 1fr; }
     }
 
-    /* ---------- the reveal ----------
-       One button, and the form arrives in place. <details> gives the whole
-       disclosure - open, close, keyboard, screen reader - for free, so the
-       stylesheet alone is the finished state. */
-
-    .cform-reveal { margin-top: var(--space-md); }
-
-    .cform-reveal__cta {
-      list-style: none;            /* no disclosure triangle */
-      -webkit-user-select: none;
-      user-select: none;
-    }
-    .cform-reveal__cta::-webkit-details-marker { display: none; }
-    .cform-reveal__cta::marker { content: ""; }
-    .cform-reveal__cta:focus-visible { outline: 2px solid var(--steel-100); outline-offset: 3px; }
-
-    /* Open, the button steps down to steel. The form's own "Send it" is the
-       amber in that viewport, and DESIGN.md allows one - two lit buttons
-       stacked above each other would cancel each other. Same label both
-       ways: a summary is a toggle, and the open panel says which state it
-       is in without the text having to. */
-    .cform-reveal[open] > .cform-reveal__cta {
-      background: transparent;
-      color: var(--steel-100);
-      border: 1px solid var(--border-lit);
-      padding: 12px 21px;          /* 1px border replaces 1px of padding */
-    }
-    .cform-reveal[open] > .cform-reveal__cta:hover { color: var(--white); border-color: var(--steel-700); }
-
-    /* Entrance answers the click - transform and opacity only. The height
-       itself snaps, which is what <details> does; the fade makes the
-       arrival read as one motion rather than a jump. */
-    .cform-reveal__panel { margin-top: var(--space-sm); }
-    .cform-reveal[open] > .cform-reveal__panel {
-      animation: cform-in var(--dur-base) var(--ease-settle) both;
-    }
-    @keyframes cform-in {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: none; }
-    }
-    .cform-reveal[open] > .cform-reveal__panel > .cform { margin-top: 0; }
+    .cform-wrap { margin-top: var(--space-md); }
+    .cform-wrap > .cform { margin-top: 0; }
 
     /* ---------- the pick rows ----------
        The device from badmarketing.com: full-width rows you tap to select,
@@ -1168,7 +1129,6 @@
       .cform__field textarea,
       .cform__row,
       .cform__row::after { transition: none; }
-      .cform-reveal[open] > .cform-reveal__panel { animation: none; }
     }
 
     /* ---------- footer ----------

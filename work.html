@@ -70,7 +70,7 @@
   <!-- Calendly popup chrome. Its own stylesheet - the popup renders in
      Calendly's iframe and cannot take our tokens. -->
   <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
-  <link rel="stylesheet" href="site.css?v=47">
+  <link rel="stylesheet" href="site.css?v=48">
   <link rel="stylesheet" href="nightfield.css?v=4">
 
 
@@ -358,15 +358,13 @@
           deal makes sense. If it doesn't, we'll say so.
         </p>
         <!-- ============================================================
-             Inline enquiry form, behind one click.
+             Inline enquiry form, at the bottom of every page.
 
-             Pattern from badmarketing.com: a single button in the contact
-             section, and the form arrives in place when it is pressed.
-             Built on <details>, the same primitive the nav dropdown uses,
-             so opening, closing and keyboard operation all work with no
-             script at all - the stylesheet is the finished state. enquire.js
-             only adds one thing: arriving on #contact from a CTA elsewhere
-             opens it, because that visitor has already pressed a button.
+             Look and structure from badmarketing.com's work-with form,
+             measured field for field. Fully visible, no reveal: the form
+             IS the contact section. enquire.js adds only the in-place
+             submit and the done / fail states, and binds nothing until
+             action is a real endpoint.
 
              The device worth copying from theirs is the "what are you
              looking for" block: full-width rows you tap to select, several
@@ -384,9 +382,7 @@
              NO ENDPOINT YET. action is an obvious placeholder on purpose:
              a plausible-looking wrong URL fails silently on live traffic.
              ============================================================ -->
-        <details class="cform-reveal">
-          <summary class="cta cform-reveal__cta">Start the conversation</summary>
-          <div class="cform-reveal__panel">
+        <div class="cform-wrap">
         <form class="cform" action="REPLACE_WITH_FORM_ENDPOINT" method="post">
           <div class="cform__grid">
             <p class="cform__field">
@@ -458,8 +454,7 @@
         </form>
         <p class="cform__done" hidden role="status">Got it. We read every one, and you'll hear back from a person.</p>
         <p class="cform__fail" hidden role="alert">That didn't send. Email us instead: <a href="mailto:contact@silverbulletagency.com">contact@silverbulletagency.com</a>.</p>
-          </div>
-        </details>
+        </div>
       </div>
     </section>
 
@@ -535,7 +530,7 @@
   <script defer src="nav.js?v=2"></script>
   <!-- Enquiry form reveal. Self-initialising and GSAP-free, same as
        nav.js - the form is a working <details> without it. -->
-  <script defer src="enquire.js?v=2"></script>
+  <script defer src="enquire.js?v=3"></script>
 
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
