@@ -70,7 +70,7 @@
   <!-- Calendly popup chrome. Its own stylesheet - the popup renders in
      Calendly's iframe and cannot take our tokens. -->
   <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
-  <link rel="stylesheet" href="site.css?v=42">
+  <link rel="stylesheet" href="site.css?v=44">
   <link rel="stylesheet" href="nightfield.css?v=4">
 
 
@@ -358,25 +358,35 @@
           deal makes sense. If it doesn't, we'll say so.
         </p>
         <!-- ============================================================
-             Inline enquiry form. Patterned on the one at the bottom of
-             vaynermedia.com, deliberately much shorter.
+             Inline enquiry form, behind one click.
 
-             Theirs asks ten required questions including job title,
-             region and annual marketing budget, which suits an enterprise
-             lead desk. This visitor is an owner-operator who is already
-             suspicious of agencies, so the form asks the five things that
-             actually decide whether a performance deal is possible and
-             nothing else. Revenue is in because it is the qualifier - the
-             target is service businesses at $15M and under - not because
-             forms usually ask.
+             Pattern from badmarketing.com: a single button in the contact
+             section, and the form arrives in place when it is pressed.
+             Built on <details>, the same primitive the nav dropdown uses,
+             so opening, closing and keyboard operation all work with no
+             script at all - the stylesheet is the finished state. enquire.js
+             only adds one thing: arriving on #contact from a CTA elsewhere
+             opens it, because that visitor has already pressed a button.
 
-             NO ENDPOINT YET. action is an obvious placeholder for the same
-             reason the VSL booking link is: a plausible-looking wrong URL
-             fails silently on live traffic, and a form that appears to
-             send while dropping enquiries is worse than one that clearly
-             does not work. Wiring it needs a decision on where posts go,
-             which touches deploy config - so it is left for that call.
+             The device worth copying from theirs is the "what are you
+             looking for" block: full-width rows you tap to select, several
+             at once. Theirs are radios with no visual selected state (the
+             rows never change when picked - checked on their live page).
+             Ours are real checkboxes with a real selected state, listing
+             the six capabilities by the names the rest of the site uses.
+
+             What was NOT copied: first/last name split (one field, less
+             friction), a business-type <select> (the toggles do that job),
+             revenue buckets (kept as typed - buckets make an owner round
+             themselves into someone else's brackets), and two consent
+             checkboxes for SMS marketing we do not run.
+
+             NO ENDPOINT YET. action is an obvious placeholder on purpose:
+             a plausible-looking wrong URL fails silently on live traffic.
              ============================================================ -->
+        <details class="cform-reveal">
+          <summary class="cta cform-reveal__cta">Start the conversation</summary>
+          <div class="cform-reveal__panel">
         <form class="cform" action="REPLACE_WITH_FORM_ENDPOINT" method="post">
           <div class="cform__grid">
             <p class="cform__field">
@@ -388,10 +398,34 @@
               <input id="cf-email" name="email" type="email" autocomplete="email" required>
             </p>
             <p class="cform__field">
+              <label for="cf-phone">Phone <span class="cform__opt">optional</span></label>
+              <input id="cf-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel">
+            </p>
+            <p class="cform__field">
               <label for="cf-site">Business website</label>
               <input id="cf-site" name="website" type="text" inputmode="url"
                      autocomplete="url" placeholder="yourbusiness.com" required>
             </p>
+          </div>
+
+          <!-- The rows. A <fieldset> so the question is announced once as
+               the group's name, and each row is a real <label> wrapping a
+               real checkbox - the checkbox is visually hidden, never
+               removed, so keyboard and screen readers get the native
+               control and pointer users get the row. -->
+          <fieldset class="cform__pick">
+            <legend>What are you looking for? <span class="cform__hint">Select all that apply</span></legend>
+            <div class="cform__pick-grid">
+              <label class="cform__row"><input type="checkbox" name="interest" value="paid-acquisition"><span>Paid acquisition</span></label>
+              <label class="cform__row"><input type="checkbox" name="interest" value="landing-pages"><span>Landing pages</span></label>
+              <label class="cform__row"><input type="checkbox" name="interest" value="offer-positioning"><span>Offer and positioning</span></label>
+              <label class="cform__row"><input type="checkbox" name="interest" value="tracking-attribution"><span>Tracking and attribution</span></label>
+              <label class="cform__row"><input type="checkbox" name="interest" value="creative-production"><span>Creative production</span></label>
+              <label class="cform__row"><input type="checkbox" name="interest" value="lifecycle-retention"><span>Lifecycle and retention</span></label>
+            </div>
+          </fieldset>
+
+          <div class="cform__grid">
             <!-- Typed, not a range picker. Buckets make an owner round
                  themselves into someone else's brackets, and the number
                  that matters here is the real one. Free text also lets
@@ -401,6 +435,10 @@
               <label for="cf-rev">Annual revenue</label>
               <input id="cf-rev" name="revenue" type="text"
                      placeholder="e.g. $2.5M" required>
+            </p>
+            <p class="cform__field">
+              <label for="cf-heard">How did you hear about us? <span class="cform__opt">optional</span></label>
+              <input id="cf-heard" name="heard" type="text">
             </p>
           </div>
 
@@ -418,6 +456,8 @@
             </span>
           </div>
         </form>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -491,6 +531,9 @@
   <!-- Dropdown enhancement. The menu works without it. -->
   <script defer src="booking.js?v=1"></script>
   <script defer src="nav.js?v=2"></script>
+  <!-- Enquiry form reveal. Self-initialising and GSAP-free, same as
+       nav.js - the form is a working <details> without it. -->
+  <script defer src="enquire.js?v=1"></script>
 
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
