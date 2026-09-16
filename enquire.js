@@ -46,6 +46,10 @@
       if (!r.ok) throw new Error(String(r.status));
       form.hidden = true;
       if (done) { done.hidden = false; done.focus && done.setAttribute('tabindex', '-1'); done.focus(); }
+      /* Tell anyone listening that the enquiry went through. booking.js
+         uses this to offer a call straight after - it never binds submit
+         itself, so the form has exactly one owner and posts exactly once. */
+      form.dispatchEvent(new CustomEvent('sb:enquiry-sent', { bubbles: true }));
     }).catch(function () {
       if (fail) fail.hidden = false;
       if (button) { button.disabled = false; button.textContent = 'Send it'; }

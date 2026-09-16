@@ -395,7 +395,10 @@
       transform: rotate(90deg);
       transition: transform .18s ease, opacity .18s ease;
     }
-    .nav-dd[open] .nav-dd__sign::after {
+    /* Scoped to the dropdown's OWN toggle. Descendant-matched, this also
+       flipped the sign on every group head inside an open Capabilities
+       panel, so a collapsed B2B read as "-". */
+    .nav-dd[open] > .nav-dd__toggle .nav-dd__sign::after {
       transform: rotate(0deg);
       opacity: 0;
     }
@@ -456,13 +459,47 @@
        nothing left to animate out and a fake close would need JS holding the
        element in the DOM for no gain. */
     .nav-dd[open] .nav-dd__panel {
-      animation: dd-open .14s var(--ease-settle) both;
+      animation: dd-open .2s var(--ease-settle) both;
     }
 
     @keyframes dd-open {
-      from { opacity: 0; transform: translateY(-2px); }
+      from { opacity: 0; transform: translateY(-6px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+
+    /* ---- the two-column Capabilities panel ----
+       One column per group, rendered by capabilities.js. Each column is
+       a <details> held open on desktop (nav.js), so its summary is a
+       plain heading here and the accordion behaviour only exists on a
+       phone. */
+    .nav-dd__cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 8px;
+      min-width: 560px;
+    }
+
+    .nav-dd__group { min-width: 0; }
+    .nav-dd__group + .nav-dd__group { border-left: 1px solid var(--border); padding-left: 8px; }
+
+    .nav-dd__group-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .02em;
+      color: var(--steel-700);
+      list-style: none;
+      cursor: default;
+    }
+    .nav-dd__group-head::-webkit-details-marker { display: none; }
+    .nav-dd__group-head .nav-dd__sign { display: none; }   /* no +/- on a heading */
+
+    /* Resources is a plain single column. */
+    .nav-dd__panel--single { min-width: 240px; }
 
     .nav-dd__list {
       margin: 0;
@@ -600,7 +637,8 @@
 
       /* The capabilities dropdown stays a <details> here - tapping it opens
          the list in place rather than flying out a panel with nowhere to go. */
-      .nav-dd { width: 100%; }
+      /* Stacked, not the desktop row: toggle on top, panel underneath. */
+      .nav-dd { width: 100%; flex-direction: column; align-items: stretch; }
       .nav-dd__toggle { padding: 16px 0; font-size: 17px; }
       .nav-dd__panel {
         position: static;
@@ -609,6 +647,23 @@
         background: none;
         border: 0;
       }
+
+      /* Capabilities > B2B / B2C > list. The columns become stacked
+         accordions: nav.js closes them on load here, and tapping a group
+         head opens its list in place. */
+      .nav-dd__cols { display: block; min-width: 0; }
+      .nav-dd__group + .nav-dd__group { border-left: 0; padding-left: 0; }
+      .nav-dd__group { border-top: 1px solid var(--border); }
+      .nav-dd__group-head {
+        padding: 14px 0;
+        font-size: 15px;
+        color: var(--steel-100);
+        cursor: pointer;
+      }
+      .nav-dd__group-head .nav-dd__sign { display: block; }
+      .nav-dd__group[open] .nav-dd__group-head .nav-dd__sign::after { transform: rotate(0deg); opacity: 0; }
+      .nav-dd__group .nav-dd__list { padding-bottom: 8px; }
+      .nav-dd__list a { padding: 11px 0 11px 8px; font-size: 15px; }
 
       /* The one amber element stays the CTA, and it goes full width. */
       .nav .cta-secondary {
@@ -1861,6 +1916,214 @@
        six of them at full white would flatten the hierarchy. */
 
 
+    /* ---------- capabilities: two panels ----------
+       Rendered by capabilities.js from the one data object, so the group
+       names, descriptors and lists here are never typed twice. Two big
+       panels side by side, divided by one hairline; below 900px they
+       stack, first group first.
+
+       Bold on purpose. The group label is display type at hero scale,
+       the capability names are a step under a section heading, and the
+       panels take the whole content width. No boxes, no fills, no
+       radius - the separation is one rule, per DESIGN.md. */
+
+    .capabilities {
+      padding: var(--space-xl) 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .cap-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: var(--space-md);
+    }
+
+    .cap-panel {
+      min-width: 0;
+      padding: 0 var(--space-md) 0 0;
+    }
+    .cap-panel + .cap-panel {
+      padding: 0 0 0 var(--space-md);
+      border-left: 1px solid var(--border);
+    }
+
+    /* Hero scale. --white is rationed to headlines and this is one. */
+    .cap-panel__label {
+      margin: 0;
+      font-size: clamp(56px, 8vw, 112px);
+      font-weight: 800;
+      line-height: .92;
+      letter-spacing: -.03em;
+      color: var(--white);
+    }
+
+    .cap-panel__tag {
+      margin: 18px 0 0;
+      font-size: clamp(17px, 1.5vw, 20px);
+      line-height: 1.5;
+      color: var(--steel-300);
+      max-width: 34ch;
+    }
+
+    .cap-panel__list {
+      list-style: none;
+      margin: var(--space-md) 0 0;
+      padding: 0;
+    }
+
+    .cap-panel__list li {
+      position: relative;
+      padding: 22px 0 22px 52px;
+      border-top: 1px solid var(--border);
+      /* Anchor landings from the dropdown sit clear of the fixed header. */
+      scroll-margin-top: calc(var(--nav-h, 72px) + 24px);
+    }
+    .cap-panel__list li:last-child { border-bottom: 1px solid var(--border); }
+
+    .cap-panel__list .cap-num {
+      position: absolute;
+      left: 0;
+      top: 26px;
+      margin: 0;
+    }
+
+    .cap-panel__name {
+      font-size: clamp(22px, 2.2vw, 30px);
+      font-weight: 600;
+      line-height: 1.15;
+      letter-spacing: -.01em;
+      color: var(--steel-050);
+      text-decoration: none;
+    }
+    .cap-panel__name:hover,
+    .cap-panel__name:focus-visible { color: var(--white); }
+
+    .cap-panel__desc {
+      margin: 8px 0 0;
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--text);
+      max-width: 52ch;
+    }
+
+    /* Deep-link landing: the row you were sent to takes the lit edge. */
+    .cap-panel__list li:target { border-top-color: var(--border-lit); }
+
+    @media (max-width: 900px) {
+      .cap-panels { grid-template-columns: 1fr; }
+      .cap-panel,
+      .cap-panel + .cap-panel { padding: 0; border-left: 0; }
+      .cap-panel + .cap-panel {
+        margin-top: var(--space-xl);
+        padding-top: var(--space-xl);
+        border-top: 1px solid var(--border);
+      }
+    }
+
+    /* No JS: the panels never render. Say so rather than leave a hole. */
+    .cap-panels:empty + .cap-fallback { display: block; }
+    .cap-fallback { display: none; margin-top: var(--space-md); }
+
+    /* ---------- the pages: scroll-linked screenshots ----------
+       A card holds a full-length page screenshot inside a frame a third
+       its height, and the screenshot travels UP inside the frame as the
+       page scrolls down. You see the whole page without a case study, a
+       number or a claim. Proof by showing.
+
+       This is scroll-linked, not a reveal: it is scrubbed to scroll
+       position through ScrollTrigger in motion.js (initScrollShots), so
+       it is still when the visitor is and reverses when they go back up -
+       the same footing as the reactive chrome's scroll half. It is not a
+       third orchestrated moment, and DESIGN.md's ceiling on those is
+       untouched.
+
+       The frame follows .panel: lit top edge, --border down the sides,
+       --ink along the bottom. Square corners. The thing being shown is a
+       web page, so the frame reads as a viewport, not a photo mount. */
+
+    .pages {
+      padding: var(--space-xl) 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .pages .lead { margin-top: 20px; }
+
+    .shots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-sm);
+      margin: var(--space-md) 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    @media (max-width: 900px) { .shots { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .shots { grid-template-columns: 1fr; } }
+
+    .shot {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* The frame. Fixed aspect so the travel distance is knowable, and
+       overflow hidden so the screenshot is cropped to it rather than
+       stretching the card. */
+    .shot__frame {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      margin: 0;
+      overflow: hidden;
+      background: var(--bg-raised);
+      border-top: 1px solid var(--border-lit);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--ink);
+    }
+
+    /* --shot is the travel, in px, published by motion.js: 0 with the frame
+       at the bottom of the viewport, the full overshoot with it at the top.
+       transform only, so the scrub runs on the compositor and never
+       touches layout. The 0 fallback matters: with the script absent the
+       page is simply visible from the top, not blank. */
+    .shot__frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+      transform: translateY(calc(var(--shot, 0) * -1px));
+      will-change: transform;
+    }
+
+    /* A hairline over the frame's own top edge would double up with the
+       lit border, so the caption sits below on its own rule instead. */
+    .shot__cap {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0 0;
+      margin-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .shot__name {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--steel-050);
+    }
+
+    .shot__what {
+      font-size: 13px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* Reduced motion: no travel, and the frame scrolls by hand instead so
+       the whole page is still reachable. The scrollbar is left visible on
+       purpose - it is the only cue that there is more. */
+    @media (prefers-reduced-motion: reduce) {
+      .shot__frame { overflow-y: auto; }
+      .shot__frame img { transform: none; will-change: auto; }
+    }
+
     /* ---------- who we work with: the vertical cards ----------
        Each card is one <a>. The whole tile is the target, so there is no
        second click target inside it and nothing to miss on a phone.
@@ -2695,9 +2958,17 @@
 .press-wall img {
   display: block;
   width: auto;
-  height: auto;
+  /* height, not max-height. With height:auto the marks are 0px tall until
+     the file arrives - the width/height attributes cannot reserve a box
+     when the width side is left to resolve from an image that has not
+     loaded - and they are loading="lazy", so the section grew 138px the
+     moment a visitor scrolled to it and every anchor below it moved. CLS
+     never saw it because the reveal holds the marks at opacity 0 while it
+     happens. A declared height gives the attributes a side to work from,
+     so the box is right before the request is even made. Visually it is
+     the same: every one of the six was height-capped already. */
+  height: clamp(32px, 3.4vw, 46px);
   max-width: clamp(150px, 18vw, 230px);
-  max-height: clamp(32px, 3.4vw, 46px);
 }
 
 /* Optical sizing, same move as .client-wall. A mark that is nearly square

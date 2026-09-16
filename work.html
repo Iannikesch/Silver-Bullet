@@ -67,14 +67,14 @@
        it rather than swapping. crossorigin is required on a font preload
        even same-origin, or the browser fetches it twice. -->
   <link rel="preload" href="Assets/fonts/bebas-neue-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="tokens.css?v=4">
+  <link rel="stylesheet" href="tokens.css?v=5">
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
-  <link rel="stylesheet" href="textures.css?v=10">
+  <link rel="stylesheet" href="textures.css?v=11">
 
   <!-- Calendly popup chrome. Its own stylesheet - the popup renders in
      Calendly's iframe and cannot take our tokens. -->
   <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
-  <link rel="stylesheet" href="site.css?v=52">
+  <link rel="stylesheet" href="site.css?v=53">
   <link rel="stylesheet" href="nightfield.css?v=4">
 
 
@@ -230,22 +230,31 @@
           <span class="nav-burger__box" aria-hidden="true"><span></span><span></span></span>
         </button>
         <nav class="nav" id="site-nav">
-        <a class="nav-link" href="work.html">Our work</a>
+        <!-- Both dropdowns are <details>: they open, close and take the
+             keyboard on their own if nav.js never arrives. -->
 
-        <!-- A <details>, not a div with a click handler: it opens, closes and
-             takes the keyboard on its own if nav.js never arrives. -->
+        <!-- Capabilities. The two group columns are rendered into the panel
+             by capabilities.js from the one data object it holds, so this
+             list is never typed a second time. With that script absent the
+             panel is empty and the summary still works as a link. -->
         <details class="nav-dd">
           <summary class="nav-dd__toggle">Capabilities<span class="nav-dd__sign" aria-hidden="true"></span></summary>
-          <div class="nav-dd__panel">
+          <div class="nav-dd__panel" data-cap-menu>
+            <noscript><a class="nav-dd__all" href="capabilities.html">All capabilities</a></noscript>
+          </div>
+        </details>
+
+        <a class="nav-link" href="work.html">Our work</a>
+
+        <!-- Resources: written here, not generated - it is three links. -->
+        <details class="nav-dd">
+          <summary class="nav-dd__toggle">Resources<span class="nav-dd__sign" aria-hidden="true"></span></summary>
+          <div class="nav-dd__panel nav-dd__panel--single">
             <ul class="nav-dd__list">
-            <li><a href="capabilities.html#paid-acquisition"><span class="nav-dd__num">01</span>Paid acquisition</a></li>
-            <li><a href="capabilities.html#landing-pages"><span class="nav-dd__num">02</span>Landing pages</a></li>
-            <li><a href="capabilities.html#offer-positioning"><span class="nav-dd__num">03</span>Offer and positioning</a></li>
-            <li><a href="capabilities.html#tracking-attribution"><span class="nav-dd__num">04</span>Tracking and attribution</a></li>
-            <li><a href="capabilities.html#creative-production"><span class="nav-dd__num">05</span>Creative production</a></li>
-            <li><a href="capabilities.html#lifecycle-retention"><span class="nav-dd__num">06</span>Lifecycle and retention</a></li>
+              <li><a href="blog.html" data-track="nav-resources-blog">Blog</a></li>
+              <li><a href="resources.html" data-track="nav-resources-guides">Guides and e-books</a></li>
+              <li><a href="work.html" data-track="nav-resources-case-studies">Case studies</a></li>
             </ul>
-            <a class="nav-dd__all" href="capabilities.html">All capabilities</a>
           </div>
         </details>
 
@@ -562,6 +571,8 @@
         <a class="foot-link" href="index.html">Home</a>
         <a class="foot-link" href="work.html">Our work</a>
         <a class="foot-link" href="capabilities.html">Capabilities</a>
+        <a class="foot-link" href="blog.html">Blog</a>
+        <a class="foot-link" href="resources.html">Guides and e-books</a>
         <a class="foot-link" href="testimonials.html">Testimonials</a>
         <a class="foot-link" href="#contact">Contact</a>
       </nav>
@@ -582,19 +593,28 @@
     </div>
   </footer>
   <!-- First, and dependency-free: the intro must not wait on a CDN. -->
-  <script defer src="intro.js?v=4"></script>
+  <script defer src="intro.js?v=5"></script>
   <!-- Dropdown enhancement. The menu works without it. -->
-  <script defer src="booking.js?v=2"></script>
-  <script defer src="nav.js?v=2"></script>
+  <script defer src="booking.js?v=3"></script>
+
+
+  <!-- The capabilities data, and the two things rendered from it: the nav
+       dropdown's columns and (on the home page) the section. It has to run
+       BEFORE nav.js: deferred scripts execute in document order, and nav.js
+       decides on load whether the columns are open (desktop) or collapsed
+       (phone), which it can only do if they exist. -->
+  <script defer src="capabilities.js?v=2"></script>
+
+  <script defer src="nav.js?v=3"></script>
   <!-- Enquiry form reveal. Self-initialising and GSAP-free, same as
        nav.js - the form is a working <details> without it. -->
-  <script defer src="enquire.js?v=3"></script>
+  <script defer src="enquire.js?v=4"></script>
 
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
-  <script defer src="motion.js?v=15"></script>
+  <script defer src="motion.js?v=16"></script>
   <script defer src="textures.js?v=11"></script>
 
   <script defer src="boot.js?v=5"></script>

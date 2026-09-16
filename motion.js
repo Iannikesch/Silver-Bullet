@@ -702,6 +702,77 @@
     if (st.scroll() > st.start) tl.progress(1);
   }
 
+
+  /* ------------------------------------------------------------------ *
+   * 5b. The pages: scroll-linked screenshots
+   *
+   * Each [data-scroll-shot] is a frame holding a page screenshot far
+   * taller than itself. As the frame crosses the viewport the screenshot
+   * travels upward inside it, so a visitor sees the whole page by doing
+   * nothing but scrolling. The CSS owns the transform; this publishes one
+   * number per frame, --shot, the travel in px.
+   *
+   * Scrubbed to scroll POSITION, not played on entry. Still when the
+   * visitor is still, reversing when they go back up - the same footing as
+   * the reactive chrome's scroll half, and not a third orchestrated
+   * moment.
+   *
+   * Nothing is read from layout inside the scroll handler. The travel
+   * distance is measured once, and again on resize and when the image
+   * lands, then the handler is one multiply and one property write.
+   * ------------------------------------------------------------------ */
+
+  /* How much of the screenshot is seen in one pass through the viewport.
+     1 shows all of it: the image covers its full overshoot while the frame
+     crosses the screen, which puts the content past the eye at about twice
+     scroll speed. Lower it and the page scrolls more slowly inside the
+     frame - 0.6 reads as a window onto a page rather than a page whipping
+     by, at the cost of the bottom 40% never coming into view. Tune this by
+     feel in a real browser, not from a screenshot. */
+  var SHOT_RATE = 1;
+
+  function initScrollShots() {
+    var frames = Array.prototype.slice.call(document.querySelectorAll('[data-scroll-shot]'));
+    if (!frames.length) return;
+
+    frames.forEach(function (frame) {
+      var img = frame.querySelector('img');
+      if (!img) return;
+
+      var travel = 0;
+      function measure() {
+        /* offsetHeight, not the rect: the rect is the height AFTER the
+           transform this file is responsible for. The layout height is
+           right even before the file arrives, because width/height are
+           set on the <img>. */
+        travel = Math.max(0, img.offsetHeight - frame.clientHeight);
+      }
+      measure();
+
+      var st = ScrollTrigger.create({
+        trigger: frame,
+        /* From the frame's top reaching the bottom of the viewport to its
+           bottom leaving the top: the whole time it is on screen. */
+        start: 'top bottom',
+        end: 'bottom top',
+        onUpdate: function (self) {
+          frame.style.setProperty('--shot', (Math.min(1, self.progress * SHOT_RATE) * travel).toFixed(1));
+        },
+        onRefresh: measure
+      });
+
+      /* The image can land after the trigger is built. Re-measure, and
+         re-apply at the current progress so it does not sit at 0 until
+         the next scroll. */
+      if (!img.complete) {
+        img.addEventListener('load', function () {
+          measure();
+          frame.style.setProperty('--shot', (Math.min(1, st.progress * SHOT_RATE) * travel).toFixed(1));
+        }, { once: true });
+      }
+    });
+  }
+
   /* ------------------------------------------------------------------ *
    * 6. Boot
    * ------------------------------------------------------------------ */
@@ -726,6 +797,7 @@
   initMarquees();
   initClientReveal();
   initPlatformReveal();
+  initScrollShots();
   document.documentElement.setAttribute('data-motion', 'full');
 
   /* Exposed for verification only. */

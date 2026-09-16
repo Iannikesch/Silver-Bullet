@@ -3,11 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page not found — Silver Bullet</title>
-  <meta name="description" content="That page does not exist. Links through to Silver Bullet's case studies, capabilities and contact.">
-  <!-- An error page should never be indexed, and must not claim a
-       canonical URL — it has no canonical form. -->
+  <title>Blog — Silver Bullet</title>
+  <meta name="description" content="Notes on running paid acquisition, landing pages and lifecycle for service businesses, from an agency paid on the result.">
+  <!-- Nothing here yet. Unlisted until the first piece is published:
+       delete the robots line and add the page to sitemap.xml at the same time. -->
   <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="https://silverbulletagency.com/blog.html">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://silverbulletagency.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Blog"
+    }
+  ]
+}
+  </script>
 
   <!-- Icons. The mark is the bullet, drawn with the same hard-stopped chrome
        ramp as the site: paired stops at identical offsets, so every band is
@@ -19,20 +40,20 @@
   <link rel="manifest" href="/site.webmanifest">
   <meta name="theme-color" content="#0A0D0E">
   <!-- Social card. Absolute URLs, as the OG spec requires. -->
-  <meta property="og:url" content="https://silverbulletagency.com/404.html">
+  <meta property="og:url" content="https://silverbulletagency.com/blog.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Silver Bullet">
-  <meta property="og:title" content="Page not found — Silver Bullet">
-  <meta property="og:description" content="Case studies from Silver Bullet. Revenue and gross profit growth for service businesses, on rev share and profit share.">
+  <meta property="og:title" content="Blog — Silver Bullet">
+  <meta property="og:description" content="Notes on running paid acquisition, landing pages and lifecycle for service businesses, from an agency paid on the result.">
   <meta property="og:image" content="https://silverbulletagency.com/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Silver Bullet case studies — measured revenue growth for service businesses">
+  <meta property="og:image:alt" content="What Silver Bullet clients say about working on rev share">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Page not found — Silver Bullet">
-  <meta name="twitter:description" content="Case studies from Silver Bullet. Revenue and gross profit growth for service businesses, on rev share and profit share.">
+  <meta name="twitter:title" content="Blog — Silver Bullet">
+  <meta name="twitter:description" content="Notes on running paid acquisition, landing pages and lifecycle for service businesses, from an agency paid on the result.">
   <meta name="twitter:image" content="https://silverbulletagency.com/og-image.png">
-  <meta name="twitter:image:alt" content="Silver Bullet case studies — measured revenue growth for service businesses">
+  <meta name="twitter:image:alt" content="What Silver Bullet clients say about working on rev share">
 
 
   <!-- Bump ?v= whenever tokens.css changes. The hero headline is painted
@@ -45,10 +66,6 @@
        and without it the handshake is made twice rather than reused. -->
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <!-- The word band's face, fetched early so the band's first paint is in
-       it rather than swapping. crossorigin is required on a font preload
-       even same-origin, or the browser fetches it twice. -->
-  <link rel="preload" href="Assets/fonts/bebas-neue-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="tokens.css?v=5">
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css?v=11">
@@ -60,129 +77,39 @@
   <link rel="stylesheet" href="nightfield.css?v=4">
 
 
+
   <style>
-    .work-hero { padding: var(--space-lg) 0 var(--space-md); }
-    .work-hero .lead { margin-top: var(--space-sm); }
+    /* Page-scoped, same convention as the other inner pages. Every value
+       is a token. The list is built to take content later: rows on a
+       hairline, no cards, no radius. */
+    .lib-hero { padding: var(--space-lg) 0 var(--space-md); }
+    .lib-hero .lead { max-width: 58ch; margin-top: 20px; }
 
-    /* Flex rather than grid, deliberately.
+    .lib { padding: 0 0 var(--space-xl); }
+    .lib-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--border); }
 
-       The hairline-divided grid used elsewhere paints the container in
-       --border and lets a 1px gap show through as the rules. That is right
-       when the cells always fill the row. With three cards it does not: drop
-       to two columns and the last row is one card and one EMPTY cell, and
-       that empty cell is a slab of grey.
-
-       Flex has no cells to leave empty. justify-content centres a short last
-       row, so the third card sits in the middle of the row instead of hanging
-       off the left with a hole beside it. Each card carries its own lit top
-       edge, which is the panel treatment from DESIGN.md anyway. */
-    .case-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: clamp(14px, 1.6vw, 22px);
-      margin: 0 0 var(--space-xl);
-      padding: 0;
-      list-style: none;
-    }
-
-    /* Basis rather than a fixed width: three sit across at full width, then
-       two, then one, and a lone card never stretches to fill the row. */
-    .case-grid > li {
-      display: flex;
-      flex: 0 1 clamp(300px, 31%, 380px);
-    }
-
-    .case-card {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: var(--bg);
+    .lib-item { border-bottom: 1px solid var(--border); }
+    .lib-item__link {
+      display: grid;
+      grid-template-columns: 9rem 1fr;
+      gap: 12px var(--space-sm);
+      padding: 26px 0;
       text-decoration: none;
-      border-top: 1px solid var(--border-lit);
-      border-left: 1px solid var(--border);
-      border-right: 1px solid var(--border);
-      border-bottom: 1px solid var(--ink);
-      transition: background-color .2s ease, border-color .2s ease;
+    }
+    .lib-item__meta  { grid-row: 1 / 3; font-size: 13px; color: var(--text-muted); padding-top: 6px; }
+    .lib-item__title { font-size: clamp(21px, 2.2vw, 28px); font-weight: 600; line-height: 1.2; color: var(--steel-050); }
+    .lib-item__desc  { font-size: 15px; line-height: 1.55; color: var(--text); max-width: 62ch; }
+    .lib-item__link:hover .lib-item__title,
+    .lib-item__link:focus-visible .lib-item__title { color: var(--white); }
+    @media (max-width: 600px) {
+      .lib-item__link { grid-template-columns: 1fr; }
+      .lib-item__meta { grid-row: auto; padding-top: 0; }
     }
 
-    .case-card:hover { border-top-color: var(--steel-500); }
-
-    .case-card:hover { background: var(--bg-raised); }
-
-    .case-card__art {
-      aspect-ratio: 16 / 10;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg-raised);
-      border-bottom: 1px solid var(--border);
-      color: var(--steel-900);
-      font-size: 13px;
-    }
-
-    .case-card:hover .case-card__art { background: var(--charcoal); }
-
-    .case-card__body { padding: var(--space-sm); }
-
-    .case-card__meta {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      font-size: 13px;
-      color: var(--steel-700);
-    }
-
-    /* h2, not h3: these are the page's primary content, and they used to sit
-       before the first h2 on the page, which made the outline read
-       h1 -> h3 -> h2. Promoted a level; the selector moved with the tag so
-       the rendered size is unchanged. */
-    .case-card h2 {
-      margin: 10px 0 14px;
-      color: var(--steel-050);
-      font-size: clamp(19px, 1.7vw, 23px);
-      line-height: 1.2;
-    }
-
-    /* The number goes on the card. Vayner's index carries none, and the index
-       is the highest-traffic page on the site. */
-    .case-card__figure {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      flex-wrap: wrap;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
-      color: var(--white);
-      font-size: clamp(20px, 1.9vw, 26px);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-    }
-
-    .case-card__figure .to { color: var(--steel-700); font-weight: 400; }
-    .case-card__figure .in { color: var(--steel-500); font-size: 14px; font-weight: 500; letter-spacing: 0; }
-
-    /* Real project photography in the slot. The card art keeps its aspect
-       box so a missing or slow image cannot collapse the grid row. */
-    .case-card__art img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      /* Held slightly back so the card reads as one surface rather than a
-         photo with a caption stapled under it; full strength on hover. */
-      opacity: .82;
-      filter: saturate(.85);
-      transition: opacity .25s ease, filter .25s ease, transform .5s ease;
-    }
-
-    .case-card:hover .case-card__art img {
-      opacity: 1;
-      filter: saturate(1);
-      transform: scale(1.02);
-    }
-
-    .case-card__art { overflow: hidden; }
+    /* The empty state: one rule, one line, one steel action. */
+    .lib-empty { padding: var(--space-md) 0 var(--space-lg); border-bottom: 1px solid var(--border); }
+    .lib-empty__head { margin: 0; font-size: clamp(21px, 2.2vw, 28px); font-weight: 600; color: var(--steel-050); }
+    .lib-empty__body { margin: 12px 0 24px; font-size: 16px; line-height: 1.6; color: var(--text); max-width: 58ch; }
   </style>
 </head>
 
@@ -198,7 +125,7 @@
   </div>
   <header class="site-header tx-frost">
     <div class="wrap">
-      <a class="logo tx-halo tx-halo--lung" href="index.html" aria-label="Silver Bullet — home">
+      <a class="logo tx-halo tx-halo--lung" href="index.html#top" aria-label="Silver Bullet — home">
         <span class="logo__inner">
           <!-- width/height are the file's real pixels: they give the browser
                the aspect ratio so the header never jumps as it loads.
@@ -241,95 +168,41 @@
         </details>
 
         <a class="nav-link" href="testimonials.html">Testimonials</a>
-        <a data-book class="cta-secondary tx-glare tx-halo" href="https://calendly.com/inikesch-theprofectusagency/30min" data-texture="rim">Talk to us</a>
+        <a data-book class="cta-secondary tx-glare" href="https://calendly.com/inikesch-theprofectusagency/30min" data-texture="rim">Talk to us</a>
       </nav>
     </div>
     <div class="site-header__rule"></div>
   </header>
-  <!-- The word band. Two rows of big hollow words with a lit subset -
-       modelled on thearmcandy.com's client-partners strip, three rows of
-       48px outlined industries with every other one lit neon pink. Ours is
-       two rows, cold white where theirs is pink, and the words are what
-       this company is rather than who it serves.
-
-       Each row is its own [data-marquee] band, so drag, throw, hover-slow
-       and the reduced-motion stop all arrive from motion.js unchanged. The
-       two speeds are deliberately different (38 and 30 px/s) so the rows
-       slide against each other instead of moving as one plate. Each row
-       carries its own .ticker__travel so the intro's ride-out still hits
-       both.
-
-       The pinned "Book a call" is gone by request; the booking CTAs are the
-       hero button and the nav.
-
-       Lit words are FIXED, exactly as on the reference. The "flash" is a
-       lit word passing a hollow one, not a pulse - a pulse would be a
-       fifth ambient mover and there is no fifth. -->
-  <aside class="ticker" aria-label="What we do">
-    <div class="ticker__row" data-marquee data-marquee-speed="38" data-marquee-viewport>
+  <aside class="ticker" data-marquee aria-label="How we work">
+    <div class="ticker__viewport" data-marquee-viewport>
       <div class="ticker__travel">
         <div class="ticker__track" data-marquee-track>
           <ul class="ticker__set">
-            <li class="is-lit">Skin in the game</li>
-            <li>Rev share</li>
-            <li class="is-lit">Identity resolution</li>
-            <li>Profit share</li>
-            <li class="is-lit">Data driven</li>
-            <li>Paid acquisition</li>
-            <li class="is-lit">Data architecture</li>
-            <li>Aligned by default</li>
-            <li class="is-lit">First-party data</li>
-            <li>Landing pages</li>
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>Aligned by default.</li>
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>Our upside comes after yours.</li>
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>Paid on performance.</li>
           </ul>
           <!-- Duplicate set is what makes the loop seamless. Hidden from the
-               accessibility tree so nothing is announced twice. -->
+               accessibility tree so the hook is not announced twice. -->
           <ul class="ticker__set" aria-hidden="true">
-            <li class="is-lit">Skin in the game</li>
-            <li>Rev share</li>
-            <li class="is-lit">Identity resolution</li>
-            <li>Profit share</li>
-            <li class="is-lit">Data driven</li>
-            <li>Paid acquisition</li>
-            <li class="is-lit">Data architecture</li>
-            <li>Aligned by default</li>
-            <li class="is-lit">First-party data</li>
-            <li>Landing pages</li>
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>Aligned by default.</li>
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>Our upside comes after yours.</li>
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>Paid on performance.</li>
           </ul>
         </div>
       </div>
     </div>
-    <div class="ticker__row ticker__row--b" data-marquee data-marquee-speed="30" data-marquee-viewport>
-      <div class="ticker__travel">
-        <div class="ticker__track" data-marquee-track>
-          <ul class="ticker__set">
-            <li class="is-lit">Paid on performance</li>
-            <li>Attribution</li>
-            <li class="is-lit">Our upside comes after yours</li>
-            <li>Creative</li>
-            <li class="is-lit">Identity resolution</li>
-            <li>Lifecycle</li>
-            <li class="is-lit">Data architecture</li>
-            <li>Tracking</li>
-            <li class="is-lit">Rev share or profit share</li>
-            <li>Offer and positioning</li>
-          </ul>
-          <!-- Duplicate set is what makes the loop seamless. Hidden from the
-               accessibility tree so nothing is announced twice. -->
-          <ul class="ticker__set" aria-hidden="true">
-            <li class="is-lit">Paid on performance</li>
-            <li>Attribution</li>
-            <li class="is-lit">Our upside comes after yours</li>
-            <li>Creative</li>
-            <li class="is-lit">Identity resolution</li>
-            <li>Lifecycle</li>
-            <li class="is-lit">Data architecture</li>
-            <li>Tracking</li>
-            <li class="is-lit">Rev share or profit share</li>
-            <li>Offer and positioning</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    <!-- Pinned outside the scrolling viewport, so it never drifts off. The
+         href is the one place a booking link needs to go when Calendly
+         exists; until then it drops to the contact section rather than
+         being a dead link on the front door. -->
+    <a data-book class="ticker__cta tx-glare" href="https://calendly.com/inikesch-theprofectusagency/30min" data-texture="rim">Book a call</a>
   </aside>
   <!-- The intro. Removed from the DOM once it has run. -->
   <div class="intro-layer" aria-hidden="true">
@@ -344,37 +217,38 @@
 
   <main id="top">
 
-    <!-- 404. Carries the full header, nav and footer on purpose: a dead URL
-         is the one moment a visitor is most likely to leave, so the way back
-         in has to be the same navigation they would have had anywhere else.
-         Vercel serves this automatically for unmatched paths on a static
-         deploy — no routing config, nothing added to vercel.json. -->
-    <section class="wrap notfound">
-      <p class="meta notfound__code">404</p>
-      <h1>That page does not exist.</h1>
-      <p class="lead">
-        The link was wrong, or the page moved. Nothing here is lost &mdash;
-        these are the three places worth going.
-      </p>
+    <section class="wrap lib-hero">
+      <h1 class="tx-rim-text" data-texture="rim">Notes from the work.</h1>
+      <p class="lead">What we are learning running acquisition on a share of the outcome &mdash; written down as we go, for owners who would rather understand it than outsource the understanding.</p>
+    </section>
 
-      <ul class="notfound__list">
-        <li>
-          <a href="work.html">Our work</a>
-          <span>Three case studies with the numbers, and how each was measured.</span>
+    <!-- ============================================================
+         Posts. Content lands later; the structure is ready now.
+
+         Each post is one <li class="lib-item"> in the list below, newest first.
+         Individual posts live under /blog/. The data-track value is the
+         post slug so a click can be tagged in GA4.
+         ============================================================ -->
+    <section class="wrap lib">
+      <ul class="lib-list" data-lib>
+
+        <!-- TEMPLATE - copy this <li>, fill it in, delete the empty state below.
+        <li class="lib-item">
+          <a class="lib-item__link" href="blog/slug.html" data-track="blog-slug">
+            <span class="lib-item__meta"><time datetime="2026-01-01">1 January 2026</time></span>
+            <span class="lib-item__title">Title of the piece</span>
+            <span class="lib-item__desc">One or two sentences on what it covers and who it is for.</span>
+          </a>
         </li>
-        <li>
-          <a href="capabilities.html">Capabilities</a>
-          <span>Paid acquisition, landing pages, tracking, retention.</span>
+        -->
+
+        <li class="lib-empty">
+          <p class="lib-empty__head">Nothing published yet.</p>
+          <p class="lib-empty__body">The first posts are being written. Until then, the case studies are the best reading on how the arrangement works in practice.</p>
+          <a class="cta-secondary" href="work.html">Read the case studies</a>
         </li>
-        <li>
-          <a href="index.html">Home</a>
-          <span>How a rev share or profit share deal actually works.</span>
-        </li>
+
       </ul>
-
-      <div class="cta-row">
-        <a class="cta" href="#contact">Tell us what you are trying to grow</a>
-      </div>
     </section>
 
     <section id="contact" class="contact">
@@ -391,31 +265,25 @@
           deal makes sense. If it doesn't, we'll say so.
         </p>
         <!-- ============================================================
-             Inline enquiry form, at the bottom of every page.
+             Inline enquiry form. Patterned on the one at the bottom of
+             vaynermedia.com, deliberately much shorter.
 
-             Look and structure from badmarketing.com's work-with form,
-             measured field for field. Fully visible, no reveal: the form
-             IS the contact section. enquire.js adds only the in-place
-             submit and the done / fail states, and binds nothing until
-             action is a real endpoint.
+             Theirs asks ten required questions including job title,
+             region and annual marketing budget, which suits an enterprise
+             lead desk. This visitor is an owner-operator who is already
+             suspicious of agencies, so the form asks the five things that
+             actually decide whether a performance deal is possible and
+             nothing else. Revenue is in because it is the qualifier - the
+             target is service businesses at $15M and under - not because
+             forms usually ask.
 
-             The device worth copying from theirs is the "what are you
-             looking for" block: full-width rows you tap to select, several
-             at once. Theirs are radios with no visual selected state (the
-             rows never change when picked - checked on their live page).
-             Ours are real checkboxes with a real selected state, listing
-             the six capabilities by the names the rest of the site uses.
-
-             What was NOT copied: first/last name split (one field, less
-             friction), a business-type <select> (the toggles do that job),
-             revenue buckets (kept as typed - buckets make an owner round
-             themselves into someone else's brackets), and two consent
-             checkboxes for SMS marketing we do not run.
-
-             NO ENDPOINT YET. action is an obvious placeholder on purpose:
-             a plausible-looking wrong URL fails silently on live traffic.
+             NO ENDPOINT YET. action is an obvious placeholder for the same
+             reason the VSL booking link is: a plausible-looking wrong URL
+             fails silently on live traffic, and a form that appears to
+             send while dropping enquiries is worse than one that clearly
+             does not work. Wiring it needs a decision on where posts go,
+             which touches deploy config - so it is left for that call.
              ============================================================ -->
-        <div class="cform-wrap">
         <form class="cform" action="REPLACE_WITH_FORM_ENDPOINT" method="post">
           <div class="cform__grid">
             <p class="cform__field">
@@ -427,34 +295,10 @@
               <input id="cf-email" name="email" type="email" autocomplete="email" required>
             </p>
             <p class="cform__field">
-              <label for="cf-phone">Phone <span class="cform__opt">optional</span></label>
-              <input id="cf-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel">
-            </p>
-            <p class="cform__field">
               <label for="cf-site">Business website</label>
               <input id="cf-site" name="website" type="text" inputmode="url"
                      autocomplete="url" placeholder="yourbusiness.com" required>
             </p>
-          </div>
-
-          <!-- The rows. A <fieldset> so the question is announced once as
-               the group's name, and each row is a real <label> wrapping a
-               real checkbox - the checkbox is visually hidden, never
-               removed, so keyboard and screen readers get the native
-               control and pointer users get the row. -->
-          <fieldset class="cform__pick">
-            <legend>What are you looking for? <span class="cform__hint">Select all that apply</span></legend>
-            <div class="cform__pick-grid">
-              <label class="cform__row"><input type="checkbox" name="interest" value="paid-acquisition"><span>Paid acquisition</span></label>
-              <label class="cform__row"><input type="checkbox" name="interest" value="landing-pages"><span>Landing pages</span></label>
-              <label class="cform__row"><input type="checkbox" name="interest" value="offer-positioning"><span>Offer and positioning</span></label>
-              <label class="cform__row"><input type="checkbox" name="interest" value="tracking-attribution"><span>Tracking and attribution</span></label>
-              <label class="cform__row"><input type="checkbox" name="interest" value="creative-production"><span>Creative production</span></label>
-              <label class="cform__row"><input type="checkbox" name="interest" value="lifecycle-retention"><span>Lifecycle and retention</span></label>
-            </div>
-          </fieldset>
-
-          <div class="cform__grid">
             <!-- Typed, not a range picker. Buckets make an owner round
                  themselves into someone else's brackets, and the number
                  that matters here is the real one. Free text also lets
@@ -464,10 +308,6 @@
               <label for="cf-rev">Annual revenue</label>
               <input id="cf-rev" name="revenue" type="text"
                      placeholder="e.g. $2.5M" required>
-            </p>
-            <p class="cform__field">
-              <label for="cf-heard">How did you hear about us? <span class="cform__opt">optional</span></label>
-              <input id="cf-heard" name="heard" type="text">
             </p>
           </div>
 
@@ -485,9 +325,6 @@
             </span>
           </div>
         </form>
-        <p class="cform__done" hidden role="status">Got it. We read every one, and you'll hear back from a person.</p>
-        <p class="cform__fail" hidden role="alert">That didn't send. Email us instead: <a href="mailto:contact@silverbulletagency.com">contact@silverbulletagency.com</a>.</p>
-        </div>
       </div>
     </section>
 
@@ -540,13 +377,13 @@
         <a class="foot-link" href="blog.html">Blog</a>
         <a class="foot-link" href="resources.html">Guides and e-books</a>
         <a class="foot-link" href="testimonials.html">Testimonials</a>
-        <a class="foot-link" href="index.html#contact">Contact</a>
+        <a class="foot-link" href="#contact">Contact</a>
       </nav>
 
       <div class="foot-brand">
         <img class="foot-brand__logo" src="silver-bullet-logo-alpha.png?v=2"
              width="732" height="60" alt="Silver Bullet">
-        <a data-book class="cta-secondary tx-halo" href="https://calendly.com/inikesch-theprofectusagency/30min">Connect with us</a>
+        <a data-book class="cta-secondary" href="https://calendly.com/inikesch-theprofectusagency/30min">Connect with us</a>
       </div>
 
       <!-- Legal lives on the copyright line, not in a column of its own —
@@ -562,8 +399,6 @@
   <script defer src="intro.js?v=5"></script>
   <!-- Dropdown enhancement. The menu works without it. -->
   <script defer src="booking.js?v=3"></script>
-
-
   <!-- The capabilities data, and the two things rendered from it: the nav
        dropdown's columns and (on the home page) the section. It has to run
        BEFORE nav.js: deferred scripts execute in document order, and nav.js
@@ -572,7 +407,6 @@
   <script defer src="capabilities.js?v=2"></script>
 
   <script defer src="nav.js?v=3"></script>
-  <script defer src="enquire.js?v=4"></script>
 
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
