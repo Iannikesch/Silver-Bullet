@@ -81,9 +81,22 @@
     var a = e.target.closest('a[href^="#"]');
     if (!a) return;
     var id = a.getAttribute('href');
-    if (!id || id === '#') return;
+    if (!id) return;
+    if (!lenis) return;
+    /* A bare "#" means the top of the document. The logo uses it. It used
+       to point at #top, which is <main> - and <main> sits BELOW the ticker,
+       so "back to top" landed 49px down with the ticker tucked under the
+       sticky bar. It cannot target the header instead: the header is
+       sticky, and Lenis measures a stuck element where it is on screen,
+       not where it is in the document. Scrolling to 0 is the only thing
+       that means "top" regardless of scroll position. */
+    if (id === '#') {
+      e.preventDefault();
+      lenis.scrollTo(0, { duration: 1.1 });
+      return;
+    }
     var target = document.querySelector(id);
-    if (!target || !lenis) return;
+    if (!target) return;
     e.preventDefault();
     lenis.scrollTo(target, { offset: -72, duration: 1.1 });
   }
