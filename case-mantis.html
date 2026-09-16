@@ -106,7 +106,7 @@
   <!-- Calendly popup chrome. Its own stylesheet - the popup renders in
      Calendly's iframe and cannot take our tokens. -->
   <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
-  <link rel="stylesheet" href="site.css?v=44">
+  <link rel="stylesheet" href="site.css?v=47">
   <link rel="stylesheet" href="nightfield.css?v=4">
 
 
@@ -505,6 +505,8 @@
             </span>
           </div>
         </form>
+        <p class="cform__done" hidden role="status">Got it. We read every one, and you'll hear back from a person.</p>
+        <p class="cform__fail" hidden role="alert">That didn't send. Email us instead: <a href="mailto:contact@silverbulletagency.com">contact@silverbulletagency.com</a>.</p>
           </div>
         </details>
       </div>
@@ -582,7 +584,7 @@
   <script defer src="nav.js?v=2"></script>
   <!-- Enquiry form reveal. Self-initialising and GSAP-free, same as
        nav.js - the form is a working <details> without it. -->
-  <script defer src="enquire.js?v=1"></script>
+  <script defer src="enquire.js?v=2"></script>
 
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>

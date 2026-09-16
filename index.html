@@ -97,7 +97,7 @@
   <!-- Calendly popup chrome. Its own stylesheet - the popup renders in
      Calendly's iframe and cannot take our tokens. -->
   <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
-  <link rel="stylesheet" href="site.css?v=44">
+  <link rel="stylesheet" href="site.css?v=47">
 </head>
 
 <body class="has-nightfield">
@@ -789,6 +789,8 @@
             </span>
           </div>
         </form>
+        <p class="cform__done" hidden role="status">Got it. We read every one, and you'll hear back from a person.</p>
+        <p class="cform__fail" hidden role="alert">That didn't send. Email us instead: <a href="mailto:contact@silverbulletagency.com">contact@silverbulletagency.com</a>.</p>
           </div>
         </details>
       </div>
@@ -1012,7 +1014,7 @@
   <script defer src="nav.js?v=2"></script>
   <!-- Enquiry form reveal. Self-initialising and GSAP-free, same as
        nav.js - the form is a working <details> without it. -->
-  <script defer src="enquire.js?v=1"></script>
+  <script defer src="enquire.js?v=2"></script>
   <!-- Testimonial slider. Self-initialising and GSAP-free, same as
        nav.js — the band is a readable stack of quotes without it. -->
   <script defer src="testimonial-slider.js?v=4"></script>
