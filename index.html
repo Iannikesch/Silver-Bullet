@@ -97,7 +97,7 @@
   <!-- Calendly popup chrome. Its own stylesheet - the popup renders in
      Calendly's iframe and cannot take our tokens. -->
   <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
-  <link rel="stylesheet" href="site.css?v=49">
+  <link rel="stylesheet" href="site.css?v=51">
 </head>
 
 <body class="has-nightfield">
@@ -409,17 +409,41 @@
     <section id="press" class="press">
       <div class="wrap">
         <div class="press__head">
-          <h2>Proficient in.</h2>
-          <p class="lead">The platforms we run every day.</p>
+          <h2>Partnered with.</h2>
+          <p class="lead">The platforms, CRMs and tools behind the work.</p>
         </div>
 
+        <!-- Four across, four down. DOM order is grid order - left to right,
+             top to bottom - and the reveal in motion.js reads each mark's
+             rendered position, not its index, so the grid can drop to two
+             or one column and every mark still enters from the edge it is
+             nearer to.
+
+             Six marks are logo files. The other ten are type-set until a
+             file exists for them: swap the <span> for an <img> with
+             width/height and the same optical caps apply. The real logos
+             hold the outer columns where they can, because the outer pair
+             leads each row's arrival. -->
         <ul class="press-wall">
           <li><img src="Assets/web/press-meta.svg" alt="Meta" width="948" height="191" loading="lazy" decoding="async"></li>
+          <li><span class="press-wall__mark">HubSpot</span></li>
+          <li><span class="press-wall__mark">Salesforce</span></li>
           <li><img src="Assets/web/press-google.svg" alt="Google" width="272" height="92" loading="lazy" decoding="async"></li>
+
           <li><img src="Assets/web/press-youtube.svg" alt="YouTube" width="512" height="114" loading="lazy" decoding="async"></li>
+          <li><span class="press-wall__mark">Klaviyo</span></li>
+          <li><span class="press-wall__mark">Mailchimp</span></li>
           <li><img src="Assets/web/press-tiktok.png" alt="TikTok" width="161" height="51" loading="lazy" decoding="async"></li>
+
           <li><img src="Assets/web/press-linkedin.svg" alt="LinkedIn" width="568" height="144" loading="lazy" decoding="async"></li>
+          <li><span class="press-wall__mark">ServiceTitan</span></li>
+          <li><span class="press-wall__mark">Jobber</span></li>
           <li><img src="Assets/web/press-shopify.png" alt="Shopify" width="157" height="51" loading="lazy" decoding="async"></li>
+
+          <li><span class="press-wall__mark">CallRail</span></li>
+          <li><span class="press-wall__mark">GoHighLevel</span></li>
+          <li><span class="press-wall__mark">Microsoft Ads</span></li>
+          <li><span class="press-wall__mark">Zapier</span></li>
         </ul>
       </div>
     </section>
@@ -1021,7 +1045,7 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
-  <script defer src="motion.js?v=12"></script>
+  <script defer src="motion.js?v=14"></script>
   <script defer src="textures.js?v=11"></script>
 
   <script defer src="boot.js?v=5"></script>

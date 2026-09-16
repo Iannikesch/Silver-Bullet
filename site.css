@@ -2529,17 +2529,32 @@
    air between them than two rows of mixed heights did. */
 .press-wall {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   align-items: center;
   justify-items: center;
-  gap: clamp(30px, 3.6vw, 52px) clamp(30px, 4vw, 64px);
-  /* Held well inside .wrap. On the full 1360px column the two marks in a row
-     finish about 690px apart with nothing between them, which reads as two
-     separate lists rather than as a pair that just met. */
-  max-width: 940px;
+  gap: clamp(30px, 3.6vw, 52px) clamp(22px, 3vw, 44px);
+  /* Four across now. Held inside .wrap so the outer columns still read as
+     the edges of one set rather than four separate lists. */
+  max-width: 1120px;
   margin: 0 auto;
   padding: 0;
   list-style: none;
+}
+
+/* Type-set marks, for the platforms that have no logo file yet. Sized to
+   sit optically with the images - same height band, same weight of
+   presence - so a row of two logos and two names reads as one row. Swap
+   the <span> for an <img> and nothing else moves. */
+.press-wall__mark {
+  display: block;
+  font-size: clamp(18px, 1.9vw, 26px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  /* The band is on paper, so the marks take the heading's ink, not the
+     site's steel - steel-050 on --paper is 1.2:1 and simply vanishes. */
+  color: var(--charcoal, #202222);
+  white-space: nowrap;
 }
 
 /* Sized by HEIGHT, with width only as an upper bound. This used to cap
@@ -2566,8 +2581,12 @@
   max-height: clamp(32px, 3.4vw, 46px);
 }
 
-/* One column below 560px. The pairs stop being pairs there, but the reveal
-   still alternates sides item by item, so it keeps reading as deliberate. */
+/* Two across under 900px, one under 560px. The reveal reads each mark's
+   rendered position rather than its column index, so at every width a
+   mark still enters from whichever edge it is nearer to. */
+@media (max-width: 900px) {
+  .press-wall { grid-template-columns: repeat(2, 1fr); }
+}
 @media (max-width: 560px) {
   .press-wall { grid-template-columns: 1fr; }
 }

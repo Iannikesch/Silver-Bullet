@@ -565,13 +565,20 @@
   /* ------------------------------------------------------------------ *
    * 5. The platform band converges
    *
-   * Head slides down from above and fades. Then the six marks arrive in
-   * three beats, a pair at a time, each pair entering from opposite
-   * viewport edges and meeting at its row: Meta/Google, then YouTube/
-   * TikTok, then LinkedIn/Shopify.
+   * Head slides down from above and fades. Then the marks arrive a ROW
+   * at a time, and each row arrives in two stages: the outer pair sweeps
+   * in from the two viewport edges, and as it lands the inner pair chases
+   * in behind it from the same edges. Every mark still crosses to its
+   * seat from outside the viewport, so the opposite-direction convergence
+   * is on all sixteen, not just the leading two.
    *
-   * Even DOM index = left column = enters from the left edge; odd = right.
-   * That is why .press-wall is a 2-up grid - see the note in site.css.
+   * Nothing here is keyed to a column index. Each mark is grouped by the
+   * row it actually rendered in (same top), enters from whichever edge it
+   * is nearer to, and is outer or inner by its distance from that row's
+   * centre. So the grid can be four, two or one across and the timeline
+   * is still right: at two across every mark is "outer" and the rows just
+   * converge as pairs; at one across each row is a single mark from the
+   * nearer side.
    *
    * The travel distance is measured per mark rather than guessed at a
    * fraction of the viewport, so each one starts genuinely off screen
@@ -585,8 +592,8 @@
    * the section.
    *
    * This is the SECOND scroll reveal on the page and it sits directly
-   * after the client wall's. DESIGN.md had recorded one as the ceiling;
-   * that note is updated rather than quietly broken.
+   * after the client wall's. DESIGN.md records the ceiling and the
+   * argument for the second; do not add a third.
    * ------------------------------------------------------------------ */
 
   function initPlatformReveal() {
@@ -598,29 +605,61 @@
     if (!head || !items.length) return;
 
     var vw = window.innerWidth;
-    var offsets = items.map(function (li, i) {
+    var mid = vw / 2;
+
+    /* Measure everything once, before anything is moved. */
+    var marks = items.map(function (li) {
       var r = li.getBoundingClientRect();
-      /* Fully clear of the edge it comes from, plus a margin so the mark is
-         never half-born when the timeline starts. */
-      return (i % 2 === 0) ? -(r.right + 80) : (vw - r.left + 80);
+      var cx = r.left + r.width / 2;
+      var fromLeft = cx < mid;
+      return {
+        el: li,
+        /* Row identity is the CENTRE line, not the top edge. align-items:
+           center seats a 26px wordmark and a 46px logo on the same centre
+           with different tops, and grouping on top split one visual row
+           into several beats - measured: outer-left landing 410ms before
+           outer-right in the same row. */
+        cy: Math.round(r.top + r.height / 2),
+        dist: Math.abs(cx - mid),
+        /* Fully clear of the edge it comes from, plus a margin so the mark
+           is never half-born when the timeline starts. */
+        x: fromLeft ? -(r.right + 80) : (vw - r.left + 80)
+      };
+    });
+
+    /* Group by rendered row. */
+    var rows = [];
+    marks.forEach(function (m) {
+      var row = rows.length ? rows[rows.length - 1] : null;
+      if (!row || Math.abs(row.cy - m.cy) > 6) { row = { cy: m.cy, marks: [] }; rows.push(row); }
+      row.marks.push(m);
     });
 
     gsap.set(head, { opacity: 0, y: -34 });
-    items.forEach(function (li, i) { gsap.set(li, { opacity: 0, x: offsets[i] }); });
+    marks.forEach(function (m) { gsap.set(m.el, { opacity: 0, x: m.x }); });
 
     var tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
-
     tl.to(head, { opacity: 1, y: 0, duration: 0.7 });
 
-    /* Three beats, one per pair. 0.16s between them - far enough apart to
-       read as three arrivals rather than one scatter, close enough that the
-       band is not still assembling once you have scrolled past it. */
-    for (var pair = 0; pair * 2 < items.length; pair++) {
-      var members = items.slice(pair * 2, pair * 2 + 2);
-      tl.to(members, {
-        opacity: 1, x: 0, duration: 0.85
-      }, 0.42 + pair * 0.16);
-    }
+    /* Row beats 0.16s apart - far enough to read as separate arrivals,
+       close enough that the band is assembled before you are past it.
+       Within a row the inner pair starts at 0.55s of the outer's 0.85s:
+       power3.out has done most of its travel by then, so the inner pair
+       reads as arriving WITH the outer's landing rather than after it. */
+    var LEAD = 0.85, CHASE_AT = 0.55;
+
+    rows.forEach(function (row, r) {
+      var t = 0.42 + r * 0.16;
+      var sorted = row.marks.slice().sort(function (a, b) { return b.dist - a.dist; });
+      var half = Math.ceil(sorted.length / 2);
+      /* Outer = the farthest from centre; inner = the rest. A row of two
+         is all outer; a row of one is one outer. */
+      var outer = sorted.slice(0, Math.min(2, half)).map(function (m) { return m.el; });
+      var inner = sorted.slice(outer.length).map(function (m) { return m.el; });
+
+      tl.to(outer, { opacity: 1, x: 0, duration: LEAD }, t);
+      if (inner.length) tl.to(inner, { opacity: 1, x: 0, duration: LEAD }, t + CHASE_AT);
+    });
 
     var st = ScrollTrigger.create({
       trigger: section,
