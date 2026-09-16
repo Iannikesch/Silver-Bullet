@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cookie policy — Silver Bullet</title>
-  <meta name="description" content="Silver Bullet sets no cookies. One session storage flag stops the intro animation replaying, and that is the whole story.">
+  <meta name="description" content="Silver Bullet sets no cookies of its own. What the site stores in your browser, what Calendly does when you book, and why there is nothing to configure.">
   <link rel="canonical" href="https://silverbulletagency.com/cookies.html">
   <!-- Icons. The mark is the bullet, drawn with the same hard-stopped chrome
        ramp as the site: paired stops at identical offsets, so every band is
@@ -42,14 +42,18 @@
        and without it the handshake is made twice rather than reused. -->
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <link rel="stylesheet" href="tokens.css?v=3">
+  <!-- The word band's face, fetched early so the band's first paint is in
+       it rather than swapping. crossorigin is required on a font preload
+       even same-origin, or the browser fetches it twice. -->
+  <link rel="preload" href="Assets/fonts/bebas-neue-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="tokens.css?v=4">
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
-  <link rel="stylesheet" href="textures.css?v=5">
+  <link rel="stylesheet" href="textures.css?v=10">
 
   <!-- Calendly popup chrome. Its own stylesheet - the popup renders in
      Calendly's iframe and cannot take our tokens. -->
   <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
-  <link rel="stylesheet" href="site.css?v=42">
+  <link rel="stylesheet" href="site.css?v=51">
   <link rel="stylesheet" href="nightfield.css?v=4">
   <meta property="og:url" content="https://silverbulletagency.com/cookies.html">
   <meta property="og:type" content="website">
@@ -76,7 +80,7 @@
 <body class="has-nightfield">
   <header class="site-header tx-frost">
     <div class="wrap">
-      <a class="logo tx-halo tx-halo--lung" href="index.html#top" aria-label="Silver Bullet — home">
+      <a class="logo tx-halo tx-halo--lung" href="index.html" aria-label="Silver Bullet — home">
         <span class="logo__inner">
           <!-- width/height are the file's real pixels: they give the browser
                the aspect ratio so the header never jumps as it loads.
@@ -110,41 +114,95 @@
         </details>
 
         <a class="nav-link" href="testimonials.html">Testimonials</a>
-        <a data-book class="cta-secondary tx-glare" href="https://calendly.com/inikesch-theprofectusagency/30min" data-texture="rim">Talk to us</a>
+        <a data-book class="cta-secondary tx-glare tx-halo" href="https://calendly.com/inikesch-theprofectusagency/30min" data-texture="rim">Talk to us</a>
       </nav>
     </div>
     <div class="site-header__rule"></div>
   </header>
-  <aside class="ticker" data-marquee aria-label="How we work">
-    <div class="ticker__viewport" data-marquee-viewport>
+  <!-- The word band. Two rows of big hollow words with a lit subset -
+       modelled on thearmcandy.com's client-partners strip, three rows of
+       48px outlined industries with every other one lit neon pink. Ours is
+       two rows, cold white where theirs is pink, and the words are what
+       this company is rather than who it serves.
+
+       Each row is its own [data-marquee] band, so drag, throw, hover-slow
+       and the reduced-motion stop all arrive from motion.js unchanged. The
+       two speeds are deliberately different (38 and 30 px/s) so the rows
+       slide against each other instead of moving as one plate. Each row
+       carries its own .ticker__travel so the intro's ride-out still hits
+       both.
+
+       The pinned "Book a call" is gone by request; the booking CTAs are the
+       hero button and the nav.
+
+       Lit words are FIXED, exactly as on the reference. The "flash" is a
+       lit word passing a hollow one, not a pulse - a pulse would be a
+       fifth ambient mover and there is no fifth. -->
+  <aside class="ticker" aria-label="What we do">
+    <div class="ticker__row" data-marquee data-marquee-speed="38" data-marquee-viewport>
       <div class="ticker__travel">
         <div class="ticker__track" data-marquee-track>
           <ul class="ticker__set">
-            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
-            <li>Aligned by default.</li>
-            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
-            <li>Our upside comes after yours.</li>
-            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
-            <li>Paid on performance.</li>
+            <li class="is-lit">Skin in the game</li>
+            <li>Rev share</li>
+            <li class="is-lit">Identity resolution</li>
+            <li>Profit share</li>
+            <li class="is-lit">Data driven</li>
+            <li>Paid acquisition</li>
+            <li class="is-lit">Data architecture</li>
+            <li>Aligned by default</li>
+            <li class="is-lit">First-party data</li>
+            <li>Landing pages</li>
           </ul>
           <!-- Duplicate set is what makes the loop seamless. Hidden from the
-               accessibility tree so the hook is not announced twice. -->
+               accessibility tree so nothing is announced twice. -->
           <ul class="ticker__set" aria-hidden="true">
-            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
-            <li>Aligned by default.</li>
-            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
-            <li>Our upside comes after yours.</li>
-            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
-            <li>Paid on performance.</li>
+            <li class="is-lit">Skin in the game</li>
+            <li>Rev share</li>
+            <li class="is-lit">Identity resolution</li>
+            <li>Profit share</li>
+            <li class="is-lit">Data driven</li>
+            <li>Paid acquisition</li>
+            <li class="is-lit">Data architecture</li>
+            <li>Aligned by default</li>
+            <li class="is-lit">First-party data</li>
+            <li>Landing pages</li>
           </ul>
         </div>
       </div>
     </div>
-    <!-- Pinned outside the scrolling viewport, so it never drifts off. The
-         href is the one place a booking link needs to go when Calendly
-         exists; until then it drops to the contact section rather than
-         being a dead link on the front door. -->
-    <a data-book class="ticker__cta tx-glare" href="https://calendly.com/inikesch-theprofectusagency/30min" data-texture="rim">Book a call</a>
+    <div class="ticker__row ticker__row--b" data-marquee data-marquee-speed="30" data-marquee-viewport>
+      <div class="ticker__travel">
+        <div class="ticker__track" data-marquee-track>
+          <ul class="ticker__set">
+            <li class="is-lit">Paid on performance</li>
+            <li>Attribution</li>
+            <li class="is-lit">Our upside comes after yours</li>
+            <li>Creative</li>
+            <li class="is-lit">Identity resolution</li>
+            <li>Lifecycle</li>
+            <li class="is-lit">Data architecture</li>
+            <li>Tracking</li>
+            <li class="is-lit">Rev share or profit share</li>
+            <li>Offer and positioning</li>
+          </ul>
+          <!-- Duplicate set is what makes the loop seamless. Hidden from the
+               accessibility tree so nothing is announced twice. -->
+          <ul class="ticker__set" aria-hidden="true">
+            <li class="is-lit">Paid on performance</li>
+            <li>Attribution</li>
+            <li class="is-lit">Our upside comes after yours</li>
+            <li>Creative</li>
+            <li class="is-lit">Identity resolution</li>
+            <li>Lifecycle</li>
+            <li class="is-lit">Data architecture</li>
+            <li>Tracking</li>
+            <li class="is-lit">Rev share or profit share</li>
+            <li>Offer and positioning</li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </aside>
 
   <main id="top">
@@ -155,36 +213,53 @@
 
       <div class="panel legal__summary">
         <h2>The short version</h2>
-        <p>This site sets no cookies at all. There is no consent banner because there
-          is nothing to consent to, and no settings panel because there is nothing to
+        <p>This site sets no cookies of its own and runs no analytics. The one third
+          party that can set cookies is Calendly, and only once you open the booking
+          window. There is no settings panel because there is nothing of ours to
           switch off.</p>
       </div>
 
-      <h2>The one thing we store in your browser</h2>
-      <p>When you first arrive, a short animation plays: a bullet crosses the screen
-        and draws the line under the navigation. It is meant to be seen once, not
-        replayed every time you click through to another page.</p>
-      <p>So the site writes a single entry called <code>sb-intro-seen</code> to
-        <strong>session storage</strong>, which records that the animation has played.
-        That is the whole content &mdash; a flag. It holds no identifier, nothing about
-        you, and nothing that could be joined to anything else.</p>
-      <p>Session storage is not a cookie. It is never sent to our server, it cannot be
-        read by any other site, and the browser discards it the moment you close the
-        tab. If your browser blocks it, the site notices and carries on; you simply
-        see the intro again.</p>
+      <h2>What we store in your browser</h2>
+      <p>One thing, and only sometimes. If you arrive here from a link that carries
+        campaign tags in the address &mdash; the <code>utm_</code> parameters an ad or
+        an email adds &mdash; the site keeps those tags in <strong>session
+        storage</strong> under the name <code>sb:utm</code>, so that if you go on to
+        book a call we can see which campaign the booking came from. If your address
+        carries no tags, nothing is written at all.</p>
+      <p>That entry holds the tags and nothing else: no identifier, nothing about you,
+        nothing that could be joined to anything else. Session storage is not a
+        cookie. It is never sent to our server, it cannot be read by any other site,
+        and the browser discards it the moment you close the tab.</p>
+      <p>The opening animation &mdash; the bullet that draws the line under the
+        navigation &mdash; used to leave a flag here so it would not replay. It no
+        longer does. It plays on every fresh arrival and every refresh, and stores
+        nothing.</p>
+
+      <h2>Booking a call: Calendly</h2>
+      <p>The &ldquo;Book a call&rdquo; and &ldquo;See if you qualify&rdquo; buttons open a
+        Calendly booking window. Calendly is a separate company. Its stylesheet loads
+        with every page, which discloses your IP address to it the way any web request
+        does; its script loads only when you hover or focus one of those buttons; and
+        once the booking window is open, it is Calendly&rsquo;s page inside ours. At
+        that point Calendly sets its own cookies and collects whatever you type into
+        the booking, under
+        <a href="https://calendly.com/legal/privacy-notice" rel="noopener">its own
+        privacy notice</a>. If you never open the window, Calendly sets nothing.</p>
 
       <h2>What other companies see</h2>
       <p>The site loads three JavaScript libraries from two public content delivery
-        networks, cdnjs (operated by Cloudflare) and jsDelivr. Requesting a file from
-        them discloses your IP address and user agent, as any web request does. We do
-        not set cookies through them and receive nothing back. Their own policies
-        govern what they do with that request.</p>
+        networks, cdnjs (operated by Cloudflare) and jsDelivr, and a stylesheet from
+        Calendly. Requesting a file from any of them discloses your IP address and
+        user agent, as any web request does. We do not set cookies through them and
+        receive nothing back. Their own policies govern what they do with that
+        request.</p>
 
       <h2>Why there is nothing to configure</h2>
       <p>Cookie settings panels exist to let you turn off analytics and advertising
         trackers. This site runs neither, so a panel would be a control with nothing
-        behind it. The <a href="privacy.html">privacy policy</a> sets out what little
-        we do collect.</p>
+        behind it. The one third-party cookie source, Calendly, is something you opt
+        into by opening the booking window, and you can close it. The
+        <a href="privacy.html">privacy policy</a> sets out what little we collect.</p>
 
       <h2>If this changes</h2>
       <p>Adding analytics or an advertising pixel would change this page and, most
@@ -248,7 +323,7 @@
       <div class="foot-brand">
         <img class="foot-brand__logo" src="silver-bullet-logo-alpha.png?v=2"
              width="1708" height="140" alt="Silver Bullet">
-        <a data-book class="cta-secondary" href="https://calendly.com/inikesch-theprofectusagency/30min">Connect with us</a>
+        <a data-book class="cta-secondary tx-halo" href="https://calendly.com/inikesch-theprofectusagency/30min">Connect with us</a>
       </div>
 
       <!-- Legal lives on the copyright line, not in a column of its own —
@@ -261,7 +336,7 @@
     </div>
   </footer>
   <!-- First, and dependency-free: the intro must not wait on a CDN. -->
-  <script defer src="intro.js?v=3"></script>
+  <script defer src="intro.js?v=4"></script>
   <!-- Dropdown enhancement. The menu works without it. -->
   <script defer src="booking.js?v=2"></script>
   <script defer src="nav.js?v=2"></script>
@@ -270,7 +345,7 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
-  <script defer src="motion.js?v=12"></script>
+  <script defer src="motion.js?v=15"></script>
   <script defer src="textures.js?v=11"></script>
 
   <script defer src="boot.js?v=5"></script>

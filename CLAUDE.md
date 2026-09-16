@@ -31,8 +31,8 @@ framework, say so and ask before doing it.
 ## Motion
 
 Movement is a priority for this site, but it is rationed. What moves: the bullet
-intro, the reactive chrome on two elements, three marquee bands — the hook
-banner, the creative conveyor and the logo band — two scroll-triggered
+intro, the reactive chrome on two elements, four marquee bands — the word band's
+two rows, the creative conveyor and the logo band — two scroll-triggered
 reveals (the client wall, and the platform band under "Proficient in"), and
 the testimonial band, which advances itself on a 7s dwell. Nothing else does.
 
@@ -67,6 +67,12 @@ never `@latest`, all `defer`red so they never block first paint.
 
 Site motion code lives in `motion.js`, loaded deferred after the libraries.
 
+One web font, self-hosted: `Assets/fonts/bebas-neue-latin.woff2` (Bebas Neue,
+the wordmark's face, OFL, 8.6KB latin subset). Used only by the word band.
+Preloaded from every `<head>`; `motion.js` re-measures the marquees on
+`document.fonts.ready` so the loop seam never goes stale. No Google Fonts
+origin — keep it that way, it is a privacy-policy line the moment it changes.
+
 ### The bullet intro is CSS-only, and stays that way
 
 The opening sequence — bullet crossing the viewport, drawing the nav rule,
@@ -75,24 +81,34 @@ orchestrated by a single `.is-intro` class on `<body>`. It does not use GSAP and
 should not be ported to it. The base stylesheet *is* the finished state, so with
 JS off or motion reduced the page is simply correct and nothing animates.
 
+It plays on every **arrival** — fresh visit, refresh, typed URL, external link —
+and not on a click between pages of this site, which used to read as the banner
+glitching. `intro.js` decides from the Navigation Timing type and the referrer,
+and stores nothing. Consequence to know: a refresh while scrolled down returns
+you to the top, because the sequence needs the top of the page.
+
 Timeline values live in `:root` in `index.html` as `--t-*` custom properties.
 
 ### The marquee bands are CSS-only, and they are the ambient exception
 
-Three strips run perpetual right-to-left CSS marquees at deliberately different
-speeds: `.ticker` (the hook, ~28px/s, with a pinned amber CTA that does not
-scroll), `.conveyor` (creative, four slots in view, ~45px/s) and `.logo-band`
-(client logos, ~18px/s). Rates live in `:root`; keep them far apart or the three
-read as one striped block.
+Four strips run perpetual right-to-left marquees at deliberately different
+speeds: the word band's two rows (`.ticker__row`, ~38 and ~30px/s - big hollow
+words with a lit subset, modelled on thearmcandy.com's client-partners strip;
+the pinned amber CTA it used to carry is gone), `.conveyor` (creative, four slots
+in view, ~49px/s) and `.logo-band` (client logos, ~16px/s). Speeds are
+`data-marquee-speed` in the markup, px/s; the `:root` rates are the no-JS
+fallback. Keep them apart or they read as one striped block - the two word rows
+are close on purpose so they slide against each other as one band, and that is
+the only pair allowed to be.
 
 Every band is `[data-marquee]` wrapping a `[data-marquee-track]`. That pairing is
 what the reduced-motion rule and the hover handler both key off, so a new band
 gets both behaviours for free.
 
-The hook banner alone also arrives with the intro. It is two nested transforms
-that compose: `.ticker__travel` is intro-only and
-rides out with the bullet, then returns on a hard ease-out; `.ticker__track` is
-the constant-rate loop underneath. Through the return the travel layer sheds
+The word band alone also arrives with the intro. Each row is two nested
+transforms that compose: `.ticker__travel` is intro-only and rides out with the
+bullet, then returns on a hard ease-out; `.ticker__track` is the constant-rate
+loop underneath. Both rows carry their own travel so the ride-out hits both. Through the return the travel layer sheds
 speed while the track holds its pace, so the composite runs from the bullet's
 own velocity down to the drift with no seam.
 

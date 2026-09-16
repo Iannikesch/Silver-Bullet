@@ -72,7 +72,8 @@
          like the bullet's pace, and a short ride leaves the deceleration
          nothing to be felt across — measured, 144px read as a flat crawl. */
       --ticker-ride: clamp(280px, 42vw, 620px);
-      --ticker-rate: 62s;   /* one full loop. Slow on purpose. */
+      --ticker-rate:   91s;   /* row A, no-JS fallback: 3462px set / 38px/s. JS uses data-marquee-speed */
+      --ticker-rate-b: 128s;  /* row B, no-JS fallback: 3854px set / 30px/s */
 
       /* Work conveyors. Three bands run right-to-left on this page, so they
          get three clearly different speeds — matched speeds would read as
@@ -196,13 +197,28 @@
 
     /* ---------- header ---------- */
 
+    /* The header and the ticker under it are one warm band: the room the
+       cold steel page sits in. DESIGN.md's premise is "cold steel subject,
+       warm environment behind it", and until this the environment was the
+       same cyan-pulled dark as everything else. The band is where it shows.
+
+       Nothing in the band that is SUBJECT goes warm - the wordmark, the nav
+       type, the button's label all stay on the steel ramp. Only the light
+       behind them and the surfaces they sit on. */
     .site-header {
       position: sticky;
       top: 0;
       z-index: 40;
       height: var(--nav-h);
-      /* No fill of its own. .tx-frost supplies a translucent pane, and only
-         once the page has been scrolled - see textures.css. */
+      /* NO background of its own - the pane supplies it, and an opaque fill
+         here would sit UNDER the pane and give the backdrop blur nothing
+         but flat colour to sample. Near-solid warm at the top of the page
+         (92%), then 58% plus blur once lifted: the bar gets glassier as
+         content starts passing under it, which is the "floats over the
+         page" the brief asked for. */
+      --tx-frost-tint: color-mix(in srgb, var(--amber-burnt) 45%, var(--taupe-dark));
+      --tx-frost-base: var(--bg-warm);
+      --tx-frost-rest: 92%;
     }
 
     .site-header .wrap {
@@ -213,14 +229,24 @@
       gap: 24px;
     }
 
-    /* The line the bullet leaves behind. It is the nav separator. */
+    /* The line the bullet leaves behind. It is the nav separator - and it
+       is still drawn by the intro (rule-draw scales it from the left), so
+       the element and its transform-origin stay exactly as they were. What
+       changed is what it is made of: a warm hairline at ~11% that fades out
+       at both ends, instead of a solid slate line edge to edge. The bullet
+       still draws it; it just draws something softer. */
     .site-header__rule {
       position: absolute;
       left: 0;
       right: 0;
       bottom: 0;
       height: 1px;
-      background: var(--border);
+      background: linear-gradient(90deg,
+        transparent 0%,
+        var(--line-warm) 12%,
+        color-mix(in srgb, var(--amber) 16%, transparent) 50%,
+        var(--line-warm) 88%,
+        transparent 100%);
       transform-origin: left center;
     }
 
@@ -277,12 +303,40 @@
 
     .nav a {
       font-size: 15px;
-      color: var(--steel-500);
+      color: var(--steel-300);        /* one step up from --steel-500 */
       text-decoration: none;
-      transition: color .18s ease;
+      transition: color .25s ease;
     }
 
-    .nav a:hover { color: var(--white); }
+    .nav a:hover { color: var(--steel-050); }
+
+    /* The underline grows from the centre. Scoped to the plain links - the
+       dropdown's summary and the CTA have their own signals. scaleX rather
+       than animating width, so it never touches layout. Steel, not amber:
+       the ticker's CTA is the one warm element in this viewport. */
+    .nav > .nav-link {
+      position: relative;
+      padding-bottom: 3px;
+    }
+    .nav > .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background: var(--steel-300);
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform .25s var(--ease-settle);
+    }
+    .nav > .nav-link:hover::after,
+    .nav > .nav-link:focus-visible::after { transform: scaleX(1); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .nav a,
+      .nav > .nav-link::after { transition: none; }
+    }
 
     /* ---------- nav dropdown ----------
        Built on <details> so the thing works with the script absent: click
@@ -570,6 +624,30 @@
       .nav { transition: none; }
     }
 
+    /* ---------- halos behind the CTAs ----------
+       Each button carries .tx-halo: a contained cold field, resting low and
+       lifting under the pointer. The pack's defaults are cut for a wordmark
+       (34px x 18px reach); a button in a 72px bar needs less or the field
+       leaves the bar, and a button on open ground can take more.
+
+       Not on the ticker CTA. It is an opaque amber slab pinned inside a band
+       that clips, so a field behind it is either hidden or cut off. */
+    .nav .tx-halo {
+      --tx-halo-pad-x: 28px;
+      --tx-halo-pad-y: 11px;    /* 37px button + 22px = 59px, inside 72px */
+      --tx-halo-low: 0.34;      /* present at rest, not only under the pointer */
+      --tx-halo-high: 0.80;
+    }
+
+    .cta-row .tx-halo,
+    .cform__actions .tx-halo,
+    .foot-brand .tx-halo {
+      --tx-halo-pad-x: 40px;
+      --tx-halo-pad-y: 22px;
+      --tx-halo-low: 0.30;
+      --tx-halo-high: 0.68;
+    }
+
     /* ---------- buttons (base classes live in tokens.css) ---------- */
 
     .cta, .cta-secondary {
@@ -583,7 +661,46 @@
       transition: background-color .18s ease, color .18s ease, border-color .18s ease;
     }
 
-    .nav .cta-secondary { padding: 9px 16px; font-size: 14px; }
+    /* The one rounded element on the site, and the reason it is allowed:
+       it sits in the warm band, and a hard steel outline there read as a
+       box nailed onto a soft surface. The fill is a warm TINT - sand at
+       low strength - not the accent: "Book a call" beside it in the ticker
+       is the viewport's one amber element, and a second would cancel it.
+       The hover lifts the tint and the button a pixel; no shadow, per
+       DESIGN.md, the halo behind it (tx-halo, tinted warm below) is what
+       reads as the glow. */
+    .nav .cta-secondary {
+      padding: 9px 18px;
+      font-size: 14px;
+      border-radius: 10px;
+      border-color: color-mix(in srgb, var(--sand) 34%, transparent);
+      background: color-mix(in srgb, var(--sand) 10%, transparent);
+      color: var(--steel-050);
+      transition:
+        background-color .25s ease,
+        border-color .25s ease,
+        color .25s ease,
+        transform .25s var(--ease-settle);
+    }
+    .nav .cta-secondary:hover,
+    .nav .cta-secondary:focus-visible {
+      background: color-mix(in srgb, var(--sand) 18%, transparent);
+      border-color: color-mix(in srgb, var(--sand) 58%, transparent);
+      color: var(--white);
+      transform: translateY(-1px);
+    }
+    /* Declared after the rule above on purpose: same specificity, so only
+       source order decides, and placed earlier this silently lost. */
+    @media (prefers-reduced-motion: reduce) {
+      .nav .cta-secondary { transition: none; }
+      .nav .cta-secondary:hover,
+      .nav .cta-secondary:focus-visible { transform: none; }
+    }
+
+    /* Its halo, and the wordmark's, go warm with the band. */
+    .site-header .tx-halo {
+      --tx-halo-tint: color-mix(in srgb, var(--amber-burnt) 50%, var(--taupe-dark));
+    }
 
     /* ---------- sections ---------- */
 
@@ -1214,151 +1331,160 @@
       .foot-link { transition: none; }
     }
 
-    /* ---------- slogan ticker ----------
-       A rotating strip of slogans in the slot under the nav rule. As with the
-       intro, the base state below is the FINISHED state: the marquee is simply
-       running and the strip is in place. .is-intro only adds the arrival.
+    /* ---------- the wordmark's face, for the word band ----------
+       Bebas Neue: the tall condensed grotesque the SILVER BULLET wordmark is
+       set in. The site's first and only web font, and it is self-hosted on
+       purpose - no fonts.googleapis.com origin, nothing new for the privacy
+       policy, no CDN in the path of the first paint. OFL licence. Latin
+       subset only, 8.6KB. Used ONLY by the word band; every other line on
+       the site stays on the system stack the way it was.
 
-       Two nested transforms, deliberately:
-         .ticker__travel  intro only  — rides out with the bullet, comes back
-         .ticker__track   forever     — the constant-rate marquee
-       They compose. Through the return the travel layer is decelerating hard
-       while the track holds its steady pace, so the composite velocity runs
-       fast -> slow -> steady drift with no moment where one hands to the other. */
+       font-display: swap, and the file is preloaded from <head>, so it is
+       almost always ready before the band paints. If it is not, the band
+       paints in the fallback and swaps - motion.js re-measures the loop on
+       document.fonts.ready so the wrap does not go stale. */
+    @font-face {
+      font-family: "Bebas Neue";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url("Assets/fonts/bebas-neue-latin.woff2") format("woff2");
+    }
+
+    /* ---------- the word band ----------
+       Two rows of big hollow words under the nav, a lit subset among them.
+       Modelled on thearmcandy.com's client-partners strip, which runs three
+       rows of 48px outlined industries with every other one lit neon pink.
+
+       What is kept from the reference: hollow letters (a stroke and no
+       fill), the "//" between words, a fixed lit subset, rows that slide
+       at different speeds. What is changed: two rows not three, cold white
+       not pink, and the words are what this company is - identity
+       resolution, data architecture, paid on performance - mixed with the
+       lines the old strip carried.
+
+       THE LIT WORDS CARRY A GLOW, AND THAT IS A KNOWING EXCEPTION. DESIGN.md
+       rules out text-shadow bloom, and this is text-shadow bloom. It is
+       here because the brief was explicitly the neon on the reference, as
+       an experiment, and a neon with no bloom is not a neon. It is held
+       cold (white over --steel-050, never warm), kept to the lit words in
+       this one band, and it does not pulse - the lit set is fixed, and the
+       "flash" is a lit word passing a hollow one. If the experiment is
+       kept, this paragraph should move to DESIGN.md as the recorded
+       exception; if not, delete .is-lit's text-shadow and it is back on
+       the sheet.
+
+       Structure per row mirrors the old single strip exactly - row (the
+       clip and the grab area) > travel (intro only) > track (the loop) -
+       so the intro ride-out and motion.js both work on it untouched. */
 
     .ticker {
       position: relative;
-      display: flex;
-      align-items: stretch;
-      border-bottom: 1px solid var(--border);
-      background: var(--bg);
+      padding: 8px 0 12px;
+      background: var(--bg-warm);
     }
 
-    /* Clipping moved off .ticker and onto this, so the pinned CTA is a
-       sibling of the scrolling area rather than something inside it that
-       would be carried away by the marquee. */
-    .ticker__viewport {
-      flex: 1;
-      min-width: 0;
+    /* The band's lower edge is a fade, not a line: the warm dark dissolves
+       into the page's cold dark over 28px. Below the strip, so it never
+       overlaps the words. */
+    .ticker::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 100%;
+      height: 28px;
+      pointer-events: none;
+      background: linear-gradient(180deg, var(--bg-warm), transparent);
+    }
+
+    /* Each row clips its own loop and is its own grab area. Words fade in
+       on the left and out on the right rather than being cut. The mask does
+       not touch pointer events, so drag is unaffected. */
+    .ticker__row {
+      position: relative;
       overflow: hidden;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
     }
 
-    /* The one persistent conversion path on the page. Amber, and the only
-       amber in this band — see the accent rule in DESIGN.md. */
-    .ticker__cta {
-      flex: none;
-      display: flex;
-      align-items: center;
-      padding: 0 clamp(16px, 2.2vw, 28px);
-      border-left: 1px solid var(--border);
-      background: var(--accent);
-      color: var(--ink);
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      text-decoration: none;
-      white-space: nowrap;
-      transition: background-color .18s ease;
-    }
+    .ticker__row + .ticker__row { margin-top: -4px; }
 
-    .ticker__cta:hover  { background: var(--accent-hover); }
-    .ticker__cta:active { background: var(--accent-active); }
-
-    /* Promoted unconditionally. This used to be gated on .is-onstage to save
-       texture, but adding and removing will-change CREATES AND DESTROYS the
-       compositor layer, and tearing one down while the band is mid-motion
-       leaves the last painted frame behind as a ghost - a still copy sitting
-       over the moving one. Worst on the inner pages, where the band is the
-       only thing on screen. A stable layer costs memory; a thrashing one
-       costs correctness. The off-screen saving that actually mattered is the
-       skipped gsap.set in bindMarquee(), which is untouched. */
+    /* Intro-only layer: rides out with the bullet and returns. Nothing here
+       at rest; body.is-intro adds the animation. See the intro section. */
     .ticker__travel { will-change: transform; }
 
+    /* The no-JS fallback loop. motion.js reads the duration, cancels this,
+       and drives the same motion itself so the band can be grabbed; with
+       JS off the rows simply run on these. The speeds in the markup are
+       what JS uses; these approximate them for the fallback. */
     .ticker__track {
       display: flex;
       width: max-content;
       animation: marquee-left var(--ticker-rate) linear infinite;
-      /* Negative delay starts the loop already part-way through, so there is
-         always content off to the left. Without it the strip rides out and
-         drags an empty gap in behind itself. */
-      animation-delay: calc(var(--ticker-rate) * -0.55);
+    }
+    .ticker__row--b .ticker__track {
+      animation-duration: var(--ticker-rate-b);
+      /* The second row starts part way round so the two lit patterns are
+         never in phase on first paint. */
+      animation-delay: calc(var(--ticker-rate-b) * -0.4);
     }
 
-    /* NOTE: deliberately no animation-play-state rule here. motion.js sets
-       track.style.animation = 'none' and drives the band from GSAP, so the
-       CSS animation only ever runs as the no-JS fallback — and pausing it
-       on :not(.is-onstage) would freeze every band permanently with JS off,
-       since nothing would be there to add the class. The off-screen saving
-       is made in bindMarquee() instead, which is where the motion lives. */
-
-    /* The bands are draggable. pan-y keeps vertical page scrolling working
-       on touch while horizontal drags come to us. */
-    [data-marquee-viewport] {
-      cursor: grab;
-      touch-action: pan-y;
-    }
-
-    [data-marquee-viewport].is-dragging { cursor: grabbing; }
-
-    /* Without this a drag selects the slogans instead of moving the band. */
-    [data-marquee-viewport].is-dragging,
-    [data-marquee-viewport].is-dragging * { user-select: none; }
-
-    /* The pinned CTA is a button, not a drag handle. */
-    .ticker__cta { cursor: pointer; }
-
-    /* Hover slows the drift to 0.4x rather than stopping it — that is done
-       in motion.js via playbackRate, because changing animation-duration
-       here would remap the loop's progress and make it jump.
-
-       Keyboard focus still stops it dead. Focus is an explicit "I am using
-       this" signal where hover is incidental, and someone tabbing through
-       needs the thing to actually hold still. This also keeps a real stop
-       available without a pointer. */
-    .ticker:focus-within .ticker__track { animation-play-state: paused; }
-
+    /* Two identical sets side by side, no gap, so translating the track by
+       exactly -50% lands the second set where the first began. Shared by
+       every band on the site. Put a gap on the track and this breaks. */
     .ticker__set {
       display: flex;
+      flex: none;
       margin: 0;
       padding: 0;
       list-style: none;
     }
 
+    /* Hollow words. A stroke and no fill is rim light in its purest form:
+       the highlight IS the contour. Uppercase because a marquee of set
+       phrases is a display band, not an eyebrow over a heading. */
     .ticker__set li {
       position: relative;
       flex: none;
-      padding: 13px clamp(22px, 3vw, 40px);
-      font-size: 14px;
-      color: var(--steel-500);
+      padding: 0 clamp(10px, 1.4vw, 22px) 0 0;
+      /* Bebas is one weight, so 400 - asking for 600 would fake-bold it and
+         thicken the hollow stroke. Condensed, so it runs larger than the
+         system face did at the same footprint. The fallbacks are the
+         narrowest faces a Mac or Windows box has, so a pre-swap frame is
+         at least the right shape. */
+      font-family: "Bebas Neue", Impact, "Arial Narrow", "Helvetica Neue Condensed", sans-serif;
+      font-size: clamp(28px, 3.4vw, 50px);
+      line-height: 1.1;
+      font-weight: 400;
+      letter-spacing: 0.045em;
+      text-transform: uppercase;
       white-space: nowrap;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      -webkit-text-stroke: 1px var(--steel-700);
     }
 
-    /* The hook — rev share / profit share / skin in the game — is the whole
-       pitch, so it opens the loop, returns at the halfway point, and carries
-       the emphasis value off the steel ramp. The supporting lines sit a step
-       down. Two bright items in ten is the ration; brighten them all and the
-       strip flattens into one grey band. */
-    .ticker__set li.is-hook {
-      color: var(--steel-100);
-      font-weight: 600;
-    }
-
-    /* Separator is a hairline, not a middle dot — see "Do not" in DESIGN.md. */
+    /* The separator, drawn in the same hollow stroke so it belongs to the
+       row rather than punctuating it. */
     .ticker__set li::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 50%;
-      width: 1px;
-      height: 12px;
-      transform: translateY(-50%);
-      background: var(--slate);
+      content: "//";
+      margin-right: clamp(10px, 1.4vw, 22px);
+      -webkit-text-stroke: 1px var(--steel-900);
+      letter-spacing: -0.06em;
     }
 
-    /* Two identical sets sit side by side, so translating the track by exactly
-       -50% lands the second set where the first began. Shared by all three
-       bands — every one of them uses paired sets and no flex `gap`, which is
-       what keeps -50% exact. Put a gap on the track and this breaks. */
+    /* The lit subset. Filled cold white with the stroke matched, plus the
+       bloom - see the note at the top of this block for why it is here. */
+    .ticker__set li.is-lit {
+      -webkit-text-fill-color: var(--white);
+      -webkit-text-stroke: 1px var(--white);
+      text-shadow:
+        0 0 2px  var(--white),
+        0 0 10px color-mix(in srgb, var(--steel-050) 62%, transparent),
+        0 0 24px color-mix(in srgb, var(--steel-050) 28%, transparent);
+    }
+
     @keyframes marquee-left {
       from { transform: translateX(0); }
       to   { transform: translateX(-50%); }
@@ -2126,13 +2252,6 @@
 
     body.is-intro .logo__inner {
       animation: name-wipe .26s var(--ease-settle) var(--t-name) both;
-    }
-
-    /* The banner CTA arrives on the nav's beat rather than riding out with
-       the bullet — it is pinned, so travelling would read as a mistake. */
-    body.is-intro .ticker__cta {
-      animation: nav-in .40s ease both;
-      animation-delay: calc(var(--t-nav) + .24s);
     }
 
     body.is-intro .nav > * {

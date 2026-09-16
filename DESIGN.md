@@ -35,6 +35,24 @@ the brightest thing in frame. White backgrounds are wrong here. `--white` is spe
 headlines and on nothing else. Body copy is `--steel-300`. If a block of white text
 grows past a headline, step it down the steel ramp.
 
+**2b. The header band is the warm environment.**
+The palette premise is a cold steel subject in a *warm* environment. For a long
+time every dark on the site was the cyan-pulled `--bg`, so the environment never
+showed up and the whole page read as cold-on-cold - the feedback was "rigid",
+"hard black boxes with hairline borders". The header and the ticker under it are
+now one warm band: `--bg-warm` surfaces, a warm field behind the wordmark, a warm
+hairline at ~11% for the rule, sand diamonds between the ticker phrases, and a
+fade rather than a line where the band meets the page.
+
+What stays cold inside the band is everything that is *subject*: the wordmark,
+the nav type, the button's label. Steel on warm is the whole idea. Do not warm
+the type to match the ground, and do not cool the ground back to match the type.
+
+The nav's "Talk to us" is the one rounded element on the site and the one with a
+warm-tinted fill. The fill is sand at low strength, not amber - the ticker's
+"Book a call" beside it is the viewport's one amber element, and rule 3 below is
+why it cannot have company.
+
 **3. Warmth appears once.**
 The entire color story is cold steel against warm amber. `--amber` marks the primary
 action and nothing else. One amber element per viewport. A second one cancels the
@@ -194,9 +212,23 @@ all, which is the thing this section otherwise rules out:
 
 | Band | What it carries | Speed |
 | --- | --- | --- |
-| `.ticker` | the hook — rev share or profit share, skin in the game | ~28px/s |
-| `.conveyor` | creative, four slots in view | ~45px/s |
-| `.logo-band` | client logos | ~18px/s |
+| `.ticker__row` (A) | the word band, row one — what this company is, hollow with a lit subset | ~38px/s |
+| `.ticker__row--b` | the word band, row two | ~30px/s |
+| `.conveyor` | creative, four slots in view | ~49px/s |
+| `.logo-band` | client logos | ~16px/s |
+
+The word band's two rows are the "fourth band" this section warned about, and
+here is the re-examination: they are one visual element, not two, and they are
+close in speed on purpose so they slide against each other rather than moving as
+a plate. That is the only pair allowed to be close. A fifth strip anywhere else
+is still the line.
+
+**The lit words glow, and that is a recorded experiment against this document.**
+The "Do not" list rules out text-shadow bloom. The word band's lit subset carries
+one - held cold, confined to that band, and static (the lit set never changes;
+the flash is a lit word passing a hollow one). It was asked for explicitly as
+the neon on thearmcandy.com. If it stays, this note is the record; if it goes,
+delete `.is-lit`'s `text-shadow` and the sheet is whole again.
 
 This is a deliberate call, made knowingly, and it is the part of this document
 most likely to go wrong. Three self-moving bands on one page is close to the
