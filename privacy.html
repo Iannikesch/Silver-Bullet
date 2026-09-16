@@ -198,8 +198,9 @@
           no LinkedIn or TikTok tag, no session recording, no heatmaps.</li>
         <li>No advertising or retargeting trackers. Nothing on this site follows you
           to another one.</li>
-        <li>No cookies. See the <a href="cookies.html">cookie policy</a> for the one
-          small thing the site does store in your browser, and why it is not a cookie.</li>
+        <li>No cookies of our own. See the <a href="cookies.html">cookie policy</a>
+          for the one thing the site may store in your browser, why it is not a
+          cookie, and what Calendly does when you open the booking window.</li>
         <li>No accounts, so no passwords.</li>
         <li>No payment details. Nothing is sold through this site.</li>
       </ul>
@@ -223,6 +224,12 @@
           email lives once it reaches us.</li>
         <li><strong>Cloudflare (cdnjs) and jsDelivr</strong> &mdash; serve the
           JavaScript libraries, and so see the IP address making the request.</li>
+        <li><strong>Calendly</strong> &mdash; runs the booking window behind
+          &ldquo;Book a call&rdquo;. Its stylesheet loads with every page; its script
+          loads when you hover a booking button; and once the window is open it is
+          Calendly collecting the booking, under its own privacy notice. If you
+          arrived via a tagged campaign link, the campaign tags are passed along with
+          the booking so we know where it came from.</li>
       </ul>
       <p>None of them is permitted to use your information for their own marketing.
         We do not sell personal information, and we do not share it for
@@ -323,7 +330,7 @@
     </div>
   </footer>
   <!-- First, and dependency-free: the intro must not wait on a CDN. -->
-  <script defer src="intro.js?v=3"></script>
+  <script defer src="intro.js?v=4"></script>
   <!-- Dropdown enhancement. The menu works without it. -->
   <script defer src="booking.js?v=1"></script>
   <script defer src="nav.js?v=2"></script>

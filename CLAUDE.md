@@ -75,6 +75,12 @@ orchestrated by a single `.is-intro` class on `<body>`. It does not use GSAP and
 should not be ported to it. The base stylesheet *is* the finished state, so with
 JS off or motion reduced the page is simply correct and nothing animates.
 
+It plays on every **arrival** — fresh visit, refresh, typed URL, external link —
+and not on a click between pages of this site, which used to read as the banner
+glitching. `intro.js` decides from the Navigation Timing type and the referrer,
+and stores nothing. Consequence to know: a refresh while scrolled down returns
+you to the top, because the sequence needs the top of the page.
+
 Timeline values live in `:root` in `index.html` as `--t-*` custom properties.
 
 ### The marquee bands are CSS-only, and they are the ambient exception

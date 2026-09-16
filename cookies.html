@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cookie policy — Silver Bullet</title>
-  <meta name="description" content="Silver Bullet sets no cookies. One session storage flag stops the intro animation replaying, and that is the whole story.">
+  <meta name="description" content="Silver Bullet sets no cookies of its own. What the site stores in your browser, what Calendly does when you book, and why there is nothing to configure.">
   <link rel="canonical" href="https://silverbulletagency.com/cookies.html">
   <!-- Icons. The mark is the bullet, drawn with the same hard-stopped chrome
        ramp as the site: paired stops at identical offsets, so every band is
@@ -155,36 +155,53 @@
 
       <div class="panel legal__summary">
         <h2>The short version</h2>
-        <p>This site sets no cookies at all. There is no consent banner because there
-          is nothing to consent to, and no settings panel because there is nothing to
+        <p>This site sets no cookies of its own and runs no analytics. The one third
+          party that can set cookies is Calendly, and only once you open the booking
+          window. There is no settings panel because there is nothing of ours to
           switch off.</p>
       </div>
 
-      <h2>The one thing we store in your browser</h2>
-      <p>When you first arrive, a short animation plays: a bullet crosses the screen
-        and draws the line under the navigation. It is meant to be seen once, not
-        replayed every time you click through to another page.</p>
-      <p>So the site writes a single entry called <code>sb-intro-seen</code> to
-        <strong>session storage</strong>, which records that the animation has played.
-        That is the whole content &mdash; a flag. It holds no identifier, nothing about
-        you, and nothing that could be joined to anything else.</p>
-      <p>Session storage is not a cookie. It is never sent to our server, it cannot be
-        read by any other site, and the browser discards it the moment you close the
-        tab. If your browser blocks it, the site notices and carries on; you simply
-        see the intro again.</p>
+      <h2>What we store in your browser</h2>
+      <p>One thing, and only sometimes. If you arrive here from a link that carries
+        campaign tags in the address &mdash; the <code>utm_</code> parameters an ad or
+        an email adds &mdash; the site keeps those tags in <strong>session
+        storage</strong> under the name <code>sb:utm</code>, so that if you go on to
+        book a call we can see which campaign the booking came from. If your address
+        carries no tags, nothing is written at all.</p>
+      <p>That entry holds the tags and nothing else: no identifier, nothing about you,
+        nothing that could be joined to anything else. Session storage is not a
+        cookie. It is never sent to our server, it cannot be read by any other site,
+        and the browser discards it the moment you close the tab.</p>
+      <p>The opening animation &mdash; the bullet that draws the line under the
+        navigation &mdash; used to leave a flag here so it would not replay. It no
+        longer does. It plays on every fresh arrival and every refresh, and stores
+        nothing.</p>
+
+      <h2>Booking a call: Calendly</h2>
+      <p>The &ldquo;Book a call&rdquo; and &ldquo;See if you qualify&rdquo; buttons open a
+        Calendly booking window. Calendly is a separate company. Its stylesheet loads
+        with every page, which discloses your IP address to it the way any web request
+        does; its script loads only when you hover or focus one of those buttons; and
+        once the booking window is open, it is Calendly&rsquo;s page inside ours. At
+        that point Calendly sets its own cookies and collects whatever you type into
+        the booking, under
+        <a href="https://calendly.com/legal/privacy-notice" rel="noopener">its own
+        privacy notice</a>. If you never open the window, Calendly sets nothing.</p>
 
       <h2>What other companies see</h2>
       <p>The site loads three JavaScript libraries from two public content delivery
-        networks, cdnjs (operated by Cloudflare) and jsDelivr. Requesting a file from
-        them discloses your IP address and user agent, as any web request does. We do
-        not set cookies through them and receive nothing back. Their own policies
-        govern what they do with that request.</p>
+        networks, cdnjs (operated by Cloudflare) and jsDelivr, and a stylesheet from
+        Calendly. Requesting a file from any of them discloses your IP address and
+        user agent, as any web request does. We do not set cookies through them and
+        receive nothing back. Their own policies govern what they do with that
+        request.</p>
 
       <h2>Why there is nothing to configure</h2>
       <p>Cookie settings panels exist to let you turn off analytics and advertising
         trackers. This site runs neither, so a panel would be a control with nothing
-        behind it. The <a href="privacy.html">privacy policy</a> sets out what little
-        we do collect.</p>
+        behind it. The one third-party cookie source, Calendly, is something you opt
+        into by opening the booking window, and you can close it. The
+        <a href="privacy.html">privacy policy</a> sets out what little we collect.</p>
 
       <h2>If this changes</h2>
       <p>Adding analytics or an advertising pixel would change this page and, most
@@ -261,7 +278,7 @@
     </div>
   </footer>
   <!-- First, and dependency-free: the intro must not wait on a CDN. -->
-  <script defer src="intro.js?v=3"></script>
+  <script defer src="intro.js?v=4"></script>
   <!-- Dropdown enhancement. The menu works without it. -->
   <script defer src="booking.js?v=1"></script>
   <script defer src="nav.js?v=2"></script>
