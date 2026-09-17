@@ -102,7 +102,7 @@
   <!-- Calendly popup chrome. Its own stylesheet - the popup renders in
      Calendly's iframe and cannot take our tokens. -->
   <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
-  <link rel="stylesheet" href="site.css?v=59">
+  <link rel="stylesheet" href="site.css?v=60">
 
 </head>
 
@@ -288,18 +288,46 @@
           </div>
         </div>
 
-        <h1 class="tx-rim-text" data-texture="rim">Growth partner invested in your success.</h1>
-        <p class="lead">
-          Silver Bullet is a performance-based marketing firm. We take a share of
-          the revenue or profit we generate, so the bigger part of what we earn
-          depends on what you earn. That is the whole arrangement — our upside
-          only arrives after yours does.
-        </p>
-        <div class="cta-row">
-          <a data-book class="cta tx-torch tx-halo" href="https://calendly.com/inikesch-theprofectusagency/30min" data-texture="torch"
-             data-lit-in="0.9" data-lit-out="0.7">See if you qualify</a>
-          <a class="cta-secondary tx-torch tx-halo" href="#work" data-texture="torch"
-             data-lit-in="0.9" data-lit-out="0.7">See our work</a>
+        <div class="hero__grid">
+          <div class="hero__copy">
+            <h1 class="tx-rim-text" data-texture="rim">Growth partner invested in your success.</h1>
+            <p class="lead">
+              Silver Bullet is a performance-based marketing firm. We take a share of
+              the revenue or profit we generate, so the bigger part of what we earn
+              depends on what you earn. That is the whole arrangement — our upside
+              only arrives after yours does.
+            </p>
+            <div class="cta-row">
+              <a data-book class="cta tx-torch tx-halo" href="https://calendly.com/inikesch-theprofectusagency/30min" data-texture="torch"
+                 data-lit-in="0.9" data-lit-out="0.7">See if you qualify</a>
+              <a class="cta-secondary tx-torch tx-halo" href="#work" data-texture="torch"
+                 data-lit-in="0.9" data-lit-out="0.7">See our work</a>
+            </div>
+          </div>
+
+          <!-- ============================================================
+               The reel. A portrait window beside the headline that two
+               short clips take turns in: one slides up into the frame and
+               eases to a stop, plays through, then slides up and out a
+               touch faster while the other slides in underneath it. Only
+               one is ever fully in frame. reel.js runs the cycle off each
+               clip's own `ended` event, so a clip always plays out before
+               it leaves; the frame is the clip - it holds nothing else.
+
+               Both clips are 9:16 and about five seconds. Muted and
+               playsinline are what autoplay requires; there is no
+               `autoplay` attribute and preload is none, so nothing is
+               fetched until reel.js decides the reel is on and on screen.
+               Under 760px the reel is not shown and the clips - 15MB
+               between them - are never downloaded. With JS off there is
+               no reel at all (see the noscript rule), so the hero is
+               simply one column, which is correct rather than an empty
+               frame. Decorative: aria-hidden, nothing here is content.
+               ============================================================ -->
+          <aside class="hero__reel" data-reel aria-hidden="true">
+            <video class="hero__clip" muted playsinline preload="none" src="Assets/Videos/hero-reel-1.mp4"></video>
+            <video class="hero__clip" muted playsinline preload="none" src="Assets/Videos/hero-reel-2.mp4"></video>
+          </aside>
         </div>
       </section>
     </div><!-- /.hero-ground -->
@@ -1121,6 +1149,9 @@
   <script defer src="capabilities.js?v=2"></script>
 
   <script defer src="nav.js?v=3"></script>
+  <!-- The hero reel. Self-initialising, no GSAP. -->
+  <script defer src="reel.js?v=1"></script>
+  <noscript><style>.hero__reel { display: none; } .hero__grid { grid-template-columns: minmax(0, 1fr); }</style></noscript>
   <!-- The work/clients stack: pin height and push-back. No GSAP. -->
   <script defer src="stack.js?v=1"></script>
   <!-- Enquiry form reveal. Self-initialising and GSAP-free, same as

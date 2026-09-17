@@ -32,7 +32,10 @@ framework, say so and ask before doing it.
 
 Movement is a priority for this site, but it is rationed. What moves: the bullet
 intro, the reactive chrome on two elements, four marquee bands — the word band's
-two rows, the creative conveyor and the logo band — two scroll-triggered
+two rows, the creative conveyor and the logo band — the hero reel (two 9:16
+clips taking turns in one window beside the headline; `reel.js`, no GSAP,
+driven by each clip's own `ended` event, paused off screen and in background
+tabs, never fetched under 760px or under reduced motion), two scroll-triggered
 reveals (the client wall, and the platform band under "Platforms we work on"), the
 testimonial band, which advances itself on a 7s dwell, and the verticals
 carousel, which drifts its industry cards on a continuous loop at about 9s per
