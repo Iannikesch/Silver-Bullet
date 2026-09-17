@@ -490,64 +490,78 @@
     </div><!-- /.stack -->
 
     <!-- ============================================================
-         Platforms we work on. Structure is still inboundmedia.co's press
-         band: centred head, one line under it, then a 3-up grid of
-         marks that wraps to two rows.
+         The stack band. Structure is still inboundmedia.co's press
+         band: centred head, then rows of marks on the site's one
+         paper surface.
 
-         What it carries changed. These are the platforms the work
-         runs on, not publications that covered us - so the claim is
-         "we know these", not "these endorsed us". The four press
-         marks that used to sit here (Business Insider, Yahoo News,
-         Associated Press, Digital Journal) are gone with their files.
+         2026-09-17: sixteen marks in four rows of four. The list came
+         from Ian with two cut (ZoomInfo, Microsoft Advertising) and the
+         instruction to ignore the category grouping it arrived in — so
+         the rows are LAYOUT, not taxonomy, and carry no labels. Order
+         is the order the list was given in, which is also a sensible
+         read: ad platforms first, measurement, then data and CRM.
+
+         Seven of the sixteen have a file in Assets/web and render as
+         <img>; the other nine are .press-wall__ph placeholder boxes,
+         each with an HTML comment naming the mark that goes there.
+         Replace the div with an <img> and it picks up the greyscale
+         rule in site.css. Still needed:
+
+           Google Ads, Amazon Ads, GA4, Google Tag Manager,
+           Looker Studio, Segment, Triple Whale, BigQuery, Snowflake
+
+         press-google.svg exists on disk and is a Google wordmark, not
+         the Google Ads mark — left unused rather than passed off as
+         the wrong product.
+
+         Nine old files are no longer referenced and were left on disk
+         by instruction: gohighlevel, google, jobber, mailchimp,
+         microsoft-ads, servicetitan, shopify, youtube, zapier.
+
+         The reveal in motion.js selects .press-wall li and groups them
+         by rendered row, so four lists are still one choreography and
+         no extra reveal is added. DOM order is visual order.
 
          The id and .press* class names are unchanged on purpose:
-         nothing links to #press, renaming would touch eight CSS
-         rules for no user-visible gain, and this branch is being
-         merged against others. Worth renaming later, in isolation.
-
-         Ordered by how much of a budget they usually take, which is
-         also roughly descending recognition. Six marks divide
-         cleanly by 3, 2 and 1 so no breakpoint leaves a hole.
+         nothing links to #press, and renaming would touch eight CSS
+         rules for no user-visible gain.
          ============================================================ -->
     <section id="press" class="press">
       <div class="wrap">
         <div class="press__head">
-          <h2>Platforms we work on.</h2>
-          <p class="lead">The platforms, CRMs and tools behind the work.</p>
+          <h2>The data, measurement and media stack behind the work.</h2>
         </div>
 
-        <!-- Four across, four down. DOM order is grid order - left to right,
-             top to bottom - and the reveal in motion.js reads each mark's
-             rendered position, not its index, so the grid can drop to two
-             or one column and every mark still enters from the edge it is
-             nearer to.
-
-             All sixteen are logo files. The six on the outer columns of the
-             first three rows are the original set; the ten added are official
-             wordmarks - six from Wikimedia Commons, four pulled from the
-             companies' own sites. GoHighLevel's shipped as white-on-dark and
-             its letterforms are recoloured to the band's ink; everything
-             else is as published. -->
+        <!-- Row 1 -->
         <ul class="press-wall">
+          <li><!-- Google Ads --><div class="press-wall__ph"></div></li>
           <li><img src="Assets/web/press-meta.svg" alt="Meta" width="948" height="191" loading="lazy" decoding="async"></li>
+          <li><img src="Assets/web/press-linkedin.svg" alt="LinkedIn" width="568" height="144" loading="lazy" decoding="async"></li>
+          <li><img src="Assets/web/press-tiktok.png" alt="TikTok" width="161" height="51" loading="lazy" decoding="async"></li>
+        </ul>
+
+        <!-- Row 2 -->
+        <ul class="press-wall">
+          <li><!-- Amazon Ads --><div class="press-wall__ph"></div></li>
+          <li><!-- GA4 --><div class="press-wall__ph"></div></li>
+          <li><!-- Google Tag Manager --><div class="press-wall__ph"></div></li>
+          <li><!-- Looker Studio --><div class="press-wall__ph"></div></li>
+        </ul>
+
+        <!-- Row 3 -->
+        <ul class="press-wall">
+          <li><img src="Assets/web/press-callrail.svg" alt="CallRail" width="598" height="137" loading="lazy" decoding="async"></li>
+          <li><!-- Segment --><div class="press-wall__ph"></div></li>
+          <li><!-- Triple Whale --><div class="press-wall__ph"></div></li>
+          <li><!-- BigQuery --><div class="press-wall__ph"></div></li>
+        </ul>
+
+        <!-- Row 4 -->
+        <ul class="press-wall">
+          <li><!-- Snowflake --><div class="press-wall__ph"></div></li>
           <li><img src="Assets/web/press-hubspot.svg" alt="HubSpot" width="212" height="62" loading="lazy" decoding="async"></li>
           <li><img class="is-tall" src="Assets/web/press-salesforce.svg" alt="Salesforce" width="273" height="191" loading="lazy" decoding="async"></li>
-          <li><img src="Assets/web/press-google.svg" alt="Google" width="272" height="92" loading="lazy" decoding="async"></li>
-
-          <li><img src="Assets/web/press-youtube.svg" alt="YouTube" width="512" height="114" loading="lazy" decoding="async"></li>
           <li><img src="Assets/web/press-klaviyo.svg" alt="Klaviyo" width="581" height="172" loading="lazy" decoding="async"></li>
-          <li><img src="Assets/web/press-mailchimp.svg" alt="Mailchimp" width="185" height="60" loading="lazy" decoding="async"></li>
-          <li><img src="Assets/web/press-tiktok.png" alt="TikTok" width="161" height="51" loading="lazy" decoding="async"></li>
-
-          <li><img src="Assets/web/press-linkedin.svg" alt="LinkedIn" width="568" height="144" loading="lazy" decoding="async"></li>
-          <li><img src="Assets/web/press-servicetitan.svg" alt="ServiceTitan" width="585" height="106" loading="lazy" decoding="async"></li>
-          <li><img src="Assets/web/press-jobber.svg" alt="Jobber" width="367" height="66" loading="lazy" decoding="async"></li>
-          <li><img src="Assets/web/press-shopify.png" alt="Shopify" width="157" height="51" loading="lazy" decoding="async"></li>
-
-          <li><img src="Assets/web/press-callrail.svg" alt="CallRail" width="598" height="137" loading="lazy" decoding="async"></li>
-          <li><img src="Assets/web/press-gohighlevel.svg" alt="GoHighLevel" width="172" height="38" loading="lazy" decoding="async"></li>
-          <li><img src="Assets/web/press-microsoft-ads.svg" alt="Microsoft Ads" width="338" height="72" loading="lazy" decoding="async"></li>
-          <li><img class="is-tall" src="Assets/web/press-zapier.svg" alt="Zapier" width="500" height="229" loading="lazy" decoding="async"></li>
         </ul>
       </div>
     </section>
