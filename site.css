@@ -1015,33 +1015,35 @@
       margin-bottom: var(--space-sm);
     }
 
-    .contact h2 { max-width: 14ch; }
-    .contact .lead { margin-top: var(--space-sm); }
+    /* ---------- the contact column ----------
+       Centred at every width, and it grows into the width it is given
+       rather than sitting in a fixed column with dead space either side.
 
-    /* Two columns from 1000px: the ask on the left, the form on the right,
-       so the section runs the full width of the page instead of a heading
-       and a 760px form stacked down the left edge. The bar spans both. */
-    @media (min-width: 1000px) {
-      .contact .wrap {
-        display: grid;
-        grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-        /* The third row is the flexible one. Without naming it, the form's
-           span was shared out equally between the heading row and the lead
-           row, and the lead sank to the bottom of the section. */
-        grid-template-rows: auto auto 1fr;
-        column-gap: clamp(40px, 6vw, 120px);
-        align-items: start;
-      }
-      .contact__bar { grid-column: 1 / -1; grid-row: 1; }
-      .contact h2   { grid-column: 1; grid-row: 2; }
-      .contact .lead { grid-column: 1; grid-row: 3; }
-      .contact .cform {
-        grid-column: 2;
-        grid-row: 2 / span 2;
-        margin-top: 0;
-        max-width: none;
-      }
+       This replaces a two-column grid (34a15df) that put the heading left
+       and the form right from 1000px. Once the form moved inside
+       .cform-wrap that rule placed the wrong element: the wrapper auto-
+       flowed into the second column beside an empty first one, and on
+       every inner page the form sat 600px to the right of a narrow heading.
+       Under 1000px it was fine, which is why it read as "shifts right on
+       wide screens".
+
+       The answer to a wide screen is not a second column beside the form;
+       it is a wider form. From 1000px the cap lifts to 1120px and the
+       fields pair up - name | email, phone | website, revenue | heard, and
+       the six pick rows in two rows of three - so the block fills what it
+       is given and the textarea and the submit run the full width. */
+
+    .contact .wrap { text-align: center; }
+    .contact h2 { max-width: 20ch; margin-left: auto; margin-right: auto; }
+    .contact .lead { margin-top: var(--space-sm); margin-left: auto; margin-right: auto; }
+
+    .cform-wrap {
+      margin: var(--space-md) auto 0;
+      max-width: 800px;
+      text-align: left;
     }
+    .cform-wrap > .cform { margin-top: 0; max-width: none; }
+    .cform__done, .cform__fail { margin-left: auto; margin-right: auto; }
 
     /* ---------- legal pages ----------
    Privacy, terms and cookies. One shared block rather than a <style> in each
@@ -1264,15 +1266,6 @@
       .cform__grid { grid-template-columns: 1fr; }
     }
 
-    /* Centred as a column, like theirs: heading, lead and the 800px form
-       all on the page's centre line. Labels stay left-aligned INSIDE the
-       form - the block is centred, its contents are not. */
-    .contact .wrap { text-align: center; }
-    .contact h2 { margin-left: auto; margin-right: auto; }
-    .contact .lead { margin-left: auto; margin-right: auto; }
-    .cform-wrap { margin: var(--space-md) auto 0; max-width: 800px; text-align: left; }
-    .cform-wrap > .cform { margin-top: 0; }
-    .cform__done, .cform__fail { margin-left: auto; margin-right: auto; }
 
     /* ---------- the pick rows ----------
        The device from badmarketing.com: full-width rows you tap to select,
@@ -1388,6 +1381,23 @@
 
     @media (max-width: 640px) {
       .cform__pick-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Wide screens: the form widens and pairs its fields instead of
+       sitting in a fixed column with dead space either side. Placed after
+       every base rule it overrides - they are single-column by default and
+       win on source order otherwise. */
+    @media (min-width: 1000px) {
+      /* No cap of its own from here: the form runs edge to edge of .wrap,
+         which already stops at --wrap. On a 1440 screen that is 1336px;
+         on anything wider, 1360. Side to side, as asked. */
+      .cform-wrap { max-width: none; }
+      .cform__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(20px, 2.4vw, 32px); }
+      .cform__pick-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: clamp(10px, 1.4vw, 16px); }
+      /* Three across, the longest row is ~350px at 1000px; the single-column
+         text size wrapped "Tracking and attribution" to two lines. */
+      .cform__row { font-size: clamp(17px, 1.6vw, 24px); padding-left: 36px; padding-right: 36px; }
+      .cform__done, .cform__fail { max-width: none; }
     }
 
 
