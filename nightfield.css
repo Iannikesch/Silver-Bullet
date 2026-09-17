@@ -208,7 +208,13 @@
    those later siblings paint OVER the open Capabilities panel. The header
    needs no lift from here anyway - it already carries z-index:40, which is
    above the backdrop's 0. */
-body.has-nightfield > *:not(.tx-nightfield--fixed):not(.site-header) {
+/* .intro-layer is excluded for the same reason as the header, and it is
+   worse there: this rule would turn its position:fixed into relative, so
+   the bullet's top resolves from wherever the layer sits in flow instead of
+   from the viewport, and drop its z-index from 60 to a tie with <main> that
+   DOM order then loses. The bullet still flies - a metre lower and behind
+   the hero. */
+body.has-nightfield > *:not(.tx-nightfield--fixed):not(.site-header):not(.intro-layer) {
   position: relative;
   z-index: 1;
 }
