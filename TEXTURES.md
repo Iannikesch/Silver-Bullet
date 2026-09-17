@@ -343,11 +343,7 @@ It was fully transparent at the top before, which read as a hard slab the
 moment it lifted - the field is what makes the bar a surface rather than a
 line.
 - **Needs:** `initFrost(selector, thresholdPx)`
-- **Knobs:** `--tx-frost-blur` (7px), `--tx-frost-fill` (58%, the lifted fill),
-  `--tx-frost-rest` (0%, the fill BEFORE scrolling - the header sets 92% so it
-  is a surface from the first frame and goes glassier as content passes under),
-  `--tx-frost-base` (`--bg`, what the fill is made of), `--tx-frost-tint`
-  (`--petrol`, the always-on field; the header swings it warm)
+- **Knobs:** `--tx-frost-blur` (7px), `--tx-frost-fill` (58% of `--bg`)
 - **The two states are the cost control.** While unscrolled, `backdrop-filter`
   is not applied at all — not zero-blur, absent. It is one of the most
   expensive things a browser composites, and worst over playing video.
@@ -368,9 +364,7 @@ line.
 ### `.tx-halo` + `--lung` / `--orbit` / `--pulse`
 A contained field of light behind one element. One body, three characters.
 - **Knobs:** `--tx-halo-pad-x` / `-pad-y`, `--tx-halo-rate`, `--tx-halo-low` /
-  `-high`, `--tx-halo-strength` (orbit), `--tx-halo-tint` (`--petrol`; the
-  field is environment, so a warm band may set it warm where a warm *button*
-  would break rule 3)
+  `-high`, `--tx-halo-strength` (orbit)
 - **`--lung`** swells and subsides. CSS only. `alternate` makes the exhale the
   inhale reversed, so the loop has no seam.
 - **`--orbit`** light travels around it. CSS only, via a registered
@@ -381,9 +375,8 @@ A contained field of light behind one element. One body, three characters.
   what makes it a pulse rather than a throb.
 - **Sized to cover the whole element**, not pool under its middle. Colour carries
   to 74% of the radius.
-- **Cold by default.** The header overrides `--tx-halo-tint` warm because its
-  halos are the environment behind the wordmark and the button, not accents - a
-  warm *accent* there would be a second one beside the ticker's amber CTA.
+- **All three are cold.** A warm halo would be a second warm element in the same
+  viewport as the ticker's amber CTA.
 - **Inside a frosted bar a halo sits on top of the pane** — `backdrop-filter`
   blurs what is behind an element, never its own children.
 - **The plain `.tx-halo` answers the pointer.** Rests at `--low`, lifts to

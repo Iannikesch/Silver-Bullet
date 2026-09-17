@@ -35,24 +35,6 @@ the brightest thing in frame. White backgrounds are wrong here. `--white` is spe
 headlines and on nothing else. Body copy is `--steel-300`. If a block of white text
 grows past a headline, step it down the steel ramp.
 
-**2b. The header band is the warm environment.**
-The palette premise is a cold steel subject in a *warm* environment. For a long
-time every dark on the site was the cyan-pulled `--bg`, so the environment never
-showed up and the whole page read as cold-on-cold - the feedback was "rigid",
-"hard black boxes with hairline borders". The header and the ticker under it are
-now one warm band: `--bg-warm` surfaces, a warm field behind the wordmark, a warm
-hairline at ~11% for the rule, sand diamonds between the ticker phrases, and a
-fade rather than a line where the band meets the page.
-
-What stays cold inside the band is everything that is *subject*: the wordmark,
-the nav type, the button's label. Steel on warm is the whole idea. Do not warm
-the type to match the ground, and do not cool the ground back to match the type.
-
-The nav's "Talk to us" is the one rounded element on the site and the one with a
-warm-tinted fill. The fill is sand at low strength, not amber - the ticker's
-"Book a call" beside it is the viewport's one amber element, and rule 3 below is
-why it cannot have company.
-
 **3. Warmth appears once.**
 The entire color story is cold steel against warm amber. `--amber` marks the primary
 action and nothing else. One amber element per viewport. A second one cancels the

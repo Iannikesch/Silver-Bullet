@@ -38,17 +38,6 @@
   --chrome-100:     #BDBDBD;
   --chrome-050:     #E1E1E1;
 
-  /* ---- Warm darks: the environment. ----
-     The palette premise is a cold steel subject in a WARM environment, and
-     until these existed every dark on the site was the cyan-pulled --bg, so
-     the environment never showed up. These are the same depth as --bg and
-     --bg-raised with the tint swung to brown - for surfaces that are the
-     room rather than the subject. The header band is the first. Type never
-     changes colour to sit on them: steel on warm is the whole idea. */
-  --bg-warm:        #100D0B;  /* header + ticker band */
-  --bg-warm-raised: #17130F;  /* a lifted warm surface */
-  --line-warm:      color-mix(in srgb, var(--amber) 11%, transparent);  /* the soft hairline */
-
   /* ---- Warm: the counterweight. ~22%. ---- */
   --taupe-dark:     #6F685D;
   --taupe:          #958978;
