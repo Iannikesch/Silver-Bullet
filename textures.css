@@ -523,23 +523,6 @@
   transition:
     background-color var(--dur-base) var(--ease-metal),
     backdrop-filter  var(--dur-base) var(--ease-metal);
-
-  /* The bar used to be nothing at all until you scrolled: transparent, one
-     hard rule under it, a slab once lifted. Read as rigid. This is a soft
-     cold field that is ALWAYS there - light from above the bar falling
-     into it, densest at the top edge, gone before the rule. It is the same
-     petrol the halos use, so the bar and the buttons in it belong to one
-     light source rather than two.
-
-     A gradient, not a filter, so it costs nothing at the top of the page;
-     the backdrop blur still arrives only with .is-lifted, and paints under
-     this because background-image sits above background-color. */
-  background-image: radial-gradient(
-    ellipse 64% 160% at 50% -14%,
-    color-mix(in srgb, var(--petrol) 58%, transparent) 0%,
-    color-mix(in srgb, var(--petrol) 24%, transparent) 40%,
-    transparent 78%
-  );
 }
 
 .tx-frost.is-lifted::before {
@@ -607,14 +590,6 @@
   --tx-halo-high: 0.60;         /* opacity at full */
   --tx-beat: 0;                 /* 0-1, written by initHalo() for --pulse */
   position: relative;
-
-  /* The field is drawn at z-index:-1, which means "bottom of the nearest
-     stacking context". In the header that is the header, and it works. On
-     a button inside a section with its own background it is the SECTION's
-     context - so the field paints under the section's fill and vanishes.
-     Isolating makes the element its own context: the field sits behind
-     its content and in front of everything outside it, wherever it is. */
-  isolation: isolate;
 }
 
 .tx-halo::before {
@@ -685,33 +660,8 @@
   transform: scale(calc(1 + var(--tx-beat) * 0.07));
 }
 
-/* -- the plain halo answers the pointer. Rests at --low, lifts to --high
-      and swells a touch under hover or keyboard focus. That is "motion that
-      answers input", which DESIGN.md allows; it is NOT a fourth ambient
-      variant. Scoped away from --lung / --orbit / --pulse, whose animation
-      owns opacity and would fight a hover rule for it anyway. -- */
-.tx-halo:not([class*="tx-halo--"])::before {
-  transition:
-    opacity   var(--dur-base) var(--ease-metal),
-    transform var(--dur-base) var(--ease-metal);
-}
-
-.tx-halo:not([class*="tx-halo--"]):hover::before,
-.tx-halo:not([class*="tx-halo--"]):focus-visible::before {
-  opacity: var(--tx-halo-high);
-  transform: scale(1.06);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .tx-halo::before { animation: none; }
-  /* Specificity has to match the hover rule above - :not([class*=...])
-     carries an attribute selector, so a bare .tx-halo::before loses to it
-     and the transition survives. The state change stays (a lit field is
-     information), the swell goes: a 6% jump with no ramp reads as a
-     flicker, which is worse than no swell. */
-  .tx-halo:not([class*="tx-halo--"])::before { transition: none; }
-  .tx-halo:not([class*="tx-halo--"]):hover::before,
-  .tx-halo:not([class*="tx-halo--"]):focus-visible::before { transform: none; }
 }
 
 
