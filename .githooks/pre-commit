@@ -1,0 +1,15 @@
+#!/bin/bash
+# Git pre-commit hook: refuse any staged file over 3MB.
+# Same rule as .claude/hooks/check-commit.sh, for commits typed in a terminal
+# rather than made by Claude. Activate once with:
+#   git config core.hooksPath .githooks
+limit=3000000; over=0
+while IFS= read -r f; do
+  [ -f "$f" ] || continue
+  sz=$(stat -f %z "$f" 2>/dev/null || stat -c %s "$f" 2>/dev/null)
+  if [ "$sz" -gt "$limit" ]; then
+    echo "pre-commit: $f is $(( sz / 1048576 ))MB, over the 3MB limit. Re-encode it first (see asset-cop for the command)." >&2
+    over=1
+  fi
+done < <(git diff --cached --name-only --diff-filter=AM)
+exit $over
