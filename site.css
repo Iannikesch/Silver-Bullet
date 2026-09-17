@@ -72,8 +72,8 @@
          like the bullet's pace, and a short ride leaves the deceleration
          nothing to be felt across — measured, 144px read as a flat crawl. */
       --ticker-ride: clamp(280px, 42vw, 620px);
-      --ticker-rate:   91s;   /* row A, no-JS fallback: 3462px set / 38px/s. JS uses data-marquee-speed */
-      --ticker-rate-b: 128s;  /* row B, no-JS fallback: 3854px set / 30px/s */
+      --ticker-rate:   58s;   /* row A, no-JS fallback; JS uses data-marquee-speed=38 */
+      --ticker-rate-b: 74s;   /* row B, no-JS fallback; JS uses data-marquee-speed=30 */
 
       /* Work conveyors. Three bands run right-to-left on this page, so they
          get three clearly different speeds — matched speeds would read as
@@ -1548,26 +1548,6 @@
       .foot-link { transition: none; }
     }
 
-    /* ---------- the wordmark's face, for the word band ----------
-       Bebas Neue: the tall condensed grotesque the SILVER BULLET wordmark is
-       set in. The site's first and only web font, and it is self-hosted on
-       purpose - no fonts.googleapis.com origin, nothing new for the privacy
-       policy, no CDN in the path of the first paint. OFL licence. Latin
-       subset only, 8.6KB. Used ONLY by the word band; every other line on
-       the site stays on the system stack the way it was.
-
-       font-display: swap, and the file is preloaded from <head>, so it is
-       almost always ready before the band paints. If it is not, the band
-       paints in the fallback and swaps - motion.js re-measures the loop on
-       document.fonts.ready so the wrap does not go stale. */
-    @font-face {
-      font-family: "Bebas Neue";
-      font-style: normal;
-      font-weight: 400;
-      font-display: swap;
-      src: url("Assets/fonts/bebas-neue-latin.woff2") format("woff2");
-    }
-
     /* ---------- the word band ----------
        Two rows of big hollow words under the nav, a lit subset among them.
        Modelled on thearmcandy.com's client-partners strip, which runs three
@@ -1664,17 +1644,11 @@
     .ticker__set li {
       position: relative;
       flex: none;
-      padding: 0 clamp(10px, 1.4vw, 22px) 0 0;
-      /* Bebas is one weight, so 400 - asking for 600 would fake-bold it and
-         thicken the hollow stroke. Condensed, so it runs larger than the
-         system face did at the same footprint. The fallbacks are the
-         narrowest faces a Mac or Windows box has, so a pre-swap frame is
-         at least the right shape. */
-      font-family: "Bebas Neue", Impact, "Arial Narrow", "Helvetica Neue Condensed", sans-serif;
-      font-size: clamp(28px, 3.4vw, 50px);
-      line-height: 1.1;
-      font-weight: 400;
-      letter-spacing: 0.045em;
+      padding: 2px clamp(10px, 1.4vw, 22px) 2px 0;
+      font-size: clamp(22px, 2.7vw, 40px);
+      line-height: 1.25;
+      font-weight: 600;
+      letter-spacing: 0.035em;
       text-transform: uppercase;
       white-space: nowrap;
       color: transparent;

@@ -52,7 +52,6 @@
   <meta name="twitter:image" content="https://silverbulletagency.com/og-image.png">
   <meta name="twitter:image:alt" content="Silver Bullet capabilities — paid acquisition, landing pages, tracking">
 
-
   <!-- Bump ?v= whenever tokens.css changes. The hero headline is painted
        with background-clip:text, so a stale palette that drops the
        --chrome-* ramp would render it as invisible text. -->
@@ -63,10 +62,6 @@
        and without it the handshake is made twice rather than reused. -->
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <!-- The word band's face, fetched early so the band's first paint is in
-       it rather than swapping. crossorigin is required on a font preload
-       even same-origin, or the browser fetches it twice. -->
-  <link rel="preload" href="Assets/fonts/bebas-neue-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="tokens.css?v=5">
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css?v=11">
@@ -76,8 +71,6 @@
   <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
   <link rel="stylesheet" href="site.css?v=53">
   <link rel="stylesheet" href="nightfield.css?v=4">
-
-
 
   <style>
     /* ---------- capabilities ----------
@@ -682,7 +675,6 @@
   <script defer src="intro.js?v=5"></script>
   <!-- Dropdown enhancement. The menu works without it. -->
   <script defer src="booking.js?v=3"></script>
-
 
   <!-- The capabilities data, and the two things rendered from it: the nav
        dropdown's columns and (on the home page) the section. It has to run

@@ -278,17 +278,6 @@
   function initMarquees() {
     var strips = document.querySelectorAll('[data-marquee]');
     for (var i = 0; i < strips.length; i++) bindMarquee(strips[i]);
-
-    /* The word band is set in a web font. If that font lands AFTER the
-       bands were measured, every word is a different width, the set width
-       is wrong, and the loop seam shows as a gap or an overlap on every
-       wrap. Each band already re-measures on resize; fire that once the
-       fonts have settled. Cheap, and a no-op on a page with no web font. */
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(function () {
-        window.dispatchEvent(new Event('resize'));
-      });
-    }
   }
 
   /* Clones the set until the track covers the viewport plus one whole set.
@@ -525,14 +514,7 @@
         var w = fillTrack(track);
         if (!w) return;
         setWidth = w;
-        /* Same rule as the initial bind: a declared px/s wins, and only a
-           band without one falls back to setWidth / duration. This used to
-           recompute from the duration unconditionally, which silently
-           re-sped any declared band on every resize - masked for years
-           because the conveyor and logo fallback rates happened to match
-           their declared speeds. The word band's did not, and the fonts
-           re-measure made it fire on every load. */
-        baseVel = declared > 0 ? -declared : -setWidth / dur;
+        baseVel = -setWidth / dur;
         wrapX = gsap.utils.wrap(-setWidth, 0);
         pos = wrapX(pos);
       }, 180);
