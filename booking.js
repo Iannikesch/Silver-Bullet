@@ -31,13 +31,6 @@
   var UTM_STORE  = 'sb:utm';
   var LEAD_STORE = 'sb:lead';
 
-  /* Step 5 of the brief - turning a form fill into a booked call - is
-     switched off deliberately. The form still posts to a placeholder
-     endpoint, so there is no successful submit to hang this off. Turning
-     it on now would mean the enquiry is silently never sent while the
-     visitor sees a booking popup, which looks like it worked and is worse
-     than the current failure. Flip this the day the endpoint is real. */
-  var FORM_HANDOFF = false;
 
   var booking = document.querySelectorAll('a[data-book]');
   if (!booking.length) return;
@@ -210,42 +203,29 @@
   });
 
 
-  /* ---- form handoff (off until the endpoint exists) ----------------- */
+  /* ---- form handoff --------------------------------------------------
+     enquire.js owns the form: it posts it, shows the done / fail state,
+     and announces success with an sb:enquiry-sent event. This file never
+     binds submit - two handlers on one form is how an enquiry gets posted
+     twice - it just listens for that announcement and offers the call.
+     enquire.js only goes live once the action is a real endpoint, so
+     until then this is inert by construction, not by flag. */
   var form = document.querySelector('form.cform');
 
   if (form) {
-    /* Capture what they typed even without the handoff, so a visitor who
-       fills the form and then clicks a booking CTA is not asked twice. */
+    /* Capture what they typed, so a visitor who fills the form and then
+       clicks a booking CTA is not asked for it again in Calendly. */
     form.addEventListener('input', function () { lead(); });
 
-    if (FORM_HANDOFF) {
-      /* Send the enquiry FIRST, then offer the booking. The naive version
-         - preventDefault and open the popup - never posts the form at all,
-         which is the silent-loss failure this flag exists to prevent. So
-         the form is posted with fetch to its own action, and the popup only
-         opens once the endpoint has accepted it. If the post fails the
-         browser's normal submit runs instead, so nothing is ever lost to
-         this script. */
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var btn = form.querySelector('[type="submit"]');
-        if (btn) btn.disabled = true;
+    /* Warm the widget while they are still typing, so the popup is
+       ready by the time the enquiry lands rather than falling back to a
+       new tab at the one moment that matters most. */
+    form.addEventListener('focusin', loadWidget, { once: true });
 
-        fetch(form.action, {
-          method: 'POST',
-          body: new FormData(form),
-          headers: { 'Accept': 'application/json' }
-        }).then(function (res) {
-          if (!res.ok) throw new Error('form endpoint returned ' + res.status);
-          window.dataLayer.push({ event: 'contact_form_submit' });
-          open(e);
-        }).catch(function () {
-          /* Fall back to a plain submit so the enquiry still goes somewhere. */
-          if (btn) btn.disabled = false;
-          form.submit();
-        });
-      });
-    }
+    form.addEventListener('sb:enquiry-sent', function () {
+      window.dataLayer.push({ event: 'contact_form_submit' });
+      open({ preventDefault: function () {} });
+    });
   }
 
 

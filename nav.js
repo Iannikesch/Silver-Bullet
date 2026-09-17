@@ -1,7 +1,7 @@
 /* ==========================================================
    Silver Bullet — nav dropdown
 
-   The dropdown is a <details>, so opening, closing and keyboard
+   Each dropdown is a <details>, so opening, closing and keyboard
    operation already work with this file absent. Everything here is
    enhancement on top of that:
 
@@ -12,6 +12,9 @@
        panel does not shut it in your face.
      - Escape closes and hands focus back to the summary.
      - a click anywhere else closes it.
+     - opening one dropdown closes any other.
+     - inside Capabilities, the group columns are accordions on a
+       phone and held-open columns on desktop.
 
    Self-initialising like intro.js rather than routed through boot.js,
    so it does not wait on GSAP and does not need a line in a file two
@@ -23,53 +26,102 @@
 
   var CLOSE_DELAY = 220;   /* ms of grace when the pointer leaves */
 
-  var dd = document.querySelector('.nav-dd');
-  if (!dd) return;
-
-  var summary = dd.querySelector('summary');
-  if (!summary) return;
+  /* Every dropdown on the page, not just the first: Capabilities and
+     Resources both use this, and a third would get it for free. */
+  var dds = Array.prototype.slice.call(document.querySelectorAll('.nav-dd'));
+  if (!dds.length) return;
 
   /* Not a media query listener: this is re-read on each event so a
      hybrid device that switches between trackpad and touch gets the
      right behaviour per interaction rather than per page load. */
-  var fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+  var fine   = window.matchMedia('(hover: hover) and (pointer: fine)');
+  var MOBILE = window.matchMedia('(max-width: 760px)');
 
-  var shut = null;
-
-  function close() {
-    clearTimeout(shut);
-    dd.open = false;
+  function closeAll(except) {
+    dds.forEach(function (d) { if (d !== except) d.open = false; });
   }
 
-  dd.addEventListener('mouseenter', function () {
-    if (!fine.matches) return;
-    clearTimeout(shut);
-    dd.open = true;
-  });
+  dds.forEach(function (dd) {
+    var summary = dd.querySelector(':scope > summary');
+    if (!summary) return;
 
-  dd.addEventListener('mouseleave', function () {
-    if (!fine.matches) return;
-    clearTimeout(shut);
-    shut = setTimeout(function () { dd.open = false; }, CLOSE_DELAY);
-  });
+    var shut = null;
 
-  /* Choosing something closes the menu. Without this the panel is still
-     sitting there when the anchor jump lands, over the thing you asked
-     to see. */
-  dd.addEventListener('click', function (e) {
-    if (e.target.closest('.nav-dd__panel a')) close();
+    function close() {
+      clearTimeout(shut);
+      dd.open = false;
+    }
+
+    dd.addEventListener('mouseenter', function () {
+      if (!fine.matches) return;
+      clearTimeout(shut);
+      closeAll(dd);
+      dd.open = true;
+    });
+
+    dd.addEventListener('mouseleave', function () {
+      if (!fine.matches) return;
+      clearTimeout(shut);
+      shut = setTimeout(function () { dd.open = false; }, CLOSE_DELAY);
+    });
+
+    /* Opening one by click or keyboard shuts the other, so two panels
+       are never open side by side. */
+    dd.addEventListener('toggle', function () {
+      if (dd.open) closeAll(dd);
+    });
+
+    /* Choosing something closes the menu. Without this the panel is still
+       sitting there when the anchor jump lands, over the thing you asked
+       to see. */
+    dd.addEventListener('click', function (e) {
+      if (e.target.closest('.nav-dd__panel a')) close();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && dd.open) {
+        close();
+        summary.focus();
+      }
+    });
   });
 
   document.addEventListener('click', function (e) {
-    if (dd.open && !dd.contains(e.target)) close();
+    dds.forEach(function (dd) {
+      if (dd.open && !dd.contains(e.target)) dd.open = false;
+    });
   });
 
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && dd.open) {
-      close();
-      summary.focus();
-    }
-  });
+  /* ---- the group accordions inside Capabilities -----------------
+     Each group column is its own <details>. On desktop they are held
+     open and read as headed columns; on a phone they start closed, so
+     the menu is "Capabilities > B2B / B2C > the list" rather than
+     twelve rows at once. The summaries are taken out of the tab order
+     on desktop so Tab walks the links, not the column heads. */
+  function syncGroups() {
+    var groups = document.querySelectorAll('.nav-dd__group');
+    Array.prototype.forEach.call(groups, function (g) {
+      var head = g.querySelector(':scope > summary');
+      if (MOBILE.matches) {
+        g.open = false;
+        if (head) head.removeAttribute('tabindex');
+      } else {
+        g.open = true;
+        if (head) head.setAttribute('tabindex', '-1');
+      }
+    });
+  }
+
+  /* A desktop toggle on a group (Enter on a summary that got focus
+     somehow) must not collapse a column. */
+  document.addEventListener('toggle', function (e) {
+    var g = e.target;
+    if (g.classList && g.classList.contains('nav-dd__group') && !MOBILE.matches && !g.open) g.open = true;
+  }, true);
+
+  syncGroups();
+  if (MOBILE.addEventListener) MOBILE.addEventListener('change', syncGroups);
+  else if (MOBILE.addListener) MOBILE.addListener(syncGroups);
 })();
 
 

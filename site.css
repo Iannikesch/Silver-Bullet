@@ -21,7 +21,7 @@
          number here moves the whole site between the two. Structural
          changes (hero order, two-column sections, nightfield) do not
          interpolate; they are simply on. */
-      --dial:       0.39;
+      --dial:       0.32;
 
       --nav-h:      calc(72px + 12px * var(--dial));
       /* Widened twice. 1180px, then 1360px, and the page still read as a
@@ -368,7 +368,10 @@
       transform: rotate(90deg);
       transition: transform .18s ease, opacity .18s ease;
     }
-    .nav-dd[open] .nav-dd__sign::after {
+    /* Scoped to the dropdown's OWN toggle. Descendant-matched, this also
+       flipped the sign on every group head inside an open Capabilities
+       panel, so a collapsed B2B read as "-". */
+    .nav-dd[open] > .nav-dd__toggle .nav-dd__sign::after {
       transform: rotate(0deg);
       opacity: 0;
     }
@@ -431,13 +434,47 @@
        nothing left to animate out and a fake close would need JS holding the
        element in the DOM for no gain. */
     .nav-dd[open] .nav-dd__panel {
-      animation: dd-open .14s var(--ease-settle) both;
+      animation: dd-open .2s var(--ease-settle) both;
     }
 
     @keyframes dd-open {
-      from { opacity: 0; transform: translateY(-2px); }
+      from { opacity: 0; transform: translateY(-6px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+
+    /* ---- the two-column Capabilities panel ----
+       One column per group, rendered by capabilities.js. Each column is
+       a <details> held open on desktop (nav.js), so its summary is a
+       plain heading here and the accordion behaviour only exists on a
+       phone. */
+    .nav-dd__cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 8px;
+      min-width: 560px;
+    }
+
+    .nav-dd__group { min-width: 0; }
+    .nav-dd__group + .nav-dd__group { border-left: 1px solid var(--border); padding-left: 8px; }
+
+    .nav-dd__group-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .02em;
+      color: var(--steel-700);
+      list-style: none;
+      cursor: default;
+    }
+    .nav-dd__group-head::-webkit-details-marker { display: none; }
+    .nav-dd__group-head .nav-dd__sign { display: none; }   /* no +/- on a heading */
+
+    /* Resources is a plain single column. */
+    .nav-dd__panel--single { min-width: 240px; }
 
     .nav-dd__list {
       margin: 0;
@@ -576,7 +613,8 @@
 
       /* The capabilities dropdown stays a <details> here - tapping it opens
          the list in place rather than flying out a panel with nowhere to go. */
-      .nav-dd { width: 100%; }
+      /* Stacked, not the desktop row: toggle on top, panel underneath. */
+      .nav-dd { width: 100%; flex-direction: column; align-items: stretch; }
       .nav-dd__toggle { padding: calc(16px + 2px * var(--dial)) 0; font-size: calc(17px + 3px * var(--dial)); }
       .nav-dd__panel {
         position: static;
@@ -585,6 +623,23 @@
         background: none;
         border: 0;
       }
+
+      /* Capabilities > B2B / B2C > list. The columns become stacked
+         accordions: nav.js closes them on load here, and tapping a group
+         head opens its list in place. */
+      .nav-dd__cols { display: block; min-width: 0; }
+      .nav-dd__group + .nav-dd__group { border-left: 0; padding-left: 0; }
+      .nav-dd__group { border-top: 1px solid var(--border); }
+      .nav-dd__group-head {
+        padding: 14px 0;
+        font-size: 15px;
+        color: var(--steel-100);
+        cursor: pointer;
+      }
+      .nav-dd__group-head .nav-dd__sign { display: block; }
+      .nav-dd__group[open] .nav-dd__group-head .nav-dd__sign::after { transform: rotate(0deg); opacity: 0; }
+      .nav-dd__group .nav-dd__list { padding-bottom: 8px; }
+      .nav-dd__list a { padding: 11px 0 11px 8px; font-size: 15px; }
 
       /* The one amber element stays the CTA, and it goes full width. */
       .nav .cta-secondary {
@@ -976,18 +1031,25 @@
        version left the textarea's label crowding the row above it, because
        the grid children had their margin zeroed and the grid itself carried
        none - the classic collapse this avoids entirely. */
+    /* Matched to badmarketing.com's work-with form, measured: one column,
+       every field full width, label above at ~21px, fields ~60px tall with a
+       1px light border and a 12px radius on a fill darker than the ground,
+       textarea ~270px, pick rows stacked full width at 2px border. Colours
+       are tokens - their pure white is our --steel-050, their red pill is
+       our amber - and the type is the site's stack; everything else is a
+       like-for-like. */
     .cform {
       margin-top: var(--space-md);
       max-width: calc(760px + 100px * var(--dial));
       display: flex;
       flex-direction: column;
-      gap: var(--space-sm);
+      gap: 32px;
     }
 
     .cform__grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: var(--space-sm) clamp(16px, 2.4vw, 28px);
+      grid-template-columns: 1fr;
+      gap: 32px;
     }
 
     .cform__field {
@@ -998,44 +1060,70 @@
     }
 
     .cform__field label {
-      font-size: calc(14px + 1px * var(--dial));
-      color: var(--steel-500);
+      font-size: clamp(17px, 1.5vw, 21px);
+      color: var(--steel-050);
     }
 
     .cform__field input,
     .cform__field textarea {
       font: inherit;
-      font-size: calc(15px + 1px * var(--dial));
+      font-size: clamp(20px, 2.2vw, 32px);
       width: 100%;
-      padding: calc(12px + 4px * var(--dial)) calc(14px + 4px * var(--dial));
-      color: var(--steel-050);
-      background: var(--charcoal);
-      border-top: 1px solid var(--border-lit);
-      border-left: 1px solid var(--border);
-      border-right: 1px solid var(--border);
-      border-bottom: 1px solid var(--ink);
-      border-radius: var(--r-sm);
+      min-height: 61px;
+      padding: 8px 16px;
+      color: var(--white);
+      background: var(--bg);
+      border: 1px solid var(--steel-050);
+      border-radius: 12px;
       transition: border-color .18s ease, background-color .18s ease;
     }
 
-    .cform__field textarea { resize: vertical; min-height: calc(118px + 32px * var(--dial)); }
+    .cform__field textarea { resize: vertical; min-height: 270px; padding: 14px 16px; }
 
-    .cform__field input::placeholder { color: var(--steel-900); }
+    .cform__field input::placeholder,
+    .cform__field textarea::placeholder { color: var(--steel-700); }
 
     .cform__field input:hover,
-    .cform__field textarea:hover { border-top-color: var(--steel-900); }
+    .cform__field textarea:hover { border-color: var(--white); }
+    .cform__field input:focus-visible,
+    .cform__field textarea:focus-visible { outline: 2px solid var(--steel-100); outline-offset: 3px; }
 
     .cform__actions {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 16px clamp(18px, 2.4vw, 28px);
-      margin-top: 4px;
+      gap: 18px;
+      margin-top: 10px;
+      text-align: center;
+    }
+    .cform__actions .cta {
+      border-radius: 12px;
+      min-width: 232px;
+      min-height: 47px;
+      padding: 10px 24px;
+      font-size: 18px;
+      font-weight: 700;
     }
 
+    /* Submission states. Theirs exist too - "Thank you! Your submission has
+       been received!" / "Oops! Something went wrong" - and both are set in
+       #f4f4f4 on #f4f4f4, so neither can be read. Ours are hidden until the
+       endpoint script shows one, and legible when it does. */
+    .cform__done,
+    .cform__fail {
+      max-width: 800px;
+      margin-top: var(--space-sm);
+      padding: 22px 24px;
+      border-radius: 12px;
+      font-size: clamp(17px, 1.5vw, 20px);
+      text-align: center;
+    }
+    .cform__done { color: var(--white); background: var(--bg); border: 1px solid var(--steel-050); }
+    .cform__fail { color: var(--white); background: var(--bg); border: 1px solid var(--magenta-hot); }
+
     .cform__note {
-      flex: 1 1 320px;
-      font-size: calc(14px + 1px * var(--dial));
+      max-width: 56ch;
+      font-size: 14px;
       line-height: 1.6;
       /* --steel-500, not --steel-700. On the homepage the contact section is
          --bg-raised, where steel-700 measures 4.05 and fails WCAG AA; on the
@@ -1051,6 +1139,133 @@
     @media (max-width: 640px) {
       .cform__grid { grid-template-columns: 1fr; }
     }
+
+    /* Centred as a column, like theirs: heading, lead and the 800px form
+       all on the page's centre line. Labels stay left-aligned INSIDE the
+       form - the block is centred, its contents are not. */
+    .contact .wrap { text-align: center; }
+    .contact h2 { margin-left: auto; margin-right: auto; }
+    .contact .lead { margin-left: auto; margin-right: auto; }
+    .cform-wrap { margin: var(--space-md) auto 0; max-width: 800px; text-align: left; }
+    .cform-wrap > .cform { margin-top: 0; }
+    .cform__done, .cform__fail { margin-left: auto; margin-right: auto; }
+
+    /* ---------- the pick rows ----------
+       The device from badmarketing.com: full-width rows you tap to select,
+       several at once. Real checkboxes underneath - visually hidden, never
+       removed - so the keyboard and screen readers get the native control
+       and the pointer gets the row. */
+
+    .cform__pick {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      min-width: 0;
+    }
+
+    .cform__pick legend {
+      padding: 0;
+      margin-bottom: 12px;
+      font-size: clamp(17px, 1.5vw, 21px);
+      color: var(--steel-050);
+    }
+    .cform__pick legend .cform__hint { display: block; margin: 4px 0 0; font-size: 13px; font-style: italic; }
+
+    /* --steel-500, not the --steel-900 the ramp suggests for a hint: on the
+       homepage this section is --bg-raised, where steel-900 is 2.80:1 and
+       steel-700 is 4.05 - both fail AA. steel-500 is 5.75 there. */
+    .cform__hint,
+    .cform__opt {
+      color: var(--steel-500);
+      font-size: 13px;
+      margin-left: 6px;
+    }
+
+    .cform__pick-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 5px;
+    }
+
+    .cform__row {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 62px;
+      padding: 8px 48px;
+      text-align: center;
+      font-size: clamp(20px, 2.2vw, 32px);
+      font-weight: 500;
+      color: var(--steel-050);
+      background: transparent;
+      border: 2px solid var(--steel-050);
+      border-radius: 12px;
+      cursor: pointer;
+      -webkit-user-select: none;
+      user-select: none;
+      transition: background-color .18s ease, color .18s ease, border-color .18s ease;
+    }
+
+    /* The checkbox: off the visual layer, still in the tab order, still
+       announced. clip, not display:none - display:none removes it from
+       the accessibility tree and the keyboard. */
+    .cform__row input {
+      position: absolute;
+      width: 1px; height: 1px;
+      margin: -1px; padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* The tick. A drawn 12px mark at the trailing edge, hidden until
+       checked, so a selected row has two signals - fill and mark - not a
+       colour change alone. */
+    .cform__row::after {
+      content: "";
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      width: 14px;
+      height: 8px;
+      border-left: 2px solid var(--amber);
+      border-bottom: 2px solid var(--amber);
+      transform: translateY(-60%) rotate(-45deg) scale(0.6);
+      opacity: 0;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+
+    .cform__row:hover { border-color: var(--white); color: var(--white); }
+
+    .cform__row:has(input:checked) {
+      color: var(--white);
+      background: var(--bg);
+      border-color: var(--white);
+    }
+    .cform__row:has(input:checked)::after { opacity: 1; transform: translateY(-60%) rotate(-45deg) scale(1); }
+
+    .cform__row:has(input:focus-visible) {
+      outline: 2px solid var(--steel-100);
+      outline-offset: 2px;
+    }
+
+    /* No :has() - a browser old enough not to have it gets the native
+       checkbox back, visible, in the row, and everything still works. */
+    @supports not selector(:has(*)) {
+      .cform__row input {
+        position: static; width: auto; height: auto; margin: 0 10px 0 0;
+        clip: auto; clip-path: none; overflow: visible;
+      }
+      .cform__row::after { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .cform__pick-grid { grid-template-columns: 1fr; }
+    }
+
 
     /* 16px is a hard floor on touch, not a preference. iOS Safari zooms the
        whole page in when a field with a computed font-size under 16px is
@@ -1070,7 +1285,9 @@
 
     @media (prefers-reduced-motion: reduce) {
       .cform__field input,
-      .cform__field textarea { transition: none; }
+      .cform__field textarea,
+      .cform__row,
+      .cform__row::after { transition: none; }
     }
 
     /* ---------- footer ----------
@@ -1695,6 +1912,214 @@
        six of them at full white would flatten the hierarchy. */
 
 
+    /* ---------- capabilities: two panels ----------
+       Rendered by capabilities.js from the one data object, so the group
+       names, descriptors and lists here are never typed twice. Two big
+       panels side by side, divided by one hairline; below 900px they
+       stack, first group first.
+
+       Bold on purpose. The group label is display type at hero scale,
+       the capability names are a step under a section heading, and the
+       panels take the whole content width. No boxes, no fills, no
+       radius - the separation is one rule, per DESIGN.md. */
+
+    .capabilities {
+      padding: var(--space-xl) 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .cap-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: var(--space-md);
+    }
+
+    .cap-panel {
+      min-width: 0;
+      padding: 0 var(--space-md) 0 0;
+    }
+    .cap-panel + .cap-panel {
+      padding: 0 0 0 var(--space-md);
+      border-left: 1px solid var(--border);
+    }
+
+    /* Hero scale. --white is rationed to headlines and this is one. */
+    .cap-panel__label {
+      margin: 0;
+      font-size: clamp(56px, 8vw, 112px);
+      font-weight: 800;
+      line-height: .92;
+      letter-spacing: -.03em;
+      color: var(--white);
+    }
+
+    .cap-panel__tag {
+      margin: 18px 0 0;
+      font-size: clamp(17px, 1.5vw, 20px);
+      line-height: 1.5;
+      color: var(--steel-300);
+      max-width: 34ch;
+    }
+
+    .cap-panel__list {
+      list-style: none;
+      margin: var(--space-md) 0 0;
+      padding: 0;
+    }
+
+    .cap-panel__list li {
+      position: relative;
+      padding: 22px 0 22px 52px;
+      border-top: 1px solid var(--border);
+      /* Anchor landings from the dropdown sit clear of the fixed header. */
+      scroll-margin-top: calc(var(--nav-h, 72px) + 24px);
+    }
+    .cap-panel__list li:last-child { border-bottom: 1px solid var(--border); }
+
+    .cap-panel__list .cap-num {
+      position: absolute;
+      left: 0;
+      top: 26px;
+      margin: 0;
+    }
+
+    .cap-panel__name {
+      font-size: clamp(22px, 2.2vw, 30px);
+      font-weight: 600;
+      line-height: 1.15;
+      letter-spacing: -.01em;
+      color: var(--steel-050);
+      text-decoration: none;
+    }
+    .cap-panel__name:hover,
+    .cap-panel__name:focus-visible { color: var(--white); }
+
+    .cap-panel__desc {
+      margin: 8px 0 0;
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--text);
+      max-width: 52ch;
+    }
+
+    /* Deep-link landing: the row you were sent to takes the lit edge. */
+    .cap-panel__list li:target { border-top-color: var(--border-lit); }
+
+    @media (max-width: 900px) {
+      .cap-panels { grid-template-columns: 1fr; }
+      .cap-panel,
+      .cap-panel + .cap-panel { padding: 0; border-left: 0; }
+      .cap-panel + .cap-panel {
+        margin-top: var(--space-xl);
+        padding-top: var(--space-xl);
+        border-top: 1px solid var(--border);
+      }
+    }
+
+    /* No JS: the panels never render. Say so rather than leave a hole. */
+    .cap-panels:empty + .cap-fallback { display: block; }
+    .cap-fallback { display: none; margin-top: var(--space-md); }
+
+    /* ---------- the pages: scroll-linked screenshots ----------
+       A card holds a full-length page screenshot inside a frame a third
+       its height, and the screenshot travels UP inside the frame as the
+       page scrolls down. You see the whole page without a case study, a
+       number or a claim. Proof by showing.
+
+       This is scroll-linked, not a reveal: it is scrubbed to scroll
+       position through ScrollTrigger in motion.js (initScrollShots), so
+       it is still when the visitor is and reverses when they go back up -
+       the same footing as the reactive chrome's scroll half. It is not a
+       third orchestrated moment, and DESIGN.md's ceiling on those is
+       untouched.
+
+       The frame follows .panel: lit top edge, --border down the sides,
+       --ink along the bottom. Square corners. The thing being shown is a
+       web page, so the frame reads as a viewport, not a photo mount. */
+
+    .pages {
+      padding: var(--space-xl) 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .pages .lead { margin-top: 20px; }
+
+    .shots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-sm);
+      margin: var(--space-md) 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    @media (max-width: 900px) { .shots { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .shots { grid-template-columns: 1fr; } }
+
+    .shot {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* The frame. Fixed aspect so the travel distance is knowable, and
+       overflow hidden so the screenshot is cropped to it rather than
+       stretching the card. */
+    .shot__frame {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      margin: 0;
+      overflow: hidden;
+      background: var(--bg-raised);
+      border-top: 1px solid var(--border-lit);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--ink);
+    }
+
+    /* --shot is the travel, in px, published by motion.js: 0 with the frame
+       at the bottom of the viewport, the full overshoot with it at the top.
+       transform only, so the scrub runs on the compositor and never
+       touches layout. The 0 fallback matters: with the script absent the
+       page is simply visible from the top, not blank. */
+    .shot__frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+      transform: translateY(calc(var(--shot, 0) * -1px));
+      will-change: transform;
+    }
+
+    /* A hairline over the frame's own top edge would double up with the
+       lit border, so the caption sits below on its own rule instead. */
+    .shot__cap {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0 0;
+      margin-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .shot__name {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--steel-050);
+    }
+
+    .shot__what {
+      font-size: 13px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* Reduced motion: no travel, and the frame scrolls by hand instead so
+       the whole page is still reachable. The scrollbar is left visible on
+       purpose - it is the only cue that there is more. */
+    @media (prefers-reduced-motion: reduce) {
+      .shot__frame { overflow-y: auto; }
+      .shot__frame img { transform: none; will-change: auto; }
+    }
+
     /* ---------- who we work with: the vertical cards ----------
        Each card is one <a>. The whole tile is the target, so there is no
        second click target inside it and nothing to miss on a phone.
@@ -1706,13 +2131,17 @@
        everything. */
 
     /* ---- the rail ----------------------------------------------------
-       A scroll-snap strip, not a grid. Native scrolling does the dragging,
-       the momentum and the touch handling, which means no pointer maths to
-       get wrong and no library to load: trackpad, touch, shift-wheel and
-       the keyboard all work because the browser already knows how.
+       Two states, one element.
 
-       With JS off this is the whole component - six readable cards you can
-       scroll. vertical-rail.js only adds the depth falloff and the arrows. */
+       Declared here as a scroll-snap strip: with JS off, or under
+       prefers-reduced-motion, this is the whole component - six readable
+       cards at full strength you can scroll with a trackpad, a finger or
+       shift-wheel, because the browser already knows how.
+
+       vertical-rail.js adds .vrail--loop and the strip becomes a track:
+       a slow, continuous right-to-left loop that the script drives with
+       one number (--x) and fades with one number per card (--k). Those
+       rules are further down under "the loop". */
     .vrail {
       display: flex;
       gap: var(--space-sm);
@@ -1727,13 +2156,10 @@
          padding exists to prevent. Proximity leaves the two-card straddle a
          stable resting position and still settles a near-miss. */
       scroll-snap-type: x proximity;
-      /* No leading pad. Centring a pair inside the rail meant 232px of
-         dead space before the first card, which read as a broken margin
-         rather than as a carousel. The cards start on the same line as the
-         heading; what moves instead is the point the falloff measures from,
-         which vertical-rail.js puts over the leading pair. See --k there.
-
-         The trailing pad is what lets the LAST pair reach that point. */
+      /* No leading pad: the cards start on the same line as the heading.
+         The trailing pad only matters in the scroll-strip state, where it
+         lets the last card scroll clear of the right edge. The loop zeroes
+         it. */
       padding-inline-start: 0;
       padding-inline-end: max(0px, calc(100% - 2 * var(--vcard-w) - var(--space-sm)));
       scrollbar-width: none;
@@ -1757,35 +2183,15 @@
        .conveyor keeps --cols and --slot-gap to itself. */
     .verticals { --vcard-w: clamp(calc(258px + 42px * var(--dial)), calc(27vw + 4vw * var(--dial)), calc(384px + 116px * var(--dial))); }
 
-    /* --k is published per card by vertical-rail.js: 0 in the middle of the
-       rail, 1 out at the edges. Everything below is that one number spent
-       three ways - the centre pair sit forward, full strength and lifted;
-       everything else sinks, dims and steps back.
-
-       transform and opacity only, so the whole falloff runs on the
-       compositor and a drag never touches layout. */
+    /* The resting card. No transform, no transition, no falloff: this is
+       what a no-JS or reduced-motion visitor gets, and it has to be
+       complete on its own. */
     .vcard {
       --k: 0;
       display: flex;
       flex-direction: column;
       width: 100%;
-      /* Raised at the top, settling toward the page at the foot, so the
-         card's lower edge dissolves rather than stopping on a rule. The
-         same idea as the panel's --ink bottom border, done as a fade. */
-      background: linear-gradient(180deg, var(--bg-raised), color-mix(in srgb, var(--bg-raised) calc(100% - 55% * var(--dial)), var(--bg)));
-      transform: scale(calc(1 - 0.11 * var(--k, 0)))
-                 translateY(calc(14px * var(--k, 0)));
-      opacity: calc(1 - 0.58 * var(--k, 0));
-      /* --dur-base, not --dur-slow. textures.css reserves --dur-slow (1.15s)
-         for "one orchestrated moment, used sparingly", and this is the
-         opposite kind of motion: --k is retargeted every frame the rail
-         scrolls, so a 1.15s transition damps the cards a full second behind
-         the drag. 0.42s tracks the pointer with just enough lag to read as
-         weight - the same argument the reactive chrome makes at 0.3s. */
-      transition: transform var(--dur-base, .42s) var(--ease-metal, ease-out),
-                  opacity var(--dur-base, .42s) var(--ease-metal, ease-out),
-                  border-top-color var(--dur-base, .42s) var(--ease-metal, ease-out);
-      will-change: transform, opacity;
+      background: var(--bg-raised);
       border-top: 1px solid var(--border-lit);
       border-left: 1px solid var(--border);
       border-right: 1px solid var(--border);
@@ -1794,10 +2200,60 @@
       overflow: hidden;
     }
 
-    /* The lit top edge is the one thing that gets BRIGHTER at the centre
-       rather than just less dim. Rim light, per DESIGN.md - a 1px edge, no
-       blur, nothing bleeding into the space around it. */
-    .vrail .vcard { border-top-color: color-mix(in srgb, var(--border-lit), var(--steel-100) calc((1 - var(--k, 0)) * 100%)); }
+    /* ---- the loop ----------------------------------------------------
+       vertical-rail.js puts .vrail--loop on the rail once it has cloned
+       the cards and taken over. The strip stops scrolling and becomes a
+       window onto a track that moves under it. */
+    .vrail--loop {
+      overflow: hidden;
+      scroll-snap-type: none;
+      padding-inline: 0;
+      /* Draggable, on the marquee bands' rules: pan-y keeps vertical page
+         scrolling working on touch while horizontal drags come to us. */
+      cursor: grab;
+      touch-action: pan-y;
+      /* Cards dissolve at the edges rather than getting cut off. The
+         fade is inside the rail's own box, so nothing bleeds into the
+         gutter - a mask, not a glow. */
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+              mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+    }
+
+    .vrail--loop.is-dragging { cursor: grabbing; }
+    /* Without this a drag selects the card copy instead of moving the track. */
+    .vrail--loop.is-dragging,
+    .vrail--loop.is-dragging * { user-select: none; }
+    /* The case-study link is a link, not a drag handle. */
+    .vrail--loop .vcard__case { cursor: pointer; }
+
+    /* --x is the track position, one value on the rail that every card
+       shares. --k is per card: 0 at the centre of the rail, 1 at either
+       edge. The brief spends it two ways - opacity to 30% and scale to
+       90% at the edges - and the lit top edge gets a third: it is the
+       one thing that gets BRIGHTER at the centre rather than just less
+       dim. Rim light, per DESIGN.md.
+
+       No transition. The script retargets --k every frame, so a
+       transition here would only lag the card behind its own position.
+       transform and opacity only, so the loop runs on the compositor. */
+    .vrail--loop .vcard {
+      transform: translateX(var(--x, 0px)) scale(calc(1 - 0.10 * var(--k, 0)));
+      opacity: calc(1 - 0.70 * var(--k, 0));
+      border-top-color: color-mix(in srgb, var(--border-lit), var(--steel-100) calc((1 - var(--k, 0)) * 100%));
+      will-change: transform, opacity;
+    }
+
+    /* Seconds for one card pitch to pass a fixed point - how long a card
+       takes to cross the centre. Drift, not a slide: the brief is 8-10s.
+       Read by vertical-rail.js; tune it here, not there. */
+    .verticals { --vrail-dwell: 9s; }
+
+    /* One card at a time on a phone. The card fills most of the rail so
+       the one in the middle is the one you read, with its neighbours
+       just showing at the edges. Same falloff, same pace. */
+    @media (max-width: 640px) {
+      .verticals { --vcard-w: 82%; }
+    }
 
     /* No hover state, and no cursor change: these cards do not go anywhere
        yet. A tile that lights up under the pointer promises a click it
@@ -1805,15 +2261,16 @@
        waiting on. When the vertical pages exist, wrap each card's contents
        in an <a> and the hover treatment comes back with it. */
 
-    /* Reduced motion gets the rail and none of the depth: every card at
-       full size and full strength, scrolling and nothing else. */
+    /* Reduced motion never gets .vrail--loop - the script bails before
+       adding it - so the base rules above are the whole story: the strip,
+       every card full size and full strength, scrolling and nothing else.
+       Belt and braces for the one case where the preference flips while
+       the class is on. */
     @media (prefers-reduced-motion: reduce) {
-      .vcard {
-        transform: none;
+      .vrail--loop .vcard {
+        transform: translateX(var(--x, 0px));
         opacity: 1;
-        transition: none;
       }
-      .vrail { scroll-behavior: auto; }
     }
 
     /* ---- arrows ----
@@ -1840,7 +2297,6 @@
     }
     .vrail-btn svg { width: 20px; height: 20px; stroke-width: 1.5; }
     .vrail-btn:hover:not(:disabled) { color: var(--white); border-color: var(--steel-700); }
-    .vrail-btn:disabled { color: var(--steel-900); border-color: var(--border); cursor: default; }
 
     /* ---- media: photo and icon share every dimension ----
        The two treatments have to read as one system, so the box is defined
@@ -2496,17 +2952,32 @@
    air between them than two rows of mixed heights did. */
 .press-wall {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   align-items: center;
   justify-items: center;
-  gap: clamp(calc(30px + 6px * var(--dial)), calc(3.6vw + 0.8vw * var(--dial)), calc(52px + 20px * var(--dial))) clamp(30px, 4vw, 64px);
-  /* Held inside .wrap. On the full column the two marks in a row finish
-     far apart with nothing between them, which reads as two separate lists
-     rather than as a pair that just met. */
-  max-width: calc(940px + 300px * var(--dial));
+  gap: clamp(30px, 3.6vw, 52px) clamp(22px, 3vw, 44px);
+  /* Four across now. Held inside .wrap so the outer columns still read as
+     the edges of one set rather than four separate lists. */
+  max-width: 1120px;
   margin: 0 auto;
   padding: 0;
   list-style: none;
+}
+
+/* Type-set marks, for the platforms that have no logo file yet. Sized to
+   sit optically with the images - same height band, same weight of
+   presence - so a row of two logos and two names reads as one row. Swap
+   the <span> for an <img> and nothing else moves. */
+.press-wall__mark {
+  display: block;
+  font-size: clamp(18px, 1.9vw, 26px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  /* The band is on paper, so the marks take the heading's ink, not the
+     site's steel - steel-050 on --paper is 1.2:1 and simply vanishes. */
+  color: var(--charcoal, #202222);
+  white-space: nowrap;
 }
 
 /* Sized by HEIGHT, with width only as an upper bound. This used to cap
@@ -2528,13 +2999,31 @@
 .press-wall img {
   display: block;
   width: auto;
-  height: auto;
-  max-width: clamp(calc(150px + 40px * var(--dial)), calc(18vw + 8vw * var(--dial)), calc(230px + 170px * var(--dial)));
-  max-height: clamp(calc(32px + 12px * var(--dial)), calc(3.4vw + 2.2vw * var(--dial)), calc(46px + 38px * var(--dial)));
+  /* height, not max-height. With height:auto the marks are 0px tall until
+     the file arrives - the width/height attributes cannot reserve a box
+     when the width side is left to resolve from an image that has not
+     loaded - and they are loading="lazy", so the section grew 138px the
+     moment a visitor scrolled to it and every anchor below it moved. CLS
+     never saw it because the reveal holds the marks at opacity 0 while it
+     happens. A declared height gives the attributes a side to work from,
+     so the box is right before the request is even made. Visually it is
+     the same: every one of the six was height-capped already. */
+  height: clamp(32px, 3.4vw, 46px);
+  max-width: clamp(150px, 18vw, 230px);
 }
 
-/* One column below 560px. The pairs stop being pairs there, but the reveal
-   still alternates sides item by item, so it keeps reading as deliberate. */
+/* Optical sizing, same move as .client-wall. A mark that is nearly square
+   - the Salesforce cloud, the Zapier lockup - capped to the same HEIGHT as
+   a long wordmark renders at a third of its width and reads as a dot beside
+   Meta. A taller cap for those two puts them at the same visual weight. */
+.press-wall img.is-tall { max-height: clamp(44px, 4.6vw, 62px); }
+
+/* Two across under 900px, one under 560px. The reveal reads each mark's
+   rendered position rather than its column index, so at every width a
+   mark still enters from whichever edge it is nearer to. */
+@media (max-width: 900px) {
+  .press-wall { grid-template-columns: repeat(2, 1fr); }
+}
 @media (max-width: 560px) {
   .press-wall { grid-template-columns: 1fr; }
 }

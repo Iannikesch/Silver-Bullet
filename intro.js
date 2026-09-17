@@ -13,42 +13,50 @@
 (function () {
   'use strict';
 
-  /* Once per browser session, not once per page load.
+  /* The bullet flies on every ARRIVAL - a fresh visit, a refresh, a typed
+     URL, a link from anywhere else - and not on a click between pages of
+     this site.
 
-     Every page carries .intro-layer, so with this false the full 2.4s
-     bullet sequence replayed on every single navigation — click a case
-     card and the ticker rides out, comes back, and the amber CTA fades
-     in again on the nav's beat. On the home page that reads as the
-     intro. Clicking into a case study it just reads as the banner
-     glitching, because nobody asked for it a second time.
+     It used to be once per browser session, held in sessionStorage. That
+     was to fix a real thing: every page carries .intro-layer, and replayed
+     on every internal click the sequence read as the banner glitching -
+     click a case card and the ticker rides out and back for no reason. But
+     "once per session" also meant a refresh never showed it again, and the
+     bullet is the one thing this site does that nobody else's does.
 
-     A fresh tab still gets the intro. Moving around the site does not. */
-  var ONCE_PER_SESSION = true;
+     So the gate is now WHERE YOU CAME FROM, read off the Navigation Timing
+     entry and the referrer, and it stores nothing:
+
+       reload        -> play. A refresh always gets the bullet.
+       back_forward  -> skip. Going back should restore scroll, not replay.
+       navigate      -> play unless the referrer is this site, which means
+                        an internal link. Typed, bookmarked, external,
+                        no referrer at all: play.
+
+     This also removed the site's only client-side storage - the cookie
+     policy used to describe that flag, and has been updated. */
+  function arrivedFromInside() {
+    var entry = (performance.getEntriesByType &&
+                 performance.getEntriesByType('navigation')[0]) || null;
+    var type = entry ? entry.type : 'navigate';
+    if (type === 'reload') return false;
+    if (type === 'back_forward') return true;
+    try {
+      if (!document.referrer) return false;
+      return new URL(document.referrer).origin === location.origin;
+    } catch (e) { return false; }
+  }
 
   var TOTAL_MS = 2400;         // full sequence, including the page fade
-  var KEY = 'sb-intro-seen';
 
   var body = document.body;
   var layer = document.querySelector('.intro-layer');
   var logo = document.querySelector('.logo');
 
-  /* sessionStorage throws outright in some privacy contexts rather than
-     returning null. Both calls were unreachable while ONCE_PER_SESSION was
-     false; now they are not, and a throw between adding .is-intro and
-     scheduling finish() would leave the class on <body> for good. Treat an
-     unreadable store as "not seen" and an unwritable one as a no-op — the
-     intro replaying is a far smaller problem than it never ending. */
-  function seenThisSession() {
-    try { return sessionStorage.getItem(KEY) === '1'; } catch (e) { return false; }
-  }
-  function markSeen() {
-    try { sessionStorage.setItem(KEY, '1'); } catch (e) { /* nothing to do */ }
-  }
-
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var seen = ONCE_PER_SESSION && seenThisSession();
+  var skip = arrivedFromInside();
 
-  if (reduced || seen || !layer || !logo) {
+  if (reduced || skip || !layer || !logo) {
     if (layer) layer.remove();
     return;   /* scrollRestoration deliberately left alone — see below */
   }
@@ -66,9 +74,14 @@
      hit reload.
 
      Taken over only on the path where the intro actually runs. The
-     early return above leaves scrollRestoration at 'auto', so once
-     ONCE_PER_SESSION is flipped on, returning visitors who skip the
-     intro keep normal browser behaviour and come back where they were.
+     early return above leaves scrollRestoration at 'auto', so an
+     internal click or a back/forward that skips the intro keeps normal
+     browser behaviour and lands where it should.
+
+     The cost worth knowing: a REFRESH now plays the intro, and the intro
+     needs the top of the page, so refreshing while scrolled down brings
+     you back to the top. That is the trade for the bullet on every
+     refresh, and it is deliberate.
 
      Set before .is-intro is added, and before Lenis exists — motion.js
      loads after this file, so Lenis reads a document already at 0. */
@@ -95,7 +108,6 @@
   }
 
   body.classList.add('is-intro');
-  if (ONCE_PER_SESSION) markSeen();
 
   /* Any sign of impatience skips straight to the finished state. */
   window.addEventListener('wheel', finish, { passive: true, once: true });

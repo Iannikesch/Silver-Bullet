@@ -147,8 +147,9 @@ site animates its sections", which is the template look the "do not" list above
 exists to prevent.
 
 **Why it was allowed anyway.** The platform band's choreography is specific
-rather than generic: three pairs converge from opposite viewport edges to meet
-at their rows, which is a statement about the marks meeting in the middle, not a
+rather than generic: each row's outer pair converges from opposite viewport
+edges, and the inner pair chases in behind it from the same edges, which is a
+statement about the marks meeting in the middle, not a
 fade-and-rise applied to whatever happens to be there. It was asked for
 deliberately, with the beats specified.
 
@@ -208,9 +209,9 @@ a template. What keeps it on the right side of that line:
   needs its own speed, and at that point the whole idea should be re-examined
   instead.
 - **One direction.** All three run right to left. Mixed directions read as chaos.
-- **Nothing else moves ambiently** except the testimonial band, which is the
-  fourth mover this section warned about. Not sections, not cards, not
-  backgrounds. See below.
+- **Nothing else moves ambiently** except the testimonial band and the
+  verticals carousel, the fourth and fifth movers this section warned about.
+  Not sections, not backgrounds. See below.
 - **The bands answer the pointer.** Hovering one slows it to 0.4x rather than
   stopping it dead, so it yields to a reader without snapping. You can grab any
   band and drag it, and a throw carries and decays back into the drift. This is
@@ -245,9 +246,39 @@ sentence away mid-read. What keeps it on the right side of the line:
 - **It never starts under `prefers-reduced-motion`**, and the band stays a
   readable stack of every quote when it does not.
 
-There is no fifth. The next thing that wants to move on its own should be
-refused, and if it cannot be, this document is wrong and needs rewriting rather
-than another entry.
+### The fifth mover: the verticals carousel
+
+The paragraph that used to sit here said there would be no fifth, and that if
+one could not be refused this document was wrong and needed rewriting. One was
+added - the industry cards drift right to left on a continuous loop - so this
+is the rewrite, not another entry.
+
+The honest position: the ambient rule is now "five, and each one earns it",
+not "three bands and two exceptions". What the carousel does to earn it:
+
+- **It is the slowest thing on the page that carries text.** About 9s for a
+  card to cross the centre, tuned as `--vrail-dwell` on `.verticals`. It should
+  read as drift. If it ever reads as a slide, slow it down rather than argue.
+- **Only the centre card is fully there.** Opacity falls to 30% and scale to
+  90% at the rail's edges, continuously, from each card's distance to the
+  centre - so at any moment there is one card to read and the rest are
+  context. That is what stops six paragraphs in motion reading as noise.
+- **It yields to attention, and eases into it.** Hover, keyboard focus and a
+  held finger all bring it to a stop over about a third of a second, and it
+  picks back up the same way. Never a snap.
+- **It does not run unseen.** Off screen it holds.
+- **It never starts under `prefers-reduced-motion`**, and the rail stays a
+  plain scroll strip of six full-strength cards when it does not.
+
+What it costs, so the next person knows: it sits directly under the logo band,
+so two ambient movers are now adjacent. The rates are far enough apart (~18px/s
+against ~45px/s at desktop) that they read as two systems, but this is the
+first place the page should be checked if it starts to feel busy - and the
+standing advice from "The orchestrated moments" applies: if something has to
+go, drop the client wall reveal before touching any of these.
+
+There is no sixth. Five self-moving things is already past where this document
+wanted to be, and the next one should be traded for one of these, not added.
 
 ## The scale pass (2026-09-16)
 
