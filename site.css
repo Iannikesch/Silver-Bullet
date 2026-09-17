@@ -223,13 +223,28 @@
 
     /* ---------- header ---------- */
 
+    /* The header and the ticker under it are one warm band: the room the
+       cold steel page sits in. DESIGN.md's premise is "cold steel subject,
+       warm environment behind it", and until this the environment was the
+       same cyan-pulled dark as everything else. The band is where it shows.
+
+       Nothing in the band that is SUBJECT goes warm - the wordmark, the nav
+       type, the button's label all stay on the steel ramp. Only the light
+       behind them and the surfaces they sit on. */
     .site-header {
       position: sticky;
       top: 0;
       z-index: 40;
       height: var(--nav-h);
-      /* No fill of its own. .tx-frost supplies a translucent pane, and only
-         once the page has been scrolled - see textures.css. */
+      /* NO background of its own - the pane supplies it, and an opaque fill
+         here would sit UNDER the pane and give the backdrop blur nothing
+         but flat colour to sample. Near-solid warm at the top of the page
+         (92%), then 58% plus blur once lifted: the bar gets glassier as
+         content starts passing under it, which is the "floats over the
+         page" the brief asked for. */
+      --tx-frost-tint: color-mix(in srgb, var(--amber-burnt) 45%, var(--taupe-dark));
+      --tx-frost-base: var(--bg-warm);
+      --tx-frost-rest: 92%;
     }
 
     .site-header .wrap {
@@ -240,14 +255,24 @@
       gap: 24px;
     }
 
-    /* The line the bullet leaves behind. It is the nav separator. */
+    /* The line the bullet leaves behind. It is the nav separator - and it
+       is still drawn by the intro (rule-draw scales it from the left), so
+       the element and its transform-origin stay exactly as they were. What
+       changed is what it is made of: a warm hairline at ~11% that fades out
+       at both ends, instead of a solid slate line edge to edge. The bullet
+       still draws it; it just draws something softer. */
     .site-header__rule {
       position: absolute;
       left: 0;
       right: 0;
       bottom: 0;
       height: 1px;
-      background: var(--border);
+      background: linear-gradient(90deg,
+        transparent 0%,
+        var(--line-warm) 12%,
+        color-mix(in srgb, var(--amber) 16%, transparent) 50%,
+        var(--line-warm) 88%,
+        transparent 100%);
       transform-origin: left center;
     }
 
@@ -304,12 +329,40 @@
 
     .nav a {
       font-size: calc(15px + 1px * var(--dial));
-      color: var(--steel-500);
+      color: var(--steel-300);        /* one step up from --steel-500 */
       text-decoration: none;
-      transition: color .18s ease;
+      transition: color .25s ease;
     }
 
-    .nav a:hover { color: var(--white); }
+    .nav a:hover { color: var(--steel-050); }
+
+    /* The underline grows from the centre. Scoped to the plain links - the
+       dropdown's summary and the CTA have their own signals. scaleX rather
+       than animating width, so it never touches layout. Steel, not amber:
+       the ticker's CTA is the one warm element in this viewport. */
+    .nav > .nav-link {
+      position: relative;
+      padding-bottom: 3px;
+    }
+    .nav > .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background: var(--steel-300);
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform .25s var(--ease-settle);
+    }
+    .nav > .nav-link:hover::after,
+    .nav > .nav-link:focus-visible::after { transform: scaleX(1); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .nav a,
+      .nav > .nav-link::after { transition: none; }
+    }
 
     /* ---------- nav dropdown ----------
        Built on <details> so the thing works with the script absent: click
@@ -697,7 +750,46 @@
       transition: background-color .18s ease, color .18s ease, border-color .18s ease;
     }
 
-    .nav .cta-secondary { padding: calc(9px + 2px * var(--dial)) calc(16px + 4px * var(--dial)); font-size: calc(14px + 1px * var(--dial)); }
+    /* The one rounded element on the site, and the reason it is allowed:
+       it sits in the warm band, and a hard steel outline there read as a
+       box nailed onto a soft surface. The fill is a warm TINT - sand at
+       low strength - not the accent: "Book a call" beside it in the ticker
+       is the viewport's one amber element, and a second would cancel it.
+       The hover lifts the tint and the button a pixel; no shadow, per
+       DESIGN.md, the halo behind it (tx-halo, tinted warm below) is what
+       reads as the glow. */
+    .nav .cta-secondary {
+      padding: calc(9px + 2px * var(--dial)) calc(18px + 4px * var(--dial));
+      font-size: calc(14px + 1px * var(--dial));
+      border-radius: 10px;
+      border-color: color-mix(in srgb, var(--sand) 34%, transparent);
+      background: color-mix(in srgb, var(--sand) 10%, transparent);
+      color: var(--steel-050);
+      transition:
+        background-color .25s ease,
+        border-color .25s ease,
+        color .25s ease,
+        transform .25s var(--ease-settle);
+    }
+    .nav .cta-secondary:hover,
+    .nav .cta-secondary:focus-visible {
+      background: color-mix(in srgb, var(--sand) 18%, transparent);
+      border-color: color-mix(in srgb, var(--sand) 58%, transparent);
+      color: var(--white);
+      transform: translateY(-1px);
+    }
+    /* Declared after the rule above on purpose: same specificity, so only
+       source order decides, and placed earlier this silently lost. */
+    @media (prefers-reduced-motion: reduce) {
+      .nav .cta-secondary { transition: none; }
+      .nav .cta-secondary:hover,
+      .nav .cta-secondary:focus-visible { transform: none; }
+    }
+
+    /* Its halo, and the wordmark's, go warm with the band. */
+    .site-header .tx-halo {
+      --tx-halo-tint: color-mix(in srgb, var(--amber-burnt) 50%, var(--taupe-dark));
+    }
 
     /* ---------- sections ---------- */
 
@@ -1568,8 +1660,21 @@
       position: relative;
       display: flex;
       align-items: stretch;
-      border-bottom: 1px solid var(--border);
-      background: var(--bg);
+      background: var(--bg-warm);
+    }
+
+    /* The band's lower edge is a fade, not a line: the warm dark dissolves
+       into the page's cold dark over 28px. Sits below the strip so it never
+       overlaps the text or the pinned CTA. */
+    .ticker::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 100%;
+      height: 28px;
+      pointer-events: none;
+      background: linear-gradient(180deg, var(--bg-warm), transparent);
     }
 
     /* Clipping moved off .ticker and onto this, so the pinned CTA is a
@@ -1577,6 +1682,11 @@
        would be carried away by the marquee. */
     .ticker__viewport {
       flex: 1;
+      /* Phrases fade in on the left and out on the right instead of being
+         cut. On the viewport, not the strip, so the pinned CTA beside it is
+         never faded. Drag still works: a mask does not touch pointer events. */
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 94%, transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 94%, transparent 100%);
       min-width: 0;
       overflow: hidden;
     }
@@ -1667,7 +1777,7 @@
       flex: none;
       padding: calc(13px + 3px * var(--dial)) clamp(calc(22px + 2px * var(--dial)), calc(3vw + 0.2vw * var(--dial)), calc(40px + 8px * var(--dial)));
       font-size: calc(14px + 1px * var(--dial));
-      color: var(--steel-500);
+      color: var(--steel-300);        /* up from --steel-500: narrows the gap to the hook */
       white-space: nowrap;
     }
 
@@ -1677,20 +1787,24 @@
        down. Two bright items in ten is the ration; brighten them all and the
        strip flattens into one grey band. */
     .ticker__set li.is-hook {
-      color: var(--steel-100);
-      font-weight: 600;
+      color: var(--steel-050);
+      font-weight: 500;               /* was 600; the hook still leads, less loudly */
     }
 
-    /* Separator is a hairline, not a middle dot — see "Do not" in DESIGN.md. */
+    /* Separator is a small warm diamond. Not a middle dot - that is on the
+       "Do not" list - and not the hairline bar it was, which read as a fence
+       post between every phrase. Rotated square, 5px on the diagonal, sand
+       at ~55%: warm because it is part of the band, small because it is
+       punctuation. */
     .ticker__set li::before {
       content: "";
       position: absolute;
-      left: 0;
+      left: -2px;
       top: 50%;
-      width: 1px;
-      height: 12px;
-      transform: translateY(-50%);
-      background: var(--slate);
+      width: 4px;
+      height: 4px;
+      transform: translateY(-50%) rotate(45deg);
+      background: color-mix(in srgb, var(--sand) 55%, transparent);
     }
 
     /* Two identical sets sit side by side, so translating the track by exactly
