@@ -88,9 +88,9 @@
        and without it the handshake is made twice rather than reused. -->
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <link rel="stylesheet" href="tokens.css?v=5">
+  <link rel="stylesheet" href="tokens.css?v=6">
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
-  <link rel="stylesheet" href="textures.css?v=11">
+  <link rel="stylesheet" href="textures.css?v=12">
 
   <link rel="stylesheet" href="bore.css?v=5">
   <!-- Full-page lighting field, same as every other page. See nightfield.css. -->
@@ -98,7 +98,7 @@
   <!-- Calendly popup chrome. Its own stylesheet - the popup renders in
      Calendly's iframe and cannot take our tokens. -->
   <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
-  <link rel="stylesheet" href="site.css?v=53">
+  <link rel="stylesheet" href="site.css?v=54">
 
 </head>
 
@@ -1125,7 +1125,7 @@
        never block first paint. The bullet intro below is deliberately
        CSS-only and does not depend on any of these. -->
   <!-- First, and dependency-free: the intro must not wait on a CDN. -->
-  <script defer src="intro.js?v=5"></script>
+  <script defer src="intro.js?v=6"></script>
   <!-- Dropdown enhancement. The menu works without it. -->
   <script defer src="booking.js?v=3"></script>
 
@@ -1145,13 +1145,13 @@
   <script defer src="testimonial-slider.js?v=4"></script>
   <!-- Verticals rail. Same doctrine as the slider above: self-initialising,
        GSAP-free, and the rail is a readable scroll strip without it. -->
-  <script defer src="vertical-rail.js?v=7"></script>
+  <script defer src="vertical-rail.js?v=8"></script>
 
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
-  <script defer src="motion.js?v=16"></script>
+  <script defer src="motion.js?v=17"></script>
   <script defer src="textures.js?v=11"></script>
 
   <script defer src="boot.js?v=5"></script>
