@@ -32,7 +32,10 @@ framework, say so and ask before doing it.
 
 Movement is a priority for this site, but it is rationed. What moves: the bullet
 intro, the reactive chrome on two elements, four marquee bands — the word band's
-two rows, the creative conveyor and the logo band — two scroll-triggered
+two rows, the creative conveyor and the logo band — the hero reel (two 9:16
+clips taking turns in one window beside the headline; `reel.js`, no GSAP,
+driven by each clip's own `ended` event, paused off screen and in background
+tabs, never fetched under 760px or under reduced motion), two scroll-triggered
 reveals (the client wall, and the platform band under "Platforms we work on"), the
 testimonial band, which advances itself on a 7s dwell, and the verticals
 carousel, which drifts its industry cards on a continuous loop at about 9s per
@@ -74,6 +77,15 @@ never `@latest`, all `defer`red so they never block first paint.
   script tag.
 
 Site motion code lives in `motion.js`, loaded deferred after the libraries.
+
+One scroll-linked effect lives outside it, on purpose: the **stack** on the
+home page, where "A glimpse at our work" pins (CSS `position: sticky`, negative
+top) and "Companies who trust us" slides up over it. `stack.js` only measures
+the pin height and writes a 0–1 progress that the stylesheet turns into a small
+scale-down and dim on the pinned section. No GSAP, same doctrine as `nav.js`:
+the markup works with the file absent. Scrubbed and reversible, so it is in the
+"answers scroll" category DESIGN.md allows, not a new ambient mover. Off under
+768px and under reduced motion the push-back is dropped (the pin stays).
 
 One web font, self-hosted: `Assets/fonts/bebas-neue-latin.woff2` (Bebas Neue,
 the wordmark's face, OFL, 8.6KB latin subset). Used only by the word band.
