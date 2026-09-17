@@ -89,9 +89,6 @@
   <meta name="twitter:image:alt" content="NSP Plumbing: 50% revenue growth in two months with Silver Bullet">
 
 
-  <!-- Bump ?v= whenever tokens.css changes. The hero headline is painted
-       with background-clip:text, so a stale palette that drops the
-       --chrome-* ramp would render it as invisible text. -->
   <!-- Both script origins, opened early. Every page pulls deferred JS from
        cdnjs and jsDelivr; without this each origin pays a full DNS lookup
        plus TLS handshake before its first byte, which is most of the cost
@@ -103,15 +100,15 @@
        it rather than swapping. crossorigin is required on a font preload
        even same-origin, or the browser fetches it twice. -->
   <link rel="preload" href="Assets/fonts/bebas-neue-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="tokens.css?v=7">
+  <link rel="stylesheet" href="tokens.css">
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
-  <link rel="stylesheet" href="textures.css?v=13">
+  <link rel="stylesheet" href="textures.css">
 
   <!-- Calendly popup chrome. Its own stylesheet - the popup renders in
      Calendly's iframe and cannot take our tokens. -->
   <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
-  <link rel="stylesheet" href="site.css?v=62">
-  <link rel="stylesheet" href="nightfield.css?v=5">
+  <link rel="stylesheet" href="site.css">
+  <link rel="stylesheet" href="nightfield.css">
 
 
   <style>
@@ -254,7 +251,7 @@
           <!-- width/height are the file's real pixels: they give the browser
                the aspect ratio so the header never jumps as it loads.
                alt is empty because the link above already carries the name. -->
-          <img class="logo__img" src="silver-bullet-logo-alpha.png?v=2"
+          <img class="logo__img" src="silver-bullet-logo-alpha.png"
                width="732" height="60" alt="">
         </span>
       </a>
@@ -646,7 +643,7 @@
       </nav>
 
       <div class="foot-brand">
-        <img class="foot-brand__logo" src="silver-bullet-logo-alpha.png?v=2"
+        <img class="foot-brand__logo" src="silver-bullet-logo-alpha.png"
              width="732" height="60" alt="Silver Bullet">
         <a data-book class="cta-secondary tx-halo" href="https://calendly.com/inikesch-theprofectusagency/30min">Connect with us</a>
       </div>
@@ -661,9 +658,9 @@
     </div>
   </footer>
   <!-- First, and dependency-free: the intro must not wait on a CDN. -->
-  <script defer src="intro.js?v=7"></script>
+  <script defer src="intro.js"></script>
   <!-- Dropdown enhancement. The menu works without it. -->
-  <script defer src="booking.js?v=3"></script>
+  <script defer src="booking.js"></script>
 
 
   <!-- The capabilities data, and the two things rendered from it: the nav
@@ -671,24 +668,23 @@
        BEFORE nav.js: deferred scripts execute in document order, and nav.js
        decides on load whether the columns are open (desktop) or collapsed
        (phone), which it can only do if they exist. -->
-  <script defer src="capabilities.js?v=2"></script>
+  <script defer src="capabilities.js"></script>
 
-  <script defer src="nav.js?v=3"></script>
+  <script defer src="nav.js"></script>
   <!-- Text roll on the nav labels and the client marks. Markup only; the
        motion is CSS, and with this absent every label is just its text. -->
-  <script defer src="roll.js?v=2"></script>
+  <script defer src="roll.js"></script>
   <!-- Enquiry form reveal. Self-initialising and GSAP-free, same as
        nav.js - the form is a working <details> without it. -->
-  <script defer src="enquire.js?v=4"></script>
+  <script defer src="enquire.js"></script>
 
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
-  <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
-  <script defer src="motion.js?v=19"></script>
-  <script defer src="textures.js?v=11"></script>
+  <script defer src="motion.js"></script>
+  <script defer src="textures.js"></script>
 
-  <script defer src="boot.js?v=5"></script>
+  <script defer src="boot.js"></script>
 
 </body>
 </html>

@@ -21,15 +21,15 @@ Four steps. Copy this into any new page and everything below is available.
 
 ```html
 <head>
-  <link rel="stylesheet" href="tokens.css?v=2">
-  <link rel="stylesheet" href="textures.css?v=2">   <!-- AFTER tokens.css -->
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="textures.css">   <!-- AFTER tokens.css -->
 </head>
 
 <body class="tx-grain">                              <!-- page-wide grain -->
 
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
-  <script defer src="textures.js?v=2"></script>
+  <script defer src="textures.js"></script>
   <script>
     window.addEventListener('DOMContentLoaded', function () {
       initTextures();                    // cursor-reactive textures
@@ -105,8 +105,10 @@ fight over one variable.
    renders with *no background at all*, silently, with nothing in the console.
    This has cost real time three separate times.
 4. **A texture must render correctly with no JS.** JavaScript only improves it.
-5. **Bump `?v=` on any file you change**, or returning visitors get a stale
-   cached copy. This was missed for four commits and shipped stale CSS.
+5. **No cache-busters.** Vercel sends `max-age=0, must-revalidate` with an ETag
+   on every asset, so browsers revalidate on every load and always get the
+   current file. `?v=` strings were hand-bumped across 13 pages for four rounds
+   of merge conflicts and never changed what a visitor received. Do not add them.
 6. **Nothing reaches a page before it exists in `sandbox.html`.**
 7. **Percentages are invalid for a `circle` radius** — lengths only. `ellipse`
    takes both.
@@ -420,7 +422,7 @@ hand. Change one, change both.
 Seven places. If the page is restructured these are the only things to
 re-attach; the pack itself is structure-agnostic.
 
-1. `<head>` — `<link href="textures.css?v=2">`, after `tokens.css`
+1. `<head>` — `<link href="textures.css">`, after `tokens.css`
 2. `<body class="tx-grain">`
 3. `.hero-ground` — a full-bleed wrapper AROUND `<section class="hero">`, with
    `tx-thermal tx-vignette--in` and two child spans (`.th-cold`, `.th-warm`)

@@ -5,8 +5,9 @@
    bullet intro and hook banner from ONE source instead of a copy that
    drifts. Load AFTER tokens.css and textures.css.
 
-   Bump ?v= on every change — see TEXTURES.md. Stale cached CSS has
-   already shipped on this project once.
+   No cache-busters. Vercel revalidates every asset on every load via
+   ETag, so a changed file reaches visitors on the next request without
+   any ?v= string. See TEXTURES.md house rule 5.
    ========================================================== */
 
     /* ==========================================================
