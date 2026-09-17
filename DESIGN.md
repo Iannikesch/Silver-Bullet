@@ -213,9 +213,23 @@ all, which is the thing this section otherwise rules out:
 
 | Band | What it carries | Speed |
 | --- | --- | --- |
-| `.ticker` | the hook — rev share or profit share, skin in the game | ~28px/s |
-| `.conveyor` | creative, four slots in view | ~45px/s |
-| `.logo-band` | client logos | ~18px/s |
+| `.ticker__row` (A) | the word band, row one — what this company is, hollow with a lit subset | ~38px/s |
+| `.ticker__row--b` | the word band, row two | ~30px/s |
+| `.conveyor` | creative, four slots in view | ~49px/s |
+| `.logo-band` | client logos | ~16px/s |
+
+The word band's two rows are the "fourth band" this section warned about, and
+here is the re-examination: they are one visual element, not two, and they are
+close in speed on purpose so they slide against each other rather than moving as
+a plate. That is the only pair allowed to be close. A fifth strip anywhere else
+is still the line.
+
+**The lit words glow, and that is a recorded experiment against this document.**
+The "Do not" list rules out text-shadow bloom. The word band's lit subset carries
+one - held cold, confined to that band, and static (the lit set never changes;
+the flash is a lit word passing a hollow one). It was asked for explicitly as
+the neon on thearmcandy.com. If it stays, this note is the record; if it goes,
+delete `.is-lit`'s `text-shadow` and the sheet is whole again.
 
 This is a deliberate call, made knowingly, and it is the part of this document
 most likely to go wrong. Three self-moving bands on one page is close to the

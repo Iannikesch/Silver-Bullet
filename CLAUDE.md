@@ -31,8 +31,8 @@ framework, say so and ask before doing it.
 ## Motion
 
 Movement is a priority for this site, but it is rationed. What moves: the bullet
-intro, the reactive chrome on two elements, three marquee bands — the hook
-banner, the creative conveyor and the logo band — two scroll-triggered
+intro, the reactive chrome on two elements, four marquee bands — the word band's
+two rows, the creative conveyor and the logo band — two scroll-triggered
 reveals (the client wall, and the platform band under "Platforms we work on"), the
 testimonial band, which advances itself on a 7s dwell, and the verticals
 carousel, which drifts its industry cards on a continuous loop at about 9s per
@@ -93,20 +93,24 @@ Timeline values live in `:root` in `index.html` as `--t-*` custom properties.
 
 ### The marquee bands are CSS-only, and they are the ambient exception
 
-Three strips run perpetual right-to-left CSS marquees at deliberately different
-speeds: `.ticker` (the hook, ~28px/s, with a pinned amber CTA that does not
-scroll), `.conveyor` (creative, four slots in view, ~45px/s) and `.logo-band`
-(client logos, ~18px/s). Rates live in `:root`; keep them far apart or the three
-read as one striped block.
+Four strips run perpetual right-to-left marquees at deliberately different
+speeds: the word band's two rows (`.ticker__row`, ~38 and ~30px/s - big hollow
+words with a lit subset, modelled on thearmcandy.com's client-partners strip;
+the pinned amber CTA it used to carry is gone), `.conveyor` (creative, four slots
+in view, ~49px/s) and `.logo-band` (client logos, ~16px/s). Speeds are
+`data-marquee-speed` in the markup, px/s; the `:root` rates are the no-JS
+fallback. Keep them apart or they read as one striped block - the two word rows
+are close on purpose so they slide against each other as one band, and that is
+the only pair allowed to be.
 
 Every band is `[data-marquee]` wrapping a `[data-marquee-track]`. That pairing is
 what the reduced-motion rule and the hover handler both key off, so a new band
 gets both behaviours for free.
 
-The hook banner alone also arrives with the intro. It is two nested transforms
-that compose: `.ticker__travel` is intro-only and
-rides out with the bullet, then returns on a hard ease-out; `.ticker__track` is
-the constant-rate loop underneath. Through the return the travel layer sheds
+The word band alone also arrives with the intro. Each row is two nested
+transforms that compose: `.ticker__travel` is intro-only and rides out with the
+bullet, then returns on a hard ease-out; `.ticker__track` is the constant-rate
+loop underneath. Both rows carry their own travel so the ride-out hits both. Through the return the travel layer sheds
 speed while the track holds its pace, so the composite runs from the bullet's
 own velocity down to the drift with no seam.
 
