@@ -33,7 +33,7 @@ framework, say so and ask before doing it.
 Movement is a priority for this site, but it is rationed. What moves: the bullet
 intro, the reactive chrome on two elements, three marquee bands — the hook
 banner, the creative conveyor and the logo band — two scroll-triggered
-reveals (the client wall, and the platform band under "Proficient in"), the
+reveals (the client wall, and the platform band under "Platforms we work on"), the
 testimonial band, which advances itself on a 7s dwell, and the verticals
 carousel, which drifts its industry cards on a continuous loop at about 9s per
 card. Nothing else does.
@@ -49,8 +49,11 @@ one of these, not added.
 
 There are two scroll reveals, and they sit on consecutive sections. The client
 wall drops its heading in and rises its logos; the platform band slides its head
-down and then converges three pairs of marks from opposite viewport edges,
-Meta/Google, then YouTube/TikTok, then LinkedIn/Shopify. Both are once-only, both
+down and then converges sixteen marks a row at a time, each row in two stages:
+the outer pair sweeps in from the two viewport edges, and as it lands the inner
+pair chases in behind it from the same edges. Rows are grouped by rendered
+position, not index, so the four-across grid can drop to two or one and every
+mark still enters from the edge it is nearer to. Both are once-only, both
 set their start state from JS so a no-JS or reduced-motion load is simply
 visible, and both are in `motion.js` (`initClientReveal`, `initPlatformReveal`).
 
@@ -79,6 +82,12 @@ friction heat, glint, wordmark wipe, logo travel — is pure CSS animation
 orchestrated by a single `.is-intro` class on `<body>`. It does not use GSAP and
 should not be ported to it. The base stylesheet *is* the finished state, so with
 JS off or motion reduced the page is simply correct and nothing animates.
+
+It plays on every **arrival** — fresh visit, refresh, typed URL, external link —
+and not on a click between pages of this site, which used to read as the banner
+glitching. `intro.js` decides from the Navigation Timing type and the referrer,
+and stores nothing. Consequence to know: a refresh while scrolled down returns
+you to the top, because the sequence needs the top of the page.
 
 Timeline values live in `:root` in `index.html` as `--t-*` custom properties.
 
