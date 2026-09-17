@@ -3156,122 +3156,69 @@
   color: var(--steel-900, #50636E);
 }
 
-/* Three rows, one list per row, so the categories hold their shape without
-   a label. Each list is a centred flex line, the same pattern as
-   .client-wall, so a row of five and a row of six both centre on the same
-   axis. The old 4-column grid could only ever give 4/4/4/4.
+/* One grid, four across. This is the layout the wall shipped with in
+   74ec84e and it is restored on instruction: sixteen marks, four rows,
+   the reference gap and the reference cap. The interim version (three
+   flex lists, one per category) is gone along with the categories.
 
-   The reveal in motion.js is untouched by this: it collects every
-   .press-wall li, groups them by rendered centre-line, and each list lands
-   on its own line, so three lists are still one choreography.
-
-   No max-width cap. The old 1120px could not seat a row of six marks at
-   their capped width plus gaps; .wrap is the only bound now. */
+   Held inside .wrap at the reference 1120px so the outer columns still
+   read as the edges of one set rather than four separate lists. */
 .press-wall {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   align-items: center;
-  justify-content: center;
+  justify-items: center;
   gap: clamp(30px, 3.6vw, 52px) clamp(22px, 3vw, 44px);
+  max-width: 1120px;
   margin: 0 auto;
   padding: 0;
   list-style: none;
 }
 
-/* Rows are categories, so the gap between lists is one step up from the
-   in-row gap. That difference is the only thing telling the visitor these
-   are three groups and not one wall. */
-.press-wall + .press-wall { margin-top: var(--space-md, 56px); }
+/* Sized by HEIGHT, with width only as an upper bound. One width cap
+   renders a 2.5:1 lockup 68% taller than a 5:1 one and the row stops
+   reading as a set; capping the height is how a logo wall is balanced,
+   and it makes optical size independent of how long each wordmark is.
 
-/* The placeholder slot, until a logo file lands. Same height as
-   .press-wall img below, and 3.5x that for width: a typical horizontal
-   lockup's ratio. Not the img's max-width, which is a cap most marks never
-   reach; six slots at the cap plus gaps overshoot .wrap and the row of six
-   broke to 5+1. Derived from the height so there is one number to change.
-   Faint charcoal on the paper: present enough to show the layout, quiet
-   enough not to read as content. */
-.press-wall__ph {
-  height: clamp(32px, 3.4vw, 46px);
-  width: calc(3.5 * clamp(32px, 3.4vw, 46px));
-  background: color-mix(in srgb, var(--charcoal, #202222) var(--alpha-soft, 18%), transparent);
-  border: 1px solid var(--border, #323738);
-}
+   height, not max-height: with height:auto the marks are 0px tall until
+   the file arrives — the width/height attributes cannot reserve a box
+   when the width side is left to resolve from an image that has not
+   loaded — and they are loading="lazy", so the section grew the moment
+   a visitor scrolled to it and every anchor below it moved. A declared
+   height gives the attributes a side to work from.
 
-/* Type-set marks, for the platforms that have no logo file yet. Sized to
-   sit optically with the images - same height band, same weight of
-   presence - so a row of two logos and two names reads as one row. Swap
-   the <span> for an <img> and nothing else moves. */
-.press-wall__mark {
-  display: block;
-  font-size: clamp(18px, 1.9vw, 26px);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1;
-  /* The band is on paper, so the marks take the heading's ink, not the
-     site's steel - steel-050 on --paper is 1.2:1 and simply vanishes. */
-  color: var(--charcoal, #202222);
-  white-space: nowrap;
-}
-
-/* Sized by HEIGHT, with width only as an upper bound. This used to cap
-   width alone, which worked while all six crops sat within a narrow band
-   of aspect ratios. The current marks do not: Meta is 4.96:1 and Google
-   is 2.96:1, so one width cap renders Google about 68% taller than Meta
-   and the row stops reading as a set. Capping the height is how a logo
-   wall is normally balanced - it is what .client-wall already does - and
-   it makes optical size independent of how long each wordmark happens
-   to be.
-
-   Both caps stay below natural size, so every mark is still downscaled
-   and none is ever soft. width/height on the <img> hold the aspect ratio
-   so the band does not jump while the images load.
-
-   Greyscaled, as of 2026-09-17. The band used to keep full colour because
-   the marks were the site's only colour logos, and dimming a full-colour
-   logo just makes it look faded. That no longer applies: these marks are
-   greyscale on purpose, matching the client wall and the logo band, so a
-   green mascot or an orange wordmark cannot read as a second accent. No
-   opacity dimming and no hover lift: on paper, a grey mark at full opacity
-   is already the quiet version. */
+   FULL COLOUR, on instruction. The greyscale that was here read every
+   mark as texture; these are the platforms the work runs on and they
+   are meant to be recognised, which is what their colour is for. The
+   band sits on paper, where sixteen brand colours read as a logo wall
+   and not as sixteen competing accents. */
 .press-wall img {
   display: block;
   width: auto;
-  filter: grayscale(1);
-  /* height, not max-height. With height:auto the marks are 0px tall until
-     the file arrives - the width/height attributes cannot reserve a box
-     when the width side is left to resolve from an image that has not
-     loaded - and they are loading="lazy", so the section grew 138px the
-     moment a visitor scrolled to it and every anchor below it moved. CLS
-     never saw it because the reveal holds the marks at opacity 0 while it
-     happens. A declared height gives the attributes a side to work from,
-     so the box is right before the request is even made. Visually it is
-     the same: every one of the six was height-capped already. */
   height: clamp(32px, 3.4vw, 46px);
   max-width: clamp(150px, 18vw, 230px);
 }
 
-/* Optical sizing, same move as .client-wall. A mark that is nearly square
-   - the Salesforce cloud, the Zapier lockup - capped to the same HEIGHT as
-   a long wordmark renders at a third of its width and reads as a dot beside
-   Meta. A taller cap for those two puts them at the same visual weight. */
-.press-wall img.is-tall { max-height: clamp(44px, 4.6vw, 62px); }
+/* Optical sizing. A mark that is nearly square — the Salesforce cloud,
+   the Google Tag Manager and Looker Studio icons — capped to the same
+   HEIGHT as a long wordmark renders at a third of its width and reads as
+   a dot beside Meta. A taller cap puts them at the same visual weight.
 
-/* Three per line under 900px, two under 560px. Fixed thirds and halves
-   rather than a natural wrap: at 899px a row of six measures wider than
-   .wrap, and a natural wrap would leave one mark orphaned on its own line.
-   column-gap goes to 0 or 3 x 33.333% plus two gaps overflows and wraps to
-   two per line anyway. The slot's max-width in vw keeps each mark well
-   inside its third or half.
+   This sets height, not max-height. The reference had max-height here,
+   which a declared height on the rule above ignores outright — so the
+   taller cap never actually applied and Salesforce shipped as a dot.
+   Same intent, now in effect. */
+.press-wall img.is-tall { height: clamp(44px, 4.6vw, 62px); }
 
-   The reveal reads each mark's rendered position rather than its column
-   index, so a row of six breaking to 3+3 still converges correctly: each
-   rendered line is two outer marks and the rest inner. */
+/* Two across under 900px, one under 560px — the reference ladder. The
+   reveal in motion.js reads each mark's rendered position rather than its
+   column index, so at every width a mark still enters from whichever edge
+   it is nearer to. */
 @media (max-width: 900px) {
-  .press-wall { column-gap: 0; }
-  .press-wall li { flex: 0 0 33.333%; display: flex; justify-content: center; }
+  .press-wall { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 560px) {
-  .press-wall li { flex-basis: 50%; }
+  .press-wall { grid-template-columns: 1fr; }
 }
 
 /* ==========================================================

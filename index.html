@@ -490,41 +490,33 @@
     </div><!-- /.stack -->
 
     <!-- ============================================================
-         The stack band. Structure is still inboundmedia.co's press
-         band: centred head, then rows of marks on the site's one
-         paper surface.
+         The stack band. Structure is inboundmedia.co's press band:
+         centred head, then one grid of marks on the site's one paper
+         surface.
 
-         2026-09-17: sixteen marks in four rows of four. The list came
+         2026-09-17, final: sixteen marks, all real files, full colour,
+         in one four-across grid - the layout and spacing the wall
+         shipped with in 74ec84e, restored on instruction. The list came
          from Ian with two cut (ZoomInfo, Microsoft Advertising) and the
-         instruction to ignore the category grouping it arrived in — so
-         the rows are LAYOUT, not taxonomy, and carry no labels. Order
-         is the order the list was given in, which is also a sensible
-         read: ad platforms first, measurement, then data and CRM.
+         category grouping ignored, so the rows are layout, not taxonomy.
+         Order is the order the list was given in.
 
-         Seven of the sixteen have a file in Assets/web and render as
-         <img>; the other nine are .press-wall__ph placeholder boxes,
-         each with an HTML comment naming the mark that goes there.
-         Replace the div with an <img> and it picks up the greyscale
-         rule in site.css. Still needed:
-
-           Google Ads, Amazon Ads, GA4, Google Tag Manager,
-           Looker Studio, Segment, Triple Whale, BigQuery, Snowflake
-
-         press-google.svg exists on disk and is a Google wordmark, not
-         the Google Ads mark — left unused rather than passed off as
-         the wrong product.
-
-         Nine old files are no longer referenced and were left on disk
-         by instruction: gohighlevel, google, jobber, mailchimp,
-         microsoft-ads, servicetitan, shopify, youtube, zapier.
+         Sources, so nobody has to re-find them:
+           Google Ads, GA4, BigQuery, Segment, Snowflake: vectorlogo.zone
+             ar21 lockups, viewBox cropped to content (they ship padded to
+             a 2:1 box, which rendered them at half the size of the rest).
+           Google Tag Manager, Looker Studio: Google's own product icons
+             from gstatic (analytics-suite/header/suite/v2). Icon only, as
+             no lockup exists for either, so they take .is-tall. Looker
+             Studio is deliberately NOT the Looker platform mark: different
+             product, different logo.
+           Triple Whale: the brand lockup from triplewhale.com/assets/brand.
+           Amazon Ads: Amazon's own horizontal Squid Ink PNG from
+             advertising.amazon.com, cropped to content.
+           The remaining seven were already on disk.
 
          The reveal in motion.js selects .press-wall li and groups them
-         by rendered row, so four lists are still one choreography and
-         no extra reveal is added. DOM order is visual order.
-
-         The id and .press* class names are unchanged on purpose:
-         nothing links to #press, and renaming would touch eight CSS
-         rules for no user-visible gain.
+         by rendered row. DOM order is visual order.
          ============================================================ -->
     <section id="press" class="press">
       <div class="wrap">
@@ -532,33 +524,20 @@
           <h2>The data, measurement and media stack behind the work.</h2>
         </div>
 
-        <!-- Row 1 -->
         <ul class="press-wall">
-          <li><!-- Google Ads --><div class="press-wall__ph"></div></li>
+          <li><img src="Assets/web/press-google-ads.svg" alt="Google Ads" width="1100" height="433" loading="lazy" decoding="async"></li>
           <li><img src="Assets/web/press-meta.svg" alt="Meta" width="948" height="191" loading="lazy" decoding="async"></li>
           <li><img src="Assets/web/press-linkedin.svg" alt="LinkedIn" width="568" height="144" loading="lazy" decoding="async"></li>
           <li><img src="Assets/web/press-tiktok.png" alt="TikTok" width="161" height="51" loading="lazy" decoding="async"></li>
-        </ul>
-
-        <!-- Row 2 -->
-        <ul class="press-wall">
-          <li><!-- Amazon Ads --><div class="press-wall__ph"></div></li>
-          <li><!-- GA4 --><div class="press-wall__ph"></div></li>
-          <li><!-- Google Tag Manager --><div class="press-wall__ph"></div></li>
-          <li><!-- Looker Studio --><div class="press-wall__ph"></div></li>
-        </ul>
-
-        <!-- Row 3 -->
-        <ul class="press-wall">
+          <li><img src="Assets/web/press-amazon-ads.png" alt="Amazon Ads" width="900" height="227" loading="lazy" decoding="async"></li>
+          <li><img src="Assets/web/press-ga4.svg" alt="Google Analytics 4" width="1122" height="437" loading="lazy" decoding="async"></li>
+          <li><img class="is-tall" src="Assets/web/press-google-tag-manager.svg" alt="Google Tag Manager" width="192" height="192" loading="lazy" decoding="async"></li>
+          <li><img class="is-tall" src="Assets/web/press-looker-studio.svg" alt="Looker Studio" width="192" height="192" loading="lazy" decoding="async"></li>
           <li><img src="Assets/web/press-callrail.svg" alt="CallRail" width="598" height="137" loading="lazy" decoding="async"></li>
-          <li><!-- Segment --><div class="press-wall__ph"></div></li>
-          <li><!-- Triple Whale --><div class="press-wall__ph"></div></li>
-          <li><!-- BigQuery --><div class="press-wall__ph"></div></li>
-        </ul>
-
-        <!-- Row 4 -->
-        <ul class="press-wall">
-          <li><!-- Snowflake --><div class="press-wall__ph"></div></li>
+          <li><img src="Assets/web/press-segment.svg" alt="Segment" width="1044" height="312" loading="lazy" decoding="async"></li>
+          <li><img src="Assets/web/press-triple-whale.svg" alt="Triple Whale" width="1030" height="150" loading="lazy" decoding="async"></li>
+          <li><img src="Assets/web/press-bigquery.svg" alt="Google BigQuery" width="1133" height="409" loading="lazy" decoding="async"></li>
+          <li><img src="Assets/web/press-snowflake.svg" alt="Snowflake" width="1126" height="356" loading="lazy" decoding="async"></li>
           <li><img src="Assets/web/press-hubspot.svg" alt="HubSpot" width="212" height="62" loading="lazy" decoding="async"></li>
           <li><img class="is-tall" src="Assets/web/press-salesforce.svg" alt="Salesforce" width="273" height="191" loading="lazy" decoding="async"></li>
           <li><img src="Assets/web/press-klaviyo.svg" alt="Klaviyo" width="581" height="172" loading="lazy" decoding="async"></li>
