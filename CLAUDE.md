@@ -75,6 +75,12 @@ never `@latest`, all `defer`red so they never block first paint.
 
 Site motion code lives in `motion.js`, loaded deferred after the libraries.
 
+One web font, self-hosted: `Assets/fonts/bebas-neue-latin.woff2` (Bebas Neue,
+the wordmark's face, OFL, 8.6KB latin subset). Used only by the word band.
+Preloaded from every `<head>`; `motion.js` re-measures the marquees on
+`document.fonts.ready` so the loop seam never goes stale. No Google Fonts
+origin — keep it that way, it is a privacy-policy line the moment it changes.
+
 ### The bullet intro is CSS-only, and stays that way
 
 The opening sequence — bullet crossing the viewport, drawing the nav rule,
