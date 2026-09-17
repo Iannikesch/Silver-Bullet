@@ -85,7 +85,10 @@
     var target = document.querySelector(id);
     if (!target || !lenis) return;
     e.preventDefault();
-    lenis.scrollTo(target, { offset: -72, duration: 1.1 });
+    /* Read from CSS rather than hardcoded: the bar's height is --nav-h and
+       the two had already drifted apart once. */
+    var navH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 72;
+    lenis.scrollTo(target, { offset: -navH, duration: 1.1 });
   }
 
   function destroyLenis() {
