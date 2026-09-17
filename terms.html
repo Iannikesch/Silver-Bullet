@@ -75,7 +75,7 @@
 <body class="has-nightfield">
   <header class="site-header tx-frost">
     <div class="wrap">
-      <a class="logo tx-halo tx-halo--lung" href="index.html#top" aria-label="Silver Bullet — home">
+      <a class="logo tx-halo tx-halo--lung" href="index.html" aria-label="Silver Bullet — home">
         <span class="logo__inner">
           <!-- width/height are the file's real pixels: they give the browser
                the aspect ratio so the header never jumps as it loads.
@@ -89,22 +89,31 @@
           <span class="nav-burger__box" aria-hidden="true"><span></span><span></span></span>
         </button>
         <nav class="nav" id="site-nav">
-        <a class="nav-link" href="work.html">Our work</a>
+        <!-- Both dropdowns are <details>: they open, close and take the
+             keyboard on their own if nav.js never arrives. -->
 
-        <!-- A <details>, not a div with a click handler: it opens, closes and
-             takes the keyboard on its own if nav.js never arrives. -->
+        <!-- Capabilities. The two group columns are rendered into the panel
+             by capabilities.js from the one data object it holds, so this
+             list is never typed a second time. With that script absent the
+             panel is empty and the summary still works as a link. -->
         <details class="nav-dd">
           <summary class="nav-dd__toggle">Capabilities<span class="nav-dd__sign" aria-hidden="true"></span></summary>
-          <div class="nav-dd__panel">
+          <div class="nav-dd__panel" data-cap-menu>
+            <noscript><a class="nav-dd__all" href="capabilities.html">All capabilities</a></noscript>
+          </div>
+        </details>
+
+        <a class="nav-link" href="work.html">Our work</a>
+
+        <!-- Resources: written here, not generated - it is three links. -->
+        <details class="nav-dd">
+          <summary class="nav-dd__toggle">Resources<span class="nav-dd__sign" aria-hidden="true"></span></summary>
+          <div class="nav-dd__panel nav-dd__panel--single">
             <ul class="nav-dd__list">
-            <li><a href="capabilities.html#paid-acquisition"><span class="nav-dd__num">01</span>Paid acquisition</a></li>
-            <li><a href="capabilities.html#landing-pages"><span class="nav-dd__num">02</span>Landing pages</a></li>
-            <li><a href="capabilities.html#offer-positioning"><span class="nav-dd__num">03</span>Offer and positioning</a></li>
-            <li><a href="capabilities.html#tracking-attribution"><span class="nav-dd__num">04</span>Tracking and attribution</a></li>
-            <li><a href="capabilities.html#creative-production"><span class="nav-dd__num">05</span>Creative production</a></li>
-            <li><a href="capabilities.html#lifecycle-retention"><span class="nav-dd__num">06</span>Lifecycle and retention</a></li>
+              <li><a href="blog.html" data-track="nav-resources-blog">Blog</a></li>
+              <li><a href="resources.html" data-track="nav-resources-guides">Guides and e-books</a></li>
+              <li><a href="work.html" data-track="nav-resources-case-studies">Case studies</a></li>
             </ul>
-            <a class="nav-dd__all" href="capabilities.html">All capabilities</a>
           </div>
         </details>
 
