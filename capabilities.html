@@ -74,7 +74,7 @@
   <!-- Calendly popup chrome. Its own stylesheet - the popup renders in
      Calendly's iframe and cannot take our tokens. -->
   <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
-  <link rel="stylesheet" href="site.css?v=58">
+  <link rel="stylesheet" href="site.css?v=59">
   <link rel="stylesheet" href="nightfield.css?v=5">
 
 
@@ -695,6 +695,9 @@
   <script defer src="capabilities.js?v=2"></script>
 
   <script defer src="nav.js?v=3"></script>
+  <!-- Text roll on the nav labels and the client marks. Markup only; the
+       motion is CSS, and with this absent every label is just its text. -->
+  <script defer src="roll.js?v=2"></script>
   <!-- Enquiry form reveal. Self-initialising and GSAP-free, same as
        nav.js - the form is a working <details> without it. -->
   <script defer src="enquire.js?v=4"></script>

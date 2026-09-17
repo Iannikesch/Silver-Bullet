@@ -365,6 +365,82 @@
       .nav > .nav-link::after { transition: none; }
     }
 
+    /* ---------- the text roll ----------
+       Built by roll.js: each nav label (and each client-wall mark) is
+       wrapped in .roll, one line tall and clipped, holding two copies of
+       itself. The first is in flow and sets the height; the second is
+       positioned just below the clip. Hover or keyboard focus slides both
+       up one line, so the label rolls out the top while its twin rolls in
+       from below. Transforms only, so it never touches layout, and the
+       wrapper takes exactly the space the bare text did.
+
+       --roll-dur and --roll-ease are the spin; --roll-step is the per-letter
+       delay used when roll.js is in stagger mode. The bezier is a hard
+       launch with a settle, so it reads as one quick spin rather than a
+       slide. */
+    :root {
+      --roll-dur:  .4s;
+      --roll-ease: cubic-bezier(.76, 0, .24, 1);
+      --roll-step: 20ms;
+    }
+
+    .roll {
+      position: relative;
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: top;
+      white-space: nowrap;
+    }
+
+    .roll__line {
+      display: block;
+      transition: transform var(--roll-dur) var(--roll-ease);
+    }
+
+    /* The twin: same box, one line lower, waiting under the clip. */
+    .roll__line[aria-hidden] {
+      position: absolute;
+      top: 100%;
+      left: 0;
+    }
+
+    /* Whole-word mode: the line moves. */
+    .has-roll:hover .roll__line,
+    .has-roll:focus-visible .roll__line { transform: translateY(-100%); }
+
+    /* Letter mode: the line stays put and each letter moves on its own,
+       --i letters after the first. inline-block so a transform applies. */
+    .roll--stagger .roll__line { transition: none; }
+    .roll__ch {
+      display: inline-block;
+      white-space: pre;
+      transition: transform var(--roll-dur) var(--roll-ease);
+      transition-delay: calc(var(--i, 0) * var(--roll-step));
+    }
+    .has-roll:hover .roll--stagger .roll__ch,
+    .has-roll:focus-visible .roll--stagger .roll__ch { transform: translateY(-100%); }
+    .has-roll:hover .roll--stagger .roll__line,
+    .has-roll:focus-visible .roll--stagger .roll__line { transform: none; }
+
+    /* The dropdown summaries open on hover of the whole <details>, so the
+       roll keys off the same thing and matches the panel's timing. */
+    .nav-dd[open] > .has-roll .roll__line { transform: translateY(-100%); }
+    .nav-dd[open] > .has-roll .roll--stagger .roll__ch { transform: translateY(-100%); }
+    .nav-dd[open] > .has-roll .roll--stagger .roll__line { transform: none; }
+
+    /* The client-wall marks. Both copies are the same <img>, so the sizing
+       caps below apply to each; the line has to be as tall as the image and
+       no taller, which display:block on the img already gives it. */
+    .roll--mark .roll__line { line-height: 0; }
+
+    /* Reduced motion: nothing rolls. The twin stays under the clip, the
+       colour and opacity hovers the nav and wall already have still fire,
+       and that is the whole state change. */
+    @media (prefers-reduced-motion: reduce) {
+      .roll__line,
+      .roll__ch { transition: none !important; transform: none !important; }
+    }
+
     /* ---------- nav dropdown ----------
        Built on <details> so the thing works with the script absent: click
        opens it, the keyboard gets it for free, and nav.js only adds the
