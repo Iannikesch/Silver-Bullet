@@ -102,7 +102,7 @@
   <!-- Calendly popup chrome. Its own stylesheet - the popup renders in
      Calendly's iframe and cannot take our tokens. -->
   <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
-  <link rel="stylesheet" href="site.css?v=58">
+  <link rel="stylesheet" href="site.css?v=59">
 
 </head>
 
@@ -315,7 +315,19 @@
          Both are placeholders. The slots take creative, the band takes
          client logos.
          ============================================================ -->
-    <section id="work" class="work">
+    <!-- ============================================================
+         The stack. "A glimpse at our work" pins once a fifth of it has
+         scrolled past, and "Companies who trust us" slides up over it and
+         covers it; scrolling back reverses it. The pin is position:sticky
+         on .work, so it is the browser's own scroll doing the work - no
+         listener, no jitter. The wrapper is what gives the sticky element
+         room to stay pinned: it is exactly as tall as the two sections, so
+         .work stays put until .clients has fully covered it and then
+         leaves with it. See .stack in site.css and stack.js for the push-
+         back polish. Nothing inside either section changed.
+         ============================================================ -->
+    <div class="stack" data-stack>
+    <section id="work" class="work" data-stack-pinned>
       <div class="wrap work__head">
         <h2>A glimpse at our work.</h2>
         <!-- The homepage carried no link to a case study at all, which meant
@@ -431,7 +443,7 @@
          out — so the wall is one value and one weight rather than five
          brand palettes fighting each other.
          ============================================================ -->
-    <section id="clients" class="clients">
+    <section id="clients" class="clients" data-stack-cover>
       <div class="wrap">
         <div class="clients__head">
           <h2>Companies who trust us.</h2>
@@ -450,6 +462,7 @@
         </ul>
       </div>
     </section>
+    </div><!-- /.stack -->
 
     <!-- ============================================================
          Platforms we work on. Structure is still inboundmedia.co's press
@@ -1108,6 +1121,8 @@
   <script defer src="capabilities.js?v=2"></script>
 
   <script defer src="nav.js?v=3"></script>
+  <!-- The work/clients stack: pin height and push-back. No GSAP. -->
+  <script defer src="stack.js?v=1"></script>
   <!-- Enquiry form reveal. Self-initialising and GSAP-free, same as
        nav.js - the form is a working <details> without it. -->
   <script defer src="enquire.js?v=4"></script>

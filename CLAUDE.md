@@ -75,6 +75,15 @@ never `@latest`, all `defer`red so they never block first paint.
 
 Site motion code lives in `motion.js`, loaded deferred after the libraries.
 
+One scroll-linked effect lives outside it, on purpose: the **stack** on the
+home page, where "A glimpse at our work" pins (CSS `position: sticky`, negative
+top) and "Companies who trust us" slides up over it. `stack.js` only measures
+the pin height and writes a 0–1 progress that the stylesheet turns into a small
+scale-down and dim on the pinned section. No GSAP, same doctrine as `nav.js`:
+the markup works with the file absent. Scrubbed and reversible, so it is in the
+"answers scroll" category DESIGN.md allows, not a new ambient mover. Off under
+768px and under reduced motion the push-back is dropped (the pin stays).
+
 One web font, self-hosted: `Assets/fonts/bebas-neue-latin.woff2` (Bebas Neue,
 the wordmark's face, OFL, 8.6KB latin subset). Used only by the word band.
 Preloaded from every `<head>`; `motion.js` re-measures the marquees on

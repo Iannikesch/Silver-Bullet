@@ -1811,6 +1811,90 @@
       to   { transform: translateX(-50%); }
     }
 
+    /* ---------- the stack: work pins, clients covers it ----------
+       The pin is CSS. .work is position:sticky with a NEGATIVE top, so it
+       scrolls normally until that much of it has passed the top of the
+       viewport, then holds there. The value is set by stack.js as
+       --stack-pin: a fifth of the section's own height, or, if the section
+       is taller than the viewport, enough that the bottom of it has been
+       seen before it pins (a percentage top would measure the viewport,
+       not the section, which is why it is a pixel value from JS). The
+       fallback here is a fifth of the viewport, for the moment before the
+       script runs.
+
+       .clients is the cover: relative, above .work, and opaque. It has to
+       be opaque - it is sliding over a section that is still painting,
+       marquee and all - so it takes --bg. That also means the nightfield
+       backdrop no longer shows through this one section; it never showed
+       through much of it, and a see-through cover is not a cover.
+
+       No overflow anywhere on this chain. overflow on any ancestor turns
+       it into the sticky element's scrollport and the pin silently stops
+       working; the header's pin is the proof the chain is clean today.
+
+       Push-back polish - the pinned section scaling down and dimming as
+       it is covered - is stack.js writing --stack-progress (0-1) each
+       frame. The transform and filter below read it. Under reduced motion
+       they are dropped and only the pin and the cover remain: the overlap
+       is still legible, nothing is pushed. Under 768px the pin is off and
+       the two sections scroll like any other pair. */
+
+    .stack { position: relative; }
+
+    .stack .work {
+      position: sticky;
+      top: var(--stack-pin, -20vh);
+      z-index: 1;
+      --stack-progress: 0;
+      transform: scale(calc(1 - var(--stack-progress) * 0.05));
+      filter: brightness(calc(1 - var(--stack-progress) * 0.4));
+      transform-origin: 50% 50%;
+      will-change: transform, filter;
+    }
+
+    .stack .clients {
+      position: relative;
+      z-index: 2;
+      background: var(--bg);
+    }
+
+    /* The incoming edge. A dark fringe above the cover section, drawn as a
+       gradient rather than a box-shadow (which DESIGN.md rules out for
+       depth) - but this is not faked depth, the section really is on top,
+       and on black over black the seam needs SOMETHING or the cover reads
+       as the page simply continuing. The lit hairline the section already
+       carries is the rim; this is the fall-off under it. */
+    .stack .clients::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 100%;
+      height: 56px;
+      pointer-events: none;
+      background: linear-gradient(to top,
+        color-mix(in srgb, var(--ink) 72%, transparent),
+        transparent);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .stack .work {
+        transform: none;
+        filter: none;
+        will-change: auto;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .stack .work {
+        position: static;
+        transform: none;
+        filter: none;
+        will-change: auto;
+      }
+      .stack .clients::before { display: none; }
+    }
+
     /* ---------- a glimpse at our work ---------- */
 
     .work { padding: var(--space-xl) 0; }
