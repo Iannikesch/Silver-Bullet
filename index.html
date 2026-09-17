@@ -160,90 +160,41 @@
     <div class="site-header__rule"></div>
   </header>
 
-  <!-- The word band. Two rows of big hollow words with a lit subset -
-       modelled on thearmcandy.com's client-partners strip, three rows of
-       48px outlined industries with every other one lit neon pink. Ours is
-       two rows, cold white where theirs is pink, and the words are what
-       this company is rather than who it serves.
-
-       Each row is its own [data-marquee] band, so drag, throw, hover-slow
-       and the reduced-motion stop all arrive from motion.js unchanged. The
-       two speeds are deliberately different (38 and 30 px/s) so the rows
-       slide against each other instead of moving as one plate. Each row
-       carries its own .ticker__travel so the intro's ride-out still hits
-       both.
-
-       The pinned "Book a call" is gone by request; the booking CTAs are the
-       hero button and the nav.
-
-       Lit words are FIXED, exactly as on the reference. The "flash" is a
-       lit word passing a hollow one, not a pulse - a pulse would be a
-       fifth ambient mover and there is no fifth. -->
-  <aside class="ticker" aria-label="What we do">
-    <div class="ticker__row" data-marquee data-marquee-speed="38" data-marquee-viewport>
+  <!-- Slogan ticker. A real page element, deliberately NOT inside
+       .intro-layer: that layer is removed from the DOM when the sequence
+       ends, and this has to keep running afterwards. It also sits outside
+       <main>, which the intro fades in at 1.80s — inside it, the strip
+       could not fade in alongside the bullet at 0.10s. -->
+  <aside class="ticker" data-marquee aria-label="How we work">
+    <div class="ticker__viewport" data-marquee-viewport>
       <div class="ticker__travel">
         <div class="ticker__track" data-marquee-track>
           <ul class="ticker__set">
-            <li class="is-lit">Skin in the game</li>
-            <li>Rev share</li>
-            <li class="is-lit">Identity resolution</li>
-            <li>Profit share</li>
-            <li class="is-lit">Data driven</li>
-            <li>Paid acquisition</li>
-            <li class="is-lit">Data architecture</li>
-            <li>Aligned by default</li>
-            <li class="is-lit">First-party data</li>
-            <li>Landing pages</li>
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>Aligned by default.</li>
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>Our upside comes after yours.</li>
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>Paid on performance.</li>
           </ul>
           <!-- Duplicate set is what makes the loop seamless. Hidden from the
-               accessibility tree so nothing is announced twice. -->
+               accessibility tree so the hook is not announced twice. -->
           <ul class="ticker__set" aria-hidden="true">
-            <li class="is-lit">Skin in the game</li>
-            <li>Rev share</li>
-            <li class="is-lit">Identity resolution</li>
-            <li>Profit share</li>
-            <li class="is-lit">Data driven</li>
-            <li>Paid acquisition</li>
-            <li class="is-lit">Data architecture</li>
-            <li>Aligned by default</li>
-            <li class="is-lit">First-party data</li>
-            <li>Landing pages</li>
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>Aligned by default.</li>
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>Our upside comes after yours.</li>
+            <li class="is-hook">Rev share or profit share. Skin in the game.</li>
+            <li>Paid on performance.</li>
           </ul>
         </div>
       </div>
     </div>
-    <div class="ticker__row ticker__row--b" data-marquee data-marquee-speed="30" data-marquee-viewport>
-      <div class="ticker__travel">
-        <div class="ticker__track" data-marquee-track>
-          <ul class="ticker__set">
-            <li class="is-lit">Paid on performance</li>
-            <li>Attribution</li>
-            <li class="is-lit">Our upside comes after yours</li>
-            <li>Creative</li>
-            <li class="is-lit">Identity resolution</li>
-            <li>Lifecycle</li>
-            <li class="is-lit">Data architecture</li>
-            <li>Tracking</li>
-            <li class="is-lit">Rev share or profit share</li>
-            <li>Offer and positioning</li>
-          </ul>
-          <!-- Duplicate set is what makes the loop seamless. Hidden from the
-               accessibility tree so nothing is announced twice. -->
-          <ul class="ticker__set" aria-hidden="true">
-            <li class="is-lit">Paid on performance</li>
-            <li>Attribution</li>
-            <li class="is-lit">Our upside comes after yours</li>
-            <li>Creative</li>
-            <li class="is-lit">Identity resolution</li>
-            <li>Lifecycle</li>
-            <li class="is-lit">Data architecture</li>
-            <li>Tracking</li>
-            <li class="is-lit">Rev share or profit share</li>
-            <li>Offer and positioning</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    <!-- Pinned outside the scrolling viewport, so it never drifts off. The
+         href is the one place a booking link needs to go when Calendly
+         exists; until then it drops to the contact section rather than
+         being a dead link on the front door. -->
+    <a data-book class="ticker__cta tx-glare" href="https://calendly.com/inikesch-theprofectusagency/30min" data-texture="rim">Book a call</a>
   </aside>
 
   <!-- The intro. Removed from the DOM once it has run. -->
