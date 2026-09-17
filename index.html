@@ -102,7 +102,7 @@
   <!-- Calendly popup chrome. Its own stylesheet - the popup renders in
      Calendly's iframe and cannot take our tokens. -->
   <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
-  <link rel="stylesheet" href="site.css?v=58">
+  <link rel="stylesheet" href="site.css?v=62">
 
 </head>
 
@@ -288,18 +288,46 @@
           </div>
         </div>
 
-        <h1 class="tx-rim-text" data-texture="rim">Growth partner invested in your success.</h1>
-        <p class="lead">
-          Silver Bullet is a performance-based marketing firm. We take a share of
-          the revenue or profit we generate, so the bigger part of what we earn
-          depends on what you earn. That is the whole arrangement: our upside
-          only arrives after yours does.
-        </p>
-        <div class="cta-row">
-          <a data-book class="cta tx-torch tx-halo" href="https://calendly.com/inikesch-theprofectusagency/30min" data-texture="torch"
-             data-lit-in="0.9" data-lit-out="0.7">See if you qualify</a>
-          <a class="cta-secondary tx-torch tx-halo" href="#work" data-texture="torch"
-             data-lit-in="0.9" data-lit-out="0.7">See our work</a>
+        <div class="hero__grid">
+          <div class="hero__copy">
+            <h1 class="tx-rim-text" data-texture="rim">Growth partner invested in your success.</h1>
+            <p class="lead">
+              Silver Bullet is a performance-based marketing firm. We take a share of
+              the revenue or profit we generate, so the bigger part of what we earn
+              depends on what you earn. That is the whole arrangement — our upside
+              only arrives after yours does.
+            </p>
+            <div class="cta-row">
+              <a data-book class="cta tx-torch tx-halo" href="https://calendly.com/inikesch-theprofectusagency/30min" data-texture="torch"
+                 data-lit-in="0.9" data-lit-out="0.7">See if you qualify</a>
+              <a class="cta-secondary tx-torch tx-halo" href="#work" data-texture="torch"
+                 data-lit-in="0.9" data-lit-out="0.7">See our work</a>
+            </div>
+          </div>
+
+          <!-- ============================================================
+               The reel. A portrait window beside the headline that two
+               short clips take turns in: one slides up into the frame and
+               eases to a stop, plays through, then slides up and out a
+               touch faster while the other slides in underneath it. Only
+               one is ever fully in frame. reel.js runs the cycle off each
+               clip's own `ended` event, so a clip always plays out before
+               it leaves; the frame is the clip - it holds nothing else.
+
+               Both clips are 9:16 and about five seconds. Muted and
+               playsinline are what autoplay requires; there is no
+               `autoplay` attribute and preload is none, so nothing is
+               fetched until reel.js decides the reel is on and on screen.
+               Under 760px the reel is not shown and the clips - 15MB
+               between them - are never downloaded. With JS off there is
+               no reel at all (see the noscript rule), so the hero is
+               simply one column, which is correct rather than an empty
+               frame. Decorative: aria-hidden, nothing here is content.
+               ============================================================ -->
+          <aside class="hero__reel" data-reel aria-hidden="true">
+            <video class="hero__clip" muted playsinline preload="none" src="Assets/Videos/hero-reel-1.mp4"></video>
+            <video class="hero__clip" muted playsinline preload="none" src="Assets/Videos/hero-reel-2.mp4"></video>
+          </aside>
         </div>
       </section>
     </div><!-- /.hero-ground -->
@@ -315,7 +343,19 @@
          Both are placeholders. The slots take creative, the band takes
          client logos.
          ============================================================ -->
-    <section id="work" class="work">
+    <!-- ============================================================
+         The stack. "A glimpse at our work" pins once a fifth of it has
+         scrolled past, and "Companies who trust us" slides up over it and
+         covers it; scrolling back reverses it. The pin is position:sticky
+         on .work, so it is the browser's own scroll doing the work - no
+         listener, no jitter. The wrapper is what gives the sticky element
+         room to stay pinned: it is exactly as tall as the two sections, so
+         .work stays put until .clients has fully covered it and then
+         leaves with it. See .stack in site.css and stack.js for the push-
+         back polish. Nothing inside either section changed.
+         ============================================================ -->
+    <div class="stack" data-stack>
+    <section id="work" class="work" data-stack-pinned>
       <div class="wrap work__head">
         <h2>A glimpse at our work.</h2>
         <!-- The homepage carried no link to a case study at all, which meant
@@ -431,7 +471,7 @@
          out — so the wall is one value and one weight rather than five
          brand palettes fighting each other.
          ============================================================ -->
-    <section id="clients" class="clients">
+    <section id="clients" class="clients" data-stack-cover>
       <div class="wrap">
         <div class="clients__head">
           <h2>Companies who trust us.</h2>
@@ -450,6 +490,7 @@
         </ul>
       </div>
     </section>
+    </div><!-- /.stack -->
 
     <!-- ============================================================
          Platforms we work on. Structure is still inboundmedia.co's press
@@ -541,8 +582,8 @@
       <div class="wrap">
         <h2>Industries we already know.</h2>
         <p class="lead">
-          No learning curve on your budget. In these six we already know where
-          the leads come from, what they cost, and where the money leaks.
+          No learning curve on your budget. In these we already know where the
+          leads come from, what they cost, and where the money leaks.
         </p>
         <!-- A carousel. vertical-rail.js clones the cards and drifts them
              right to left on a seamless loop, about 9s per card, fading and
@@ -631,74 +672,59 @@
                 <a class="vcard__case" href="case-mantis.html">Mantis Moving case study</a>
               </span>
           </li>
-
+          <!-- PLACEHOLDER COPY. The problem/fix lines below are a sketch of the
+               shape, not a claim from a client - replace before public. -->
           <li class="vcard">
               <span class="vcard__media vcard__media--mark">
                 <svg class="vcard__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                  <path d="M5 12l-2 0l9 -9l9 9l-2 0"></path>
-                  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"></path>
-                  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"></path>
+                  <path d="M6 19a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                  <path d="M17 17h-11v-14h-2"></path>
+                  <path d="M6 5l14 1l-1 7h-13"></path>
                 </svg>
               </span>
               <span class="vcard__body">
-                <h3 class="vcard__name">Roofing</h3>
-                <span class="vcard__problem">Storm work and planned replacement look identical in the ad account, so budget follows whichever is cheaper that week instead of whichever is worth having.</span>
-                <span class="vcard__fix">We split storm response from planned replacement into separate campaigns with their own budgets and landing pages, so one stops quietly eating the other when the weather turns.</span>
+                <h3 class="vcard__name">Ecommerce</h3>
+                <span class="vcard__problem">Ad spend scales, margin does not. Blended ROAS looks fine while the best sellers quietly lose money once the ad cost is counted against them.</span>
+                <span class="vcard__fix">We run acquisition against contribution margin per SKU, not blended revenue, and put retention on the list before the next dollar of paid - so growth compounds instead of being rebought every month.</span>
                 <span class="vcard__tags">
                   <span class="vtag">Paid acquisition</span>
-                  <span class="vtag">Offer and positioning</span>
-                  <span class="vtag">Landing pages</span>
-                </span>
-              </span>
-              <span class="vcard__foot">
-                <span class="vcard__scope">Repair, replacement, storm response</span>
-              </span>
-          </li>
-
-          <li class="vcard">
-              <span class="vcard__media vcard__media--mark">
-                <svg class="vcard__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                  <path d="M7.502 19.423c2.602 2.105 6.395 2.105 8.996 0c2.602 -2.105 3.262 -5.708 1.566 -8.546l-4.89 -7.26c-.42 -.625 -1.287 -.803 -1.936 -.397a1.4 1.4 0 0 0 -.41 .397l-4.893 7.26c-1.695 2.838 -1.035 6.441 1.567 8.546z"></path>
-                </svg>
-              </span>
-              <span class="vcard__body">
-                <h3 class="vcard__name">Restoration</h3>
-                <span class="vcard__problem">The job is bought in the first hour of a flood or a fire, on a phone, usually by someone who has never needed the service before and has no idea who to call.</span>
-                <span class="vcard__fix">We hold the emergency terms at the hours they actually convert, put the phone number above everything else on the page, and measure to the dispatched job rather than the form fill.</span>
-                <span class="vcard__tags">
-                  <span class="vtag">Paid acquisition</span>
-                  <span class="vtag">Landing pages</span>
+                  <span class="vtag">Lifecycle and retention</span>
                   <span class="vtag">Tracking and attribution</span>
                 </span>
               </span>
               <span class="vcard__foot">
-                <span class="vcard__scope">Water, fire, mold</span>
+                <span class="vcard__scope">DTC, Shopify, marketplaces</span>
               </span>
           </li>
-
+          <!-- PLACEHOLDER COPY. Same note as above. -->
           <li class="vcard">
               <span class="vcard__media vcard__media--mark">
                 <svg class="vcard__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                  <path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1 -8.5 15a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3"></path>
+                  <path d="M3 21h18"></path>
+                  <path d="M5 21v-16a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v16"></path>
+                  <path d="M15 9h2a2 2 0 0 1 2 2v10"></path>
+                  <path d="M9 8h1"></path><path d="M9 12h1"></path><path d="M9 16h1"></path>
                 </svg>
               </span>
               <span class="vcard__body">
-                <h3 class="vcard__name">Insurance</h3>
-                <span class="vcard__problem">Carriers outbid every independent agency on the obvious terms, and the clicks cheap enough to win are shopping on price and nothing else.</span>
-                <span class="vcard__fix">We go after the coverage situations a call center handles badly, bundled, high-value and hard-to-place, and build the quote form to qualify on that instead of chasing the cheapest click.</span>
+                <h3 class="vcard__name">B2B</h3>
+                <span class="vcard__problem">A long sales cycle means the ad platform never sees the close, so it optimises for whoever fills a form fastest - not whoever signs.</span>
+                <span class="vcard__fix">We feed qualified pipeline and closed-won back into the platforms as the conversion, so bidding learns what a real customer looks like instead of what a lead form looks like.</span>
                 <span class="vcard__tags">
-                  <span class="vtag">Offer and positioning</span>
+                  <span class="vtag">Tracking and attribution</span>
                   <span class="vtag">Paid acquisition</span>
-                  <span class="vtag">Landing pages</span>
+                  <span class="vtag">Offer and positioning</span>
                 </span>
               </span>
               <span class="vcard__foot">
-                <span class="vcard__scope">Independent and boutique agencies</span>
+                <span class="vcard__scope">Services, SaaS, agencies, distributors</span>
               </span>
           </li>
+
+
+
 
         </ul>
 
@@ -707,9 +733,9 @@
         <!-- Seventh element, deliberately not a seventh card: the six are
              where the method is sharpest, not the edge of who it fits. -->
         <p class="vgrid-note">
-          The six above are where we know the demand best, but the arrangement
-          is not limited to them. If you sell a service direct to consumers and
-          you are under $15M a year, it works the same way.
+          These are where we know the demand best, but the arrangement is not
+          limited to them. If you are under $15M a year and can measure what
+          we do, it works the same way.
           <a href="#contact">Tell us what you are trying to grow</a>.
         </p>
       </div>
@@ -1108,6 +1134,11 @@
   <script defer src="capabilities.js?v=2"></script>
 
   <script defer src="nav.js?v=3"></script>
+  <!-- The hero reel. Self-initialising, no GSAP. -->
+  <script defer src="reel.js?v=1"></script>
+  <noscript><style>.hero__reel { display: none; } .hero__grid { grid-template-columns: minmax(0, 1fr); }</style></noscript>
+  <!-- The work/clients stack: pin height and push-back. No GSAP. -->
+  <script defer src="stack.js?v=1"></script>
   <!-- Enquiry form reveal. Self-initialising and GSAP-free, same as
        nav.js - the form is a working <details> without it. -->
   <script defer src="enquire.js?v=4"></script>
