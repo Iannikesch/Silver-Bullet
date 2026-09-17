@@ -51,3 +51,14 @@ Tried: commit work-5's text roll and merge it. Wrong: `roll.js` was new, and
 tag pointing at a 404 on every page. A missing deferred script fails silently;
 a browser probe found zero rolled labels. Prevented by: `git status` before
 every commit, `/ship` verifying in a browser. Lesson: `-u` is not "all".
+
+## 2026-09-17: the shorthand that zeroes a gutter, again
+
+Tried: a capability page template. Wrong: `.cap-page { padding: X 0 Y }` on an
+element that is also `.wrap`, so the horizontal gutter went to 0 and the title
+sat on the viewport edge. capabilities.html has a comment warning about this
+exact rule two screens up. Also: a Playwright touch-emulation call stuck after
+a thrown test and made the next three desktop runs report hover as broken.
+Prevented by: reading the comment, and a fresh page per test run. Lesson:
+`padding-block` on anything that is also `.wrap`; never trust a probe after a
+throw.

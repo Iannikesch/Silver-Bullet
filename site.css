@@ -276,6 +276,7 @@
     }
 
     .nav {
+      position: relative;        /* the wide Capabilities panel hangs off this, not its toggle */
       display: flex;
       align-items: center;
       gap: clamp(calc(18px + 2px * var(--dial)), calc(2.5vw + 0.3vw * var(--dial)), calc(34px + 8px * var(--dial)));
@@ -522,36 +523,109 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ---- the two-column Capabilities panel ----
-       One column per group, rendered by capabilities.js. Each column is
-       a <details> held open on desktop (nav.js), so its summary is a
-       plain heading here and the accordion behaviour only exists on a
-       phone. */
+    /* ---- the Capabilities panel: three columns and a strip ----
+       Rendered by capabilities.js. Grid areas, top to bottom:
+
+         .        brands   brands      the parent label over the two brand
+         agencies b2b      b2c         columns, so the hierarchy is visible
+         shared   shared   shared      the set that runs under everything,
+                                       full width so it reads as a floor
+                                       and not a fourth column
+
+       Each column is a <details> held open on desktop by nav.js, so its
+       summary is a plain heading here; the accordion behaviour only
+       exists on a phone. The four <details> land in the areas by
+       source order, which is also the numbering order (01 to 25).
+
+       The panel is wider than a nav item, so it anchors to the nav's
+       right edge rather than the toggle's: anchored to the toggle it
+       runs off the left of the viewport at 1024px. Width is capped at
+       the viewport less the gutters for the same reason. */
+    .nav-dd--wide { position: static; }
+    .nav-dd--wide .nav-dd__panel {
+      right: 0;
+      width: min(calc(840px + 80px * var(--dial)), calc(100vw - 2 * var(--gutter, 24px)));
+      min-width: 0;
+      padding: var(--s-2) var(--s-3) var(--s-3);
+    }
+
     .nav-dd__cols {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0 8px;
-      min-width: 560px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-areas:
+        ".  brands brands"
+        "g1 g2     g3"
+        "sh sh     sh";
+      gap: 0 var(--s-2);
+    }
+    .nav-dd__parent { grid-area: brands; }
+    .nav-dd__group:nth-of-type(1) { grid-area: g1; }
+    .nav-dd__group:nth-of-type(2) { grid-area: g2; }
+    .nav-dd__group:nth-of-type(3) { grid-area: g3; }
+    .nav-dd__group--shared        { grid-area: sh; }
+
+    /* The parent label. Small and sentence-case: DESIGN.md rules out the
+       tracked-out all-caps eyebrow, so the hierarchy is carried by the
+       rule under it spanning both brand columns, not by letterspacing. */
+    .nav-dd__parent {
+      margin: 0 0 var(--s-1);
+      padding: var(--s-2) var(--s-3) var(--s-1);
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--steel-700);
     }
 
     .nav-dd__group { min-width: 0; }
-    .nav-dd__group + .nav-dd__group { border-left: 1px solid var(--border); padding-left: 8px; }
+    .nav-dd__group + .nav-dd__group:not(.nav-dd__group--shared) {
+      border-left: 1px solid var(--border);
+      padding-left: var(--s-2);
+    }
 
     .nav-dd__group-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      padding: 10px 12px 8px;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: .02em;
-      color: var(--steel-700);
+      gap: var(--s-3);
+      padding: var(--s-3) var(--s-3) 0;
       list-style: none;
       cursor: default;
     }
     .nav-dd__group-head::-webkit-details-marker { display: none; }
     .nav-dd__group-head .nav-dd__sign { display: none; }   /* no +/- on a heading */
+
+    .nav-dd__group-name {
+      font-size: calc(14px + 1px * var(--dial));
+      font-weight: 600;
+      letter-spacing: -.005em;
+      color: var(--steel-050);
+    }
+
+    .nav-dd__group-tag {
+      margin: var(--s-1) 0 var(--s-2);
+      padding: 0 var(--s-3);
+      font-size: 12px;
+      line-height: 1.45;
+      min-height: calc(2 * 1.45em);   /* two lines reserved, so the three lists start level */
+      color: var(--steel-700);
+    }
+
+    /* The shared strip: the foundation layer. A rule above it, the list
+       laid out across rather than down. */
+    .nav-dd__group--shared {
+      margin-top: var(--s-2);
+      padding-top: var(--s-1);
+      border-top: 1px solid var(--border);
+    }
+    /* Flex, not equal columns: the four names differ in length, and equal
+       tracks wrapped the longest one while leaving the shortest swimming.
+       Each takes its natural width and the row wraps only if it must. */
+    .nav-dd__list--row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 var(--s-2);
+    }
+    .nav-dd__list--row .cap-name { white-space: nowrap; }
 
     /* Resources is a plain single column. */
     .nav-dd__panel--single { min-width: 240px; }
@@ -565,11 +639,16 @@
     .nav-dd__list a {
       display: flex;
       align-items: baseline;
-      gap: 12px;
-      padding: calc(9px + 2px * var(--dial)) calc(12px + 2px * var(--dial));
+      gap: var(--s-3);
+      padding: calc(var(--s-2) + 2px * var(--dial)) var(--s-3);
       font-size: calc(14px + 1px * var(--dial));
       color: var(--steel-300);
       border-radius: var(--r-sm);
+      /* One duration for the row, the text and the number, so they move
+         as one thing. --dur-quick is the token for a state answering the
+         pointer. */
+      transition: color var(--dur-quick) var(--ease-hover),
+                  background-color var(--dur-quick) var(--ease-hover);
     }
 
     .nav-dd__list a:hover,
@@ -578,12 +657,19 @@
       background: var(--charcoal);
     }
 
-    .nav-dd__num {
+    /* The number is the quiet part of the row and it brightens with it.
+       Tabular figures in the body face, not monospace, per DESIGN.md. */
+    .nav-dd__list .cap-n {
       flex: none;
+      min-width: 2ch;
       font-size: 11px;
       color: var(--steel-700);
       font-variant-numeric: tabular-nums;
+      transition: color var(--dur-quick) var(--ease-hover);
     }
+    .nav-dd__list a:hover .cap-n,
+    .nav-dd__list a:focus-visible .cap-n { color: var(--steel-100); }
+    .nav-dd__list .cap-name { min-width: 0; }
 
     .nav-dd__all {
       display: block;
@@ -707,19 +793,39 @@
       /* Capabilities > B2B / B2C > list. The columns become stacked
          accordions: nav.js closes them on load here, and tapping a group
          head opens its list in place. */
-      .nav-dd__cols { display: block; min-width: 0; }
-      .nav-dd__group + .nav-dd__group { border-left: 0; padding-left: 0; }
+      /* Capabilities > a group > its list. Every group, the shared set
+         included, is a stacked accordion: nav.js closes them on load
+         here, and tapping a group head opens its list in place. */
+      .nav-dd--wide { position: relative; }
+      .nav-dd--wide .nav-dd__panel { width: auto; }
+      /* A column, so the Brands label can be ordered under Agencies and
+         over B2B. In source it comes first (it is a grid item on desktop);
+         stacked, it belongs where the hierarchy actually changes. */
+      .nav-dd__cols { display: flex; flex-direction: column; min-width: 0; }
+      .nav-dd__group:nth-of-type(1) { order: 0; }
+      .nav-dd__parent               { order: 1; }
+      .nav-dd__group:nth-of-type(2),
+      .nav-dd__group:nth-of-type(3) { order: 2; }
+      .nav-dd__group--shared        { order: 3; }
+      .nav-dd__group + .nav-dd__group:not(.nav-dd__group--shared) { border-left: 0; padding-left: 0; }
       .nav-dd__group { border-top: 1px solid var(--border); }
+      .nav-dd__group--shared { margin-top: 0; padding-top: 0; }
+      .nav-dd__parent {
+        margin: 0;
+        padding: var(--s-3) 0 var(--s-1);
+        border-bottom: 0;
+      }
       .nav-dd__group-head {
-        padding: 14px 0;
-        font-size: 15px;
-        color: var(--steel-100);
+        padding: var(--s-4) 0;
         cursor: pointer;
       }
+      .nav-dd__group-name { font-size: 15px; color: var(--steel-100); }
       .nav-dd__group-head .nav-dd__sign { display: block; }
       .nav-dd__group[open] .nav-dd__group-head .nav-dd__sign::after { transform: rotate(0deg); opacity: 0; }
-      .nav-dd__group .nav-dd__list { padding-bottom: 8px; }
-      .nav-dd__list a { padding: 11px 0 11px 8px; font-size: 15px; }
+      .nav-dd__group-tag { padding: 0; margin: 0 0 var(--s-2); min-height: 0; }
+      .nav-dd__group .nav-dd__list { padding-bottom: var(--s-2); }
+      .nav-dd__list--row { display: block; }
+      .nav-dd__list a { padding: var(--s-3) 0 var(--s-3) var(--s-2); font-size: 15px; }
 
       /* The one amber element stays the CTA, and it goes full width. */
       .nav .cta-secondary {
@@ -2238,16 +2344,17 @@
        six of them at full white would flatten the hierarchy. */
 
 
-    /* ---------- capabilities: two panels ----------
-       Rendered by capabilities.js from the one data object, so the group
-       names, descriptors and lists here are never typed twice. Two big
-       panels side by side, divided by one hairline; below 900px they
-       stack, first group first.
+    /* ---------- capabilities: three groups and a floor ----------
+       Rendered by capabilities.js from the one data object, on the home
+       page and on capabilities.html alike. Grid areas mirror the nav:
 
-       Bold on purpose. The group label is display type at hero scale,
-       the capability names are a step under a section heading, and the
-       panels take the whole content width. No boxes, no fills, no
-       radius - the separation is one rule, per DESIGN.md. */
+         .        brands   brands
+         agencies b2b      b2c
+         shared   shared   shared
+
+       Bold, per the earlier two-panel version: group names are display
+       type, the names under them a step below a section heading, one
+       hairline between columns. No boxes, no fills, no radius. */
 
     .capabilities {
       padding: var(--space-xl) 0;
@@ -2256,95 +2363,224 @@
 
     .cap-panels {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-areas:
+        ".  brands brands"
+        "g1 g2     g3"
+        "sh sh     sh";
+      gap: 0 var(--space-md);
       margin-top: var(--space-md);
     }
+    .cap-parent { grid-area: brands; }
+    .cap-panel:nth-of-type(1) { grid-area: g1; }
+    .cap-panel:nth-of-type(2) { grid-area: g2; }
+    .cap-panel:nth-of-type(3) { grid-area: g3; }
+    .cap-shared { grid-area: sh; }
 
-    .cap-panel {
-      min-width: 0;
-      padding: 0 var(--space-md) 0 0;
+    /* The parent label: sentence case, carried by the rule beneath it
+       spanning both brand columns, not by tracking. */
+    .cap-parent {
+      margin: 0 0 var(--s-6);
+      padding-bottom: var(--s-3);
+      border-bottom: 1px solid var(--border);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--steel-700);
     }
+
+    .cap-panel { min-width: 0; }
     .cap-panel + .cap-panel {
-      padding: 0 0 0 var(--space-md);
+      padding-left: var(--space-md);
+      margin-left: calc(-1 * var(--space-md));
       border-left: 1px solid var(--border);
     }
 
-    /* Hero scale. --white is rationed to headlines and this is one. */
+    /* Display scale, sized for a third of the width rather than half. */
     .cap-panel__label {
       margin: 0;
-      font-size: clamp(56px, 8vw, 112px);
+      font-size: clamp(40px, 4.6vw, 68px);
       font-weight: 800;
-      line-height: .92;
+      line-height: .95;
       letter-spacing: -.03em;
       color: var(--white);
     }
 
     .cap-panel__tag {
-      margin: 18px 0 0;
-      font-size: clamp(17px, 1.5vw, 20px);
+      margin: var(--s-4) 0 0;
+      font-size: clamp(16px, 1.3vw, 19px);
       line-height: 1.5;
+      min-height: calc(2 * 1.5em);    /* two lines reserved: a one-line descriptor must not pull its list up */
       color: var(--steel-300);
-      max-width: 34ch;
+      max-width: 30ch;
     }
 
-    .cap-panel__list {
+    .cap-panel__list,
+    .cap-shared__list {
       list-style: none;
-      margin: var(--space-md) 0 0;
+      margin: var(--space-sm) 0 0;
       padding: 0;
     }
 
-    .cap-panel__list li {
-      position: relative;
-      padding: 22px 0 22px 52px;
-      border-top: 1px solid var(--border);
-      /* Anchor landings from the dropdown sit clear of the fixed header. */
-      scroll-margin-top: calc(var(--nav-h, 72px) + 24px);
-    }
+    .cap-panel__list li { border-top: 1px solid var(--border); }
     .cap-panel__list li:last-child { border-bottom: 1px solid var(--border); }
 
-    .cap-panel__list .cap-num {
-      position: absolute;
-      left: 0;
-      top: 26px;
-      margin: 0;
-    }
-
-    .cap-panel__name {
-      font-size: clamp(22px, 2.2vw, 30px);
-      font-weight: 600;
-      line-height: 1.15;
-      letter-spacing: -.01em;
-      color: var(--steel-050);
+    /* Every row is one link: number, then name. The row lights, the
+       number brightens with it, one duration. */
+    .cap-panel__list a,
+    .cap-shared__list a {
+      display: flex;
+      align-items: baseline;
+      gap: var(--s-4);
+      padding: var(--s-4) 0;
       text-decoration: none;
+      color: var(--steel-050);
+      transition: color var(--dur-quick) var(--ease-hover);
     }
-    .cap-panel__name:hover,
-    .cap-panel__name:focus-visible { color: var(--white); }
+    .cap-panel__list a:hover,
+    .cap-panel__list a:focus-visible,
+    .cap-shared__list a:hover,
+    .cap-shared__list a:focus-visible { color: var(--white); }
 
-    .cap-panel__desc {
-      margin: 8px 0 0;
-      font-size: 15px;
-      line-height: 1.55;
-      color: var(--text);
-      max-width: 52ch;
+    .cap-panel__list .cap-name,
+    .cap-shared__list .cap-name {
+      font-size: clamp(18px, 1.5vw, 22px);
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -.01em;
     }
 
-    /* Deep-link landing: the row you were sent to takes the lit edge. */
-    .cap-panel__list li:target { border-top-color: var(--border-lit); }
+    .cap-panel__list .cap-n,
+    .cap-shared__list .cap-n {
+      flex: none;
+      min-width: 2ch;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--steel-700);
+      font-variant-numeric: tabular-nums;
+      transition: color var(--dur-quick) var(--ease-hover);
+    }
+    .cap-panel__list a:hover .cap-n,
+    .cap-panel__list a:focus-visible .cap-n,
+    .cap-shared__list a:hover .cap-n,
+    .cap-shared__list a:focus-visible .cap-n { color: var(--steel-100); }
+
+    /* The floor. A rule above, the four laid across. */
+    .cap-shared {
+      margin-top: var(--space-md);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--border);
+    }
+    .cap-shared__label {
+      margin: 0;
+      font-size: clamp(24px, 2.2vw, 32px);
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: var(--white);
+    }
+    .cap-shared__tag {
+      margin: var(--s-2) 0 0;
+      font-size: clamp(15px, 1.2vw, 17px);
+      color: var(--steel-300);
+    }
+    .cap-shared__list {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0 var(--s-6);
+    }
+    .cap-shared__list li { border-top: 1px solid var(--border); }
 
     @media (max-width: 900px) {
-      .cap-panels { grid-template-columns: 1fr; }
-      .cap-panel,
-      .cap-panel + .cap-panel { padding: 0; border-left: 0; }
-      .cap-panel + .cap-panel {
-        margin-top: var(--space-xl);
-        padding-top: var(--space-xl);
-        border-top: 1px solid var(--border);
+      .cap-panels {
+        grid-template-columns: 1fr;
+        grid-template-areas: "g1" "brands" "g2" "g3" "sh";
       }
+      .cap-parent { margin-top: var(--space-lg); }
+      .cap-panel + .cap-panel { padding-left: 0; margin-left: 0; border-left: 0; }
+      .cap-panel + .cap-panel,
+      .cap-panel:first-of-type + .cap-parent { margin-top: var(--space-lg); }
+      .cap-shared__list { grid-template-columns: 1fr; gap: 0; }
+      .cap-panel__tag { min-height: 0; }
     }
 
-    /* No JS: the panels never render. Say so rather than leave a hole. */
+    /* No JS: the section never renders. Say so rather than leave a hole. */
     .cap-panels:empty + .cap-fallback { display: block; }
     .cap-fallback { display: none; margin-top: var(--space-md); }
+
+    /* ---------- the capability page ----------
+       capability.html, rendered by capabilities.js from ?c={slug}.
+       Deliberately plain: the content is being written later. */
+    /* padding-block, not the shorthand: this element is also .wrap, and the
+       shorthand zeroes its gutter. */
+    .cap-page { padding-block: var(--space-lg) var(--space-xl); }
+    .cap-page__group {
+      display: flex;
+      align-items: baseline;
+      gap: var(--s-3);
+      margin: 0 0 var(--s-4);
+      font-size: 15px;
+      color: var(--steel-700);
+    }
+    .cap-page__group .cap-n { font-weight: 700; font-variant-numeric: tabular-nums; }
+    .cap-page__title {
+      margin: 0;
+      font-size: clamp(44px, 6vw, 96px);
+      line-height: .98;
+      letter-spacing: -.03em;
+      max-width: 14ch;
+    }
+    .cap-page__tag {
+      margin: var(--s-5) 0 0;
+      font-size: clamp(17px, 1.5vw, 21px);
+      line-height: 1.5;
+      color: var(--steel-300);
+      max-width: 48ch;
+    }
+    .cap-page__body {
+      margin-top: var(--space-md);
+      max-width: 64ch;
+      font-size: clamp(17px, 1.4vw, 19px);
+      line-height: 1.65;
+      color: var(--text);
+    }
+    .cap-page__body p + p { margin-top: var(--s-4); }
+    .cap-page__body--empty { color: var(--steel-500); }
+    .cap-page__cta { margin-top: var(--space-md); }
+    .cap-page__more {
+      margin-top: var(--space-lg);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--border);
+    }
+    .cap-page__more-head,
+    .cap-page__group-name {
+      margin: 0;
+      font-size: clamp(22px, 2vw, 30px);
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: var(--white);
+    }
+    .cap-page__group-tag { margin: var(--s-2) 0 0; color: var(--steel-300); }
+    .cap-page__list {
+      list-style: none;
+      margin: var(--s-6) 0 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 0 var(--s-6);
+    }
+    .cap-page__list li { border-top: 1px solid var(--border); }
+    .cap-page__list a {
+      display: flex;
+      align-items: baseline;
+      gap: var(--s-3);
+      padding: var(--s-3) 0;
+      color: var(--steel-050);
+      text-decoration: none;
+      transition: color var(--dur-quick) var(--ease-hover);
+    }
+    .cap-page__list a:hover,
+    .cap-page__list a:focus-visible { color: var(--white); }
+    .cap-page__list .cap-n { font-size: 12px; font-weight: 700; color: var(--steel-700); font-variant-numeric: tabular-nums; }
+    .cap-page__all { margin-top: var(--space-md); display: grid; gap: var(--space-md); }
 
     /* ---------- who we work with: the vertical cards ----------
        Each card is one <a>. The whole tile is the target, so there is no

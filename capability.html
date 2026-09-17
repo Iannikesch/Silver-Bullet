@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Client testimonials, rev share marketing | Silver Bullet</title>
-  <meta name="description" content="What Silver Bullet clients say about being on rev share, in their own words, with the numbers the arrangement produced.">
-  <link rel="canonical" href="https://silverbulletagency.com/testimonials.html">
+  <title>Capability | Silver Bullet</title>
+  <meta name="description" content="One of the capabilities Silver Bullet runs, on rev share or profit share.">
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="https://silverbulletagency.com/capability.html">
 
   <script type="application/ld+json">
 {
@@ -21,7 +22,7 @@
     {
       "@type": "ListItem",
       "position": 2,
-      "name": "Testimonials"
+      "name": "Capability"
     }
   ]
 }
@@ -37,20 +38,20 @@
   <link rel="manifest" href="/site.webmanifest">
   <meta name="theme-color" content="#0A0D0E">
   <!-- Social card. Absolute URLs, as the OG spec requires. -->
-  <meta property="og:url" content="https://silverbulletagency.com/testimonials.html">
+  <meta property="og:url" content="https://silverbulletagency.com/capability.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Silver Bullet">
-  <meta property="og:title" content="Client testimonials, rev share marketing | Silver Bullet">
-  <meta property="og:description" content="Clients on what changes when the agency is paid out of the result.">
+  <meta property="og:title" content="Capability | Silver Bullet">
+  <meta property="og:description" content="One of the capabilities Silver Bullet runs, on rev share or profit share.">
   <meta property="og:image" content="https://silverbulletagency.com/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="What Silver Bullet clients say about working on rev share">
+  <meta property="og:image:alt" content="Silver Bullet capabilities: paid acquisition, landing pages, tracking">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Client testimonials, rev share marketing | Silver Bullet">
-  <meta name="twitter:description" content="Clients on what changes when the agency is paid out of the result.">
+  <meta name="twitter:title" content="Capability | Silver Bullet">
+  <meta name="twitter:description" content="One of the capabilities Silver Bullet runs, on rev share or profit share.">
   <meta name="twitter:image" content="https://silverbulletagency.com/og-image.png">
-  <meta name="twitter:image:alt" content="What Silver Bullet clients say about working on rev share">
+  <meta name="twitter:image:alt" content="Silver Bullet capabilities: paid acquisition, landing pages, tracking">
 
 
   <!-- Both script origins, opened early. Every page pulls deferred JS from
@@ -77,101 +78,10 @@
 
 
   <style>
-    /* Testimonials. The quote treatment is the case pages' blockquote —
-       lit left edge, no card, no shadow — set larger because here the quote
-       is the content rather than a break in it. */
-
-    .tm-hero { padding-block: var(--space-lg) var(--space-md); }  /* padding-block, not the shorthand: the section is also .wrap, and the shorthand was zeroing its gutter */
-    .tm-hero .lead { max-width: 58ch; margin-top: 20px; }
-
-    .tm-list {
-      margin: 0;
-      padding: 0 0 var(--space-xl);
-      list-style: none;
-    }
-
-    /* Top and bottom both, so this is half the gap between two quotes. */
-    .tm {
-      margin: 0;
-      padding: var(--space-sm) 0;
-      border-top: 1px solid var(--border);
-    }
-
-    .tm blockquote {
-      max-width: 30ch;
-      margin: 0;
-      padding-left: var(--space-sm);
-      border-left: 1px solid var(--border-lit);
-    }
-
-    .tm blockquote p {
-      margin: 0;
-      color: var(--steel-050);
-      font-size: clamp(calc(21px + 1px * var(--dial)), 2.6vw, calc(32px + 4px * var(--dial)));
-      line-height: 1.3;
-      letter-spacing: -0.02em;
-      text-wrap: pretty;
-    }
-
-    /* Stacked, not joined with dots — DESIGN.md rules those out, and at
-       three parts a run-on line stops being readable anyway. */
-    .tm figcaption {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 6px;
-      margin-top: 22px;
-      padding-left: calc(var(--space-sm) + 1px);
-    }
-
-    .tm__who   { color: var(--steel-100); font-size: calc(15px + 2px * var(--dial)); font-weight: 600; }
-    .tm__what  { color: var(--text-muted); font-size: calc(14px + 1px * var(--dial)); }
-
-    .tm__case {
-      margin-top: 6px;
-      color: var(--steel-500);
-      font-size: calc(14px + 1px * var(--dial));
-      text-decoration: none;
-      border-bottom: 1px solid var(--border-lit);
-      padding-bottom: 2px;
-      transition: color .18s ease, border-color .18s ease;
-    }
-    .tm__case:hover { color: var(--white); border-color: var(--steel-500); }
-
-    /* Wide enough and the quote sits beside its attribution rather than
-       above it — the same two-column move the case figures use.
-
-       The attribution column is sized to its CONTENT, not to a share of the
-       page. At 1.35fr / 1fr it took 42% of a 1264px column to hold a name
-       and three short meta lines, which left roughly 460px of empty column
-       running the full height of every quote — and the taller the quote,
-       the bigger the void. Worse, it squeezed the quote into ~460px, so the
-       long ones ran to sixteen lines and made the void taller still.
-
-       Capping the right column near its natural width fixes both ends at
-       once: the quote gets the remaining ~870px and loses half its lines. */
-    @media (min-width: 900px) {
-      .tm {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
-        gap: var(--space-sm) clamp(32px, 5vw, 72px);
-        align-items: start;
-      }
-      .tm blockquote { max-width: none; }
-      .tm figcaption { margin-top: 6px; padding-left: 0; }
-    }
-
-    .tm-end {
-      padding-block: var(--space-lg);   /* not the shorthand: this is also .wrap */
-      border-top: 1px solid var(--border);
-    }
-    .tm-end h2 { max-width: 20ch; }
-    .tm-end .lead { max-width: 54ch; margin-top: 18px; }
-    .tm-end .cta-row { margin-top: 32px; }
-
-    @media (prefers-reduced-motion: reduce) {
-      .tm__case { transition: none; }
-    }
+    /* This page is one template. capabilities.js reads ?c={slug}, finds
+       the capability, and renders it into [data-cap-page]. All of its
+       styling is .cap-page* in site.css. */
+    .cap-foot { padding-bottom: var(--space-xl); }
   </style>
 </head>
 
@@ -333,123 +243,13 @@
 
   <main id="top">
 
-    <section class="wrap tm-hero">
-      <h1 class="tx-rim-text" data-texture="rim">What clients make of the deal.</h1>
-      <p class="lead">
-        Both of these are rev share. Neither client was paying a flat fee to
-        stay pleased with us, which is the only reason the first quote
-        exists at all.
-      </p>
-    </section>
-
-    <div class="wrap">
-      <ul class="tm-list">
-
-        <!-- Plumbing first, deliberately. It opens by admitting the work was
-             worth nothing at the start, which is the one thing a testimonial
-             can say that an agency cannot say about itself. Same running
-             order as the homepage band. Copy verbatim from Ian, 2026-09-17;
-             attribution is vertical and region rather than a company name,
-             on instruction. See the note on the homepage band. -->
-        <li>
-          <figure class="tm">
-            <blockquote>
-              <p>&ldquo;The commercial side was worth nothing when we started and I knew it. Six
-              weeks in I was ready to call it. I&rsquo;ve done that to two other agencies, so
-              that&rsquo;s not me talking tough. Only reason I let it ride is it wasn&rsquo;t
-              costing me anything it hadn&rsquo;t already made. What I didn&rsquo;t expect was
-              the first month being mostly them just figuring out where my work came from. They
-              matched up the calls to the actual accounts &mdash; I had three property managers
-              calling from four different numbers and I&rsquo;d been counting them as seven
-              customers. Seven. For years. Around week eight the commercial calls started and
-              they were the right kind, buildings that call you back, not somebody&rsquo;s drain
-              at eleven at night. We&rsquo;re up around fifty percent. I still think most
-              marketing companies are full of it. These ones weren&rsquo;t.&rdquo;</p>
-            </blockquote>
-            <figcaption>
-              <span class="tm__who">Owner, commercial plumbing, West Michigan</span>
-              <span class="tm__what">+50% revenue growth in two months</span>
-              <span class="tm__what">A single-digit share of tracked new revenue</span>
-              <a class="tm__case" href="case-nsp.html">Read the case study</a>
-            </figcaption>
-          </figure>
-        </li>
-
-        <li>
-          <figure class="tm">
-            <blockquote>
-              <p>&ldquo;We were at the mercy of LSAs for years. Google changes something, somebody
-              outbids you, phone&rsquo;s dead for a week, nothing you can do but wait. First
-              thing they did was map out where every booked job was actually coming from, which
-              nobody had ever shown me. The paid search account is the first channel
-              that&rsquo;s mine. I know what a booked move costs me and I know roughly what next
-              week looks like. Turn it up when I want more.&rdquo;</p>
-            </blockquote>
-            <figcaption>
-              <span class="tm__who">Owner, moving &amp; storage</span>
-              <span class="tm__what">~$60k booked from ~$2,000 of attributable ad spend</span>
-              <span class="tm__what">A low-teens share of incremental gross profit</span>
-              <a class="tm__case" href="case-mantis.html">Read the case study</a>
-            </figcaption>
-          </figure>
-        </li>
-
-        <li>
-          <figure class="tm">
-            <blockquote>
-              <p>&ldquo;Thirty years of word of mouth and a website my brother-in-law&rsquo;s kid
-              built that just sat there. We&rsquo;d never deliberately spent a dollar to go get
-              work. I dragged my feet on this for probably eight months before I said yes, and
-              the onboarding was slower than I&rsquo;d like &mdash; took about five weeks before
-              anything went live. But they tied the phone calls back to where people were
-              actually finding us, and it turned out a chunk of what I assumed was referrals was
-              people who&rsquo;d already looked us up and just didn&rsquo;t tell me that. Same
-              trucks, same guys, same number. New site. People land on it now and they
-              call.&rdquo;</p>
-            </blockquote>
-            <figcaption>
-              <span class="tm__who">Owner, HVAC, SE Michigan</span>
-              <span class="tm__what">+25% revenue growth in two months</span>
-              <span class="tm__what">A single-digit share of tracked new revenue</span>
-              <a class="tm__case" href="case-vitality.html">Read the case study</a>
-            </figcaption>
-          </figure>
-        </li>
-
-        <!-- Galway has no case study page yet, so this one carries no
-             "read the case" link rather than a link to nothing. Add the
-             <a class="tm__case"> back the day the page exists. -->
-        <li>
-          <figure class="tm">
-            <blockquote>
-              <p>&ldquo;Doubled revenue in seven months with the same headcount, which is not what
-              I came in asking for. I asked for traffic. What I got was somebody stitching the
-              order data back to the ad clicks and then sitting me down and telling me which
-              products to stop advertising entirely. Two of what I thought were my best sellers
-              were underwater once you put the spend against them. Four years and nobody had put
-              that in front of me. The growth is nice. Knowing which half to feed is the part
-              I&rsquo;d pay for again.&rdquo;</p>
-            </blockquote>
-            <figcaption>
-              <span class="tm__who">Founder, DTC e-commerce</span>
-              <span class="tm__what">2x revenue in seven months</span>
-              <span class="tm__what">Ecommerce, paid acquisition and retention</span>
-            </figcaption>
-          </figure>
-        </li>
-
-      </ul>
-    </div>
-
-    <section class="wrap tm-end">
-      <h2>Four clients is not a wall of proof.</h2>
-      <p class="lead">
-        It is what we have said out loud so far, and we would rather show four
-        real ones than pad the page. The numbers behind three of them are on the
-        case studies, including how they were measured.
-      </p>
-      <div class="cta-row">
-        <a class="cta-secondary" href="work.html">See the work</a>
+    <!-- The whole page is rendered here by capabilities.js from the slug
+         in the query string. With the script absent or a bad slug the
+         fallback below is what shows: a link out, not a broken page. -->
+    <section class="wrap cap-page" aria-labelledby="cap-page-title">
+      <div data-cap-page>
+        <h1 id="cap-page-title" class="cap-page__title">Capabilities</h1>
+        <p class="cap-page__tag">Every capability we run is listed on <a href="capabilities.html" data-track="capability-fallback-all">the capabilities page</a>.</p>
       </div>
     </section>
 

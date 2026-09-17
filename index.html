@@ -136,10 +136,10 @@
              by capabilities.js from the one data object it holds, so this
              list is never typed a second time. With that script absent the
              panel is empty and the summary still works as a link. -->
-        <details class="nav-dd">
+        <details class="nav-dd nav-dd--wide">
           <summary class="nav-dd__toggle">Capabilities<span class="nav-dd__sign" aria-hidden="true"></span></summary>
           <div class="nav-dd__panel" data-cap-menu>
-            <noscript><a class="nav-dd__all" href="capabilities.html">All capabilities</a></noscript>
+            <noscript><a class="nav-dd__all" href="capabilities.html" data-track="nav-capabilities-all">All capabilities</a></noscript>
           </div>
         </details>
 
@@ -728,6 +728,27 @@
           we do, it works the same way.
           <a href="#contact">Tell us what you are trying to grow</a>.
         </p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         Capabilities.
+
+         Rendered by capabilities.js from the one data object: the three
+         groups, the Brands label over the two brand columns, and the
+         shared set as a floor underneath. Every name links to its page
+         (capability.html?c=slug). Nothing about the capabilities is
+         written here, so this section, the nav dropdown and the pages
+         can never disagree.
+
+         Order on the page: who we work with, then what we do for them.
+         ============================================================ -->
+    <section id="capabilities" class="capabilities" aria-labelledby="capabilities-head">
+      <div class="wrap">
+        <h2 id="capabilities-head">Every capability, sorted by who it is for.</h2>
+        <div class="cap-panels" data-cap-section></div>
+        <!-- Shown only when the script never ran and the grid is empty. -->
+        <p class="cap-fallback"><a href="capabilities.html" data-track="capabilities-fallback-all">See every capability</a>, grouped for agencies, B2B and B2C brands.</p>
       </div>
     </section>
 

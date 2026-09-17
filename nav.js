@@ -46,23 +46,37 @@
     if (!summary) return;
 
     var shut = null;
+    var byHover = false;     /* opened by the pointer arriving, not by a click */
 
     function close() {
       clearTimeout(shut);
       dd.open = false;
+      byHover = false;
     }
 
     dd.addEventListener('mouseenter', function () {
       if (!fine.matches) return;
       clearTimeout(shut);
       closeAll(dd);
+      if (!dd.open) byHover = true;
       dd.open = true;
+    });
+
+    /* Hover has already opened it by the time the pointer reaches the
+       summary, so a click there would toggle it shut: open on the way
+       in, closed on arrival. The first click after a hover-open is
+       swallowed and the menu stays; the next click closes it as usual. */
+    summary.addEventListener('click', function (e) {
+      if (dd.open && byHover) {
+        e.preventDefault();
+        byHover = false;
+      }
     });
 
     dd.addEventListener('mouseleave', function () {
       if (!fine.matches) return;
       clearTimeout(shut);
-      shut = setTimeout(function () { dd.open = false; }, CLOSE_DELAY);
+      shut = setTimeout(function () { dd.open = false; byHover = false; }, CLOSE_DELAY);
     });
 
     /* Opening one by click or keyboard shuts the other, so two panels
