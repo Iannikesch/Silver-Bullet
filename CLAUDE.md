@@ -33,14 +33,19 @@ framework, say so and ask before doing it.
 Movement is a priority for this site, but it is rationed. What moves: the bullet
 intro, the reactive chrome on two elements, three marquee bands — the hook
 banner, the creative conveyor and the logo band — two scroll-triggered
-reveals (the client wall, and the platform band under "Platforms we work on"), and
-the testimonial band, which advances itself on a 7s dwell. Nothing else does.
+reveals (the client wall, and the platform band under "Platforms we work on"), the
+testimonial band, which advances itself on a 7s dwell, and the verticals
+carousel, which drifts its industry cards on a continuous loop at about 9s per
+card. Nothing else does.
 
-The testimonial band is the fourth ambient mover, which DESIGN.md said would
-force a re-examination of the whole ambient rule. That re-examination is
-written up under "The fourth mover" — it is allowed because it yields to
-hover and focus, holds off screen, and stops permanently the moment the
-visitor picks a quote. There is no fifth.
+The testimonial band is the fourth ambient mover and the verticals carousel is
+the fifth. DESIGN.md said a fourth would force a re-examination and that there
+would be no fifth; both are written up there, under "The fourth mover" and
+"The fifth mover". The carousel is vanilla JS in `vertical-rail.js` — no GSAP —
+and is allowed because it yields to hover, focus and touch, holds off screen,
+fades everything but the centre card, and never starts under reduced motion.
+There is no sixth; the next thing that wants to move on its own is traded for
+one of these, not added.
 
 There are two scroll reveals, and they sit on consecutive sections. The client
 wall drops its heading in and rises its logos; the platform band slides its head

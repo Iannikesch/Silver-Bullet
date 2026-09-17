@@ -2009,13 +2009,17 @@
        everything. */
 
     /* ---- the rail ----------------------------------------------------
-       A scroll-snap strip, not a grid. Native scrolling does the dragging,
-       the momentum and the touch handling, which means no pointer maths to
-       get wrong and no library to load: trackpad, touch, shift-wheel and
-       the keyboard all work because the browser already knows how.
+       Two states, one element.
 
-       With JS off this is the whole component - six readable cards you can
-       scroll. vertical-rail.js only adds the depth falloff and the arrows. */
+       Declared here as a scroll-snap strip: with JS off, or under
+       prefers-reduced-motion, this is the whole component - six readable
+       cards at full strength you can scroll with a trackpad, a finger or
+       shift-wheel, because the browser already knows how.
+
+       vertical-rail.js adds .vrail--loop and the strip becomes a track:
+       a slow, continuous right-to-left loop that the script drives with
+       one number (--x) and fades with one number per card (--k). Those
+       rules are further down under "the loop". */
     .vrail {
       display: flex;
       gap: var(--space-sm);
@@ -2030,13 +2034,10 @@
          padding exists to prevent. Proximity leaves the two-card straddle a
          stable resting position and still settles a near-miss. */
       scroll-snap-type: x proximity;
-      /* No leading pad. Centring a pair inside the rail meant 232px of
-         dead space before the first card, which read as a broken margin
-         rather than as a carousel. The cards start on the same line as the
-         heading; what moves instead is the point the falloff measures from,
-         which vertical-rail.js puts over the leading pair. See --k there.
-
-         The trailing pad is what lets the LAST pair reach that point. */
+      /* No leading pad: the cards start on the same line as the heading.
+         The trailing pad only matters in the scroll-strip state, where it
+         lets the last card scroll clear of the right edge. The loop zeroes
+         it. */
       padding-inline-start: 0;
       padding-inline-end: max(0px, calc(100% - 2 * var(--vcard-w) - var(--space-sm)));
       scrollbar-width: none;
@@ -2060,42 +2061,75 @@
        .conveyor keeps --cols and --slot-gap to itself. */
     .verticals { --vcard-w: clamp(258px, 27vw, 384px); }
 
-    /* --k is published per card by vertical-rail.js: 0 in the middle of the
-       rail, 1 out at the edges. Everything below is that one number spent
-       three ways - the centre pair sit forward, full strength and lifted;
-       everything else sinks, dims and steps back.
-
-       transform and opacity only, so the whole falloff runs on the
-       compositor and a drag never touches layout. */
+    /* The resting card. No transform, no transition, no falloff: this is
+       what a no-JS or reduced-motion visitor gets, and it has to be
+       complete on its own. */
     .vcard {
       --k: 0;
       display: flex;
       flex-direction: column;
       width: 100%;
       background: var(--bg-raised);
-      transform: scale(calc(1 - 0.11 * var(--k, 0)))
-                 translateY(calc(14px * var(--k, 0)));
-      opacity: calc(1 - 0.58 * var(--k, 0));
-      /* --dur-base, not --dur-slow. textures.css reserves --dur-slow (1.15s)
-         for "one orchestrated moment, used sparingly", and this is the
-         opposite kind of motion: --k is retargeted every frame the rail
-         scrolls, so a 1.15s transition damps the cards a full second behind
-         the drag. 0.42s tracks the pointer with just enough lag to read as
-         weight - the same argument the reactive chrome makes at 0.3s. */
-      transition: transform var(--dur-base, .42s) var(--ease-metal, ease-out),
-                  opacity var(--dur-base, .42s) var(--ease-metal, ease-out),
-                  border-top-color var(--dur-base, .42s) var(--ease-metal, ease-out);
-      will-change: transform, opacity;
       border-top: 1px solid var(--border-lit);
       border-left: 1px solid var(--border);
       border-right: 1px solid var(--border);
       border-bottom: 1px solid var(--ink);
     }
 
-    /* The lit top edge is the one thing that gets BRIGHTER at the centre
-       rather than just less dim. Rim light, per DESIGN.md - a 1px edge, no
-       blur, nothing bleeding into the space around it. */
-    .vrail .vcard { border-top-color: color-mix(in srgb, var(--border-lit), var(--steel-100) calc((1 - var(--k, 0)) * 100%)); }
+    /* ---- the loop ----------------------------------------------------
+       vertical-rail.js puts .vrail--loop on the rail once it has cloned
+       the cards and taken over. The strip stops scrolling and becomes a
+       window onto a track that moves under it. */
+    .vrail--loop {
+      overflow: hidden;
+      scroll-snap-type: none;
+      padding-inline: 0;
+      /* Draggable, on the marquee bands' rules: pan-y keeps vertical page
+         scrolling working on touch while horizontal drags come to us. */
+      cursor: grab;
+      touch-action: pan-y;
+      /* Cards dissolve at the edges rather than getting cut off. The
+         fade is inside the rail's own box, so nothing bleeds into the
+         gutter - a mask, not a glow. */
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+              mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+    }
+
+    .vrail--loop.is-dragging { cursor: grabbing; }
+    /* Without this a drag selects the card copy instead of moving the track. */
+    .vrail--loop.is-dragging,
+    .vrail--loop.is-dragging * { user-select: none; }
+    /* The case-study link is a link, not a drag handle. */
+    .vrail--loop .vcard__case { cursor: pointer; }
+
+    /* --x is the track position, one value on the rail that every card
+       shares. --k is per card: 0 at the centre of the rail, 1 at either
+       edge. The brief spends it two ways - opacity to 30% and scale to
+       90% at the edges - and the lit top edge gets a third: it is the
+       one thing that gets BRIGHTER at the centre rather than just less
+       dim. Rim light, per DESIGN.md.
+
+       No transition. The script retargets --k every frame, so a
+       transition here would only lag the card behind its own position.
+       transform and opacity only, so the loop runs on the compositor. */
+    .vrail--loop .vcard {
+      transform: translateX(var(--x, 0px)) scale(calc(1 - 0.10 * var(--k, 0)));
+      opacity: calc(1 - 0.70 * var(--k, 0));
+      border-top-color: color-mix(in srgb, var(--border-lit), var(--steel-100) calc((1 - var(--k, 0)) * 100%));
+      will-change: transform, opacity;
+    }
+
+    /* Seconds for one card pitch to pass a fixed point - how long a card
+       takes to cross the centre. Drift, not a slide: the brief is 8-10s.
+       Read by vertical-rail.js; tune it here, not there. */
+    .verticals { --vrail-dwell: 9s; }
+
+    /* One card at a time on a phone. The card fills most of the rail so
+       the one in the middle is the one you read, with its neighbours
+       just showing at the edges. Same falloff, same pace. */
+    @media (max-width: 640px) {
+      .verticals { --vcard-w: 82%; }
+    }
 
     /* No hover state, and no cursor change: these cards do not go anywhere
        yet. A tile that lights up under the pointer promises a click it
@@ -2103,15 +2137,16 @@
        waiting on. When the vertical pages exist, wrap each card's contents
        in an <a> and the hover treatment comes back with it. */
 
-    /* Reduced motion gets the rail and none of the depth: every card at
-       full size and full strength, scrolling and nothing else. */
+    /* Reduced motion never gets .vrail--loop - the script bails before
+       adding it - so the base rules above are the whole story: the strip,
+       every card full size and full strength, scrolling and nothing else.
+       Belt and braces for the one case where the preference flips while
+       the class is on. */
     @media (prefers-reduced-motion: reduce) {
-      .vcard {
-        transform: none;
+      .vrail--loop .vcard {
+        transform: translateX(var(--x, 0px));
         opacity: 1;
-        transition: none;
       }
-      .vrail { scroll-behavior: auto; }
     }
 
     /* ---- arrows ----
@@ -2137,7 +2172,6 @@
     }
     .vrail-btn svg { width: 20px; height: 20px; stroke-width: 1.5; }
     .vrail-btn:hover:not(:disabled) { color: var(--white); border-color: var(--steel-700); }
-    .vrail-btn:disabled { color: var(--steel-900); border-color: var(--border); cursor: default; }
 
     /* ---- media: photo and icon share every dimension ----
        The two treatments have to read as one system, so the box is defined
