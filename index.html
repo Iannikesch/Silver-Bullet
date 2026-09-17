@@ -78,7 +78,6 @@
   <meta name="twitter:image" content="https://silverbulletagency.com/og-image.png">
   <meta name="twitter:image:alt" content="Silver Bullet, performance marketing on rev share or profit share">
 
-
   <!-- Bump ?v= whenever tokens.css changes. The hero headline is painted
        with background-clip:text, so a stale palette that drops the
        --chrome-* ramp would render it as invisible text. -->
@@ -103,7 +102,7 @@
   <!-- Calendly popup chrome. Its own stylesheet - the popup renders in
      Calendly's iframe and cannot take our tokens. -->
   <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
-  <link rel="stylesheet" href="site.css?v=56">
+  <link rel="stylesheet" href="site.css?v=58">
 
 </head>
 
@@ -276,15 +275,18 @@
 
     <section class="hero wrap">
         <!-- ============================================================
-             VSL SLOT. The video goes here, ABOVE the headline, when there
-             is one. Until then nothing is rendered: an empty 16:9 placeholder
-             filled the whole first fold with a box that said "VSL goes here",
-             which is not a landing page. To wire it in, drop the embed inside:
+             VSL SLOT — the video goes here, first, above the headline.
 
-               <div class="hero__video"> ...iframe... </div>
-
-             .hero__video already handles the 16:9 box and the lit top edge.
+             Wistia / YouTube / Vimeo iframes drop straight into this
+             container; the 16:9 box and the lit top edge are handled by
+             .hero__video. Delete the placeholder div when the embed lands.
              ============================================================ -->
+        <div class="hero__video">
+          <div class="hero__video-placeholder">
+            <strong>VSL goes here</strong>
+            <span class="meta">Paste the video embed into .hero__video in index.html</span>
+          </div>
+        </div>
 
         <h1 class="tx-rim-text" data-texture="rim">Growth partner invested in your success.</h1>
         <p class="lead">
@@ -418,81 +420,7 @@
       </div>
     </section>
 
-
-    <!-- ============================================================
-         The pages. Three full-length page screenshots, each in a frame a
-         third its height, and each travelling upward inside its frame as
-         you scroll. You see the whole page without a case study, a number
-         or a claim - proof by showing.
-
-         This is scroll-LINKED, not a reveal. It is scrubbed to scroll
-         position in motion.js (initScrollShots), so it is still when the
-         visitor is and reverses on the way back up, exactly like the
-         reactive chrome's scroll half. It does not add a third orchestrated
-         moment; DESIGN.md's ceiling on those stands.
-
-         The three here are stand-ins: they are this site's own case pages,
-         captured at 400px wide and cropped to the first 2000px. Swapping
-         one for a client landing page is dropping in a new pair of files
-         with the same names. width/height are set so the frame's travel is
-         known before the image arrives.
-
-         Without motion.js the screenshot simply sits at the top of its
-         frame. Under reduced motion the frame scrolls by hand instead.
-         ============================================================ -->
-    <section id="pages" class="pages">
-      <div class="wrap">
-        <h2>The pages it lands on.</h2>
-        <p class="lead">
-          Traffic is only half the job. These are the pages it arrives at,
-          top to bottom, so you can see what the click is being sent to.
-        </p>
-        <ul class="shots">
-          <li class="shot">
-            <figure class="shot__frame" data-scroll-shot>
-              <img src="Assets/web/page-nsp-400.webp"
-                   srcset="Assets/web/page-nsp-400.webp 400w, Assets/web/page-nsp-800.webp 800w"
-                   sizes="(max-width: 600px) 92vw, (max-width: 900px) 46vw, 30vw"
-                   width="400" height="2000" loading="lazy" decoding="async"
-                   alt="The NSP Plumbing page, top to bottom: emergency call-out headline, the tracked number, the service list, and the booking form">
-            </figure>
-            <figcaption class="shot__cap">
-              <span class="shot__name">NSP Plumbing</span>
-              <span class="shot__what">Service page</span>
-            </figcaption>
-          </li>
-
-          <li class="shot">
-            <figure class="shot__frame" data-scroll-shot>
-              <img src="Assets/web/page-vitality-400.webp"
-                   srcset="Assets/web/page-vitality-400.webp 400w, Assets/web/page-vitality-800.webp 800w"
-                   sizes="(max-width: 600px) 92vw, (max-width: 900px) 46vw, 30vw"
-                   width="400" height="2000" loading="lazy" decoding="async"
-                   alt="The Vitality Mechanical page, top to bottom: the rooftop crew, replacement and repair, maintenance plans, and the enquiry form">
-            </figure>
-            <figcaption class="shot__cap">
-              <span class="shot__name">Vitality Mechanical</span>
-              <span class="shot__what">Service page</span>
-            </figcaption>
-          </li>
-
-          <li class="shot">
-            <figure class="shot__frame" data-scroll-shot>
-              <img src="Assets/web/page-mantis-400.webp"
-                   srcset="Assets/web/page-mantis-400.webp 400w, Assets/web/page-mantis-800.webp 800w"
-                   sizes="(max-width: 600px) 92vw, (max-width: 900px) 46vw, 30vw"
-                   width="400" height="2000" loading="lazy" decoding="async"
-                   alt="The Mantis Moving page, top to bottom: the crew, the survey-first quote request, and the follow-up sequence">
-            </figure>
-            <figcaption class="shot__cap">
-              <span class="shot__name">Mantis Moving</span>
-              <span class="shot__what">Quote page</span>
-            </figcaption>
-          </li>
-        </ul>
-      </div>
-    </section>
-
+    
 
     <!-- ============================================================
          Companies who trust us. Structure is inboundmedia.co's client
@@ -787,7 +715,6 @@
       </div>
     </section>
 
-
     <!-- ============================================================
          Punchline band — .tx-bore
 
@@ -955,7 +882,6 @@
         </div>
       </div>
     </section>
-
 
     <!-- ============================================================
          Testimonials — structure mapped from inboundmedia.co's
@@ -1174,7 +1100,6 @@
   <!-- Dropdown enhancement. The menu works without it. -->
   <script defer src="booking.js?v=3"></script>
 
-
   <!-- The capabilities data, and the two things rendered from it: the nav
        dropdown's columns and (on the home page) the section. It has to run
        BEFORE nav.js: deferred scripts execute in document order, and nav.js
@@ -1197,7 +1122,7 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <!-- Bump ?v= whenever motion.js changes, same as tokens.css. -->
-  <script defer src="motion.js?v=18"></script>
+  <script defer src="motion.js?v=19"></script>
   <script defer src="textures.js?v=11"></script>
 
   <script defer src="boot.js?v=5"></script>

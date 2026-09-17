@@ -807,7 +807,11 @@
     .hero__video {
       position: relative;
       aspect-ratio: 16 / 9;
-      margin-top: var(--space-lg);
+      /* The video leads the hero now, so the gap goes under it, between the
+         box and the headline - not above it, where it would only push the
+         box down from the band. */
+      margin-top: 0;
+      margin-bottom: var(--space-lg);
       background: var(--bg-raised);
       border-top: 1px solid var(--border-lit);
       border-left: 1px solid var(--border);
@@ -2148,106 +2152,6 @@
     /* No JS: the panels never render. Say so rather than leave a hole. */
     .cap-panels:empty + .cap-fallback { display: block; }
     .cap-fallback { display: none; margin-top: var(--space-md); }
-
-    /* ---------- the pages: scroll-linked screenshots ----------
-       A card holds a full-length page screenshot inside a frame a third
-       its height, and the screenshot travels UP inside the frame as the
-       page scrolls down. You see the whole page without a case study, a
-       number or a claim. Proof by showing.
-
-       This is scroll-linked, not a reveal: it is scrubbed to scroll
-       position through ScrollTrigger in motion.js (initScrollShots), so
-       it is still when the visitor is and reverses when they go back up -
-       the same footing as the reactive chrome's scroll half. It is not a
-       third orchestrated moment, and DESIGN.md's ceiling on those is
-       untouched.
-
-       The frame follows .panel: lit top edge, --border down the sides,
-       --ink along the bottom. Square corners. The thing being shown is a
-       web page, so the frame reads as a viewport, not a photo mount. */
-
-    .pages {
-      padding: var(--space-xl) 0;
-      border-top: 1px solid var(--border);
-    }
-
-    .pages .lead { margin-top: 20px; }
-
-    .shots {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: var(--space-sm);
-      margin: var(--space-md) 0 0;
-      padding: 0;
-      list-style: none;
-    }
-    @media (max-width: 900px) { .shots { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 600px) { .shots { grid-template-columns: 1fr; } }
-
-    .shot {
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* The frame. Fixed aspect so the travel distance is knowable, and
-       overflow hidden so the screenshot is cropped to it rather than
-       stretching the card. */
-    .shot__frame {
-      position: relative;
-      aspect-ratio: 4 / 5;
-      margin: 0;
-      overflow: hidden;
-      background: var(--bg-raised);
-      border-top: 1px solid var(--border-lit);
-      border-left: 1px solid var(--border);
-      border-right: 1px solid var(--border);
-      border-bottom: 1px solid var(--ink);
-    }
-
-    /* --shot is the travel, in px, published by motion.js: 0 with the frame
-       at the bottom of the viewport, the full overshoot with it at the top.
-       transform only, so the scrub runs on the compositor and never
-       touches layout. The 0 fallback matters: with the script absent the
-       page is simply visible from the top, not blank. */
-    .shot__frame img {
-      display: block;
-      width: 100%;
-      height: auto;
-      transform: translateY(calc(var(--shot, 0) * -1px));
-      will-change: transform;
-    }
-
-    /* A hairline over the frame's own top edge would double up with the
-       lit border, so the caption sits below on its own rule instead. */
-    .shot__cap {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 14px 0 0;
-      margin-top: 14px;
-      border-top: 1px solid var(--border);
-    }
-
-    .shot__name {
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--steel-050);
-    }
-
-    .shot__what {
-      font-size: 13px;
-      color: var(--text-muted);
-      white-space: nowrap;
-    }
-
-    /* Reduced motion: no travel, and the frame scrolls by hand instead so
-       the whole page is still reachable. The scrollbar is left visible on
-       purpose - it is the only cue that there is more. */
-    @media (prefers-reduced-motion: reduce) {
-      .shot__frame { overflow-y: auto; }
-      .shot__frame img { transform: none; will-change: auto; }
-    }
 
     /* ---------- who we work with: the vertical cards ----------
        Each card is one <a>. The whole tile is the target, so there is no
