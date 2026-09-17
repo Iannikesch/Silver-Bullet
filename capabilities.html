@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Capabilities — paid search to retention — Silver Bullet</title>
-  <meta name="description" content="Paid acquisition, landing pages, offer and positioning, and more — each running on its own or as part of the whole, all paid on a share of revenue or profit.">
+  <title>Capabilities, paid search to retention | Silver Bullet</title>
+  <meta name="description" content="Paid acquisition, landing pages, offer and positioning, and more, each running on its own or as part of the whole, all paid on a share of revenue or profit.">
   <link rel="canonical" href="https://silverbulletagency.com/capabilities.html">
 
   <script type="application/ld+json">
@@ -40,17 +40,17 @@
   <meta property="og:url" content="https://silverbulletagency.com/capabilities.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Silver Bullet">
-  <meta property="og:title" content="Capabilities — paid search to retention — Silver Bullet">
+  <meta property="og:title" content="Capabilities, paid search to retention | Silver Bullet">
   <meta property="og:description" content="Every capability Silver Bullet runs, under one incentive: rev share and profit share.">
   <meta property="og:image" content="https://silverbulletagency.com/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Silver Bullet capabilities — paid acquisition, landing pages, tracking">
+  <meta property="og:image:alt" content="Silver Bullet capabilities: paid acquisition, landing pages, tracking">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Capabilities — paid search to retention — Silver Bullet">
+  <meta name="twitter:title" content="Capabilities, paid search to retention | Silver Bullet">
   <meta name="twitter:description" content="Every capability Silver Bullet runs, under one incentive: rev share and profit share.">
   <meta name="twitter:image" content="https://silverbulletagency.com/og-image.png">
-  <meta name="twitter:image:alt" content="Silver Bullet capabilities — paid acquisition, landing pages, tracking">
+  <meta name="twitter:image:alt" content="Silver Bullet capabilities: paid acquisition, landing pages, tracking">
 
   <!-- Bump ?v= whenever tokens.css changes. The hero headline is painted
        with background-clip:text, so a stale palette that drops the
@@ -85,7 +85,7 @@
        arrow appended to link text is on the Do-not list. */
 
     .cap-hero {
-      padding: var(--space-lg) 0 var(--space-md);
+      padding-block: var(--space-lg) var(--space-md); /* not the shorthand: this is also .wrap */
       text-align: center;
     }
 
@@ -109,7 +109,7 @@
       grid-template-columns: auto 1fr auto;
       align-items: center;
       gap: clamp(18px, 3vw, 40px);
-      padding: clamp(18px, 2.4vw, 26px) 0;
+      padding: clamp(calc(18px + 4px * var(--dial)), calc(2.4vw + 0.4vw * var(--dial)), calc(26px + 10px * var(--dial))) 0;
       border-bottom: 1px solid var(--border);
       text-decoration: none;
       transition: padding-left .35s var(--ease-settle), border-color .25s ease;
@@ -123,9 +123,10 @@
     }
 
     .cap-row__plate {
-      width: clamp(96px, 13vw, 168px);
+      width: clamp(calc(96px + 24px * var(--dial)), calc(13vw + 4vw * var(--dial)), calc(168px + 92px * var(--dial)));
       aspect-ratio: 3 / 2;
       overflow: hidden;
+      border-radius: var(--r-sm);
       background: var(--bg-raised);
       border-top: 1px solid var(--border-lit);
       border-left: 1px solid var(--border);
@@ -153,7 +154,7 @@
 
     .cap-row__num {
       display: block;
-      font-size: 13px;
+      font-size: calc(13px + 1px * var(--dial));
       color: var(--steel-900);
       margin-bottom: 6px;
     }
@@ -171,18 +172,18 @@
       display: block;
       margin: 0;
       color: var(--steel-050);
-      font-size: clamp(22px, 2.9vw, 38px);
+      font-size: clamp(calc(22px + 6px * var(--dial)), calc(2.9vw + 0.9vw * var(--dial)), calc(38px + 18px * var(--dial)));
       font-weight: 800;
-      line-height: 1.04;
+      line-height: calc(1.04 - 0.02 * var(--dial));
       letter-spacing: -0.035em;
       transition: color .25s ease;
     }
 
     .cap-row__desc {
       display: block;
-      margin-top: 8px;
+      margin-top: calc(8px + 2px * var(--dial));
       max-width: 52ch;
-      font-size: 15px;
+      font-size: calc(15px + 2px * var(--dial));
       color: var(--steel-700);
       transition: color .25s ease;
     }
@@ -194,8 +195,8 @@
        on the page, and only one is ever lit at a time. */
     .cap-row__go {
       position: relative;
-      width: clamp(34px, 3.6vw, 48px);
-      height: clamp(34px, 3.6vw, 48px);
+      width: clamp(calc(34px + 6px * var(--dial)), calc(3.6vw + 0.4vw * var(--dial)), calc(48px + 12px * var(--dial)));
+      height: clamp(calc(34px + 6px * var(--dial)), calc(3.6vw + 0.4vw * var(--dial)), calc(48px + 12px * var(--dial)));
       border: 1px solid var(--border-lit);
       border-radius: 50%;
       transition: background-color .25s ease, border-color .25s ease;
@@ -224,7 +225,9 @@
       .cap-row__go { display: none; }
     }
 
-    .cap-foot { padding: 0 0 var(--space-xl); }
+    /* padding-bottom, not the shorthand: this is also .wrap and the
+       shorthand was zeroing its gutter. */
+    .cap-foot { padding-bottom: var(--space-xl); }
   </style>
 </head>
 
@@ -336,7 +339,7 @@
       <h1 class="tx-rim-text" data-texture="rim">Every capability. One incentive.</h1>
       <p class="lead">
         Each of these runs on its own or as part of the whole. What does not
-        change from one to the next is how we are paid for it &mdash; a share
+        change from one to the next is how we are paid for it: a share
         of the revenue or profit it produces.
       </p>
     </section>

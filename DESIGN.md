@@ -280,6 +280,29 @@ go, drop the client wall reveal before touching any of these.
 There is no sixth. Five self-moving things is already past where this document
 wanted to be, and the next one should be traded for one of these, not added.
 
+## The scale pass (2026-09-16)
+
+The agency owner's feedback, applied site-wide: everything read too small, too
+centred and too rigid for an established agency. Three things changed that
+this document did not previously allow, and they are recorded here rather
+than edited into consistency:
+
+- **Corner radii.** `--r-sm` / `--r-md` / `--r-lg` / `--r-pill` in `site.css`.
+  The "Do not" list rules out one radius applied to everything; this is four,
+  assigned by object type (photo frames roundest, panels a step under,
+  controls tighter, CTAs are pills). The rim-light borders are unchanged.
+- **The nightfield is on the home page.** Every other page already had it;
+  `index.html` carried the markup and body class but never linked the
+  stylesheet, so the home page was the odd one out. Its five documented
+  conflicts with this file still stand - see the top of `nightfield.css`.
+- **The vertical cards fade** from `--bg-raised` to the page rather than
+  stopping on a rule. A gradient, but a tonal one on a surface, not a
+  decorative wash.
+
+The type ladder is roughly 1.7x (h1 to 152px, h2 to 92px), `--wrap` is
+1600px, and the section rhythm opened up to match. Nothing about motion
+changed: the same movers, the same reveals, no fifth.
+
 ## Floor
 
 Responsive to mobile. Visible keyboard focus on every interactive element. Contrast

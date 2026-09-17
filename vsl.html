@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Silver Bullet — See if you qualify</title>
+  <title>Silver Bullet | See if you qualify</title>
   <meta name="description" content="Performance-based marketing for service businesses under $15M. Rev share or profit share, with skin in the game. Watch the 2-minute video and book a call.">
 
   <!-- Icons. The mark is the bullet, drawn with the same hard-stopped chrome
@@ -19,17 +19,17 @@
   <meta property="og:url" content="https://silverbulletagency.com/vsl.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Silver Bullet">
-  <meta property="og:title" content="Silver Bullet — See if you qualify">
+  <meta property="og:title" content="Silver Bullet | See if you qualify">
   <meta property="og:description" content="Performance-based marketing for service businesses under $15M. Rev share or profit share, with skin in the game. Watch the 2-minute video and book a call.">
   <meta property="og:image" content="https://silverbulletagency.com/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Silver Bullet — see if you qualify for a performance deal">
+  <meta property="og:image:alt" content="Silver Bullet, see if you qualify for a performance deal">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Silver Bullet — See if you qualify">
+  <meta name="twitter:title" content="Silver Bullet | See if you qualify">
   <meta name="twitter:description" content="Performance-based marketing for service businesses under $15M. Rev share or profit share, with skin in the game. Watch the 2-minute video and book a call.">
   <meta name="twitter:image" content="https://silverbulletagency.com/og-image.png">
-  <meta name="twitter:image:alt" content="Silver Bullet — see if you qualify for a performance deal">
+  <meta name="twitter:image:alt" content="Silver Bullet, see if you qualify for a performance deal">
 
   <!-- A VSL is a paid-traffic destination, not something to be found cold. -->
   <meta name="robots" content="noindex, follow">
@@ -58,14 +58,15 @@
        ========================================================== */
 
     :root {
-      --wrap:     980px;   /* narrower than the site: this page is a column */
-      --gutter:   clamp(20px, 4vw, 40px);
+      --dial:     0.39;    /* same dial as site.css, kept in step by hand */
+      --wrap:     calc(980px + 140px * var(--dial));  /* narrower than the site: this page is a column */
+      --gutter:   clamp(20px, calc(4vw + 0.5vw * var(--dial)), calc(40px + 16px * var(--dial)));
       /* Kept in step with site.css by hand: this page is standalone and does
          not load it. If the shared scale moves, move these too. */
-      --space-xl: clamp(72px, 7.5vw, 108px);
-      --space-lg: clamp(56px, 6vw, 88px);
-      --space-md: clamp(40px, 4.5vw, 64px);
-      --space-sm: clamp(24px, 2.5vw, 32px);
+      --space-xl: clamp(calc(72px + 24px * var(--dial)), calc(7.5vw + 2.5vw * var(--dial)), calc(108px + 60px * var(--dial)));
+      --space-lg: clamp(calc(56px +  8px * var(--dial)), calc(6vw   + 1vw   * var(--dial)), calc(88px  + 32px * var(--dial)));
+      --space-md: clamp(calc(40px +  4px * var(--dial)), calc(4.5vw + 0.5vw * var(--dial)), calc(64px  + 16px * var(--dial)));
+      --space-sm: clamp(24px,                       calc(2.5vw + 0.3vw * var(--dial)), calc(32px  +  8px * var(--dial)));
     }
 
     * { box-sizing: border-box; }
@@ -102,20 +103,20 @@
       margin: 0;
     }
 
-    h1 { font-size: clamp(34px, 5.4vw, 62px); line-height: 1.0; }
-    h2 { font-size: clamp(26px, 3.4vw, 40px); line-height: 1.05; }
-    h3 { font-size: 18px; line-height: 1.25; letter-spacing: -0.02em; }
+    h1 { font-size: clamp(calc(34px + 10px * var(--dial)), calc(5.4vw + 2vw * var(--dial)), calc(62px + 42px * var(--dial))); line-height: calc(1 - 0.06 * var(--dial)); }
+    h2 { font-size: clamp(calc(26px + 6px * var(--dial)), calc(3.4vw + 1.2vw * var(--dial)), calc(40px + 24px * var(--dial))); line-height: calc(1.05 - 0.05 * var(--dial)); }
+    h3 { font-size: clamp(calc(18px + 2px * var(--dial)), 1.5vw, calc(18px + 6px * var(--dial))); line-height: 1.2; letter-spacing: -0.025em; }
 
     p { margin: 0; }
 
     .lead {
-      font-size: clamp(17px, 1.5vw, 20px);
+      font-size: clamp(calc(17px + 1px * var(--dial)), calc(1.5vw + 0.1vw * var(--dial)), calc(20px + 4px * var(--dial)));
       line-height: 1.6;
       color: var(--steel-300);
       max-width: 60ch;
     }
 
-    .meta { font-size: 14px; color: var(--text-muted); }
+    .meta { font-size: calc(14px + 1px * var(--dial)); color: var(--text-muted); }
 
     /* ---------- header: logo only ----------
        No nav. A VSL page does not offer exits. */
@@ -368,7 +369,7 @@
 
   <header class="vsl-header">
     <div class="wrap">
-      <a class="logo" href="/" aria-label="Silver Bullet — home">
+      <a class="logo" href="/" aria-label="Silver Bullet, home">
         <img class="logo__img" src="silver-bullet-logo-alpha.png?v=2"
              width="732" height="60" alt="">
       </a>
@@ -436,7 +437,7 @@
           </div>
           <div>
             <dt>Skin in the game</dt>
-            <dd>Our fee moves with your results. That is the whole model — it is
+            <dd>Our fee moves with your results. That is the whole model: it is
               why we turn work down, and why we say no to accounts we don't
               think we can move.</dd>
           </div>
@@ -449,7 +450,7 @@
         <h2 class="section-head">Who this works for.</h2>
         <ul class="qual">
           <li>Service businesses doing up to $15M a year.</li>
-          <li>You have something that already sells — we scale it, we don't
+          <li>You have something that already sells. We scale it, we don't
             invent it.</li>
           <li>You can handle more customers than you currently get.</li>
           <li>The owner is in the room when decisions get made.</li>
@@ -473,15 +474,15 @@
         <h2 class="section-head">The record.</h2>
         <div class="proof">
           <div>
-            <span class="figure" data-placeholder>—</span>
+            <span class="figure" data-placeholder>TBD</span>
             <p class="meta">Revenue generated for clients</p>
           </div>
           <div>
-            <span class="figure" data-placeholder>—</span>
+            <span class="figure" data-placeholder>TBD</span>
             <p class="meta">Businesses worked with</p>
           </div>
           <div>
-            <span class="figure" data-placeholder>—</span>
+            <span class="figure" data-placeholder>TBD</span>
             <p class="meta">Average return on spend</p>
           </div>
         </div>
@@ -516,7 +517,7 @@
   <footer class="vsl-footer">
     <div class="wrap">
       <span>&copy; 2026 Silver Bullet</span>
-      <span>Placeholder copy — replace before launch.</span>
+      <span>Placeholder copy. Replace before launch.</span>
     </div>
   </footer>
 

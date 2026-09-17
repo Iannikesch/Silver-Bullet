@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Performance marketing case studies — Silver Bullet</title>
+  <title>Performance marketing case studies | Silver Bullet</title>
   <meta name="description" content="Case studies from Silver Bullet. Revenue and gross profit growth for service businesses, on rev share and profit share.">
   <link rel="canonical" href="https://silverbulletagency.com/work.html">
 
@@ -40,17 +40,17 @@
   <meta property="og:url" content="https://silverbulletagency.com/work.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Silver Bullet">
-  <meta property="og:title" content="Performance marketing case studies — Silver Bullet">
+  <meta property="og:title" content="Performance marketing case studies | Silver Bullet">
   <meta property="og:description" content="Case studies from Silver Bullet. Revenue and gross profit growth for service businesses, on rev share and profit share.">
   <meta property="og:image" content="https://silverbulletagency.com/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Silver Bullet case studies — measured revenue growth for service businesses">
+  <meta property="og:image:alt" content="Silver Bullet case studies: measured revenue growth for service businesses">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Performance marketing case studies — Silver Bullet">
+  <meta name="twitter:title" content="Performance marketing case studies | Silver Bullet">
   <meta name="twitter:description" content="Case studies from Silver Bullet. Revenue and gross profit growth for service businesses, on rev share and profit share.">
   <meta name="twitter:image" content="https://silverbulletagency.com/og-image.png">
-  <meta name="twitter:image:alt" content="Silver Bullet case studies — measured revenue growth for service businesses">
+  <meta name="twitter:image:alt" content="Silver Bullet case studies: measured revenue growth for service businesses">
 
   <!-- Bump ?v= whenever tokens.css changes. The hero headline is painted
        with background-clip:text, so a stale palette that drops the
@@ -73,7 +73,7 @@
   <link rel="stylesheet" href="nightfield.css?v=4">
 
   <style>
-    .work-hero { padding: var(--space-lg) 0 var(--space-md); }
+    .work-hero { padding-block: var(--space-lg) var(--space-md); }  /* padding-block, not the shorthand: the section is also .wrap, and the shorthand was zeroing its gutter */
     .work-hero .lead { margin-top: var(--space-sm); }
 
     /* Flex rather than grid, deliberately.
@@ -92,7 +92,7 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: clamp(14px, 1.6vw, 22px);
+      gap: clamp(calc(14px + 2px * var(--dial)), calc(1.6vw + 0.4vw * var(--dial)), calc(22px + 10px * var(--dial)));
       margin: 0 0 var(--space-xl);
       padding: 0;
       list-style: none;
@@ -102,7 +102,9 @@
        two, then one, and a lone card never stretches to fill the row. */
     .case-grid > li {
       display: flex;
-      flex: 0 1 clamp(300px, 31%, 380px);
+      /* Grows, so three fill the row at any width the wrap allows; 30% leaves
+         room for two gaps, where 32% pushed the third card onto its own row. */
+      flex: 1 1 clamp(calc(300px + 20px * var(--dial)), calc(31% - 1% * var(--dial)), calc(380px + 180px * var(--dial)));
     }
 
     .case-card {
@@ -115,6 +117,8 @@
       border-left: 1px solid var(--border);
       border-right: 1px solid var(--border);
       border-bottom: 1px solid var(--ink);
+      border-radius: var(--r-md);
+      overflow: hidden;
       transition: background-color .2s ease, border-color .2s ease;
     }
 
@@ -135,13 +139,13 @@
 
     .case-card:hover .case-card__art { background: var(--charcoal); }
 
-    .case-card__body { padding: var(--space-sm); }
+    .case-card__body { padding: clamp(calc(24px + 0px * var(--dial)), calc(2.5vw - 0.3vw * var(--dial)), calc(32px + 4px * var(--dial))); }
 
     .case-card__meta {
       display: flex;
       justify-content: space-between;
       gap: 12px;
-      font-size: 13px;
+      font-size: calc(13px + 1px * var(--dial));
       color: var(--steel-700);
     }
 
@@ -152,8 +156,8 @@
     .case-card h2 {
       margin: 10px 0 14px;
       color: var(--steel-050);
-      font-size: clamp(19px, 1.7vw, 23px);
-      line-height: 1.2;
+      font-size: clamp(calc(19px + 3px * var(--dial)), calc(1.7vw + 0.3vw * var(--dial)), calc(23px + 7px * var(--dial)));
+      line-height: calc(1.2 - 0.05 * var(--dial));
     }
 
     /* The number goes on the card. Vayner's index carries none, and the index
@@ -166,13 +170,13 @@
       padding-top: 16px;
       border-top: 1px solid var(--border);
       color: var(--white);
-      font-size: clamp(20px, 1.9vw, 26px);
+      font-size: clamp(calc(20px + 8px * var(--dial)), calc(1.9vw + 0.7vw * var(--dial)), calc(26px + 14px * var(--dial)));
       font-weight: 800;
       letter-spacing: -0.03em;
     }
 
     .case-card__figure .to { color: var(--steel-700); font-weight: 400; }
-    .case-card__figure .in { color: var(--steel-500); font-size: 14px; font-weight: 500; letter-spacing: 0; }
+    .case-card__figure .in { color: var(--steel-500); font-size: calc(14px + 1px * var(--dial)); font-weight: 500; letter-spacing: 0; }
 
     /* Real project photography in the slot. The card art keeps its aspect
        box so a missing or slow image cannot collapse the grid row. */
@@ -305,7 +309,7 @@
     <section class="wrap work-hero">
       <h1 class="tx-rim-text" data-texture="rim">Our work</h1>
       <p class="lead">
-        A meaningful part of our fee comes out of what we generate &mdash; rev
+        A meaningful part of our fee comes out of what we generate: rev
         share or profit share. So every figure below is revenue or gross profit,
         never impressions. Growth is stated as a percentage rather than a
         dollar pair because these are private books, and every case says how

@@ -16,13 +16,33 @@
 
     :root {
       /* Layout */
-      --nav-h:      72px;
-      /* Widened from 1180px. On a 1440px screen the old cap left 130px of
-         dead margin each side on top of the gutter, which read as a narrow
-         column floating on a wide dark page. The reference site fills its
-         width and lets full-bleed bands run edge to edge. */
-      --wrap:       1360px;
-      --gutter:     clamp(20px, 4vw, 48px);
+      /* THE DIAL. 0 is the site before the scale pass, 1 is the full pass.
+         Every size, space and radius below is computed from it, so one
+         number here moves the whole site between the two. Structural
+         changes (hero order, two-column sections, nightfield) do not
+         interpolate; they are simply on. */
+      --dial:       0.32;
+
+      --nav-h:      calc(72px + 12px * var(--dial));
+      /* Widened twice. 1180px, then 1360px, and the page still read as a
+         column floating on a wide dark ground - on a 1440px screen 1360px
+         plus the gutter still left the content sitting inside the frame
+         rather than filling it. 1600px means the wrap only bites on very
+         wide monitors; everywhere else the gutter is the only margin, which
+         is how the reference sites fill their width. */
+      --wrap:       calc(1360px + 240px * var(--dial));
+      --gutter:     clamp(20px, calc(4vw + 0.5vw * var(--dial)), calc(48px + 24px * var(--dial)));
+
+      /* Corner radii. Not one value applied to everything: the photo frames
+         are the roundest, panels a step under, controls tighter, and the
+         CTAs are pills. Each shape reads as its own kind of object rather
+         than a set of identical rounded cards. */
+      --r-sm:   calc(8px  * var(--dial));
+      --r-md:   calc(16px * var(--dial));
+      --r-lg:   calc(24px * var(--dial));
+      /* 30px on a ~56px button is a full pill at 1; lower on the dial it is
+         a rounded rectangle rather than a pill at every setting. */
+      --r-pill: calc(30px * var(--dial));
 
       /* Vertical rhythm ladder */
       /* Tightened against inboundmedia.co, measured rather than eyeballed.
@@ -34,10 +54,13 @@
          background colours between sections - the colour change does the
          separating. This site is dark-only, so the hairline section borders
          and the space have to do that work together. */
-      --space-xl:   clamp(72px, 7.5vw, 108px);
-      --space-lg:   clamp(56px, 6vw, 88px);
-      --space-md:   clamp(40px, 4.5vw, 64px);
-      --space-sm:   clamp(24px, 2.5vw, 32px);
+      /* Opened back up in the scale pass: the type is roughly 1.6x bigger,
+         and the old ladder read as cramped under it. The ceiling is still
+         well under the doubled-up 400px this note describes. */
+      --space-xl:   clamp(calc(72px + 24px * var(--dial)), calc(7.5vw + 2.5vw * var(--dial)), calc(108px + 60px * var(--dial)));
+      --space-lg:   clamp(calc(56px +  8px * var(--dial)), calc(6vw   + 1vw   * var(--dial)), calc(88px  + 32px * var(--dial)));
+      --space-md:   clamp(calc(40px +  4px * var(--dial)), calc(4.5vw + 0.5vw * var(--dial)), calc(64px  + 16px * var(--dial)));
+      --space-sm:   clamp(24px,                            calc(2.5vw + 0.3vw * var(--dial)), calc(32px  +  8px * var(--dial)));
 
       /* Intro timeline — every value the animation depends on */
       --t-fire:     0.10s;  /* muzzle blip */
@@ -118,7 +141,7 @@
       margin: 0;
       background: var(--bg);
       color: var(--text);
-      font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font: clamp(16px, 1.1vw, calc(16px + 2px * var(--dial)))/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
@@ -139,40 +162,44 @@
 
     /* ---------- type ---------- */
 
+    /* Display sizes were roughly 1.7x'd in the scale pass. The old ladder
+       (86 / 46 / 18) read as a product page; these are billboard sizes,
+       and the tighter tracking is what keeps them from going loose. */
     h1, h2, h3 {
       color: var(--text-strong);
       font-weight: 800;
-      letter-spacing: -0.035em;
+      letter-spacing: calc(-0.035em - 0.01em * var(--dial));
       margin: 0;
+      text-wrap: balance;
     }
 
     h1 {
-      font-size: clamp(40px, 7vw, 86px);
-      line-height: 0.98;
+      font-size: clamp(calc(40px + 8px * var(--dial)), calc(7vw + 2.6vw * var(--dial)), calc(86px + 66px * var(--dial)));
+      line-height: calc(0.98 - 0.06 * var(--dial));
     }
 
     h2 {
-      font-size: clamp(28px, 4vw, 46px);
-      line-height: 1.02;
+      font-size: clamp(calc(28px + 10px * var(--dial)), calc(4vw + 2vw * var(--dial)), calc(46px + 46px * var(--dial)));
+      line-height: calc(1.02 - 0.06 * var(--dial));
     }
 
     h3 {
-      font-size: 18px;
-      line-height: 1.25;
-      letter-spacing: -0.02em;
+      font-size: clamp(calc(18px + 2px * var(--dial)), 1.5vw, calc(18px + 6px * var(--dial)));
+      line-height: 1.2;
+      letter-spacing: -0.025em;
     }
 
     p { margin: 0; }
 
     .lead {
-      font-size: clamp(17px, 1.5vw, 20px);
-      line-height: 1.6;
+      font-size: clamp(calc(17px + 1px * var(--dial)), calc(1.5vw + 0.1vw * var(--dial)), calc(20px + 4px * var(--dial)));
+      line-height: 1.5;
       color: var(--steel-300);
-      max-width: 62ch;
+      max-width: 58ch;
     }
 
     .meta {
-      font-size: 14px;
+      font-size: calc(14px + 1px * var(--dial));
       color: var(--text-muted);
     }
 
@@ -264,7 +291,7 @@
          declared for the reason above - the intro measures it before the
          file lands - and height is now declared too, so the box is fully
          reserved and nothing reflows when the image arrives. */
-      width: clamp(118px, 13vw, 152px);
+      width: clamp(calc(118px + 18px * var(--dial)), calc(13vw + 1vw * var(--dial)), calc(152px + 44px * var(--dial)));
       height: auto;
       aspect-ratio: 800 / 242;
     }
@@ -272,11 +299,11 @@
     .nav {
       display: flex;
       align-items: center;
-      gap: clamp(18px, 2.5vw, 34px);
+      gap: clamp(calc(18px + 2px * var(--dial)), calc(2.5vw + 0.3vw * var(--dial)), calc(34px + 8px * var(--dial)));
     }
 
     .nav a {
-      font-size: 15px;
+      font-size: calc(15px + 1px * var(--dial));
       color: var(--steel-500);
       text-decoration: none;
       transition: color .18s ease;
@@ -309,7 +336,7 @@
       display: flex;
       align-items: center;
       gap: 7px;
-      font-size: 15px;
+      font-size: calc(15px + 1px * var(--dial));
       color: var(--steel-500);
       cursor: pointer;
       list-style: none;          /* kills the disclosure triangle … */
@@ -358,13 +385,15 @@
       top: 100%;
       right: 0;
       z-index: 50;
-      min-width: 292px;
+      min-width: calc(292px + 28px * var(--dial));
       padding: 8px;
       background: var(--bg-raised);
       border-top: 1px solid var(--border-lit);
       border-left: 1px solid var(--border);
       border-right: 1px solid var(--border);
       border-bottom: 1px solid var(--ink);
+      border-radius: 0 0 var(--r-md) var(--r-md);
+      overflow: hidden;
     }
 
     /* The panel hangs off the frosted bar, so it is frosted too - it reads as
@@ -457,9 +486,10 @@
       display: flex;
       align-items: baseline;
       gap: 12px;
-      padding: 9px 12px;
-      font-size: 14px;
+      padding: calc(9px + 2px * var(--dial)) calc(12px + 2px * var(--dial));
+      font-size: calc(14px + 1px * var(--dial));
       color: var(--steel-300);
+      border-radius: var(--r-sm);
     }
 
     .nav-dd__list a:hover,
@@ -478,9 +508,9 @@
     .nav-dd__all {
       display: block;
       margin-top: 6px;
-      padding: 11px 12px;
+      padding: calc(11px + 2px * var(--dial)) calc(12px + 2px * var(--dial));
       border-top: 1px solid var(--border);
-      font-size: 14px;
+      font-size: calc(14px + 1px * var(--dial));
       color: var(--steel-100);
     }
 
@@ -513,8 +543,8 @@
     .nav-burger__box {
       display: block;
       position: relative;
-      width: 22px;
-      height: 14px;
+      width: 26px;
+      height: 16px;
     }
     .nav-burger__box span {
       position: absolute;
@@ -530,10 +560,10 @@
 
     /* open: the two bars meet in the middle and cross */
     [aria-expanded="true"] .nav-burger__box span:first-child {
-      transform: translateY(6.5px) rotate(45deg);
+      transform: translateY(7.5px) rotate(45deg);
     }
     [aria-expanded="true"] .nav-burger__box span:last-child {
-      transform: translateY(-6.5px) rotate(-45deg);
+      transform: translateY(-7.5px) rotate(-45deg);
     }
 
     @media (max-width: 760px) {
@@ -578,14 +608,14 @@
       .nav .nav-dd {
         border-top: 1px solid var(--border);
       }
-      .nav > a { padding: 16px 0; font-size: 17px; }
+      .nav > a { padding: calc(16px + 2px * var(--dial)) 0; font-size: calc(17px + 3px * var(--dial)); }
       .nav .nav-link { color: var(--steel-050); }
 
       /* The capabilities dropdown stays a <details> here - tapping it opens
          the list in place rather than flying out a panel with nowhere to go. */
       /* Stacked, not the desktop row: toggle on top, panel underneath. */
       .nav-dd { width: 100%; flex-direction: column; align-items: stretch; }
-      .nav-dd__toggle { padding: 16px 0; font-size: 17px; }
+      .nav-dd__toggle { padding: calc(16px + 2px * var(--dial)) 0; font-size: calc(17px + 3px * var(--dial)); }
       .nav-dd__panel {
         position: static;
         width: auto;
@@ -615,7 +645,8 @@
       .nav .cta-secondary {
         margin-top: var(--space-sm);
         text-align: center;
-        padding: 15px 22px;
+        padding: calc(15px + 2px * var(--dial)) 22px;
+        font-size: calc(15px + 2px * var(--dial));
       }
 
       body.nav-open { overflow: hidden; }
@@ -627,39 +658,45 @@
 
     /* ---------- buttons (base classes live in tokens.css) ---------- */
 
+    /* Pills. The one place the site goes fully round: a CTA is a thing you
+       press, not a panel you read, and the softer form is what separates
+       it from every ruled edge around it. */
     .cta, .cta-secondary {
       display: inline-block;
-      padding: 13px 22px;
+      padding: calc(13px + 4px * var(--dial)) calc(22px + 8px * var(--dial));
       font: inherit;
-      font-size: 15px;
+      font-size: calc(15px + 1px * var(--dial));
       font-weight: 600;
       text-decoration: none;
       cursor: pointer;
+      border-radius: var(--r-pill);
       transition: background-color .18s ease, color .18s ease, border-color .18s ease;
     }
 
-    .nav .cta-secondary { padding: 9px 16px; font-size: 14px; }
+    .nav .cta-secondary { padding: calc(9px + 2px * var(--dial)) calc(16px + 4px * var(--dial)); font-size: calc(14px + 1px * var(--dial)); }
 
     /* ---------- sections ---------- */
 
     section { padding: var(--space-xl) 0; }
 
     .hero {
-      padding-top: var(--space-md);
+      padding-top: var(--space-lg);
       padding-bottom: var(--space-xl);
     }
 
     /* The VSL. Separation is a lit top edge, not a drop shadow — the same
-       move as .panel in tokens.css. */
+       move as .panel in tokens.css. Sits UNDER the claim now, so it opens
+       with a margin above rather than below. */
     .hero__video {
       position: relative;
       aspect-ratio: 16 / 9;
-      margin-bottom: var(--space-md);
+      margin-top: var(--space-lg);
       background: var(--bg-raised);
       border-top: 1px solid var(--border-lit);
       border-left: 1px solid var(--border);
       border-right: 1px solid var(--border);
       border-bottom: 1px solid var(--ink);
+      border-radius: var(--r-lg);
       overflow: hidden;
     }
 
@@ -688,17 +725,51 @@
 
     .hero__video-placeholder strong {
       color: var(--steel-100);
-      font-size: 18px;
+      font-size: calc(18px + 4px * var(--dial));
       letter-spacing: -0.02em;
     }
 
-    .hero h1 { max-width: 15ch; }
+    /* Wide enough that "Growth partner invested in your success." breaks
+       as three lines at every size rather than four at the top end. */
+    .hero h1 { max-width: 13ch; }
 
-    .hero .lead { margin-top: var(--space-sm); }
+    /* The rim ramp's shadow ends are --chrome-500, which at 150px turns the
+       first word into a dark grey slab against the page. Same ramp, same
+       lean, lifted two steps at the ends so the whole line stays legible
+       and the specular band still reads as the bright part. Every page's
+       h1 carries the class, so this is site-wide; the surface version in
+       textures.css is untouched. */
+    h1.tx-rim-text {
+      --tx-rim-ramp: linear-gradient(
+        100deg,
+        var(--chrome-300) calc(0%  + var(--tx-rim-lean)),
+        var(--chrome-100) calc(30% + var(--tx-rim-lean)),
+        var(--chrome-050) calc(46% + var(--tx-rim-lean)),
+        var(--chrome-050) calc(54% + var(--tx-rim-lean)),
+        var(--chrome-100) calc(68% + var(--tx-rim-lean)),
+        var(--chrome-300) 100%
+      );
+    }
+
+    /* Lead left, actions right, on one line across the column. Below
+       1000px they stack, lead first. */
+    .hero__row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: var(--space-sm) var(--space-md);
+      margin-top: var(--space-md);
+    }
+
+    .hero__row .cta-row { flex: none; margin-top: 0; }
+
+    @media (max-width: 1000px) {
+      .hero__row { flex-direction: column; align-items: flex-start; }
+    }
 
     .cta-row {
       display: flex;
-      gap: 12px;
+      gap: calc(12px + 2px * var(--dial));
       flex-wrap: wrap;
       margin-top: var(--space-md);
     }
@@ -776,7 +847,7 @@
        make it. Swap it in one place when that call gets made. */
 
     .punchline {
-      min-height: clamp(460px, 64vh, 720px);
+      min-height: clamp(calc(460px + 60px * var(--dial)), calc(64vh + 16vh * var(--dial)), calc(720px + 180px * var(--dial)));
       display: grid;
       place-items: center;
       border-top: 1px solid var(--border);
@@ -820,8 +891,33 @@
       margin-bottom: var(--space-sm);
     }
 
-    .contact h2 { max-width: 18ch; }
-    .contact .lead { margin-top: 20px; }
+    .contact h2 { max-width: 14ch; }
+    .contact .lead { margin-top: var(--space-sm); }
+
+    /* Two columns from 1000px: the ask on the left, the form on the right,
+       so the section runs the full width of the page instead of a heading
+       and a 760px form stacked down the left edge. The bar spans both. */
+    @media (min-width: 1000px) {
+      .contact .wrap {
+        display: grid;
+        grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+        /* The third row is the flexible one. Without naming it, the form's
+           span was shared out equally between the heading row and the lead
+           row, and the lead sank to the bottom of the section. */
+        grid-template-rows: auto auto 1fr;
+        column-gap: clamp(40px, 6vw, 120px);
+        align-items: start;
+      }
+      .contact__bar { grid-column: 1 / -1; grid-row: 1; }
+      .contact h2   { grid-column: 1; grid-row: 2; }
+      .contact .lead { grid-column: 1; grid-row: 3; }
+      .contact .cform {
+        grid-column: 2;
+        grid-row: 2 / span 2;
+        margin-top: 0;
+        max-width: none;
+      }
+    }
 
     /* ---------- legal pages ----------
    Privacy, terms and cookies. One shared block rather than a <style> in each
@@ -864,8 +960,9 @@
    margin-bottom is --space-sm, not --space-lg: the next h2 brings its own
    --space-md above it, and the two stacked read as a hole in the page. */
 .legal__summary {
-  padding: clamp(20px, 2.4vw, 30px);
+  padding: clamp(24px, 2.6vw, 36px);
   margin-bottom: var(--space-sm);
+  border-radius: var(--r-md);
 }
 
 .legal__summary h2 {
@@ -943,7 +1040,7 @@
        like-for-like. */
     .cform {
       margin-top: var(--space-md);
-      max-width: 800px;
+      max-width: calc(760px + 100px * var(--dial));
       display: flex;
       flex-direction: column;
       gap: 32px;
@@ -1242,7 +1339,7 @@
     .foot-social__list {
       max-width: var(--wrap);
       margin: 0 auto;
-      padding: 14px var(--gutter);
+      padding: calc(14px + 4px * var(--dial)) var(--gutter);
       list-style: none;
       display: flex;
       flex-wrap: wrap;
@@ -1264,8 +1361,8 @@
 
     .foot-social__link svg {
       display: block;
-      width: 22px;
-      height: 22px;
+      width: calc(22px + 4px * var(--dial));
+      height: calc(22px + 4px * var(--dial));
       fill: currentColor;
     }
 
@@ -1276,7 +1373,7 @@
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, auto);
       gap: var(--space-sm) clamp(24px, 5vw, 72px);
       align-items: start;
-      padding-top: var(--space-md);
+      padding-top: var(--space-lg);
       padding-bottom: var(--space-sm);
     }
 
@@ -1295,7 +1392,7 @@
        -0.035em closes the letters up into a smudge. */
     .foot-col__head {
       margin: 0 0 4px;
-      font-size: 13px;
+      font-size: calc(13px + 1px * var(--dial));
       font-weight: 600;
       line-height: 1;
       letter-spacing: 0;
@@ -1312,8 +1409,8 @@
        neighbours and cause mis-taps, which is worse than a small target. */
     .foot-link {
       display: block;
-      padding-block: 10px;          /* 25px line box + 20px = 45px */
-      font-size: 15px;
+      padding-block: 10px;          /* 25-27px line box + 20px = 45-47px */
+      font-size: calc(15px + 2px * var(--dial));
       text-decoration: none;
       color: var(--steel-300);
       transition: color .18s ease;
@@ -1334,7 +1431,7 @@
        the right shape before the image lands. */
     .foot-brand__logo {
       display: block;
-      width: clamp(170px, 20vw, 240px);
+      width: clamp(calc(170px + 30px * var(--dial)), calc(20vw + 2vw * var(--dial)), calc(240px + 80px * var(--dial)));
       height: auto;
     }
 
@@ -1466,11 +1563,11 @@
       flex: none;
       display: flex;
       align-items: center;
-      padding: 0 clamp(16px, 2.2vw, 28px);
+      padding: 0 clamp(calc(16px + 2px * var(--dial)), calc(2.2vw + 0.2vw * var(--dial)), calc(28px + 6px * var(--dial)));
       border-left: 1px solid var(--border);
       background: var(--accent);
       color: var(--ink);
-      font-size: 14px;
+      font-size: calc(14px + 1px * var(--dial));
       font-weight: 700;
       letter-spacing: -0.01em;
       text-decoration: none;
@@ -1544,8 +1641,8 @@
     .ticker__set li {
       position: relative;
       flex: none;
-      padding: 13px clamp(22px, 3vw, 40px);
-      font-size: 14px;
+      padding: calc(13px + 3px * var(--dial)) clamp(calc(22px + 2px * var(--dial)), calc(3vw + 0.2vw * var(--dial)), calc(40px + 8px * var(--dial)));
+      font-size: calc(14px + 1px * var(--dial));
       color: var(--steel-500);
       white-space: nowrap;
     }
@@ -1584,7 +1681,23 @@
     /* ---------- a glimpse at our work ---------- */
 
     .work { padding: var(--space-xl) 0; }
-    .work__head { margin-bottom: var(--space-md); }
+
+    /* Heading left, the case-study sentence right, both on the baseline of
+       the row. One line across the page instead of two stacked in the left
+       third of it. Stacks below 1000px. */
+    .work__head {
+      margin-bottom: var(--space-md);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: var(--space-sm) var(--space-md);
+    }
+    .work__head h2 { flex: none; max-width: 10ch; }
+    .work__head .work__cases { max-width: 44ch; }
+
+    @media (max-width: 1000px) {
+      .work__head { flex-direction: column; align-items: flex-start; }
+    }
 
     /* ---------- 404 ----------
        Reuses the page furniture rather than inventing a layout: same wrap,
@@ -1612,25 +1725,27 @@
       background: var(--border);
       border-top: 1px solid var(--border-lit);
       border-bottom: 1px solid var(--ink);
+      border-radius: var(--r-md);
+      overflow: hidden;
     }
 
     .notfound__list li {
       background: var(--bg);
-      padding: 18px 20px;
+      padding: calc(18px + 4px * var(--dial)) calc(20px + 4px * var(--dial));
       display: grid;
       gap: 4px;
     }
 
     .notfound__list a {
       color: var(--steel-050);
-      font-size: 17px;
+      font-size: calc(17px + 4px * var(--dial));
       font-weight: 600;
       letter-spacing: -0.01em;
       text-decoration: none;
     }
     .notfound__list li:hover a { color: var(--white); }
     .notfound__list a:focus-visible { outline: 2px solid var(--steel-100); outline-offset: 3px; }
-    .notfound__list span { color: var(--steel-500); font-size: 14px; }
+    .notfound__list span { color: var(--steel-500); font-size: calc(14px + 2px * var(--dial)); }
 
 
     /* Inline links in body copy. The site sets `a { color: inherit }`
@@ -1639,7 +1754,7 @@
        around it. These get a lit underline instead of a colour change: the
        rim-light move, not a second accent, so the amber stays rationed to
        the CTA. */
-    .work__cases { margin-top: var(--space-sm); }
+    .work__cases { margin-top: 0; }
 
     .work__cases a {
       color: var(--steel-050);
@@ -1683,9 +1798,14 @@
        drifting to three-and-a-bit. No flex `gap` anywhere — the spacing is
        margin on the item, because a gap on the track would break the -50%
        loop. */
+    /* Three in view, not four. At four the photographs were 330px wide on
+       a 1440 screen, which is thumbnail territory; three puts them at
+       ~460px and they start to read as work rather than as a strip. */
     .conveyor {
-      --cols: 4;
-      --slot-gap: clamp(12px, 1.6vw, 24px);
+      /* Fractional in between: 3.61 slots in view at 0.39 is fine, the
+         width formula below takes any number. */
+      --cols: calc(4 - 1 * var(--dial));
+      --slot-gap: clamp(calc(12px + 2px * var(--dial)), calc(1.6vw + 0.2vw * var(--dial)), calc(24px + 4px * var(--dial)));
     }
 
     .slot {
@@ -1704,6 +1824,8 @@
       border-left: 1px solid var(--border);
       border-right: 1px solid var(--border);
       border-bottom: 1px solid var(--ink);
+      border-radius: var(--r-md);
+      overflow: hidden;
     }
 
     .slot span {
@@ -1724,31 +1846,31 @@
     @media (max-width: 560px) { .conveyor { --cols: 1; } }
 
     .logo-band {
-      margin-top: var(--space-md);
+      margin-top: calc(var(--space-md) + (var(--space-lg) - var(--space-md)) * var(--dial));
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
 
     /* A stacked lockup matched by HEIGHT reads far smaller than a wide one,
        because almost all of its area is vertical. Matched optically instead. */
-    .logo-band__set li img.is-stacked { height: 54px; }
+    .logo-band__set li img.is-stacked { height: calc(54px + 30px * var(--dial)); }
 
     .logo-band__set li img {
       display: block;
-      height: 34px;              /* marks are matched by height, never width */
+      height: calc(34px + 18px * var(--dial));              /* marks are matched by height, never width */
       width: auto;
       /* Greyscale is not a preference. A green mascot and an orange wordmark
          next to cold steel would each read as a second accent, and the palette
          allows one. Stripped of hue they become texture. */
       filter: grayscale(1) brightness(1.12) contrast(.95);
-      opacity: .7;               /* context, not the subject */
+      opacity: calc(.7 + .12 * var(--dial));   /* context, not the subject */
       transition: opacity var(--dur-base) var(--ease-metal);
     }
     .logo-band__set li:hover img { opacity: 1; }
 
     .logo-band__set li {
       flex: none;
-      padding: 22px clamp(28px, 4vw, 56px);
+      padding: calc(22px + 8px * var(--dial)) clamp(calc(28px + 4px * var(--dial)), calc(4vw + 0.5vw * var(--dial)), calc(56px + 16px * var(--dial)));
       color: var(--steel-700);
       font-size: 15px;
       font-weight: 600;
@@ -2059,7 +2181,7 @@
        Declared on the component, not :root. :root is the site's token
        layer; a card width is this component's business, the same way
        .conveyor keeps --cols and --slot-gap to itself. */
-    .verticals { --vcard-w: clamp(258px, 27vw, 384px); }
+    .verticals { --vcard-w: clamp(calc(258px + 42px * var(--dial)), calc(27vw + 4vw * var(--dial)), calc(384px + 116px * var(--dial))); }
 
     /* The resting card. No transform, no transition, no falloff: this is
        what a no-JS or reduced-motion visitor gets, and it has to be
@@ -2074,6 +2196,8 @@
       border-left: 1px solid var(--border);
       border-right: 1px solid var(--border);
       border-bottom: 1px solid var(--ink);
+      border-radius: var(--r-md);
+      overflow: hidden;
     }
 
     /* ---- the loop ----------------------------------------------------
@@ -2159,13 +2283,14 @@
     }
 
     .vrail-btn {
-      width: 44px;
-      height: 44px;
+      width: calc(44px + 8px * var(--dial));
+      height: calc(44px + 8px * var(--dial));
       display: grid;
       place-items: center;
       background: transparent;
       color: var(--steel-100);
       border: 1px solid var(--border-lit);
+      border-radius: 50%;
       cursor: pointer;
       transition: color var(--dur-base) var(--ease-metal),
                   border-color var(--dur-base) var(--ease-metal);
@@ -2200,8 +2325,8 @@
     }
 
     .vcard__mark {
-      width: 68px;
-      height: 68px;
+      width: calc(68px + 16px * var(--dial));
+      height: calc(68px + 16px * var(--dial));
       /* Thinner as it scales up: 2 is Tabler's weight at 24px, and holding
          it at 84px turns a line drawing into a slab. */
       stroke-width: 1;
@@ -2213,7 +2338,7 @@
       /* The bottom padding lives here, not on the footer's margin, because
          the footer's top margin is auto and auto collapses to 0 the moment
          the copy fills the card - which would butt the tags into the rule. */
-      padding: 22px 20px 20px;
+      padding: calc(22px + 6px * var(--dial)) calc(20px + 6px * var(--dial)) calc(20px + 4px * var(--dial));
     }
 
     /* An <h3>, not a <span>, since the merge. Six industry names is six
@@ -2227,9 +2352,9 @@
        what every other h1/h2/h3 on the site carries; this was the only
        heading opting out. */
     .vcard__name {
-      margin: 0 0 12px;
+      margin: 0 0 calc(12px + 2px * var(--dial));
       display: block;
-      font-size: clamp(18px, 1.7vw, 22px);
+      font-size: clamp(calc(18px + 4px * var(--dial)), calc(1.7vw + 0.3vw * var(--dial)), calc(22px + 8px * var(--dial)));
       font-weight: 800;
       letter-spacing: -0.035em;
       line-height: 1.1;
@@ -2240,15 +2365,15 @@
        The fix is the one that has to land, so it takes the brighter step. */
     .vcard__problem {
       display: block;
-      font-size: 15px;
-      line-height: 1.55;
+      font-size: calc(15px + 1px * var(--dial));
+      line-height: 1.5;
       color: var(--text);
-      margin-bottom: 10px;
+      margin-bottom: calc(10px + 2px * var(--dial));
     }
 
     .vcard__fix {
       display: block;
-      font-size: 15px;
+      font-size: calc(15px + 1px * var(--dial));
       line-height: 1.55;
       color: var(--steel-100);
     }
@@ -2265,11 +2390,12 @@
     }
 
     .vtag {
-      font-size: 12px;
+      font-size: calc(12px + 1px * var(--dial));
       line-height: 1;
       color: var(--steel-500);
       border: 1px solid var(--border);
-      padding: 6px 9px;
+      border-radius: var(--r-pill);
+      padding: calc(6px + 1px * var(--dial)) calc(9px + 3px * var(--dial));
     }
 
     /* ---- footer row ----
@@ -2285,7 +2411,7 @@
     .vcard__case {
       flex: none;
       margin-left: auto;
-      font-size: 12px;
+      font-size: calc(12px + 1px * var(--dial));
       color: var(--steel-100);
       text-decoration: none;
       border-bottom: 1px solid var(--border-lit);
@@ -2300,13 +2426,13 @@
       display: flex;
       align-items: baseline;
       gap: 16px;
-      margin: auto 20px 0;
-      padding: 13px 0 20px;
+      margin: auto calc(20px + 6px * var(--dial)) 0;
+      padding: calc(13px + 1px * var(--dial)) 0 calc(20px + 4px * var(--dial));
       border-top: 1px solid var(--border);
     }
 
     .vcard__scope {
-      font-size: 12px;
+      font-size: calc(12px + 1px * var(--dial));
       /* --steel-500, not --text-muted (= --steel-700). The cards sit on
          --bg-raised, where steel-700 measures 4.05 and fails WCAG AA. Same
          step as .tq-what and .cform__note: a token that clears AA on the
@@ -2327,8 +2453,8 @@
       margin: var(--space-md) 0 0;
       padding-top: var(--space-sm);
       border-top: 1px solid var(--border);
-      font-size: clamp(15px, 1.2vw, 17px);
-      line-height: 1.6;
+      font-size: clamp(calc(15px + 2px * var(--dial)), calc(1.2vw + 0.2vw * var(--dial)), calc(17px + 4px * var(--dial)));
+      line-height: 1.55;
       color: var(--steel-100);
       max-width: 72ch;
     }
@@ -2731,7 +2857,7 @@
    arriving with its own brand colour. Opacity is the only variable. */
 
 .clients { padding: var(--space-xl) 0; border-top: 1px solid var(--border); }
-.clients__head { max-width: 58ch; margin-bottom: var(--space-lg); }
+.clients__head { max-width: 62ch; margin-bottom: var(--space-lg); }
 .clients__head .lead { margin-top: var(--space-sm); }
 
 .client-wall {
@@ -2739,7 +2865,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: clamp(38px, 6vw, 86px);
+  gap: clamp(calc(38px + 2px * var(--dial)), 6vw, calc(86px + 24px * var(--dial)));
   margin: 0;
   padding: 0;
   list-style: none;
@@ -2748,7 +2874,7 @@
 .client-wall img {
   display: block;
   width: auto;
-  opacity: .48;
+  opacity: calc(.48 + .22 * var(--dial));
   transition: opacity .3s ease;
 }
 
@@ -2758,9 +2884,9 @@
    the same height do not read as the same size, so each shape gets its own
    cap. This is the difference between a logo wall and a row of mismatched
    images. */
-.client-wall .is-wide  { max-height: clamp(22px, 2.4vw, 30px); }
-.client-wall .is-mid   { max-height: clamp(28px, 3vw, 38px); }
-.client-wall .is-tall  { max-height: clamp(46px, 5vw, 62px); }
+.client-wall .is-wide  { max-height: clamp(calc(22px + 12px * var(--dial)), calc(2.4vw + 1.4vw * var(--dial)), calc(30px + 26px * var(--dial))); }
+.client-wall .is-mid   { max-height: clamp(calc(28px + 16px * var(--dial)), calc(3vw   + 1.8vw * var(--dial)), calc(38px + 34px * var(--dial))); }
+.client-wall .is-tall  { max-height: clamp(calc(46px + 26px * var(--dial)), calc(5vw   + 3vw   * var(--dial)), calc(62px + 56px * var(--dial))); }
 
 @media (max-width: 620px) {
   .client-wall { gap: 34px 42px; }
@@ -2962,7 +3088,7 @@
 }
 
 .tq-quote {
-  max-width: 860px;
+  max-width: calc(860px + 300px * var(--dial));
   margin: 0 auto;
 }
 
@@ -2970,8 +3096,8 @@
   margin: 0;
   /* Lands on the reference's 28px at desktop and steps down cleanly
      rather than at a breakpoint. */
-  font-size: clamp(19px, 1.9vw, 28px);
-  line-height: 1.36;
+  font-size: clamp(calc(19px + 2px * var(--dial)), calc(1.9vw + 0.4vw * var(--dial)), calc(28px + 6px * var(--dial)));
+  line-height: calc(1.36 - 0.04 * var(--dial));
   /* Stepped down from --white on purpose. Rule 2 in DESIGN.md: white
      is for headlines, and a quote this long set at peak white would
      out-shout the h2 it sits under. --steel-050 is the subhead step. */
@@ -2999,9 +3125,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 73px;
-  height: 73px;
-  margin-bottom: 12px;
+  width: calc(73px + 15px * var(--dial));
+  height: calc(73px + 15px * var(--dial));
+  margin-bottom: calc(12px + 2px * var(--dial));
   border-radius: 50%;
   background: var(--charcoal);
   /* Rim light, not glow: a lit top edge tight to the form. */
@@ -3019,7 +3145,7 @@
 
 .tq-who {
   color: var(--steel-300);
-  font-size: 14px;
+  font-size: calc(14px + 1px * var(--dial));
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -3031,7 +3157,7 @@
    reads a clear step below the attribution above it. */
 .tq-what {
   color: var(--steel-500);
-  font-size: 14px;
+  font-size: calc(14px + 1px * var(--dial));
 }
 
 /* ---------- slider state ---------- */
