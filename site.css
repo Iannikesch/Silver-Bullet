@@ -849,6 +849,9 @@
     /* Wide enough that "Growth partner invested in your success." breaks
        as three lines at every size rather than four at the top end. */
     .hero h1 { max-width: 13ch; }
+    /* The lead sat inside .hero__row, which carried the gap. With the lead
+       back under the headline directly, the gap has to be its own. */
+    .hero .lead { margin-top: var(--space-sm, 28px); }
 
     /* The rim ramp's shadow ends are --chrome-500, which at 150px turns the
        first word into a dark grey slab against the page. Same ramp, same
