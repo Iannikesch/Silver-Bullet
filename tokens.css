@@ -1,6 +1,10 @@
-/* Silver Bullet Agency — color tokens
-   Derived from reference art. Core rule: no pure black, no pure white.
-   Every neutral is pulled toward cyan. Warmth appears once, as accent. */
+/* Silver Bullet Agency — design tokens
+   THE one file every value comes from. Colour, scale, space, radius, motion.
+   site.css, textures.css and the rest consume these; none of them define
+   their own. If a value is not here, it is not a value the site has.
+
+   Colour rule: no pure black, no pure white. Every neutral is pulled toward
+   cyan. Warmth appears once, as accent. */
 
 :root {
   /* ---- Base: the dark. ~43% of the reference frame. ---- */
@@ -72,6 +76,123 @@
   --accent:         var(--amber);
   --accent-hover:   var(--gold);
   --accent-active:  var(--amber-burnt);
+
+
+  /* ==========================================================
+     SCALE. THE DIAL first, because every size below reads it.
+     0 is the site before the scale pass, 1 is the full pass. One number
+     here moves the whole site between the two. Structural changes (hero
+     order, two-column sections, nightfield) do not interpolate; they are
+     simply on. Was in site.css :root; moved here so there is one file.
+     ========================================================== */
+  --dial:       0.32;
+
+  /* ---- Layout ---- */
+  --nav-h:      calc(72px + 12px * var(--dial));
+  /* 1360px + the dial's 240px: on a 1440px screen 1360 plus the gutter still
+     left the content floating inside the frame. At 1600 the wrap only bites
+     on very wide monitors; everywhere else the gutter is the only margin. */
+  --wrap:       calc(1360px + 240px * var(--dial));
+  --gutter:     clamp(20px, calc(4vw + 0.5vw * var(--dial)), calc(48px + 24px * var(--dial)));
+
+  /* ---- Space: one base unit, 4px. ----
+     --s-N is N x 4px, for component-internal padding, gaps and margins.
+     Fixed, not fluid: a button's padding should not breathe with the
+     viewport. The rhythm ladder below is fluid and is for BETWEEN sections. */
+  --s-1:   4px;
+  --s-2:   8px;
+  --s-3:  12px;
+  --s-4:  16px;
+  --s-5:  20px;
+  --s-6:  24px;
+  --s-7:  28px;
+  --s-8:  32px;
+  --s-10: 40px;
+  --s-12: 48px;
+  --s-14: 56px;
+  --s-16: 64px;
+  --s-18: 72px;
+  --s-22: 88px;
+  --s-27: 108px;
+
+  /* ---- Vertical rhythm ladder: BETWEEN sections. Fluid, on the dial. ----
+     Tightened against inboundmedia.co, measured rather than eyeballed. Their
+     largest vertical gap is ~215px; --space-xl is applied as both top and
+     bottom padding on every section, so the ceiling here is half the gap
+     you will see. Opened back up in the scale pass because the type grew
+     ~1.6x and the old ladder read as cramped under it. The floors are the
+     --s-* steps (72/56/40/24) so the two systems share a base. */
+  --space-xl:   clamp(calc(var(--s-18) + 24px * var(--dial)), calc(7.5vw + 2.5vw * var(--dial)), calc(var(--s-27) + 60px * var(--dial)));
+  --space-lg:   clamp(calc(var(--s-14) +  8px * var(--dial)), calc(6vw   + 1vw   * var(--dial)), calc(var(--s-22) + 32px * var(--dial)));
+  --space-md:   clamp(calc(var(--s-10) +  4px * var(--dial)), calc(4.5vw + 0.5vw * var(--dial)), calc(var(--s-16) + 16px * var(--dial)));
+  --space-sm:   clamp(var(--s-6),                             calc(2.5vw + 0.3vw * var(--dial)), calc(var(--s-8)  +  8px * var(--dial)));
+
+  /* ---- Type: a major-third scale (1.25) from a 16px base. ----
+     --fs-0 is body. Each step up is x1.25; each down is /1.25. Display
+     sizes are fluid between a floor and a ceiling on the same ratio. A size
+     that is not on this scale is not a size the site has; if one is
+     needed, add the step here rather than a one-off in a rule. */
+  --fs--2: 10.24px;   /* 16 / 1.25 / 1.25 - hairline labels only */
+  --fs--1: 12.8px;    /* 16 / 1.25       - meta, captions */
+  --fs-0:  16px;      /* body */
+  --fs-1:  20px;      /* lead, large body */
+  --fs-2:  25px;      /* h3 */
+  --fs-3:  clamp(25px,   2.4vw, 31.25px); /* h2 small */
+  --fs-4:  clamp(31.25px, 3vw, 39px);     /* h2 */
+  --fs-5:  clamp(39px,   4.2vw, 48.8px);  /* display */
+  --fs-6:  clamp(48.8px, 6vw,   61px);    /* display large */
+  --fs-7:  clamp(61px,   8vw,   76.3px);  /* hero */
+
+  /* ---- Corner radii. On the dial: 0 is square, 1 is the full pass. ----
+     Not one value applied to everything: photo frames are the roundest,
+     panels a step under, controls tighter, CTAs are pills. Each shape reads
+     as its own kind of object rather than a set of identical cards. */
+  --r-sm:   calc(8px  * var(--dial));
+  --r-md:   calc(16px * var(--dial));
+  --r-lg:   calc(24px * var(--dial));
+  --r-pill: calc(30px * var(--dial));  /* full pill at 1; rounded rect below */
+
+  /* ---- Rim light. This is what the site has instead of shadows. ----
+     DESIGN.md forbids box-shadow for depth and any ambient glow. Separation
+     comes from a lit top edge: light falls from above, the bottom edge
+     disappears into the page. These are the two insets that do it. */
+  --rim-top:      inset 0 1px 0 var(--border);
+  --rim-top-lit:  inset 0 1px 0 var(--border-lit);
+
+  /* ---- Alpha: the opacities borders and panes are mixed at. ----
+     For color-mix(in srgb, var(--x) var(--alpha-*), transparent).
+     Texture-internal mixes keep their own --tx-* knobs; these are for
+     borders, tints and panes in site.css. */
+  --alpha-hair:    10%;   /* a tint you can barely see */
+  --alpha-soft:    18%;   /* hover lift on a tint */
+  --alpha-mid:     34%;   /* a soft border */
+  --alpha-strong:  58%;   /* a border you notice */
+  --alpha-pane:    82%;   /* frosted pane over content */
+  --alpha-solid:   96%;   /* the no-blur fallback for a pane */
+
+  /* ---- Motion: four curves, four durations. ----
+     ENTER: something arriving. Fast start, long settle, no overshoot.
+     EXIT:  something leaving. Slow start, then gone - the mirror of enter.
+     HOVER: a state answering the pointer. The CSS ease keyword's own curve,
+            which is what every hover on the site already used.
+     RUN:   continuous motion. Linear, because a loop must not breathe.
+     METAL and RECOIL are the two special cases the doctrine names: metal
+     is the texture pack's weighty settle, recoil is the intro's return. */
+  --ease-enter:  cubic-bezier(.25, 1, .5, 1);
+  --ease-exit:   cubic-bezier(.5, 0, .75, 0);
+  --ease-hover:  cubic-bezier(.25, .1, .25, 1);
+  --ease-run:    linear;
+  --ease-metal:  cubic-bezier(.22, .61, .36, 1);
+  --ease-recoil: cubic-bezier(.2, .85, .25, 1);
+  --ease-roll:   cubic-bezier(.76, 0, .24, 1);   /* the nav label roll */
+  --ease-settle: var(--ease-enter);   /* old name, kept one release */
+
+  --dur-quick:  0.18s;   /* a state change answering a click or hover */
+  --dur-hover:  0.25s;   /* a colour or border answering the pointer */
+  --dur-base:   0.42s;   /* the default: most things should use this */
+  --dur-roll:   0.40s;   /* the nav label roll */
+  --dur-slow:   1.15s;   /* one orchestrated moment, used sparingly */
+  --roll-step:  20ms;    /* per-letter stagger in the roll */
 }
 
 /* ---- The rim-light move ----

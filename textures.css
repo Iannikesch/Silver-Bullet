@@ -20,17 +20,8 @@
    two elements move at different speeds for no reason, the page reads as
    assembled rather than designed.
 
-   When this pack lands in the real project these belong in tokens.css.
-   --ease-settle deliberately matches the value already in index.html. */
-
-:root {
-  --dur-quick: 0.18s;   /* a state change answering a click or hover */
-  --dur-base:  0.42s;   /* the default: most things should use this */
-  --dur-slow:  1.15s;   /* one orchestrated moment, used sparingly */
-
-  --ease-settle: cubic-bezier(.25, 1, .5, 1);   /* fast out, long settle */
-  --ease-metal:  cubic-bezier(.22, .61, .36, 1);/* weighty, no overshoot */
-}
+   All of them are defined in tokens.css: --dur-quick / --dur-base /
+   --dur-slow and --ease-metal / --ease-enter. Nothing is defined here. */
 
 
 /* ---- shared building blocks ------------------------------------------

@@ -16,52 +16,10 @@
        ========================================================== */
 
     :root {
+      /* Scale, space, radius and motion tokens live in tokens.css.
+         What is left here is site-specific animation config: the intro
+         timeline, marquee rates, and the reactive chrome default. */
       /* Layout */
-      /* THE DIAL. 0 is the site before the scale pass, 1 is the full pass.
-         Every size, space and radius below is computed from it, so one
-         number here moves the whole site between the two. Structural
-         changes (hero order, two-column sections, nightfield) do not
-         interpolate; they are simply on. */
-      --dial:       0.32;
-
-      --nav-h:      calc(72px + 12px * var(--dial));
-      /* Widened twice. 1180px, then 1360px, and the page still read as a
-         column floating on a wide dark ground - on a 1440px screen 1360px
-         plus the gutter still left the content sitting inside the frame
-         rather than filling it. 1600px means the wrap only bites on very
-         wide monitors; everywhere else the gutter is the only margin, which
-         is how the reference sites fill their width. */
-      --wrap:       calc(1360px + 240px * var(--dial));
-      --gutter:     clamp(20px, calc(4vw + 0.5vw * var(--dial)), calc(48px + 24px * var(--dial)));
-
-      /* Corner radii. Not one value applied to everything: the photo frames
-         are the roundest, panels a step under, controls tighter, and the
-         CTAs are pills. Each shape reads as its own kind of object rather
-         than a set of identical rounded cards. */
-      --r-sm:   calc(8px  * var(--dial));
-      --r-md:   calc(16px * var(--dial));
-      --r-lg:   calc(24px * var(--dial));
-      /* 30px on a ~56px button is a full pill at 1; lower on the dial it is
-         a rounded rectangle rather than a pill at every setting. */
-      --r-pill: calc(30px * var(--dial));
-
-      /* Vertical rhythm ladder */
-      /* Tightened against inboundmedia.co, measured rather than eyeballed.
-         Their largest vertical gap is ~215px; ours were 431px and 366px,
-         because --space-xl is applied as BOTH top and bottom padding on
-         every section, so the old 200px ceiling meant 400px between two
-         sections. Halving the ceiling puts the biggest gap in their range.
-         They can also stack tighter than we can because they alternate
-         background colours between sections - the colour change does the
-         separating. This site is dark-only, so the hairline section borders
-         and the space have to do that work together. */
-      /* Opened back up in the scale pass: the type is roughly 1.6x bigger,
-         and the old ladder read as cramped under it. The ceiling is still
-         well under the doubled-up 400px this note describes. */
-      --space-xl:   clamp(calc(72px + 24px * var(--dial)), calc(7.5vw + 2.5vw * var(--dial)), calc(108px + 60px * var(--dial)));
-      --space-lg:   clamp(calc(56px +  8px * var(--dial)), calc(6vw   + 1vw   * var(--dial)), calc(88px  + 32px * var(--dial)));
-      --space-md:   clamp(calc(40px +  4px * var(--dial)), calc(4.5vw + 0.5vw * var(--dial)), calc(64px  + 16px * var(--dial)));
-      --space-sm:   clamp(24px,                            calc(2.5vw + 0.3vw * var(--dial)), calc(32px  +  8px * var(--dial)));
 
       /* Intro timeline — every value the animation depends on */
       --t-fire:     0.10s;  /* muzzle blip */
@@ -83,12 +41,6 @@
          OVER a page that is already there, which is also why .intro-layer
          is transparent and always was. */
       --t-page:     0.35s;
-
-      --ease-settle: cubic-bezier(.25, 1, .5, 1);
-      /* Hard launch, long decaying tail. The opening slope is y1/x1 = 4.25x
-         the average, which puts the first frames of the return at roughly the
-         bullet's own speed; it then bleeds that off into the marquee drift. */
-      --ease-recoil: cubic-bezier(.2, .85, .25, 1);
 
       /* Slogan ticker.
          The ride is deliberately a long way. The return has to cover this
@@ -333,7 +285,7 @@
       font-size: calc(15px + 1px * var(--dial));
       color: var(--steel-300);        /* one step up from --steel-500 */
       text-decoration: none;
-      transition: color .25s ease;
+      transition: color var(--dur-hover) var(--ease-hover);
     }
 
     .nav a:hover { color: var(--steel-050); }
@@ -356,7 +308,7 @@
       background: var(--steel-300);
       transform: scaleX(0);
       transform-origin: center;
-      transition: transform .25s var(--ease-settle);
+      transition: transform var(--dur-hover) var(--ease-enter);
     }
     .nav > .nav-link:hover::after,
     .nav > .nav-link:focus-visible::after { transform: scaleX(1); }
@@ -380,9 +332,6 @@
        launch with a settle, so it reads as one quick spin rather than a
        slide. */
     :root {
-      --roll-dur:  .4s;
-      --roll-ease: cubic-bezier(.76, 0, .24, 1);
-      --roll-step: 20ms;
     }
 
     .roll {
@@ -395,7 +344,7 @@
 
     .roll__line {
       display: block;
-      transition: transform var(--roll-dur) var(--roll-ease);
+      transition: transform var(--dur-roll) var(--ease-roll);
     }
 
     /* The twin: same box, one line lower, waiting under the clip. */
@@ -415,7 +364,7 @@
     .roll__ch {
       display: inline-block;
       white-space: pre;
-      transition: transform var(--roll-dur) var(--roll-ease);
+      transition: transform var(--dur-roll) var(--ease-roll);
       transition-delay: calc(var(--i, 0) * var(--roll-step));
     }
     .has-roll:hover .roll--stagger .roll__ch,
@@ -471,7 +420,7 @@
       color: var(--steel-500);
       cursor: pointer;
       list-style: none;          /* kills the disclosure triangle … */
-      transition: color .18s ease;
+      transition: color var(--dur-quick) var(--ease-hover);
     }
     .nav-dd__toggle::-webkit-details-marker { display: none; }  /* … and again for WebKit */
 
@@ -497,7 +446,7 @@
     }
     .nav-dd__sign::after {
       transform: rotate(90deg);
-      transition: transform .18s ease, opacity .18s ease;
+      transition: transform var(--dur-quick) var(--ease-hover), opacity var(--dur-quick) var(--ease-hover);
     }
     /* Scoped to the dropdown's OWN toggle. Descendant-matched, this also
        flipped the sign on every group head inside an open Capabilities
@@ -565,7 +514,7 @@
        nothing left to animate out and a fake close would need JS holding the
        element in the DOM for no gain. */
     .nav-dd[open] .nav-dd__panel {
-      animation: dd-open .2s var(--ease-settle) both;
+      animation: dd-open .2s var(--ease-enter) both;
     }
 
     @keyframes dd-open {
@@ -825,7 +774,7 @@
       text-decoration: none;
       cursor: pointer;
       border-radius: var(--r-pill);
-      transition: background-color .18s ease, color .18s ease, border-color .18s ease;
+      transition: background-color var(--dur-quick) var(--ease-hover), color var(--dur-quick) var(--ease-hover), border-color var(--dur-quick) var(--ease-hover);
     }
 
     /* The one rounded element on the site, and the reason it is allowed:
@@ -844,10 +793,10 @@
       background: color-mix(in srgb, var(--sand) 10%, transparent);
       color: var(--steel-050);
       transition:
-        background-color .25s ease,
-        border-color .25s ease,
-        color .25s ease,
-        transform .25s var(--ease-settle);
+        background-color var(--dur-hover) var(--ease-hover),
+        border-color var(--dur-hover) var(--ease-hover),
+        color var(--dur-hover) var(--ease-hover),
+        transform .25s var(--ease-enter);
     }
     .nav .cta-secondary:hover,
     .nav .cta-secondary:focus-visible {
@@ -974,13 +923,13 @@
       object-fit: cover;
       display: block;
       transform: translateY(100%);
-      transition: transform .9s var(--ease-settle);
+      transition: transform .9s var(--ease-enter);
       will-change: transform;
     }
     .hero__clip.is-in  { transform: translateY(0); }
     .hero__clip.is-out {
       transform: translateY(-100%);
-      transition: transform .55s cubic-bezier(.5, 0, .75, 0);
+      transition: transform .55s var(--ease-exit);
     }
     .hero__clip.is-reset { transition: none; }
 
@@ -1049,7 +998,7 @@
     }
 
     .section-head { max-width: 62ch; margin-bottom: var(--space-md); }
-    .section-head .lead { margin-top: 20px; }
+    .section-head .lead { margin-top: var(--s-5); }
 
     /* Explicit columns, not auto-fit: both grids hold 3 or 6 cards, so a
        fixed 3 / 2 / 1 ladder never leaves an empty cell showing the
@@ -1210,9 +1159,9 @@
   max-width: 68ch;
 }
 
-.legal__eyebrow { margin: 0 0 12px; }
+.legal__eyebrow { margin: 0 0 var(--s-3); }
 
-.legal h1 { margin: 0 0 12px; }
+.legal h1 { margin: 0 0 var(--s-3); }
 
 .legal__date {
   margin: 0 0 var(--space-md);
@@ -1261,11 +1210,11 @@
   line-height: 1.75;
 }
 
-.legal p { margin: 0 0 16px; }
+.legal p { margin: 0 0 var(--s-4); }
 
 .legal ul {
-  margin: 0 0 16px;
-  padding-left: 20px;
+  margin: 0 0 var(--s-4);
+  padding-left: var(--s-5);
 }
 
 .legal li { margin-bottom: 10px; }
@@ -1319,19 +1268,19 @@
       max-width: calc(760px + 100px * var(--dial));
       display: flex;
       flex-direction: column;
-      gap: 32px;
+      gap: var(--s-8);
     }
 
     .cform__grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 32px;
+      gap: var(--s-8);
     }
 
     .cform__field {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: var(--s-2);
       margin: 0;
     }
 
@@ -1346,12 +1295,12 @@
       font-size: clamp(20px, 2.2vw, 32px);
       width: 100%;
       min-height: 61px;
-      padding: 8px 16px;
+      padding: var(--s-2) var(--s-4);
       color: var(--white);
       background: var(--bg);
       border: 1px solid var(--steel-050);
       border-radius: 12px;
-      transition: border-color .18s ease, background-color .18s ease;
+      transition: border-color var(--dur-quick) var(--ease-hover), background-color var(--dur-quick) var(--ease-hover);
     }
 
     .cform__field textarea { resize: vertical; min-height: 270px; padding: 14px 16px; }
@@ -1471,7 +1420,7 @@
       cursor: pointer;
       -webkit-user-select: none;
       user-select: none;
-      transition: background-color .18s ease, color .18s ease, border-color .18s ease;
+      transition: background-color var(--dur-quick) var(--ease-hover), color var(--dur-quick) var(--ease-hover), border-color var(--dur-quick) var(--ease-hover);
     }
 
     /* The checkbox: off the visual layer, still in the tab order, still
@@ -1502,7 +1451,7 @@
       border-bottom: 2px solid var(--amber);
       transform: translateY(-60%) rotate(-45deg) scale(0.6);
       opacity: 0;
-      transition: opacity .18s ease, transform .18s ease;
+      transition: opacity var(--dur-quick) var(--ease-hover), transform var(--dur-quick) var(--ease-hover);
     }
 
     .cform__row:hover { border-color: var(--white); color: var(--white); }
@@ -1637,7 +1586,7 @@
       display: block;
       padding: 6px;   /* touch target only — reads as no padding at all */
       color: var(--steel-050);
-      transition: color .18s ease;
+      transition: color var(--dur-quick) var(--ease-hover);
     }
 
     .foot-social__link:hover,
@@ -1697,7 +1646,7 @@
       font-size: calc(15px + 2px * var(--dial));
       text-decoration: none;
       color: var(--steel-300);
-      transition: color .18s ease;
+      transition: color var(--dur-quick) var(--ease-hover);
     }
 
     .foot-link:hover,
@@ -1765,7 +1714,7 @@
     .foot-legal a {
       color: inherit;              /* same value as the copyright beside it */
       text-decoration: none;
-      transition: color .18s ease;
+      transition: color var(--dur-quick) var(--ease-hover);
     }
 
     .foot-legal a:hover,
@@ -2555,7 +2504,7 @@
        spends its one amber element on the CTA. */
     .vrail-nav {
       display: flex;
-      gap: 8px;
+      gap: var(--s-2);
       margin-top: var(--space-sm);
     }
 
@@ -2663,7 +2612,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-top: 16px;
+      margin-top: var(--s-4);
     }
 
     .vtag {
@@ -2968,7 +2917,7 @@
     }
 
     body.is-intro .logo {
-      animation: logo-home .70s var(--ease-settle) var(--t-shift) both;
+      animation: logo-home .70s var(--ease-enter) var(--t-shift) both;
     }
 
     /* Two phases, two animations, because each needs its own easing — a single
@@ -2987,7 +2936,7 @@
     }
 
     body.is-intro .logo__inner {
-      animation: name-wipe .26s var(--ease-settle) var(--t-name) both;
+      animation: name-wipe .26s var(--ease-enter) var(--t-name) both;
     }
 
     body.is-intro .nav > * {
@@ -3011,7 +2960,7 @@
        when the text actually became legible at ~900ms. */
     body.is-intro main,
     body.is-intro .site-footer {
-      animation: page-in .55s var(--ease-settle) var(--t-page) backwards;
+      animation: page-in .55s var(--ease-enter) var(--t-page) backwards;
     }
 
     @keyframes rule-draw {
