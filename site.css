@@ -1006,8 +1006,9 @@
     .hero .lead { max-width: min(58ch, var(--copy-w, 58ch)); }
 
     /* The lane. Absolute against .hero-ground (position:relative and
-       overflow:hidden, from .tx-thermal), which is what lets the cards
-       run right off the viewport edge without a horizontal scrollbar.
+       overflow:hidden, from .tx-thermal): a column from the headline's
+       end to the viewport edge, from the top of the copy block to the
+       bottom of the hero, that the cards drop through and leave by.
        top/left/width/height are all written by reel.js from measurement;
        the defaults here only exist so nothing flashes before it runs.
        z-index 1 puts it above the thermal ground (-1) and the hero's own
@@ -1023,16 +1024,16 @@
       pointer-events: none;
     }
 
-    /* A card. Hangs from the vertical centre of the lane; reel.js writes
-       the x in translate3d and the opacity each frame. Sized by width and
+    /* A card. Centred across the lane, hung from its top; reel.js writes
+       the y in translate3d and the opacity each frame. Sized by width and
        held to its clip's ratio so the 9:16 and 4:5 clips each keep their
        own shape with nothing letterboxed. 16px radius and a hairline
        outline is the site's panel edge without the lit top, which a video
        would paint over anyway. */
     .belt__card {
       position: absolute;
-      top: 50%;
-      left: 0;
+      top: 0;
+      left: 50%;
       width: var(--card-w, 220px);
       aspect-ratio: 9 / 16;
       object-fit: cover;
@@ -1042,13 +1043,13 @@
       outline-offset: -1px;
       background: var(--bg-raised);
       opacity: 0;
-      transform: translate3d(0, -50%, 0);
+      transform: translate3d(-50%, 0, 0);
       will-change: transform, opacity;
     }
     .belt__card--4x5 { aspect-ratio: 4 / 5; }
 
     /* Reduced motion: no drift, no autoplay. reel.js still measures the
-       lane, then parks the first card at the mouth as a still (first
+       lane, then parks the first card at the top of it as a still (first
        frame only) and binds nothing else. */
     @media (prefers-reduced-motion: reduce) {
       .belt__card:first-child { opacity: 1; }
