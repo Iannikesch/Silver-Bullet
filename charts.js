@@ -34,27 +34,57 @@
   gsap.registerPlugin(ScrollTrigger);
 
   /* ---- the line: draws with scroll, the bullet rides the tip ---- */
+  var svg  = band.querySelector('.ch--line');
   var path = band.querySelector('.ch-path');
   var tip  = band.querySelector('.ch-tip');
-  if (path && tip) {
-    var len = path.getTotalLength();
-    path.style.strokeDasharray  = len;
-    path.style.strokeDashoffset = len;
+  var maskAll  = band.querySelector('.ch-mask__all');
+  var maskText = band.querySelector('.ch-mask__text');
+  var len = 0;
+  var draw = { t: 0 };
 
-    /* Place the bullet at a fraction of the path, nose along the tangent.
-       Sampling a little behind the point gives the direction; at the very
-       start there is nothing behind, so it looks ahead instead. */
+  if (svg && path && tip) {
+    /* The design is on a 1400 x 700 canvas (data-points, data-height).
+       The band is rarely 2:1, and a 2:1 drawing scaled to fit a shorter
+       band gets letterboxed: the line stopped 134px short of the corner on
+       a 620px band, and the pie crowded its end. So the viewBox is refit
+       to the band's real aspect and the points rescaled to it. Uniform
+       scale throughout, so the bullet keeps its shape. */
+    var pts = svg.getAttribute('data-points').trim().split(/\s+/).map(function (pair) {
+      var xy = pair.split(','); return { x: +xy[0], y: +xy[1] };
+    });
+    var designH = +svg.getAttribute('data-height') || 700;
+
+    function fit() {
+      var bw = band.clientWidth, bh = band.clientHeight;
+      if (!bw || !bh) return;
+      var H = 1400 * bh / bw, k = H / designH;
+      svg.setAttribute('viewBox', '0 0 1400 ' + H.toFixed(1));
+      path.setAttribute('d', 'M' + pts.map(function (p) { return p.x + ',' + (p.y * k).toFixed(1); }).join(' L'));
+      if (maskAll)  { maskAll.setAttribute('height', H.toFixed(1)); }
+      if (maskText) { maskText.setAttribute('cy', (H / 2).toFixed(1)); maskText.setAttribute('ry', (105 * k).toFixed(1)); }
+      var m = svg.querySelector('#ch-text-mask'); if (m) m.setAttribute('height', H.toFixed(1));
+      len = path.getTotalLength();
+      path.style.strokeDasharray  = len;
+      path.style.strokeDashoffset = len * (1 - draw.t);
+      placeTip(draw.t);
+    }
+
+    /* The bullet's tail sits at the drawn tip, nose along the tangent, so
+       the line runs into it and it reads as having just travelled the
+       path. Sampling a little behind the point gives the direction. */
     function placeTip(t) {
       var at = Math.max(0, Math.min(1, t)) * len;
       var p  = path.getPointAtLength(at);
       var q  = path.getPointAtLength(at >= 6 ? at - 6 : at + 6);
       var a  = Math.atan2(p.y - q.y, p.x - q.x) * 180 / Math.PI;
       if (at < 6) a += 180;
-      tip.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ',' + p.y.toFixed(1) + ') rotate(' + a.toFixed(1) + ') scale(1.7)');
+      tip.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ',' + p.y.toFixed(1) + ') rotate(' + a.toFixed(1) + ') scale(3.2)');
     }
-    placeTip(0);
 
-    var draw = { t: 0 };
+    fit();
+    var rs = null;
+    window.addEventListener('resize', function () { clearTimeout(rs); rs = setTimeout(fit, 120); });
+
     gsap.to(draw, {
       t: 1,
       ease: 'none',

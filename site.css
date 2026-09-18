@@ -1218,24 +1218,29 @@
     .ch-slot { position: absolute; }
     .ch { display: block; overflow: visible; }
 
-    /* The line spans the band, inset by the gutter, and sits behind the
-       headline. Its geometry is a 2:1 viewBox scaled to fit, so the
-       "90px above the bottom-left corner" start is proportional. */
+    /* The line fills the band edge to edge. charts.js refits its viewBox
+       to the band's aspect, so the drawing spans corner to corner
+       uniformly and the bullet is never sheared. */
     .ch-slot--line { inset: 0; }
     .ch-slot--line .ch { width: 100%; height: 100%; }
 
+    /* The bars sit clear of the corner: a step in from the gutter, and
+       well up off the bottom edge. */
     .ch-slot--bars {
-      left: var(--gutter, 24px);
-      bottom: clamp(var(--s-16), 12vh, var(--s-27));
-      width: clamp(220px, 22vw, 312px);
+      left: calc(var(--gutter, 24px) + 3vw);
+      bottom: clamp(var(--s-22), 16vh, calc(var(--s-27) + var(--s-8)));
+      width: clamp(220px, 21vw, 300px);
     }
     .ch-slot--bars .ch { width: 100%; height: auto; }
 
+    /* The pie sits in from the right edge and below the band's centre, so
+       the line's endpoint at the top right has clear air around it and
+       nothing is ever clipped by the viewport. */
     .ch-slot--pie {
-      right: var(--gutter, 24px);
-      top: 50%;
+      right: calc(var(--gutter, 24px) + 4vw);
+      top: 60%;
       transform: translateY(-50%);
-      width: clamp(180px, 17vw, 248px);
+      width: clamp(170px, 16vw, 236px);
     }
     .ch-slot--pie .ch { width: 100%; height: auto; }
 

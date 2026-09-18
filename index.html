@@ -783,7 +783,14 @@
            --magenta, "two" is the gold ramp with a lit top edge. -->
       <div class="ch-layer" aria-hidden="true">
         <div class="ch-slot ch-slot--line">
-    <svg class="ch ch--line" viewBox="0 0 1400 700" preserveAspectRatio="xMinYMax meet" aria-hidden="true" focusable="false">
+    <!-- data-points is the design, on a 1400x700 canvas. charts.js refits
+         the viewBox to the band's real aspect and rescales these points to
+         it, so the line always runs corner to corner whatever the band's
+         proportions. Static (no JS) it renders at the design aspect,
+         letterboxed. The bullet's TAIL sits on the endpoint: the line runs
+         into it, so it reads as the thing that just drew the line. -->
+    <svg class="ch ch--line" viewBox="0 0 1400 700" preserveAspectRatio="xMidYMid meet"
+         data-points="40,610 180,470 300,520 440,380 560,430 700,290 820,340 960,200 1080,250 1200,130 1300,70" data-height="700" aria-hidden="true" focusable="false">
       <defs>
         <linearGradient id="ch-gold-line" x1="0" y1="0" x2="1" y2="0">
           <stop offset="0" style="stop-color: var(--amber-burnt, #AB804F)"/>
@@ -806,14 +813,28 @@
           <stop offset=".45" style="stop-color: var(--chrome-300, #7F7F7F)"/>
           <stop offset="1" style="stop-color: var(--chrome-700, #343434)"/>
         </linearGradient>
+        <!-- Luminance mask: white shows the line, dark hides it. A soft
+             ellipse over the headline's zone drops the line to about a
+             fifth of its strength there, so the type stays clean while the
+             line still visibly passes behind it. charts.js keeps the ellipse
+             centred on the band as the viewBox is refitted. -->
+        <radialGradient id="ch-text-fade">
+          <stop offset="0" stop-color="rgb(48,48,48)"/>
+          <stop offset=".62" stop-color="rgb(48,48,48)"/>
+          <stop offset="1" stop-color="white"/>
+        </radialGradient>
+        <mask id="ch-text-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1400" height="700">
+          <rect class="ch-mask__all" x="0" y="0" width="1400" height="700" fill="white"/>
+          <ellipse class="ch-mask__text" cx="700" cy="350" rx="430" ry="105" fill="url(#ch-text-fade)"/>
+        </mask>
       </defs>
-      <path class="ch-path" d="M40,610 L180,470 L300,520 L440,380 L560,430 L700,290 L820,340 L960,200 L1080,250 L1220,120 L1360,60"/>
-      <!-- The tip. A small bullet nose-forward, rotated to the last segment.
-           JS carries it along the path as the line draws; static, it rests
-           at the end. Chrome, per the depiction ramp: it is a piece of metal. -->
-      <g class="ch-tip" transform="translate(1360,60) rotate(-23.2) scale(1.7)">
-        <path d="M-14,-4 H2 Q10,-4 14,0 Q10,4 2,4 H-14 Z" fill="url(#ch-bullet)"/>
-        <path d="M-14,-4 H2 Q8,-4 11,-1.5" class="ch-tip__lit"/>
+      <path class="ch-path" mask="url(#ch-text-mask)" d="M40,610 L180,470 L300,520 L440,380 L560,430 L700,290 L820,340 L960,200 L1080,250 L1200,130 L1300,70"/>
+      <!-- The bullet. Tail at the local origin, nose 28 units forward, so
+           translate() puts its tail on the line's tip and rotate() lays it
+           along the final segment. Chrome, per the depiction ramp. -->
+      <g class="ch-tip" transform="translate(1300,70) rotate(-31.0) scale(3.2)">
+        <path d="M0,-4 H16 Q24,-4 28,0 Q24,4 16,4 H0 Z" fill="url(#ch-bullet)"/>
+        <path d="M0,-4 H16 Q22,-4 25,-1.5" class="ch-tip__lit"/>
       </g>
     </svg>
         </div>
