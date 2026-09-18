@@ -1200,13 +1200,21 @@
       padding-block: var(--space-md);
     }
 
-    .punchline h2 {
+    .punchline :is(h1, h2) {
       max-width: 20ch;
       margin: 0 auto;
       color: var(--text-strong);
       text-wrap: balance;
     }
-    .punchline h2 em { font-style: italic; color: var(--steel-050); }
+    .punchline :is(h1, h2) em { font-style: italic; color: var(--steel-050); }
+    /* On work.html the band is the hero, so its headline is the page's h1
+       and there is no band above it to draw a rule against. The h1 takes
+       the h2's measure so the band is the home page's, chart for chart. */
+    .punchline--hero { border-top: 0; }
+    .punchline--hero h1 {
+      font-size: clamp(calc(28px + 10px * var(--dial)), calc(4vw + 2vw * var(--dial)), calc(46px + 46px * var(--dial)));
+      line-height: calc(1.02 - 0.06 * var(--dial));
+    }
 
     /* The chart layer fills the band; each slot is placed absolutely. */
     .ch-layer {

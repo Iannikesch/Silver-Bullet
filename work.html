@@ -363,8 +363,371 @@
 
   <main id="top">
 
+    <!-- The hero is the home page's punchline band, chart for chart:
+         the same composition, the same arrival, with this page's
+         headline in the middle. index.html is the source; keep the two
+         in step. charts.js animates it. -->
+    <section id="punchline" class="punchline punchline--hero" aria-labelledby="punchline-head">
+      <!-- The charts. Static SVG, complete without JS; charts.js only
+           animates. They are decorative and carry no data, so no legend,
+           no labels, no table: aria-hidden throughout.
+             left      a bar chart, bars alternating the two fills
+             centre    a rising line behind the headline
+             right     a pie of six slices in the same alternation
+           and six smaller motifs in the negative space, subordinate:
+             top-left     a heatmap
+             top-centre   nine candlesticks
+             top-right    an isotype grid, 23 of 35
+             bottom-left  a stacked area, three bands
+             bottom       three stacked horizontal bars
+             bottom-right five horizontal bars
+           Both fills are tokens: "one" is --white pulled a step toward
+           --magenta, "two" is the gold ramp with a lit top edge. -->
+      <div class="ch-layer" aria-hidden="true">
+        <div class="ch-slot ch-slot--line">
+    <!-- data-points is the design, on a 1400x700 canvas. charts.js refits
+         the viewBox to the band's real aspect and rescales these points to
+         it, so the line runs from the bottom-left corner to the right EDGE
+         whatever the band's proportions. The line is static: drawn in
+         full, dimmed through the headline by the mask below. -->
+    <svg class="ch ch--line" viewBox="0 0 1400 700" preserveAspectRatio="xMidYMid meet"
+         data-points="40,610 180,470 300,520 440,380 560,430 700,290 820,340 960,200 1080,250 1200,120 1300,170 1400,50" data-height="700" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="ch-gold-line" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" style="stop-color: var(--amber-burnt, #AB804F)"/>
+          <stop offset=".55" style="stop-color: var(--amber, #DFC38C)"/>
+          <stop offset="1" style="stop-color: var(--gold, #EDD997)"/>
+        </linearGradient>
+        <!-- The two alternating fills. Both read the band's custom
+             properties, so the colours are tokens and one place to change. -->
+        <linearGradient id="ch-grad-one" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" style="stop-color: var(--ch-one-top, #E8F1F2)"/>
+          <stop offset="1" style="stop-color: var(--ch-one-base, #D4E5EA)"/>
+        </linearGradient>
+        <linearGradient id="ch-grad-two" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" style="stop-color: var(--ch-two-top, #EDD997)"/>
+          <stop offset=".42" style="stop-color: var(--ch-two-mid, #DFC38C)"/>
+          <stop offset="1" style="stop-color: var(--ch-two-base, #AB804F)"/>
+        </linearGradient>
+        <!-- Luminance mask: white shows the line, dark hides it. A soft
+             ellipse over the headline's zone drops the line to a fifth of
+             its strength there, so the copy stays clean. charts.js keeps
+             the ellipse centred on the band as the viewBox is refitted. -->
+        <radialGradient id="ch-text-fade">
+          <stop offset="0" stop-color="rgb(48,48,48)"/>
+          <stop offset=".62" stop-color="rgb(48,48,48)"/>
+          <stop offset="1" stop-color="white"/>
+        </radialGradient>
+        <mask id="ch-text-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1400" height="700">
+          <rect class="ch-mask__all" x="0" y="0" width="1400" height="700" fill="white"/>
+          <ellipse class="ch-mask__text" cx="700" cy="350" rx="430" ry="105" fill="url(#ch-text-fade)"/>
+        </mask>
+      </defs>
+      <path class="ch-path" mask="url(#ch-text-mask)" d="M40,610 L180,470 L300,520 L440,380 L560,430 L700,290 L820,340 L960,200 L1080,250 L1200,120 L1300,170 L1400,50"/>
+    </svg>
+        </div>
+        <div class="ch-slot ch-slot--bars">
+    <svg class="ch ch--bars" viewBox="0 0 312 240" width="312" height="240" aria-hidden="true" focusable="false">
+      <line class="ch-base" x1="0" y1="240" x2="312" y2="240"/>
+      <path class="ch-bar ch-one" style="--i:0" d="M0,240 V162.4 Q0,158.4 4,158.4 H20 Q24,158.4 24,162.4 V240 Z"/>
+      <path class="ch-bar ch-two" style="--i:1" d="M36,240 V119.2 Q36,115.2 40,115.2 H56 Q60,115.2 60,119.2 V240 Z"/>
+      <path class="ch-bar ch-one" style="--i:2" d="M72,240 V145.6 Q72,141.6 76,141.6 H92 Q96,141.6 96,145.6 V240 Z"/>
+      <path class="ch-bar ch-two" style="--i:3" d="M108,240 V85.6 Q108,81.6 112,81.6 H128 Q132,81.6 132,85.6 V240 Z"/>
+      <path class="ch-bar ch-one" style="--i:4" d="M144,240 V104.80000000000001 Q144,100.80000000000001 148,100.80000000000001 H164 Q168,100.80000000000001 168,104.80000000000001 V240 Z"/>
+      <path class="ch-bar ch-two" style="--i:5" d="M180,240 V52.0 Q180,48.0 184,48.0 H200 Q204,48.0 204,52.0 V240 Z"/>
+      <path class="ch-bar ch-one" style="--i:6" d="M216,240 V76.0 Q216,72.0 220,72.0 H236 Q240,72.0 240,76.0 V240 Z"/>
+      <path class="ch-bar ch-two" style="--i:7" d="M252,240 V23.19999999999999 Q252,19.19999999999999 256,19.19999999999999 H272 Q276,19.19999999999999 276,23.19999999999999 V240 Z"/>
+      <path class="ch-bar ch-one" style="--i:8" d="M288,240 V42.400000000000006 Q288,38.400000000000006 292,38.400000000000006 H308 Q312,38.400000000000006 312,42.400000000000006 V240 Z"/>
+    </svg>
+        </div>
+        <div class="ch-slot ch-slot--pie">
+    <svg class="ch ch--pie" viewBox="0 0 248 248" width="248" height="248" aria-hidden="true" focusable="false">
+      <path class="ch-slice ch-one" style="--i:0" d="M124,124 L124.00,4.00 A120,120 0 0 1 194.53,26.92 Z"/>
+      <path class="ch-slice ch-two" style="--i:1" d="M124,124 L194.53,26.92 A120,120 0 0 1 238.13,161.08 Z"/>
+      <path class="ch-slice ch-one" style="--i:2" d="M124,124 L238.13,161.08 A120,120 0 0 1 86.92,238.13 Z"/>
+      <path class="ch-slice ch-two" style="--i:3" d="M124,124 L86.92,238.13 A120,120 0 0 1 9.87,161.08 Z"/>
+      <path class="ch-slice ch-one" style="--i:4" d="M124,124 L9.87,161.08 A120,120 0 0 1 53.47,26.92 Z"/>
+      <path class="ch-slice ch-two" style="--i:5" d="M124,124 L53.47,26.92 A120,120 0 0 1 124.00,4.00 Z"/>
+    </svg>
+        </div>
+        <div class="ch-slot ch-slot--heat">
+    <!-- Heatmap: 16 across, 10 down, the strong ones clustered loosely along the
+         upper-left to lower-right diagonal, lighter with distance from it,
+         with a little scatter so it is not a ramp. Strength is fill-opacity
+         so charts.js can fade the cell itself in. -->
+    <svg class="ch ch--heat" viewBox="0 0 254 158" width="254" height="158" aria-hidden="true" focusable="false">
+      <rect class="ch-cell" x="0" y="0" width="14" height="14" rx="1.5" fill-opacity="0.92"/>
+      <rect class="ch-cell" x="16" y="0" width="14" height="14" rx="1.5" fill-opacity="0.78"/>
+      <rect class="ch-cell" x="32" y="0" width="14" height="14" rx="1.5" fill-opacity="0.66"/>
+      <rect class="ch-cell" x="48" y="0" width="14" height="14" rx="1.5" fill-opacity="0.55"/>
+      <rect class="ch-cell" x="64" y="0" width="14" height="14" rx="1.5" fill-opacity="0.30"/>
+      <rect class="ch-cell" x="80" y="0" width="14" height="14" rx="1.5" fill-opacity="0.14"/>
+      <rect class="ch-cell" x="96" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="112" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="128" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="144" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="160" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="176" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="192" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="208" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="224" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="240" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="0" y="16" width="14" height="14" rx="1.5" fill-opacity="0.67"/>
+      <rect class="ch-cell" x="16" y="16" width="14" height="14" rx="1.5" fill-opacity="0.82"/>
+      <rect class="ch-cell" x="32" y="16" width="14" height="14" rx="1.5" fill-opacity="1.00"/>
+      <rect class="ch-cell" x="48" y="16" width="14" height="14" rx="1.5" fill-opacity="0.77"/>
+      <rect class="ch-cell" x="64" y="16" width="14" height="14" rx="1.5" fill-opacity="0.58"/>
+      <rect class="ch-cell" x="80" y="16" width="14" height="14" rx="1.5" fill-opacity="0.44"/>
+      <rect class="ch-cell" x="96" y="16" width="14" height="14" rx="1.5" fill-opacity="0.29"/>
+      <rect class="ch-cell" x="112" y="16" width="14" height="14" rx="1.5" fill-opacity="0.22"/>
+      <rect class="ch-cell" x="128" y="16" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="144" y="16" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="160" y="16" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="176" y="16" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="192" y="16" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="208" y="16" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="224" y="16" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="240" y="16" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="0" y="32" width="14" height="14" rx="1.5" fill-opacity="0.52"/>
+      <rect class="ch-cell" x="16" y="32" width="14" height="14" rx="1.5" fill-opacity="0.70"/>
+      <rect class="ch-cell" x="32" y="32" width="14" height="14" rx="1.5" fill-opacity="0.71"/>
+      <rect class="ch-cell" x="48" y="32" width="14" height="14" rx="1.5" fill-opacity="0.98"/>
+      <rect class="ch-cell" x="64" y="32" width="14" height="14" rx="1.5" fill-opacity="0.95"/>
+      <rect class="ch-cell" x="80" y="32" width="14" height="14" rx="1.5" fill-opacity="0.76"/>
+      <rect class="ch-cell" x="96" y="32" width="14" height="14" rx="1.5" fill-opacity="0.53"/>
+      <rect class="ch-cell" x="112" y="32" width="14" height="14" rx="1.5" fill-opacity="0.46"/>
+      <rect class="ch-cell" x="128" y="32" width="14" height="14" rx="1.5" fill-opacity="0.29"/>
+      <rect class="ch-cell" x="144" y="32" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="160" y="32" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="176" y="32" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="192" y="32" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="208" y="32" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="224" y="32" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="240" y="32" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="0" y="48" width="14" height="14" rx="1.5" fill-opacity="0.22"/>
+      <rect class="ch-cell" x="16" y="48" width="14" height="14" rx="1.5" fill-opacity="0.41"/>
+      <rect class="ch-cell" x="32" y="48" width="14" height="14" rx="1.5" fill-opacity="0.59"/>
+      <rect class="ch-cell" x="48" y="48" width="14" height="14" rx="1.5" fill-opacity="0.76"/>
+      <rect class="ch-cell" x="64" y="48" width="14" height="14" rx="1.5" fill-opacity="0.92"/>
+      <rect class="ch-cell" x="80" y="48" width="14" height="14" rx="1.5" fill-opacity="1.00"/>
+      <rect class="ch-cell" x="96" y="48" width="14" height="14" rx="1.5" fill-opacity="0.81"/>
+      <rect class="ch-cell" x="112" y="48" width="14" height="14" rx="1.5" fill-opacity="0.63"/>
+      <rect class="ch-cell" x="128" y="48" width="14" height="14" rx="1.5" fill-opacity="0.54"/>
+      <rect class="ch-cell" x="144" y="48" width="14" height="14" rx="1.5" fill-opacity="0.37"/>
+      <rect class="ch-cell" x="160" y="48" width="14" height="14" rx="1.5" fill-opacity="0.23"/>
+      <rect class="ch-cell" x="176" y="48" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="192" y="48" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="208" y="48" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="224" y="48" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="240" y="48" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="0" y="64" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="16" y="64" width="14" height="14" rx="1.5" fill-opacity="0.08"/>
+      <rect class="ch-cell" x="32" y="64" width="14" height="14" rx="1.5" fill-opacity="0.32"/>
+      <rect class="ch-cell" x="48" y="64" width="14" height="14" rx="1.5" fill-opacity="0.44"/>
+      <rect class="ch-cell" x="64" y="64" width="14" height="14" rx="1.5" fill-opacity="0.65"/>
+      <rect class="ch-cell" x="80" y="64" width="14" height="14" rx="1.5" fill-opacity="0.68"/>
+      <rect class="ch-cell" x="96" y="64" width="14" height="14" rx="1.5" fill-opacity="0.89"/>
+      <rect class="ch-cell" x="112" y="64" width="14" height="14" rx="1.5" fill-opacity="0.99"/>
+      <rect class="ch-cell" x="128" y="64" width="14" height="14" rx="1.5" fill-opacity="0.78"/>
+      <rect class="ch-cell" x="144" y="64" width="14" height="14" rx="1.5" fill-opacity="0.67"/>
+      <rect class="ch-cell" x="160" y="64" width="14" height="14" rx="1.5" fill-opacity="0.48"/>
+      <rect class="ch-cell" x="176" y="64" width="14" height="14" rx="1.5" fill-opacity="0.25"/>
+      <rect class="ch-cell" x="192" y="64" width="14" height="14" rx="1.5" fill-opacity="0.08"/>
+      <rect class="ch-cell" x="208" y="64" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="224" y="64" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="240" y="64" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="0" y="80" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="16" y="80" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="32" y="80" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="48" y="80" width="14" height="14" rx="1.5" fill-opacity="0.14"/>
+      <rect class="ch-cell" x="64" y="80" width="14" height="14" rx="1.5" fill-opacity="0.31"/>
+      <rect class="ch-cell" x="80" y="80" width="14" height="14" rx="1.5" fill-opacity="0.51"/>
+      <rect class="ch-cell" x="96" y="80" width="14" height="14" rx="1.5" fill-opacity="0.59"/>
+      <rect class="ch-cell" x="112" y="80" width="14" height="14" rx="1.5" fill-opacity="0.77"/>
+      <rect class="ch-cell" x="128" y="80" width="14" height="14" rx="1.5" fill-opacity="0.96"/>
+      <rect class="ch-cell" x="144" y="80" width="14" height="14" rx="1.5" fill-opacity="0.92"/>
+      <rect class="ch-cell" x="160" y="80" width="14" height="14" rx="1.5" fill-opacity="0.66"/>
+      <rect class="ch-cell" x="176" y="80" width="14" height="14" rx="1.5" fill-opacity="0.51"/>
+      <rect class="ch-cell" x="192" y="80" width="14" height="14" rx="1.5" fill-opacity="0.36"/>
+      <rect class="ch-cell" x="208" y="80" width="14" height="14" rx="1.5" fill-opacity="0.29"/>
+      <rect class="ch-cell" x="224" y="80" width="14" height="14" rx="1.5" fill-opacity="0.12"/>
+      <rect class="ch-cell" x="240" y="80" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="0" y="96" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="16" y="96" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="32" y="96" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="48" y="96" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="64" y="96" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="80" y="96" width="14" height="14" rx="1.5" fill-opacity="0.12"/>
+      <rect class="ch-cell" x="96" y="96" width="14" height="14" rx="1.5" fill-opacity="0.34"/>
+      <rect class="ch-cell" x="112" y="96" width="14" height="14" rx="1.5" fill-opacity="0.49"/>
+      <rect class="ch-cell" x="128" y="96" width="14" height="14" rx="1.5" fill-opacity="0.63"/>
+      <rect class="ch-cell" x="144" y="96" width="14" height="14" rx="1.5" fill-opacity="0.77"/>
+      <rect class="ch-cell" x="160" y="96" width="14" height="14" rx="1.5" fill-opacity="0.94"/>
+      <rect class="ch-cell" x="176" y="96" width="14" height="14" rx="1.5" fill-opacity="0.90"/>
+      <rect class="ch-cell" x="192" y="96" width="14" height="14" rx="1.5" fill-opacity="0.61"/>
+      <rect class="ch-cell" x="208" y="96" width="14" height="14" rx="1.5" fill-opacity="0.54"/>
+      <rect class="ch-cell" x="224" y="96" width="14" height="14" rx="1.5" fill-opacity="0.31"/>
+      <rect class="ch-cell" x="240" y="96" width="14" height="14" rx="1.5" fill-opacity="0.15"/>
+      <rect class="ch-cell" x="0" y="112" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="16" y="112" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="32" y="112" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="48" y="112" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="64" y="112" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="80" y="112" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="96" y="112" width="14" height="14" rx="1.5" fill-opacity="0.15"/>
+      <rect class="ch-cell" x="112" y="112" width="14" height="14" rx="1.5" fill-opacity="0.24"/>
+      <rect class="ch-cell" x="128" y="112" width="14" height="14" rx="1.5" fill-opacity="0.42"/>
+      <rect class="ch-cell" x="144" y="112" width="14" height="14" rx="1.5" fill-opacity="0.61"/>
+      <rect class="ch-cell" x="160" y="112" width="14" height="14" rx="1.5" fill-opacity="0.73"/>
+      <rect class="ch-cell" x="176" y="112" width="14" height="14" rx="1.5" fill-opacity="0.93"/>
+      <rect class="ch-cell" x="192" y="112" width="14" height="14" rx="1.5" fill-opacity="0.94"/>
+      <rect class="ch-cell" x="208" y="112" width="14" height="14" rx="1.5" fill-opacity="0.73"/>
+      <rect class="ch-cell" x="224" y="112" width="14" height="14" rx="1.5" fill-opacity="0.57"/>
+      <rect class="ch-cell" x="240" y="112" width="14" height="14" rx="1.5" fill-opacity="0.51"/>
+      <rect class="ch-cell" x="0" y="128" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="16" y="128" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="32" y="128" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="48" y="128" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="64" y="128" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="80" y="128" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="96" y="128" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="112" y="128" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="128" y="128" width="14" height="14" rx="1.5" fill-opacity="0.09"/>
+      <rect class="ch-cell" x="144" y="128" width="14" height="14" rx="1.5" fill-opacity="0.29"/>
+      <rect class="ch-cell" x="160" y="128" width="14" height="14" rx="1.5" fill-opacity="0.44"/>
+      <rect class="ch-cell" x="176" y="128" width="14" height="14" rx="1.5" fill-opacity="0.61"/>
+      <rect class="ch-cell" x="192" y="128" width="14" height="14" rx="1.5" fill-opacity="0.82"/>
+      <rect class="ch-cell" x="208" y="128" width="14" height="14" rx="1.5" fill-opacity="0.95"/>
+      <rect class="ch-cell" x="224" y="128" width="14" height="14" rx="1.5" fill-opacity="0.85"/>
+      <rect class="ch-cell" x="240" y="128" width="14" height="14" rx="1.5" fill-opacity="0.78"/>
+      <rect class="ch-cell" x="0" y="144" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="16" y="144" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="32" y="144" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="48" y="144" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="64" y="144" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="80" y="144" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="96" y="144" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="112" y="144" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="128" y="144" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="144" y="144" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="160" y="144" width="14" height="14" rx="1.5" fill-opacity="0.25"/>
+      <rect class="ch-cell" x="176" y="144" width="14" height="14" rx="1.5" fill-opacity="0.34"/>
+      <rect class="ch-cell" x="192" y="144" width="14" height="14" rx="1.5" fill-opacity="0.47"/>
+      <rect class="ch-cell" x="208" y="144" width="14" height="14" rx="1.5" fill-opacity="0.63"/>
+      <rect class="ch-cell" x="224" y="144" width="14" height="14" rx="1.5" fill-opacity="0.82"/>
+      <rect class="ch-cell" x="240" y="144" width="14" height="14" rx="1.5" fill-opacity="1.00"/>
+    </svg>
+        </div>
+        <div class="ch-slot ch-slot--stack">
+    <!-- Three stacked bars on one left baseline, longest / shortest /
+         medium, each in three tones: the gold ramp, the off-white, and the
+         burnt gold flat. 2px surface gap between segments, as the pie. -->
+    <svg class="ch ch--stack" viewBox="0 0 220 62" width="220" height="62" aria-hidden="true" focusable="false">
+      <path class="ch-seg ch-two" d="M3,0 H103.6 V12 H3 Q0,12 0,9 V3 Q0,0 3,0 Z"/>
+      <path class="ch-seg ch-three" d="M105.6,0 H169.6 V12 H105.6 Z"/>
+      <path class="ch-seg ch-one" d="M171.6,0 H217.0 Q220.0,0 220.0,3 V9 Q220.0,12 217.0,12 H171.6 Z"/>
+      <path class="ch-seg ch-two" d="M3,25 H49.2 V37 H3 Q0,37 0,34 V28 Q0,25 3,25 Z"/>
+      <path class="ch-seg ch-three" d="M51.2,25 H94.0 V37 H51.2 Z"/>
+      <path class="ch-seg ch-one" d="M96.0,25 H125.0 Q128.0,25 128.0,28 V34 Q128.0,37 125.0,37 H96.0 Z"/>
+      <path class="ch-seg ch-two" d="M3,50 H89.5 V62 H3 Q0,62 0,59 V53 Q0,50 3,50 Z"/>
+      <path class="ch-seg ch-three" d="M91.5,50 H135.3 V62 H91.5 Z"/>
+      <path class="ch-seg ch-one" d="M137.3,50 H173.0 Q176.0,50 176.0,53 V59 Q176.0,62 173.0,62 H137.3 Z"/>
+    </svg>
+        </div>
+        <div class="ch-slot ch-slot--people">
+    <!-- Isotype: five columns, seven rows; 23 figures in gold and 12 in
+         the off-white at a fraction of the strength. Reads as 23 of 35. -->
+    <svg class="ch ch--people" viewBox="0 0 92 160" width="92" height="160" aria-hidden="true" focusable="false">
+      <defs>
+        <symbol id="ch-person" viewBox="0 0 12 16">
+          <circle cx="6" cy="3.4" r="3.2"/>
+          <path d="M0,16 V11.2 Q0,7.6 3.6,7.6 H8.4 Q12,7.6 12,11.2 V16 Z"/>
+        </symbol>
+      </defs>
+      <use class="ch-person ch-person--on" href="#ch-person" x="0" y="0" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="20" y="0" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="40" y="0" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="60" y="0" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="80" y="0" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="0" y="24" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="20" y="24" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="40" y="24" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="60" y="24" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="80" y="24" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="0" y="48" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="20" y="48" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="40" y="48" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="60" y="48" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="80" y="48" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="0" y="72" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="20" y="72" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="40" y="72" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="60" y="72" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="80" y="72" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="0" y="96" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="20" y="96" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="40" y="96" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="60" y="96" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="80" y="96" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="0" y="120" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="20" y="120" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="40" y="120" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="60" y="120" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="80" y="120" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="0" y="144" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="20" y="144" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="40" y="144" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="60" y="144" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="80" y="144" width="12" height="16"/>
+    </svg>
+        </div>
+        <div class="ch-slot ch-slot--hbars">
+    <!-- Five solid horizontal bars on one left baseline, square ends,
+         bar 2.5x the gap, lengths descending but not tidily, alternating
+         the two fills down the stack. -->
+    <svg class="ch ch--hbars" viewBox="0 0 140 66" width="140" height="66" aria-hidden="true" focusable="false">
+      <rect class="ch-hbar ch-two" x="0" y="0" width="140" height="10"/>
+      <rect class="ch-hbar ch-one" x="0" y="14" width="101" height="10"/>
+      <rect class="ch-hbar ch-two" x="0" y="28" width="112" height="10"/>
+      <rect class="ch-hbar ch-one" x="0" y="42" width="63" height="10"/>
+      <rect class="ch-hbar ch-two" x="0" y="56" width="42" height="10"/>
+    </svg>
+        </div>
+        <div class="ch-slot ch-slot--candles">
+    <!-- Nine candles on a shared centre line, no order to the highs and
+         lows. Wick 1 unit, body 8 units; the body's tone runs down its
+         wick. Gold and off-white with no repeating pattern. -->
+    <svg class="ch ch--candles" viewBox="0 0 160 80" width="160" height="80" aria-hidden="true" focusable="false">
+      <g class="ch-candle ch-two"><line x1="9.00" y1="27.2" x2="9.00" y2="73.4"/><rect x="5.00" y="40.1" width="8" height="28.5"/></g>
+      <g class="ch-candle ch-one"><line x1="26.75" y1="17.3" x2="26.75" y2="53.8"/><rect x="22.75" y="26.6" width="8" height="21.8"/></g>
+      <g class="ch-candle ch-one"><line x1="44.50" y1="25.1" x2="44.50" y2="53.7"/><rect x="40.50" y="31.3" width="8" height="13.8"/></g>
+      <g class="ch-candle ch-two"><line x1="62.25" y1="10.4" x2="62.25" y2="40.2"/><rect x="58.25" y="21.5" width="8" height="10.5"/></g>
+      <g class="ch-candle ch-one"><line x1="80.00" y1="29.8" x2="80.00" y2="62.2"/><rect x="76.00" y="37.4" width="8" height="20.3"/></g>
+      <g class="ch-candle ch-two"><line x1="97.75" y1="19.4" x2="97.75" y2="65.9"/><rect x="93.75" y="30.0" width="8" height="25.7"/></g>
+      <g class="ch-candle ch-two"><line x1="115.50" y1="9.3" x2="115.50" y2="58.0"/><rect x="111.50" y="20.9" width="8" height="29.4"/></g>
+      <g class="ch-candle ch-one"><line x1="133.25" y1="27.3" x2="133.25" y2="60.7"/><rect x="129.25" y="34.4" width="8" height="21.4"/></g>
+      <g class="ch-candle ch-two"><line x1="151.00" y1="27.3" x2="151.00" y2="65.2"/><rect x="147.00" y="37.2" width="8" height="19.5"/></g>
+    </svg>
+        </div>
+        <div class="ch-slot ch-slot--area">
+    <!-- Three bands on one baseline, each top edge a wave, the waves
+         offset so the bands breathe. Bottom gold, middle off-white at
+         lower strength, top gold at the lowest. Fills only, no stroke.
+         Each band is its own region, so the strengths do not stack. -->
+    <svg class="ch ch--area" viewBox="0 0 180 70" width="180" height="70" aria-hidden="true" focusable="false">
+      <path class="ch-band ch-band--top" d="M0,12.7 L3,12.7 L6,12.5 L9,12.1 L12,11.5 L15,11.0 L18,10.8 L21,11.0 L24,11.8 L27,13.2 L30,15.1 L33,17.2 L36,19.3 L39,21.0 L42,22.2 L45,22.7 L48,22.5 L51,21.8 L54,20.7 L57,19.5 L60,18.5 L63,17.7 L66,17.3 L69,17.0 L72,16.8 L75,16.4 L78,15.7 L81,14.7 L84,13.4 L87,11.9 L90,10.4 L93,9.3 L96,8.8 L99,8.9 L102,9.8 L105,11.3 L108,13.2 L111,15.2 L114,17.1 L117,18.5 L120,19.5 L123,19.9 L126,19.9 L129,19.8 L132,19.6 L135,19.5 L138,19.7 L141,20.1 L144,20.5 L147,20.7 L150,20.6 L153,20.0 L156,18.8 L159,17.1 L162,15.1 L165,13.0 L168,11.1 L171,9.8 L174,9.1 L177,9.1 L180,9.8 L180,27.7 L177,26.7 L174,25.9 L171,25.7 L168,26.2 L165,27.7 L162,29.9 L159,32.5 L156,35.2 L153,37.3 L150,38.5 L147,38.9 L144,38.3 L141,37.3 L138,36.1 L135,35.1 L132,34.4 L129,34.1 L126,33.9 L123,33.5 L120,32.7 L117,31.3 L114,29.5 L111,27.4 L108,25.5 L105,24.3 L102,24.0 L99,24.7 L96,26.4 L93,28.6 L90,31.0 L87,33.1 L84,34.5 L81,35.3 L78,35.5 L75,35.5 L72,35.5 L69,35.8 L66,36.3 L63,37.1 L60,37.7 L57,37.8 L54,37.2 L51,35.6 L48,33.4 L45,30.8 L42,28.2 L39,26.2 L36,25.0 L33,24.8 L30,25.5 L27,26.7 L24,28.1 L21,29.3 L18,30.2 L15,30.6 L12,30.9 L9,31.3 L6,32.0 L3,33.3 L0,35.0 Z"/>
+      <path class="ch-band ch-band--mid" d="M0,35.0 L3,33.3 L6,32.0 L9,31.3 L12,30.9 L15,30.6 L18,30.2 L21,29.3 L24,28.1 L27,26.7 L30,25.5 L33,24.8 L36,25.0 L39,26.2 L42,28.2 L45,30.8 L48,33.4 L51,35.6 L54,37.2 L57,37.8 L60,37.7 L63,37.1 L66,36.3 L69,35.8 L72,35.5 L75,35.5 L78,35.5 L81,35.3 L84,34.5 L87,33.1 L90,31.0 L93,28.6 L96,26.4 L99,24.7 L102,24.0 L105,24.3 L108,25.5 L111,27.4 L114,29.5 L117,31.3 L120,32.7 L123,33.5 L126,33.9 L129,34.1 L132,34.4 L135,35.1 L138,36.1 L141,37.3 L144,38.3 L147,38.9 L150,38.5 L153,37.3 L156,35.2 L159,32.5 L162,29.9 L165,27.7 L168,26.2 L171,25.7 L174,25.9 L177,26.7 L180,27.7 L180,55.2 L177,54.4 L174,53.1 L171,51.5 L168,50.0 L165,48.7 L162,47.9 L159,47.3 L156,47.1 L153,46.8 L150,46.4 L147,45.7 L144,44.7 L141,43.5 L138,42.3 L135,41.5 L132,41.3 L129,41.8 L126,43.1 L123,45.0 L120,47.2 L117,49.4 L114,51.2 L111,52.5 L108,53.2 L105,53.2 L102,52.8 L99,52.2 L96,51.7 L93,51.3 L90,51.2 L87,51.3 L84,51.3 L81,51.1 L78,50.4 L75,49.2 L72,47.5 L69,45.5 L66,43.6 L63,41.9 L60,40.9 L57,40.6 L54,41.2 L51,42.4 L48,44.1 L45,45.8 L42,47.3 L39,48.5 L36,49.2 L33,49.6 L30,49.8 L27,50.0 L24,50.4 L21,51.1 L18,52.1 L15,53.1 L12,54.0 L9,54.4 L6,54.1 L3,53.0 L0,51.4 Z"/>
+      <path class="ch-band ch-band--low" d="M0,51.4 L3,53.0 L6,54.1 L9,54.4 L12,54.0 L15,53.1 L18,52.1 L21,51.1 L24,50.4 L27,50.0 L30,49.8 L33,49.6 L36,49.2 L39,48.5 L42,47.3 L45,45.8 L48,44.1 L51,42.4 L54,41.2 L57,40.6 L60,40.9 L63,41.9 L66,43.6 L69,45.5 L72,47.5 L75,49.2 L78,50.4 L81,51.1 L84,51.3 L87,51.3 L90,51.2 L93,51.3 L96,51.7 L99,52.2 L102,52.8 L105,53.2 L108,53.2 L111,52.5 L114,51.2 L117,49.4 L120,47.2 L123,45.0 L126,43.1 L129,41.8 L132,41.3 L135,41.5 L138,42.3 L141,43.5 L144,44.7 L147,45.7 L150,46.4 L153,46.8 L156,47.1 L159,47.3 L162,47.9 L165,48.7 L168,50.0 L171,51.5 L174,53.1 L177,54.4 L180,55.2 L180,70 L0,70 Z"/>
+    </svg>
+        </div>
+      </div>
+
+      <div class="punchline__content wrap">
+        <h1 id="punchline-head">Our work</h1>
+      </div>
+    </section>
+
     <section class="wrap work-hero">
-      <h1 class="tx-rim-text" data-texture="rim">Our work</h1>
       <p class="lead">
         A meaningful part of our fee comes out of what we generate: rev
         share or profit share. So every figure below is revenue or gross profit,
@@ -619,6 +982,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <script defer src="motion.js"></script>
   <script defer src="textures.js"></script>
+  <script defer src="charts.js"></script>
 
   <script defer src="boot.js"></script>
 
