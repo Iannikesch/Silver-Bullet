@@ -1272,24 +1272,17 @@
       opacity: .6;
     }
     .ch-slot--people {
-      left: calc(60% - 40px);                /* a step left, clear of the line's arc */
-      top: clamp(var(--s-6), 5vh, var(--s-12));
+      left: calc(34% + 15px);                /* the top-centre gap, a step right of it */
+      top: clamp(var(--s-8), 8vh, var(--s-14));
       width: clamp(72px, 6.5vw, 96px);
       opacity: .6;
     }
     .ch-slot--heat .ch, .ch-slot--stack .ch, .ch-slot--people .ch { width: 100%; height: auto; }
 
-    /* Three more, in what is left: candles in the top-centre gap between
-       the heatmap and the figures, the area chart in the bottom gap
-       between the bar chart and the stacked bars, the horizontal bars in
-       the bottom-right corner under the pie. Same rule: smaller, ~0.6
+    /* Two more, in what is left: the area chart in the bottom gap between
+       the bar chart and the stacked bars, the horizontal bars in the
+       bottom-right corner under the pie. Same rule: smaller, ~0.6
        strength, nothing under the copy. */
-    .ch-slot--candles {
-      left: 34%;
-      top: clamp(var(--s-8), 8vh, var(--s-14));
-      width: clamp(120px, 11vw, 160px);
-      opacity: .6;
-    }
     .ch-slot--area {
       left: 29%;
       bottom: 0;                             /* on the band's floor */
@@ -1302,7 +1295,7 @@
       width: clamp(100px, 9.5vw, 140px);
       opacity: .6;
     }
-    .ch-slot--candles .ch, .ch-slot--area .ch, .ch-slot--hbars .ch { width: 100%; height: auto; }
+    .ch-slot--area .ch, .ch-slot--hbars .ch { width: 100%; height: auto; }
     /* The area's hard left and right cuts read as pasted in, so its
        sides fade into the band. Mask, not gradient fill: the bands keep
        their tones. */
@@ -1328,9 +1321,6 @@
     .ch-person--off { fill: color-mix(in srgb, var(--ch-one-top) 22%, transparent); }
     .ch-hbar.ch-one { fill: var(--ch-one-top); }                    /* square, flat: the fill is the flat top colour */
     .ch-hbar.ch-two { fill: var(--ch-two-mid); stroke: none; }
-    .ch-candle line { stroke-width: 1; }
-    .ch-candle.ch-two { fill: var(--ch-two-mid); stroke: var(--ch-two-mid); }
-    .ch-candle.ch-one { fill: var(--ch-one-top); stroke: var(--ch-one-top); }
     .ch-band--low { fill: var(--ch-two-mid); }
     .ch-band--mid { fill: color-mix(in srgb, var(--ch-one-top) 55%, transparent); }
     .ch-band--top { fill: color-mix(in srgb, var(--ch-two-mid) 30%, transparent); } /* the tone is in the fill, so the arrival tween can own opacity */
@@ -1355,7 +1345,7 @@
          stays: it is the one that is part of the headline's frame. */
       .ch-slot--bars, .ch-slot--pie,
       .ch-slot--heat, .ch-slot--stack, .ch-slot--people,
-      .ch-slot--candles, .ch-slot--area, .ch-slot--hbars { display: none; }
+      .ch-slot--area, .ch-slot--hbars { display: none; }
     }
 
     /* ---------- contact ---------- */

@@ -342,29 +342,32 @@ dimmed to a fifth through the headline by the mask, and charts.js only
 refits its viewBox to the band's aspect. Reduced motion, no JS and a CDN
 outage all get the same drawing: the SVG in index.html is complete.
 
-**Six small motifs joined the big three (2026-09-18, later, in two
-briefs).** Around the headline, in the negative space, on the owner's
-brief, to balance the band: top row, a heatmap (left), nine candlesticks
-(centre), an isotype grid of 13-of-20 figures (right of the headline,
-under the line's arc); bottom row, a three-band stacked area (left of
-centre), three stacked horizontal bars (centre), five flat horizontal bars
-(right, under the pie). They are subordinate by rule: smaller than the
-big three, at about six tenths of their strength, nothing under the copy,
-and hidden below 900px with the bars and pie. Same two fills, plus the
-burnt gold flat as the stacked bars' third tone; the area's upper bands
-are the fills at lower strength; the area's sides are masked into the
-band so it does not read as pasted on. They arrive once, on scroll: the
-bars, then the pie, then all six in one fade as the pie lands (a
-staggered arrival was tried and took too long); the band is still by
-about 2s.
+**Five small motifs joined the big three (2026-09-18, later, over
+several briefs).** Around the headline, in the negative space, on the
+owner's brief, to balance the band: top row, a heatmap (left) and an
+isotype grid of 23-of-35 figures (centre); bottom row, a three-band
+stacked area (left of centre), three stacked horizontal bars (right of
+centre), five flat horizontal bars (right, under the pie). A candlestick
+chart was in the top-centre for an hour and was cut. They are
+subordinate by rule: smaller than the big three, at about six tenths of
+their strength, nothing under the copy, and hidden below 900px with the
+bars and pie. Same two fills, plus the burnt gold flat as the stacked
+bars' third tone; the area's upper bands are the fills at lower
+strength, and its sides are masked into the band so it does not read as
+pasted on. They arrive once, on scroll: the bars, then the pie, then all
+five start together as the pie lands, each drawing itself in its own
+direction (the heatmap cell by cell from the top-left, the figures from
+the bottom-right back, the bars growing from the left, the area rising
+bottom band first), all done within about a second. A staggered,
+one-after-another arrival was tried and took too long.
 
-This is nine drawn things around one headline. The count of ongoing
+This is eight drawn things around one headline. The count of ongoing
 movers on the page is unchanged (each arrives once and rests), and the
 owner asked for every one of them. If it reads as busy, the order to cut
 is the reverse of arrival: the last three first.
 
 The numbers are made up. If the band ever reads as too busy, the order to
-drop things: the six small motifs (last in, first out), then the
+drop things: the five small motifs (last in, first out), then the
 bar-and-slice arrival, and the line last.
 
 ## The scale pass (2026-09-16)
