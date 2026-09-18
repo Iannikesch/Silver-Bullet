@@ -785,12 +785,14 @@
         <div class="ch-slot ch-slot--line">
     <!-- data-points is the design, on a 1400x700 canvas. charts.js refits
          the viewBox to the band's real aspect and rescales these points to
-         it, so the line always runs corner to corner whatever the band's
-         proportions. Static (no JS) it renders at the design aspect,
-         letterboxed. The bullet's TAIL sits on the endpoint: the line runs
-         into it, so it reads as the thing that just drew the line. -->
+         it, so the line runs from the bottom-left corner to the right EDGE
+         whatever the band's proportions. The bullet's TAIL sits on the
+         drawn tip, so the line runs into it; at the end of the path the
+         bullet leaves the band through the right edge. Static (no JS or
+         reduced motion) the line is simply drawn and the bullet rests at
+         the edge. -->
     <svg class="ch ch--line" viewBox="0 0 1400 700" preserveAspectRatio="xMidYMid meet"
-         data-points="40,610 180,470 300,520 440,380 560,430 700,290 820,340 960,200 1080,250 1200,130 1300,70" data-height="700" aria-hidden="true" focusable="false">
+         data-points="40,610 180,470 300,520 440,380 560,430 700,290 820,340 960,200 1080,250 1200,120 1300,170 1400,50" data-height="700" aria-hidden="true" focusable="false">
       <defs>
         <linearGradient id="ch-gold-line" x1="0" y1="0" x2="1" y2="0">
           <stop offset="0" style="stop-color: var(--amber-burnt, #AB804F)"/>
@@ -814,13 +816,14 @@
           <stop offset="1" style="stop-color: var(--chrome-700, #343434)"/>
         </linearGradient>
         <!-- Luminance mask: white shows the line, dark hides it. A soft
-             ellipse over the headline's zone drops the line to about a
-             fifth of its strength there, so the type stays clean while the
-             line still visibly passes behind it. charts.js keeps the ellipse
+             ellipse over the headline's zone drops the line to half
+             strength there. Half, not a fifth: the line is now a short
+             moving streak, and at a fifth it vanished for the third of its
+             journey that crosses the headline. charts.js keeps the ellipse
              centred on the band as the viewBox is refitted. -->
         <radialGradient id="ch-text-fade">
-          <stop offset="0" stop-color="rgb(48,48,48)"/>
-          <stop offset=".62" stop-color="rgb(48,48,48)"/>
+          <stop offset="0" stop-color="rgb(128,128,128)"/>
+          <stop offset=".62" stop-color="rgb(128,128,128)"/>
           <stop offset="1" stop-color="white"/>
         </radialGradient>
         <mask id="ch-text-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1400" height="700">
@@ -828,13 +831,18 @@
           <ellipse class="ch-mask__text" cx="700" cy="350" rx="430" ry="105" fill="url(#ch-text-fade)"/>
         </mask>
       </defs>
-      <path class="ch-path" mask="url(#ch-text-mask)" d="M40,610 L180,470 L300,520 L440,380 L560,430 L700,290 L820,340 L960,200 L1080,250 L1200,130 L1300,70"/>
+      <!-- Two copies of the line. The bright one is the streak the bullet
+           is drawing; the dim one runs a little behind its fading edge so the
+           tail softens instead of ending on a hard cut. charts.js sets both
+           windows every frame with stroke-dasharray. -->
+      <path class="ch-path ch-path--dim" mask="url(#ch-text-mask)" d="M40,610 L180,470 L300,520 L440,380 L560,430 L700,290 L820,340 L960,200 L1080,250 L1200,120 L1300,170 L1400,50"/>
+      <path class="ch-path" mask="url(#ch-text-mask)" d="M40,610 L180,470 L300,520 L440,380 L560,430 L700,290 L820,340 L960,200 L1080,250 L1200,120 L1300,170 L1400,50"/>
       <!-- The bullet. Tail at the local origin, nose 28 units forward, so
            translate() puts its tail on the line's tip and rotate() lays it
            along the final segment. Chrome, per the depiction ramp. -->
-      <g class="ch-tip" transform="translate(1300,70) rotate(-31.0) scale(3.2)">
-        <path d="M0,-4 H16 Q24,-4 28,0 Q24,4 16,4 H0 Z" fill="url(#ch-bullet)"/>
-        <path d="M0,-4 H16 Q22,-4 25,-1.5" class="ch-tip__lit"/>
+      <g class="ch-tip" transform="translate(1400,50) rotate(-50.2) scale(3.2)">
+        <path d="M0,-2.4 H16 Q24,-2.4 28,0 Q24,2.4 16,2.4 H0 Z" fill="url(#ch-bullet)"/>
+        <path d="M0,-2.4 H16 Q22,-2.4 25,-0.9" class="ch-tip__lit"/>
       </g>
     </svg>
         </div>

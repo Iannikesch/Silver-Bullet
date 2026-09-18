@@ -335,13 +335,23 @@ toward `--magenta`, top to bottom. The "do not" list rules out gradient
 washes as decoration; this is a fill on a mark, not a wash on a surface,
 and the magenta is well under the palette's 1% budget.
 
-**The line is a scroll-scrubbed mover.** It draws itself as the band
-scrolls in and the bullet rides its tip; the bars and slices arrive once.
-It replaces the bore's pointer-driven twist, so the count of things that
-move on this page did not go up, and it answers scroll rather than a
-clock, which is the test this document applies. Reduced motion, no JS and
-a CDN outage all get the finished drawing: the SVG in index.html is
-complete and charts.js only animates it.
+**The line is a clocked streak, once.** Revised the same day. It was a
+scroll-scrubbed mover; the owner then asked for a bolt: the bullet crosses
+the band drawing the line behind it, the line fades away from the
+bottom-left forward at a slower pace, and the whole thing is gone once it
+has crossed. "Speed" and "the fade follows at 75% of it" only mean
+something against a clock, so this one runs on a clock, not scroll, and
+that is a knowing exception to the test above. What keeps it inside the
+doctrine: it plays once, on arrival, and leaves nothing behind; it
+replaces the bore's pointer-driven twist, so the count of movers did not
+go up; and the bullet is the only warm thing moving. The timing is the
+owner's arithmetic, kept in charts.js: crossing pace 1.8s reduced by 32%
+gives 2.65s edge to edge; the fading edge moves at 75% of that new pace,
+so it takes 3.53s and the line is gone 0.88s after the bullet leaves.
+Reduced motion, no JS and a CDN outage all get the finished drawing: the
+SVG in index.html is complete and charts.js only animates it.
+
+The bars and slices still arrive once, on scroll.
 
 The numbers are made up. If the band ever reads as too busy, the first
 thing to drop is the bar-and-slice arrival, not the line.
