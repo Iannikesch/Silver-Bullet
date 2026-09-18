@@ -129,7 +129,14 @@
     root.innerHTML = html;
   }
 
-  var nav = document.querySelector('[data-cap-menu]');
+  /* data-cap-nav, not the data-cap-menu the dropdown used. Deliberate:
+     a browser that still holds the OLD version of this file from cache
+     runs the old renderNav against the new markup, and that did
+     root.innerHTML = <two open dropdown columns> - which wiped the label
+     and dumped both lists into the bar. With a new hook name the stale
+     script finds nothing and does nothing, and the bar shows the label
+     alone until the fresh file arrives. Seen once; not again. */
+  var nav = document.querySelector('[data-cap-nav]');
   if (nav) renderNav(nav);
 
   var section = document.querySelector('[data-cap-panels]');
