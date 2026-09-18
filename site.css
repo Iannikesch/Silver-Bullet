@@ -1272,7 +1272,7 @@
       opacity: .6;
     }
     .ch-slot--people {
-      left: calc(34% + 15px);                /* the top-centre gap, a step right of it */
+      left: calc(34% + 145px);               /* the top-centre gap, well right of it */
       top: clamp(var(--s-8), 8vh, var(--s-14));
       width: clamp(72px, 6.5vw, 96px);
       opacity: .6;
