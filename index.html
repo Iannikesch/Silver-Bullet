@@ -302,30 +302,40 @@
           </div>
 
           <!-- ============================================================
-               The reel. A portrait window beside the headline that two
-               short clips take turns in: one slides up into the frame and
-               eases to a stop, plays through, then slides up and out a
-               touch faster while the other slides in underneath it. Only
-               one is ever fully in frame. reel.js runs the cycle off each
-               clip's own `ended` event, so a clip always plays out before
-               it leaves; the frame is the clip - it holds nothing else.
-
-               Both clips are 9:16 and about five seconds. Muted and
-               playsinline are what autoplay requires; there is no
-               `autoplay` attribute and preload is none, so nothing is
-               fetched until reel.js decides the reel is on and on screen.
-               Under 760px the reel is not shown and the clips - 15MB
-               between them - are never downloaded. With JS off there is
-               no reel at all (see the noscript rule), so the hero is
-               simply one column, which is correct rather than an empty
-               frame. Decorative: aria-hidden, nothing here is content.
+               The reel is now a belt, and it does not live in the grid: see
+               .hero__belt after this section. The grid is one column; the
+               copy stops where the headline's widest line stops (reel.js
+               writes that width to --copy-w) and the belt begins there.
                ============================================================ -->
-          <aside class="hero__reel" data-reel aria-hidden="true">
-            <video class="hero__clip" muted playsinline preload="none" src="Assets/Videos/hero-reel-1.mp4"></video>
-            <video class="hero__clip" muted playsinline preload="none" src="Assets/Videos/hero-reel-2.mp4"></video>
-          </aside>
         </div>
       </section>
+
+      <!-- ============================================================
+           The hero belt. Four clips as free cards on one lane that starts
+           at the end of the headline's widest line and runs to the right
+           edge of the viewport. Each card hard-starts its fade at the
+           mouth of the lane, drifts right at about 20px/s, plays on a
+           loop while it is visible, and fades to nothing as it leaves the
+           screen. Spacing is even, so the belt is continuous once all
+           four are out; at most two are ever clearly on screen.
+
+           reel.js measures the lane (the headline's line ends, the grid's
+           height) and drives the drift on requestAnimationFrame - no
+           GSAP, paused off screen and in background tabs. The <video>s
+           carry muted + playsinline, which autoplay needs, and no
+           autoplay attribute with preload none, so nothing is fetched
+           until reel.js decides the belt is on and in view. Under 760px
+           the belt is display:none and the clips - 2.8MB in all - are
+           never downloaded. Under reduced motion the first card sits at
+           the mouth as a still. Decorative: aria-hidden. The fourth
+           clip is 4:5 rather than 9:16 and keeps its own shape.
+           ============================================================ -->
+      <aside class="hero__belt" data-belt aria-hidden="true">
+        <video class="belt__card" muted playsinline loop preload="none" src="Assets/Videos/hero-reel-1.mp4"></video>
+        <video class="belt__card" muted playsinline loop preload="none" src="Assets/Videos/hero-reel-2.mp4"></video>
+        <video class="belt__card" muted playsinline loop preload="none" src="Assets/Videos/hero-reel-3.mp4"></video>
+        <video class="belt__card belt__card--4x5" muted playsinline loop preload="none" src="Assets/Videos/hero-reel-4.mp4"></video>
+      </aside>
     </div><!-- /.hero-ground -->
 
     <!-- ============================================================
@@ -1458,9 +1468,9 @@
   <!-- Text roll on the nav labels and the client marks. Markup only; the
        motion is CSS, and with this absent every label is just its text. -->
   <script defer src="roll.js"></script>
-  <!-- The hero reel. Self-initialising, no GSAP. -->
+  <!-- The hero belt. Self-initialising, no GSAP. -->
   <script defer src="reel.js"></script>
-  <noscript><style>.hero__reel { display: none; } .hero__grid { grid-template-columns: minmax(0, 1fr); }</style></noscript>
+  <noscript><style>.hero__belt { display: none; }</style></noscript>
   <!-- The work/clients stack: pin height and push-back. No GSAP. -->
   <script defer src="stack.js"></script>
   <!-- Enquiry form reveal. Self-initialising and GSAP-free, same as

@@ -8,10 +8,14 @@ Read both before touching anything that moves.
 
 Movement is a priority for this site, but it is rationed. What moves: the bullet
 intro, the reactive chrome on two elements, four marquee bands — the word band's
-two rows, the creative conveyor and the logo band — the hero reel (two 9:16
-clips taking turns in one window beside the headline; `reel.js`, no GSAP,
-driven by each clip's own `ended` event, paused off screen and in background
-tabs, never fetched under 760px or under reduced motion), two scroll-triggered
+two rows, the creative conveyor and the logo band — the hero belt (four
+clips as free cards on one lane that opens at the end of the headline's widest
+line and runs to the viewport edge; each hard-starts its fade at the mouth,
+drifts right at 20px/s on a loop, and fades off the screen; `reel.js`, no
+GSAP, requestAnimationFrame only, paused off screen and in background tabs,
+never fetched under 760px, a single still under reduced motion; the lane is
+measured from the h1's line rects and the same measurement caps the lead's
+width so copy and belt share one edge), two scroll-triggered
 reveals (the client wall, and the platform band under "Platforms we work on"), the
 testimonial band, which advances itself on a 7s dwell, and the verticals
 carousel, which drifts its industry cards on a continuous loop at about 9s per

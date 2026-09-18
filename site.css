@@ -982,85 +982,86 @@
       letter-spacing: -0.02em;
     }
 
-    /* Wide enough that "Growth partner invested in your success." breaks
-       as three lines at every size rather than four at the top end. */
-    /* ---------- the hero grid and the reel ----------
-       Copy on the left, a portrait window on the right. The window is
-       sized by width and holds a 9:16 aspect, so the two clips (1080x1920
-       and 720x1280, the same ratio) fill it edge to edge with no letterbox.
-       At 280px wide it stands about 500px tall, which is the height of the
-       headline, lead and buttons beside it. */
+    /* ---------- the hero copy and the belt ----------
+       One column of copy. The lane the clips run on is not in this grid:
+       it is .hero__belt, positioned against .hero-ground by reel.js so it
+       can start at the end of the headline's widest line and run to the
+       true edge of the viewport, past the wrap's gutter. */
     .hero__grid {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) clamp(220px, 21vw, 290px);
-      gap: clamp(28px, 4vw, 64px);
-      align-items: center;
+      grid-template-columns: minmax(0, 1fr);
     }
 
-    /* The frame: a lit top edge and an ink bottom, the same surface as
-       .hero__video above it. overflow:hidden is the whole trick - clips
-       slide up through it and are simply gone once past. isolation keeps
-       the clips' transforms from ever painting outside the rounded frame
-       on browsers that composite them on their own layer. */
-    .hero__reel {
-      position: relative;
-      aspect-ratio: 9 / 16;
-      overflow: hidden;
-      isolation: isolate;
-      background: var(--bg-raised);
-      border-top: 1px solid var(--border-lit);
-      border-left: 1px solid var(--border);
-      border-right: 1px solid var(--border);
-      border-bottom: 1px solid var(--ink);
-    }
-
-    /* Every clip starts parked one frame-height BELOW the window. reel.js
-       moves them with two classes:
-         is-in   slides up to 0 and eases to a stop  (the arrival, .9s)
-         is-out  continues up to -100% and out       (the exit, .55s - a
-                 touch quicker, as asked; ease-in so it gathers pace)
-       is-reset snaps back to the start with no transition so the clip is
-       waiting under the window again by the next frame. */
-    .hero__clip {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transform: translateY(100%);
-      transition: transform .9s var(--ease-enter);
-      will-change: transform;
-    }
-    .hero__clip.is-in  { transform: translateY(0); }
-    .hero__clip.is-out {
-      transform: translateY(-100%);
-      transition: transform .55s var(--ease-exit);
-    }
-    .hero__clip.is-reset { transition: none; }
-
-    /* Reduced motion: no sliding, no autoplay. reel.js stops before it
-       binds anything and asks the first clip for its first frame, which
-       sits in the window as a still. The window is kept so the layout
-       does not change with the preference. */
-    @media (prefers-reduced-motion: reduce) {
-      .hero__clip { transition: none; }
-      .hero__clip:first-child { transform: none; }
-    }
-
-    /* Under the nav's own breakpoint the reel is gone and the copy takes
-       the full width. The clips are never fetched here - reel.js checks
-       the same query before it touches them - so a phone on data does
-       not pay 15MB for a decoration it cannot see. */
-    @media (max-width: 760px) {
-      .hero__grid { grid-template-columns: minmax(0, 1fr); }
-      .hero__reel { display: none; }
-    }
-
+    /* Wide enough that "Growth partner invested in your success." breaks
+       as three lines at every size rather than four at the top end. */
     .hero h1 { max-width: 13ch; }
     /* The lead sat inside .hero__row, which carried the gap. With the lead
        back under the headline directly, the gap has to be its own. */
     .hero .lead { margin-top: var(--space-sm, 28px); }
+
+    /* The copy block ends where the headline's widest line ends, so the
+       belt's mouth is a clean edge and no card ever sits on the lead's
+       last few characters. reel.js measures that line and writes the
+       width to --copy-w; with no JS the lead keeps its 58ch. */
+    .hero .lead { max-width: min(58ch, var(--copy-w, 58ch)); }
+
+    /* The lane. Absolute against .hero-ground (position:relative and
+       overflow:hidden, from .tx-thermal), which is what lets the cards
+       run right off the viewport edge without a horizontal scrollbar.
+       top/left/width/height are all written by reel.js from measurement;
+       the defaults here only exist so nothing flashes before it runs.
+       z-index 1 puts it above the thermal ground (-1) and the hero's own
+       flow content; pointer-events none so it never blocks a click. */
+    .hero__belt {
+      position: absolute;
+      top: 0;
+      left: 100%;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* A card. Hangs from the vertical centre of the lane; reel.js writes
+       the x in translate3d and the opacity each frame. Sized by width and
+       held to its clip's ratio so the 9:16 and 4:5 clips each keep their
+       own shape with nothing letterboxed. 16px radius and a hairline
+       outline is the site's panel edge without the lit top, which a video
+       would paint over anyway. */
+    .belt__card {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: var(--card-w, 220px);
+      aspect-ratio: 9 / 16;
+      object-fit: cover;
+      display: block;
+      border-radius: var(--r-md);
+      outline: 1px solid var(--border);
+      outline-offset: -1px;
+      background: var(--bg-raised);
+      opacity: 0;
+      transform: translate3d(0, -50%, 0);
+      will-change: transform, opacity;
+    }
+    .belt__card--4x5 { aspect-ratio: 4 / 5; }
+
+    /* Reduced motion: no drift, no autoplay. reel.js still measures the
+       lane, then parks the first card at the mouth as a still (first
+       frame only) and binds nothing else. */
+    @media (prefers-reduced-motion: reduce) {
+      .belt__card:first-child { opacity: 1; }
+    }
+
+    /* Under the nav's own breakpoint the belt is gone and the copy takes
+       the full width. The clips are never fetched here - reel.js checks
+       the same query before it touches them - so a phone on data does
+       not pay for a decoration it cannot see. */
+    @media (max-width: 760px) {
+      .hero__belt { display: none; }
+      .hero .lead { max-width: 58ch; }
+    }
 
     /* The rim ramp's shadow ends are --chrome-500, which at 150px turns the
        first word into a dark grey slab against the page. Same ramp, same

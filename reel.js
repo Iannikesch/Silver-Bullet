@@ -1,157 +1,210 @@
 /* ==========================================================
-   Silver Bullet — the hero reel
+   Silver Bullet — the hero belt
 
-   Two short clips take turns in one portrait window. The cycle:
+   Four clips as free cards on one lane. The lane starts at the end of
+   the headline's widest line ("Growth partner" — the R the owner asked
+   for) and runs to the right edge of the viewport. Each card:
 
-     arrive   the clip slides up into the frame and eases to a stop
-     hold     it plays through - the frame is the clip, nothing else
-     leave    it slides up and out, a touch quicker than it came
-     ...and the other clip is already sliding in underneath.
+     appears  at the mouth of the lane with a hard start: opacity 0 to 1
+              in about .7s on a steep ease-out. It does not slide in from
+              under the text; it is simply there, and then it is solid.
+     drifts   right at BELT_SPEED px/s, linear, playing on a loop
+     leaves   fading to nothing over the last 200px of its centre's
+              travel (less on a narrow lane), so it is half off the
+              screen by the time it is gone
 
-   The cycle is driven by each clip's own `ended` event, so a clip always
-   plays out in full before it goes, whatever its length. The slides are
-   CSS transitions on two classes (see .hero__clip in site.css); this file
-   only decides when to add them.
+   Cards are spaced evenly along a belt whose length is at least the
+   lane's width, so once all four are out the belt is continuous and the
+   wrap from the far end back to the mouth is never seen: a card is
+   invisible at both ends. The study this copies (badmarketing.com) runs
+   its rows at ~21 and ~44px/s with no fades at all, just a clipped edge;
+   the fades and the mouth-at-the-headline are ours.
 
-   Same doctrine as nav.js and the slider: self-initialising, no GSAP, and
-   the page is correct without it - a <noscript> rule removes the window
-   entirely, so a no-JS visitor gets a one-column hero rather than an
-   empty frame.
+   Everything is measured, not assumed. The lane's left edge is the
+   widest client rect of the h1's text, its top and height are the
+   hero grid's, and the same measurement writes --copy-w so the lead
+   stops where the headline stops (see .hero .lead in site.css).
+
+   Same doctrine as nav.js and the slider: self-initialising, no GSAP,
+   requestAnimationFrame only, and the page is correct without it - a
+   <noscript> rule removes the belt entirely.
 
    It also decides what gets DOWNLOADED. The clips carry preload="none"
    and no autoplay attribute, so nothing is fetched until this file says
-   so - and it never says so under 760px (the window is display:none
-   there) or under prefers-reduced-motion, where the first clip is asked
-   for its first frame only and left as a still.
+   so - and it never says so under 760px (the belt is display:none there)
+   or under prefers-reduced-motion, where the first clip is asked for its
+   first frame only and parked at the mouth as a still.
    ========================================================== */
 
 (function () {
   'use strict';
 
-  var reel = document.querySelector('[data-reel]');
-  if (!reel) return;
-  var clips = Array.prototype.slice.call(reel.querySelectorAll('.hero__clip'));
-  if (clips.length < 2) return;
+  var belt = document.querySelector('[data-belt]');
+  if (!belt) return;
+  var cards = Array.prototype.slice.call(belt.querySelectorAll('.belt__card'));
+  if (!cards.length) return;
+
+  var ground = belt.parentNode;                       /* .hero-ground */
+  var grid = document.querySelector('.hero__grid');
+  var copy = document.querySelector('.hero__copy');
+  var h1 = document.querySelector('.hero h1');
+  if (!grid || !copy || !h1) return;
 
   var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var NARROW  = window.matchMedia('(max-width: 760px)');
 
-  /* A clip that cannot play (autoplay refused, decode error, a stalled
-     network) must not stall the reel. If `ended` has not arrived this
-     long after the hold began, move on anyway. Both clips are ~5s. */
-  var HOLD_CEILING_MS = 9000;
-  /* How far into the exit the next clip starts its arrival, so the two
-     overlap and the window is never empty. */
-  var HANDOFF_MS = 120;
+  /* ---- the numbers -------------------------------------------------- */
 
-  if (REDUCED) {
-    /* A still, not a reel: first frame of the first clip, nothing plays. */
-    clips[0].preload = 'metadata';
-    clips[0].load();
-    return;
+  var BELT_SPEED  = 20;    /* px per second. Slow end of the study. */
+  var CARD_W      = 220;   /* px. Heights come from each card's aspect. */
+  var MOUTH_GAP   = 28;    /* px between the headline's end and the lane */
+  var MIN_GAP     = 56;    /* px between cards, the study's 3.5rem */
+  var FADE_IN_PX  = BELT_SPEED * 0.7;   /* .7s of travel: the hard start */
+  var FADE_OUT_MAX = 200;  /* the centre's last 200px before the edge... */
+  var FADE_OUT_FRAC = 0.35; /* ...or 35% of a narrow lane, so a card is
+                               solid for most of a short crossing too */
+  var MAX_DT      = 50;    /* ms. A throttled tab must not lurch. */
+
+  /* ---- measurement -------------------------------------------------- */
+
+  var laneW = 0, pitch = 0, beltLen = 0, fadeOut = FADE_OUT_MAX;
+  var widths = [];
+
+  /* The right edge of the headline's widest LINE, not of its box: the
+     box is 13ch wide and the text wraps short of it. */
+  function headlineEdge() {
+    var range = document.createRange();
+    range.selectNodeContents(h1);
+    var rects = range.getClientRects();
+    var edge = h1.getBoundingClientRect().left;
+    for (var i = 0; i < rects.length; i++) if (rects[i].right > edge) edge = rects[i].right;
+    return edge;
   }
 
-  var current = -1;
-  var holdTimer = null;
-  var onstage = true;
-  var started = false;
+  function layout() {
+    var g = ground.getBoundingClientRect();
+    var gr = grid.getBoundingClientRect();
+    var edge = headlineEdge();
 
-  function next(i) { return (i + 1) % clips.length; }
+    copy.style.setProperty('--copy-w', Math.round(edge - copy.getBoundingClientRect().left) + 'px');
 
-  function afterTransition(el, fn) {
-    var done = false;
-    function h(e) { if (e.target !== el || done) return; done = true; el.removeEventListener('transitionend', h); fn(); }
-    el.addEventListener('transitionend', h);
-    /* transitionend can be lost if the tab is hidden mid-slide; do not
-       let that freeze the reel. */
-    setTimeout(function () { if (!done) { done = true; el.removeEventListener('transitionend', h); fn(); } }, 1400);
+    var left = Math.round(edge - g.left + MOUTH_GAP);
+    laneW = Math.max(0, Math.round(g.width - left));
+    fadeOut = Math.min(FADE_OUT_MAX, laneW * FADE_OUT_FRAC);
+    belt.style.top = Math.round(gr.top - g.top) + 'px';
+    belt.style.height = Math.round(gr.height) + 'px';
+    belt.style.left = left + 'px';
+    belt.style.width = laneW + 'px';
+
+    widths = cards.map(function (c) { return c.getBoundingClientRect().width || CARD_W; });
+    var sum = widths.reduce(function (a, b) { return a + b; }, 0);
+    /* Even spacing, and enough of it that the belt is never shorter than
+       the lane - otherwise a card could wrap while still on screen. */
+    var gap = Math.max(MIN_GAP, (laneW - sum) / cards.length);
+    pitch = sum / cards.length + gap;
+    beltLen = pitch * cards.length;
   }
 
-  function park(clip) {
-    clip.classList.add('is-reset');
-    clip.classList.remove('is-in', 'is-out');
-    try { clip.pause(); clip.currentTime = 0; } catch (e) {}
-    /* two frames, so the reset lands before transitions come back on */
-    requestAnimationFrame(function () { requestAnimationFrame(function () { clip.classList.remove('is-reset'); }); });
+  /* ---- the frame ---------------------------------------------------- */
+
+  var offset = 0;            /* how far the belt has travelled, px */
+  var last = 0;
+  var raf = 0;
+  var running = false;
+
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+  function easeInQuad(t)   { return t * t; }
+  function clamp01(t)      { return t < 0 ? 0 : t > 1 ? 1 : t; }
+
+  function place(i) {
+    var card = cards[i];
+    var w = widths[i] || CARD_W;
+    /* Card i is i pitches behind the belt's head. Negative means it has
+       not reached the mouth yet; it is hidden and waits its turn. */
+    var raw = offset - i * pitch;
+    if (raw < 0) { card.style.opacity = '0'; keep(card, false); return; }
+    var x = raw % beltLen;
+
+    var fadeIn  = easeOutCubic(clamp01(x / FADE_IN_PX));
+    var centre  = x + w / 2;
+    var leaving = 1 - easeInQuad(clamp01((centre - (laneW - fadeOut)) / fadeOut));
+    var o = Math.min(fadeIn, leaving);
+
+    card.style.transform = 'translate3d(' + x.toFixed(1) + 'px, -50%, 0)';
+    card.style.opacity = o.toFixed(3);
+    keep(card, o > 0.01 && x < laneW);
   }
 
-  function arrive(i) {
-    current = i;
-    var clip = clips[i];
-    var following = clips[next(i)];
-
-    /* The one after this needs to be ready by the time this one leaves. */
-    if (following.preload !== 'auto') { following.preload = 'auto'; following.load(); }
-
-    clip.classList.add('is-in');
-    afterTransition(clip, function () {
-      if (current !== i || !onstage) return;
-      hold(i);
-    });
-  }
-
-  function hold(i) {
-    var clip = clips[i];
-    clearTimeout(holdTimer);
-    holdTimer = setTimeout(function () { if (current === i) leave(i); }, HOLD_CEILING_MS);
-
-    clip.addEventListener('ended', function onEnd() {
-      clip.removeEventListener('ended', onEnd);
-      if (current === i) leave(i);
-    });
-
-    var p = clip.play();
-    if (p && p.catch) {
-      p.catch(function () {
-        /* Refused. Leave the first frame up for a beat, then move on. */
-        clearTimeout(holdTimer);
-        holdTimer = setTimeout(function () { if (current === i) leave(i); }, 2500);
-      });
+  /* Play while it can be seen, pause when it cannot: four clips looping
+     off screen is decode work for nothing. */
+  function keep(card, playing) {
+    if (playing) {
+      if (card.paused) { var p = card.play(); if (p && p.catch) p.catch(function () {}); }
+    } else if (!card.paused) {
+      card.pause();
     }
   }
 
-  function leave(i) {
-    clearTimeout(holdTimer);
-    var clip = clips[i];
-    clip.classList.add('is-out');
-    afterTransition(clip, function () { park(clip); });
-    /* The handoff: the next one starts coming in while this one is on
-       its way out, so the window never sits empty. */
-    setTimeout(function () { if (onstage) arrive(next(i)); }, HANDOFF_MS);
+  function frame(now) {
+    if (!running) return;
+    var dt = Math.min(MAX_DT, now - last);
+    last = now;
+    offset += BELT_SPEED * dt / 1000;
+    for (var i = 0; i < cards.length; i++) place(i);
+    raf = requestAnimationFrame(frame);
   }
 
   /* ---- start, and only when it is worth starting ------------------ */
 
+  var started = false;
+
+  function fetchAll() {
+    cards.forEach(function (c) {
+      if (c.preload !== 'auto') { c.preload = 'auto'; c.load(); }
+    });
+  }
+
   function start() {
     if (started || NARROW.matches) return;
     started = true;
-    clips[0].preload = 'auto';
-    clips[0].load();
-    arrive(0);
+    layout();
+    fetchAll();
+    resume();
   }
 
-  /* Off screen or in a background tab, the current clip pauses and the
-     cycle simply waits - `ended` cannot fire while paused, so nothing
-     advances behind the visitor's back. Back on, it resumes where it was. */
-  function pauseAll() {
-    onstage = false;
-    clearTimeout(holdTimer);
-    clips.forEach(function (c) { try { c.pause(); } catch (e) {} });
-  }
   function resume() {
-    onstage = true;
-    if (!started) { start(); return; }
-    if (current < 0) return;
-    var clip = clips[current];
-    if (clip.classList.contains('is-in') && !clip.classList.contains('is-out')) {
-      hold(current);
-    }
+    if (running || !started || NARROW.matches) return;
+    running = true;
+    last = performance.now();
+    raf = requestAnimationFrame(frame);
   }
 
+  function pauseAll() {
+    running = false;
+    cancelAnimationFrame(raf);
+    cards.forEach(function (c) { keep(c, false); });
+  }
+
+  /* ---- reduced motion: a still at the mouth ------------------------ */
+
+  if (REDUCED) {
+    layout();
+    cards[0].preload = 'metadata';
+    cards[0].load();
+    /* Opacity comes from the stylesheet; only the position is ours. */
+    cards[0].style.transform = 'translate3d(0, -50%, 0)';
+    window.addEventListener('resize', layout);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+    return;
+  }
+
+  /* Off screen or in a background tab the belt holds where it is and the
+     clips pause. Back on, it carries on from the same place. */
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (entries) {
-      if (entries[0].isIntersecting && !document.hidden) resume(); else pauseAll();
-    }, { threshold: 0.2 }).observe(reel);
+      if (entries[0].isIntersecting && !document.hidden) { start(); resume(); }
+      else pauseAll();
+    }, { threshold: 0.1 }).observe(belt);
   } else {
     start();
   }
@@ -159,10 +212,24 @@
     if (document.hidden) pauseAll(); else resume();
   });
 
-  /* Crossing the breakpoint with the reel running: stop it and drop the
-     buffers. Crossing back: it starts again from the top. */
+  /* The lane depends on where the headline wraps, which depends on the
+     font: measure again once it is in, and on every resize. */
+  var resizeTimer = 0;
+  function relayout() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () { if (started) layout(); }, 120);
+  }
+  window.addEventListener('resize', relayout);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (started) layout(); });
+
+  /* Crossing the breakpoint with the belt running: stop it and drop the
+     buffers. Crossing back: it starts again from the mouth. */
   NARROW.addEventListener('change', function (e) {
-    if (e.matches) { pauseAll(); started = false; current = -1; clips.forEach(park); }
-    else resume();
+    if (e.matches) {
+      pauseAll(); started = false; offset = 0;
+      cards.forEach(function (c) { c.style.opacity = '0'; c.preload = 'none'; c.load(); });
+    } else {
+      start();
+    }
   });
 })();
