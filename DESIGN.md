@@ -352,9 +352,11 @@ centre), three stacked horizontal bars (centre), five flat horizontal bars
 big three, at about six tenths of their strength, nothing under the copy,
 and hidden below 900px with the bars and pie. Same two fills, plus the
 burnt gold flat as the stacked bars' third tone; the area's upper bands
-are the fills at lower strength. They arrive once, on scroll, in the
-order above, after the bars and slices have settled, on the same easings;
-the whole band is still by about 4.5s.
+are the fills at lower strength; the area's sides are masked into the
+band so it does not read as pasted on. They arrive once, on scroll: the
+bars, then the pie, then all six in one fade as the pie lands (a
+staggered arrival was tried and took too long); the band is still by
+about 2s.
 
 This is nine drawn things around one headline. The count of ongoing
 movers on the page is unchanged (each arrives once and rests), and the

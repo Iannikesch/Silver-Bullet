@@ -1303,6 +1303,13 @@
       opacity: .6;
     }
     .ch-slot--candles .ch, .ch-slot--area .ch, .ch-slot--hbars .ch { width: 100%; height: auto; }
+    /* The area's hard left and right cuts read as pasted in, so its
+       sides fade into the band. Mask, not gradient fill: the bands keep
+       their tones. */
+    .ch-slot--area .ch {
+      -webkit-mask-image: linear-gradient(to right, transparent, var(--bg, #0C0C0C) 22%, var(--bg, #0C0C0C) 78%, transparent);
+      mask-image: linear-gradient(to right, transparent, var(--bg, #0C0C0C) 22%, var(--bg, #0C0C0C) 78%, transparent);
+    }
 
     /* ---- fills ----
        The gradients live once, in an SVG the layer carries; each shape
@@ -1341,10 +1348,6 @@
        charts.js sets the start state and drives it, so nothing here hides
        anything. With reduced motion or no JS every mark is simply there. */
     .ch-bar { transform-box: fill-box; transform-origin: bottom; }
-    .ch-seg { transform-box: fill-box; transform-origin: left; }
-    .ch-hbar { transform-box: fill-box; transform-origin: left; }
-    .ch-candle { transform-box: fill-box; transform-origin: center; }
-    .ch-band { transform-box: fill-box; transform-origin: bottom; }
 
     @media (max-width: 900px) {
       /* The side charts do not fit beside a headline at this width, and

@@ -9,9 +9,9 @@
        band's aspect so it runs corner to edge uniformly.
      - the bars rise from the baseline once, left to right, and the
        pie's slices arrive once, in order, as the section arrives.
-     - the six small motifs (heatmap, stacked bars, isotype grid, then
-       horizontal bars, candles, stacked area) draw themselves in one
-       after another once those have finished.
+     - the six small motifs (heatmap, candles, isotype grid, stacked
+       area, stacked bars, horizontal bars) fade in together, in one
+       move, as the pie lands.
 
    The start states are set HERE, not in CSS, so with this script
    absent, GSAP down, or reduced motion on, every mark is simply
@@ -64,25 +64,16 @@
     window.addEventListener('resize', function () { clearTimeout(rs); rs = setTimeout(fit, 120); });
   }
 
-  /* ---- bars and slices arrive once, as the band arrives; the three
-          small motifs follow, one after another, once those are done ---- */
+  /* ---- bars and slices arrive once, as the band arrives; the six
+          small motifs fade in together as those finish ---- */
   var bars   = band.querySelectorAll('.ch-bar');
   var slices = band.querySelectorAll('.ch-slice');
-  var cells  = band.querySelectorAll('.ch-cell');
-  var segs   = band.querySelectorAll('.ch-seg');
-  var people = band.querySelectorAll('.ch-person');
-  var hbars  = band.querySelectorAll('.ch-hbar');
-  var candles = band.querySelectorAll('.ch-candle');
-  var bands  = band.querySelectorAll('.ch-band');
+  /* every mark of the six small motifs, as one set */
+  var small  = band.querySelectorAll('.ch-cell, .ch-seg, .ch-person, .ch-hbar, .ch-candle, .ch-band');
 
   if (bars.length)   gsap.set(bars,   { scaleY: 0, transformOrigin: '50% 100%' });
   if (slices.length) gsap.set(slices, { opacity: 0, scale: 0.92, transformOrigin: '50% 50%' });
-  if (cells.length)  gsap.set(cells,  { opacity: 0 });
-  if (segs.length)   gsap.set(segs,   { scaleX: 0, transformOrigin: '0% 50%' });
-  if (people.length) gsap.set(people, { opacity: 0, scale: 0.8, transformOrigin: '50% 50%' });
-  if (hbars.length)  gsap.set(hbars,  { scaleX: 0, transformOrigin: '0% 50%' });
-  if (candles.length) gsap.set(candles, { opacity: 0, scaleY: 0.4, transformOrigin: '50% 50%' });
-  if (bands.length)  gsap.set(bands,  { opacity: 0, scaleY: 0, transformOrigin: '50% 100%' });
+  if (small.length)  gsap.set(small,  { opacity: 0 });
 
   ScrollTrigger.create({
     trigger: band,
@@ -90,36 +81,17 @@
     once: true,
     onEnter: function () {
       var tl = gsap.timeline();
-      /* the big three, as before: bars end at ~1.46s, slices at ~1.35s */
+      /* the bars, then the pie, as before */
       if (bars.length) tl.to(bars, {
         scaleY: 1, duration: 0.9, ease: 'power3.out', stagger: 0.07
       }, 0);
       if (slices.length) tl.to(slices, {
         opacity: 1, scale: 1, duration: 0.7, ease: 'power2.out', stagger: 0.09
       }, 0.2);
-      /* the small three, after the big three have settled, in the same
-         easing, each drawing itself in cell by cell / segment by segment */
-      if (cells.length) tl.to(cells, {
-        opacity: 1, duration: 0.5, ease: 'power2.out',
-        stagger: { each: 0.012, grid: [10, 16], from: 'start' }
-      }, 1.6);
-      if (segs.length) tl.to(segs, {
-        scaleX: 1, duration: 0.7, ease: 'power3.out', stagger: 0.07
-      }, 2.0);
-      if (people.length) tl.to(people, {
-        opacity: 1, scale: 1, duration: 0.45, ease: 'power2.out', stagger: 0.035
-      }, 2.5);
-      /* the last three, after those: bars from the left, candles
-         opening from their centres, the area rising band by band */
-      if (hbars.length) tl.to(hbars, {
-        scaleX: 1, duration: 0.7, ease: 'power3.out', stagger: 0.07
-      }, 3.0);
-      if (candles.length) tl.to(candles, {
-        opacity: 1, scaleY: 1, duration: 0.5, ease: 'power2.out', stagger: 0.05
-      }, 3.3);
-      if (bands.length) tl.to(bands, {
-        opacity: 1, scaleY: 1, duration: 0.8, ease: 'power3.out', stagger: 0.12
-      }, 3.6);
+      /* then the six small motifs together, one fade, as the pie lands */
+      if (small.length) tl.to(small, {
+        opacity: 1, duration: 0.8, ease: 'power2.out'
+      }, 1.1);
     }
   });
 
