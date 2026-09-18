@@ -101,7 +101,7 @@
          easing, each drawing itself in cell by cell / segment by segment */
       if (cells.length) tl.to(cells, {
         opacity: 1, duration: 0.5, ease: 'power2.out',
-        stagger: { each: 0.025, grid: [6, 6], from: 'start' }
+        stagger: { each: 0.012, grid: [10, 16], from: 'start' }
       }, 1.6);
       if (segs.length) tl.to(segs, {
         scaleX: 1, duration: 0.7, ease: 'power3.out', stagger: 0.07

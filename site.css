@@ -1253,19 +1253,19 @@
     .ch-slot--heat {
       left: calc(var(--gutter, 24px) + 7vw);
       top: clamp(var(--s-8), 9vh, var(--s-16));
-      width: clamp(76px, 7vw, 104px);
+      width: clamp(205px, 18.9vw, 281px);   /* 16 x 10 cells at the same cell size the 6 x 6 had */
       opacity: .62;
     }
     .ch-slot--stack {
-      left: 50%;
+      left: calc(50% + 90px);                /* a step right of centre, on the owner's eye */
       bottom: clamp(var(--s-10), 11vh, var(--s-18));
       transform: translateX(-50%);
       width: clamp(160px, 15vw, 220px);
       opacity: .6;
     }
     .ch-slot--people {
-      left: 60%;
-      top: clamp(var(--s-8), 8vh, var(--s-14));
+      left: calc(60% - 40px);                /* a step left, clear of the line's arc */
+      top: clamp(var(--s-6), 5vh, var(--s-12));
       width: clamp(72px, 6.5vw, 96px);
       opacity: .6;
     }
@@ -1284,8 +1284,8 @@
     }
     .ch-slot--area {
       left: 29%;
-      bottom: clamp(var(--s-6), 5vh, var(--s-12));
-      width: clamp(110px, 10vw, 144px);
+      bottom: 0;                             /* on the band's floor */
+      width: clamp(154px, 14vw, 202px);
       opacity: .6;
     }
     .ch-slot--hbars {

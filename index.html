@@ -782,7 +782,7 @@
            and six smaller motifs in the negative space, subordinate:
              top-left     a heatmap
              top-centre   nine candlesticks
-             top-right    an isotype grid, 13 of 20
+             top-right    an isotype grid, 23 of 35
              bottom-left  a stacked area, three bands
              bottom       three stacked horizontal bars
              bottom-right five horizontal bars
@@ -856,47 +856,171 @@
     </svg>
         </div>
         <div class="ch-slot ch-slot--heat">
-    <!-- Heatmap: 36 cells, the strong ones clustered loosely along the
+    <!-- Heatmap: 16 across, 10 down, the strong ones clustered loosely along the
          upper-left to lower-right diagonal, lighter with distance from it,
          with a little scatter so it is not a ramp. Strength is fill-opacity
          so charts.js can fade the cell itself in. -->
-    <svg class="ch ch--heat" viewBox="0 0 94 94" width="94" height="94" aria-hidden="true" focusable="false">
-      <rect class="ch-cell" x="0" y="0" width="14" height="14" rx="1.5" fill-opacity="0.99"/>
-      <rect class="ch-cell" x="16" y="0" width="14" height="14" rx="1.5" fill-opacity="0.75"/>
-      <rect class="ch-cell" x="32" y="0" width="14" height="14" rx="1.5" fill-opacity="0.55"/>
-      <rect class="ch-cell" x="48" y="0" width="14" height="14" rx="1.5" fill-opacity="0.21"/>
-      <rect class="ch-cell" x="64" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
-      <rect class="ch-cell" x="80" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
-      <rect class="ch-cell" x="0" y="16" width="14" height="14" rx="1.5" fill-opacity="0.69"/>
-      <rect class="ch-cell" x="16" y="16" width="14" height="14" rx="1.5" fill-opacity="1.00"/>
-      <rect class="ch-cell" x="32" y="16" width="14" height="14" rx="1.5" fill-opacity="0.76"/>
-      <rect class="ch-cell" x="48" y="16" width="14" height="14" rx="1.5" fill-opacity="0.53"/>
-      <rect class="ch-cell" x="64" y="16" width="14" height="14" rx="1.5" fill-opacity="0.16"/>
-      <rect class="ch-cell" x="80" y="16" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
-      <rect class="ch-cell" x="0" y="32" width="14" height="14" rx="1.5" fill-opacity="0.41"/>
-      <rect class="ch-cell" x="16" y="32" width="14" height="14" rx="1.5" fill-opacity="0.79"/>
-      <rect class="ch-cell" x="32" y="32" width="14" height="14" rx="1.5" fill-opacity="1.00"/>
-      <rect class="ch-cell" x="48" y="32" width="14" height="14" rx="1.5" fill-opacity="0.67"/>
-      <rect class="ch-cell" x="64" y="32" width="14" height="14" rx="1.5" fill-opacity="0.56"/>
-      <rect class="ch-cell" x="80" y="32" width="14" height="14" rx="1.5" fill-opacity="0.29"/>
-      <rect class="ch-cell" x="0" y="48" width="14" height="14" rx="1.5" fill-opacity="0.24"/>
-      <rect class="ch-cell" x="16" y="48" width="14" height="14" rx="1.5" fill-opacity="0.50"/>
-      <rect class="ch-cell" x="32" y="48" width="14" height="14" rx="1.5" fill-opacity="0.69"/>
-      <rect class="ch-cell" x="48" y="48" width="14" height="14" rx="1.5" fill-opacity="0.92"/>
-      <rect class="ch-cell" x="64" y="48" width="14" height="14" rx="1.5" fill-opacity="0.74"/>
-      <rect class="ch-cell" x="80" y="48" width="14" height="14" rx="1.5" fill-opacity="0.41"/>
+    <svg class="ch ch--heat" viewBox="0 0 254 158" width="254" height="158" aria-hidden="true" focusable="false">
+      <rect class="ch-cell" x="0" y="0" width="14" height="14" rx="1.5" fill-opacity="0.92"/>
+      <rect class="ch-cell" x="16" y="0" width="14" height="14" rx="1.5" fill-opacity="0.78"/>
+      <rect class="ch-cell" x="32" y="0" width="14" height="14" rx="1.5" fill-opacity="0.66"/>
+      <rect class="ch-cell" x="48" y="0" width="14" height="14" rx="1.5" fill-opacity="0.55"/>
+      <rect class="ch-cell" x="64" y="0" width="14" height="14" rx="1.5" fill-opacity="0.30"/>
+      <rect class="ch-cell" x="80" y="0" width="14" height="14" rx="1.5" fill-opacity="0.14"/>
+      <rect class="ch-cell" x="96" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="112" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="128" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="144" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="160" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="176" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="192" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="208" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="224" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="240" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="0" y="16" width="14" height="14" rx="1.5" fill-opacity="0.67"/>
+      <rect class="ch-cell" x="16" y="16" width="14" height="14" rx="1.5" fill-opacity="0.82"/>
+      <rect class="ch-cell" x="32" y="16" width="14" height="14" rx="1.5" fill-opacity="1.00"/>
+      <rect class="ch-cell" x="48" y="16" width="14" height="14" rx="1.5" fill-opacity="0.77"/>
+      <rect class="ch-cell" x="64" y="16" width="14" height="14" rx="1.5" fill-opacity="0.58"/>
+      <rect class="ch-cell" x="80" y="16" width="14" height="14" rx="1.5" fill-opacity="0.44"/>
+      <rect class="ch-cell" x="96" y="16" width="14" height="14" rx="1.5" fill-opacity="0.29"/>
+      <rect class="ch-cell" x="112" y="16" width="14" height="14" rx="1.5" fill-opacity="0.22"/>
+      <rect class="ch-cell" x="128" y="16" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="144" y="16" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="160" y="16" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="176" y="16" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="192" y="16" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="208" y="16" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="224" y="16" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="240" y="16" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="0" y="32" width="14" height="14" rx="1.5" fill-opacity="0.52"/>
+      <rect class="ch-cell" x="16" y="32" width="14" height="14" rx="1.5" fill-opacity="0.70"/>
+      <rect class="ch-cell" x="32" y="32" width="14" height="14" rx="1.5" fill-opacity="0.71"/>
+      <rect class="ch-cell" x="48" y="32" width="14" height="14" rx="1.5" fill-opacity="0.98"/>
+      <rect class="ch-cell" x="64" y="32" width="14" height="14" rx="1.5" fill-opacity="0.95"/>
+      <rect class="ch-cell" x="80" y="32" width="14" height="14" rx="1.5" fill-opacity="0.76"/>
+      <rect class="ch-cell" x="96" y="32" width="14" height="14" rx="1.5" fill-opacity="0.53"/>
+      <rect class="ch-cell" x="112" y="32" width="14" height="14" rx="1.5" fill-opacity="0.46"/>
+      <rect class="ch-cell" x="128" y="32" width="14" height="14" rx="1.5" fill-opacity="0.29"/>
+      <rect class="ch-cell" x="144" y="32" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="160" y="32" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="176" y="32" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="192" y="32" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="208" y="32" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="224" y="32" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="240" y="32" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="0" y="48" width="14" height="14" rx="1.5" fill-opacity="0.22"/>
+      <rect class="ch-cell" x="16" y="48" width="14" height="14" rx="1.5" fill-opacity="0.41"/>
+      <rect class="ch-cell" x="32" y="48" width="14" height="14" rx="1.5" fill-opacity="0.59"/>
+      <rect class="ch-cell" x="48" y="48" width="14" height="14" rx="1.5" fill-opacity="0.76"/>
+      <rect class="ch-cell" x="64" y="48" width="14" height="14" rx="1.5" fill-opacity="0.92"/>
+      <rect class="ch-cell" x="80" y="48" width="14" height="14" rx="1.5" fill-opacity="1.00"/>
+      <rect class="ch-cell" x="96" y="48" width="14" height="14" rx="1.5" fill-opacity="0.81"/>
+      <rect class="ch-cell" x="112" y="48" width="14" height="14" rx="1.5" fill-opacity="0.63"/>
+      <rect class="ch-cell" x="128" y="48" width="14" height="14" rx="1.5" fill-opacity="0.54"/>
+      <rect class="ch-cell" x="144" y="48" width="14" height="14" rx="1.5" fill-opacity="0.37"/>
+      <rect class="ch-cell" x="160" y="48" width="14" height="14" rx="1.5" fill-opacity="0.23"/>
+      <rect class="ch-cell" x="176" y="48" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="192" y="48" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="208" y="48" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="224" y="48" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="240" y="48" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
       <rect class="ch-cell" x="0" y="64" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
-      <rect class="ch-cell" x="16" y="64" width="14" height="14" rx="1.5" fill-opacity="0.18"/>
-      <rect class="ch-cell" x="32" y="64" width="14" height="14" rx="1.5" fill-opacity="0.40"/>
-      <rect class="ch-cell" x="48" y="64" width="14" height="14" rx="1.5" fill-opacity="0.73"/>
-      <rect class="ch-cell" x="64" y="64" width="14" height="14" rx="1.5" fill-opacity="0.99"/>
-      <rect class="ch-cell" x="80" y="64" width="14" height="14" rx="1.5" fill-opacity="0.79"/>
+      <rect class="ch-cell" x="16" y="64" width="14" height="14" rx="1.5" fill-opacity="0.08"/>
+      <rect class="ch-cell" x="32" y="64" width="14" height="14" rx="1.5" fill-opacity="0.32"/>
+      <rect class="ch-cell" x="48" y="64" width="14" height="14" rx="1.5" fill-opacity="0.44"/>
+      <rect class="ch-cell" x="64" y="64" width="14" height="14" rx="1.5" fill-opacity="0.65"/>
+      <rect class="ch-cell" x="80" y="64" width="14" height="14" rx="1.5" fill-opacity="0.68"/>
+      <rect class="ch-cell" x="96" y="64" width="14" height="14" rx="1.5" fill-opacity="0.89"/>
+      <rect class="ch-cell" x="112" y="64" width="14" height="14" rx="1.5" fill-opacity="0.99"/>
+      <rect class="ch-cell" x="128" y="64" width="14" height="14" rx="1.5" fill-opacity="0.78"/>
+      <rect class="ch-cell" x="144" y="64" width="14" height="14" rx="1.5" fill-opacity="0.67"/>
+      <rect class="ch-cell" x="160" y="64" width="14" height="14" rx="1.5" fill-opacity="0.48"/>
+      <rect class="ch-cell" x="176" y="64" width="14" height="14" rx="1.5" fill-opacity="0.25"/>
+      <rect class="ch-cell" x="192" y="64" width="14" height="14" rx="1.5" fill-opacity="0.08"/>
+      <rect class="ch-cell" x="208" y="64" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="224" y="64" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="240" y="64" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
       <rect class="ch-cell" x="0" y="80" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
       <rect class="ch-cell" x="16" y="80" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
-      <rect class="ch-cell" x="32" y="80" width="14" height="14" rx="1.5" fill-opacity="0.22"/>
-      <rect class="ch-cell" x="48" y="80" width="14" height="14" rx="1.5" fill-opacity="0.51"/>
-      <rect class="ch-cell" x="64" y="80" width="14" height="14" rx="1.5" fill-opacity="0.73"/>
-      <rect class="ch-cell" x="80" y="80" width="14" height="14" rx="1.5" fill-opacity="0.96"/>
+      <rect class="ch-cell" x="32" y="80" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="48" y="80" width="14" height="14" rx="1.5" fill-opacity="0.14"/>
+      <rect class="ch-cell" x="64" y="80" width="14" height="14" rx="1.5" fill-opacity="0.31"/>
+      <rect class="ch-cell" x="80" y="80" width="14" height="14" rx="1.5" fill-opacity="0.51"/>
+      <rect class="ch-cell" x="96" y="80" width="14" height="14" rx="1.5" fill-opacity="0.59"/>
+      <rect class="ch-cell" x="112" y="80" width="14" height="14" rx="1.5" fill-opacity="0.77"/>
+      <rect class="ch-cell" x="128" y="80" width="14" height="14" rx="1.5" fill-opacity="0.96"/>
+      <rect class="ch-cell" x="144" y="80" width="14" height="14" rx="1.5" fill-opacity="0.92"/>
+      <rect class="ch-cell" x="160" y="80" width="14" height="14" rx="1.5" fill-opacity="0.66"/>
+      <rect class="ch-cell" x="176" y="80" width="14" height="14" rx="1.5" fill-opacity="0.51"/>
+      <rect class="ch-cell" x="192" y="80" width="14" height="14" rx="1.5" fill-opacity="0.36"/>
+      <rect class="ch-cell" x="208" y="80" width="14" height="14" rx="1.5" fill-opacity="0.29"/>
+      <rect class="ch-cell" x="224" y="80" width="14" height="14" rx="1.5" fill-opacity="0.12"/>
+      <rect class="ch-cell" x="240" y="80" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="0" y="96" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="16" y="96" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="32" y="96" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="48" y="96" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="64" y="96" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="80" y="96" width="14" height="14" rx="1.5" fill-opacity="0.12"/>
+      <rect class="ch-cell" x="96" y="96" width="14" height="14" rx="1.5" fill-opacity="0.34"/>
+      <rect class="ch-cell" x="112" y="96" width="14" height="14" rx="1.5" fill-opacity="0.49"/>
+      <rect class="ch-cell" x="128" y="96" width="14" height="14" rx="1.5" fill-opacity="0.63"/>
+      <rect class="ch-cell" x="144" y="96" width="14" height="14" rx="1.5" fill-opacity="0.77"/>
+      <rect class="ch-cell" x="160" y="96" width="14" height="14" rx="1.5" fill-opacity="0.94"/>
+      <rect class="ch-cell" x="176" y="96" width="14" height="14" rx="1.5" fill-opacity="0.90"/>
+      <rect class="ch-cell" x="192" y="96" width="14" height="14" rx="1.5" fill-opacity="0.61"/>
+      <rect class="ch-cell" x="208" y="96" width="14" height="14" rx="1.5" fill-opacity="0.54"/>
+      <rect class="ch-cell" x="224" y="96" width="14" height="14" rx="1.5" fill-opacity="0.31"/>
+      <rect class="ch-cell" x="240" y="96" width="14" height="14" rx="1.5" fill-opacity="0.15"/>
+      <rect class="ch-cell" x="0" y="112" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="16" y="112" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="32" y="112" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="48" y="112" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="64" y="112" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="80" y="112" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="96" y="112" width="14" height="14" rx="1.5" fill-opacity="0.15"/>
+      <rect class="ch-cell" x="112" y="112" width="14" height="14" rx="1.5" fill-opacity="0.24"/>
+      <rect class="ch-cell" x="128" y="112" width="14" height="14" rx="1.5" fill-opacity="0.42"/>
+      <rect class="ch-cell" x="144" y="112" width="14" height="14" rx="1.5" fill-opacity="0.61"/>
+      <rect class="ch-cell" x="160" y="112" width="14" height="14" rx="1.5" fill-opacity="0.73"/>
+      <rect class="ch-cell" x="176" y="112" width="14" height="14" rx="1.5" fill-opacity="0.93"/>
+      <rect class="ch-cell" x="192" y="112" width="14" height="14" rx="1.5" fill-opacity="0.94"/>
+      <rect class="ch-cell" x="208" y="112" width="14" height="14" rx="1.5" fill-opacity="0.73"/>
+      <rect class="ch-cell" x="224" y="112" width="14" height="14" rx="1.5" fill-opacity="0.57"/>
+      <rect class="ch-cell" x="240" y="112" width="14" height="14" rx="1.5" fill-opacity="0.51"/>
+      <rect class="ch-cell" x="0" y="128" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="16" y="128" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="32" y="128" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="48" y="128" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="64" y="128" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="80" y="128" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="96" y="128" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="112" y="128" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="128" y="128" width="14" height="14" rx="1.5" fill-opacity="0.09"/>
+      <rect class="ch-cell" x="144" y="128" width="14" height="14" rx="1.5" fill-opacity="0.29"/>
+      <rect class="ch-cell" x="160" y="128" width="14" height="14" rx="1.5" fill-opacity="0.44"/>
+      <rect class="ch-cell" x="176" y="128" width="14" height="14" rx="1.5" fill-opacity="0.61"/>
+      <rect class="ch-cell" x="192" y="128" width="14" height="14" rx="1.5" fill-opacity="0.82"/>
+      <rect class="ch-cell" x="208" y="128" width="14" height="14" rx="1.5" fill-opacity="0.95"/>
+      <rect class="ch-cell" x="224" y="128" width="14" height="14" rx="1.5" fill-opacity="0.85"/>
+      <rect class="ch-cell" x="240" y="128" width="14" height="14" rx="1.5" fill-opacity="0.78"/>
+      <rect class="ch-cell" x="0" y="144" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="16" y="144" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="32" y="144" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="48" y="144" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="64" y="144" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="80" y="144" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="96" y="144" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="112" y="144" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="128" y="144" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="144" y="144" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="160" y="144" width="14" height="14" rx="1.5" fill-opacity="0.25"/>
+      <rect class="ch-cell" x="176" y="144" width="14" height="14" rx="1.5" fill-opacity="0.34"/>
+      <rect class="ch-cell" x="192" y="144" width="14" height="14" rx="1.5" fill-opacity="0.47"/>
+      <rect class="ch-cell" x="208" y="144" width="14" height="14" rx="1.5" fill-opacity="0.63"/>
+      <rect class="ch-cell" x="224" y="144" width="14" height="14" rx="1.5" fill-opacity="0.82"/>
+      <rect class="ch-cell" x="240" y="144" width="14" height="14" rx="1.5" fill-opacity="1.00"/>
     </svg>
         </div>
         <div class="ch-slot ch-slot--stack">
@@ -916,9 +1040,9 @@
     </svg>
         </div>
         <div class="ch-slot ch-slot--people">
-    <!-- Isotype: twenty figures, thirteen in gold and seven in the
-         off-white at a fraction of the strength. Reads as 13 of 20. -->
-    <svg class="ch ch--people" viewBox="0 0 92 88" width="92" height="88" aria-hidden="true" focusable="false">
+    <!-- Isotype: five columns, seven rows; 23 figures in gold and 12 in
+         the off-white at a fraction of the strength. Reads as 23 of 35. -->
+    <svg class="ch ch--people" viewBox="0 0 92 160" width="92" height="160" aria-hidden="true" focusable="false">
       <defs>
         <symbol id="ch-person" viewBox="0 0 12 16">
           <circle cx="6" cy="3.4" r="3.2"/>
@@ -938,13 +1062,28 @@
       <use class="ch-person ch-person--on" href="#ch-person" x="0" y="48" width="12" height="16"/>
       <use class="ch-person ch-person--on" href="#ch-person" x="20" y="48" width="12" height="16"/>
       <use class="ch-person ch-person--on" href="#ch-person" x="40" y="48" width="12" height="16"/>
-      <use class="ch-person ch-person--off" href="#ch-person" x="60" y="48" width="12" height="16"/>
-      <use class="ch-person ch-person--off" href="#ch-person" x="80" y="48" width="12" height="16"/>
-      <use class="ch-person ch-person--off" href="#ch-person" x="0" y="72" width="12" height="16"/>
-      <use class="ch-person ch-person--off" href="#ch-person" x="20" y="72" width="12" height="16"/>
-      <use class="ch-person ch-person--off" href="#ch-person" x="40" y="72" width="12" height="16"/>
-      <use class="ch-person ch-person--off" href="#ch-person" x="60" y="72" width="12" height="16"/>
-      <use class="ch-person ch-person--off" href="#ch-person" x="80" y="72" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="60" y="48" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="80" y="48" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="0" y="72" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="20" y="72" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="40" y="72" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="60" y="72" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="80" y="72" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="0" y="96" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="20" y="96" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="40" y="96" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="60" y="96" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="80" y="96" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="0" y="120" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="20" y="120" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="40" y="120" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="60" y="120" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="80" y="120" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="0" y="144" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="20" y="144" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="40" y="144" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="60" y="144" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="80" y="144" width="12" height="16"/>
     </svg>
         </div>
         <div class="ch-slot ch-slot--hbars">
