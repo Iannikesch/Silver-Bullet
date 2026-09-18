@@ -1,32 +1,36 @@
 /* ==========================================================
    Silver Bullet — the hero belt
 
-   Four clips as free cards in one lane, coming down like an elevator.
-   The lane is the column to the right of the headline: it opens past
-   the end of the headline's widest line ("Growth partner" — the R the
-   owner asked for) and runs to the right edge of the viewport. Cards
-   sit centred in that column and travel top to bottom. Each card:
+   A chain of clips coming down one lane like an elevator:
 
-     appears  level with the top of the headline with a hard start:
-              opacity 0 to 1 in about 1.2s on a steep ease-out. It does
-              not slide in from under the VSL; it is simply there, and
-              then it is solid.
-     drops    at BELT_SPEED px/s, linear, playing on a loop
-     leaves   fading to nothing over the last 260px of its centre's
-              travel (less on a short lane), so it is half past the
-              hero's bottom edge by the time it is gone
+        0
+        __
+        0
+        __
+        0
 
-   Cards are spaced evenly along a belt whose length is at least the
-   lane's height, so once all four are out the belt is continuous and
-   the wrap from the bottom back to the top is never seen: a card is
-   invisible at both ends. The study this copies (badmarketing.com) runs
-   its rows sideways at ~21 and ~44px/s with no fades at all, just a
-   clipped edge; the vertical run, the fades and the mouth at the
-   headline are ours.
+   always connected, always several live at once. The lane is the column
+   to the right of the headline: it opens past the end of the headline's
+   widest line ("Growth partner" — the R the owner asked for) and runs to
+   the right edge of the viewport. Its top is the bottom edge of the VSL
+   box and its bottom is the bottom of the hero, and it clips: a card
+   slides out from under the VSL box already solid, drops at BELT_SPEED
+   px/s, linear, playing on a loop, and dissolves over its last stretch
+   into the hero's bottom edge - with the next card CHAIN_GAP px behind
+   it the whole way. Where the lane is wide enough the chain runs in two
+   columns, staggered by half a card, so four or five are in frame.
+
+   Four clips are not enough to fill a lane at that spacing, so the belt
+   holds as many SLOTS as the lane needs and the four clips repeat down
+   the chain - the same trick as the study (badmarketing.com), whose two
+   rows each hold two copies of their list. The clips in the HTML are the
+   list; reel.js clones them into the slots the lane calls for, and a
+   slot only plays while it is on screen. Each column's belt is longer
+   than the lane by at least a card, so the wrap from the bottom to the
+   top is never seen.
 
    Everything is measured, not assumed. The lane's left edge is the
-   widest client rect of the h1's text, its top is the hero grid's and
-   its bottom is the hero ground's, and the same measurement writes
+   widest client rect of the h1's text, and the same measurement writes
    --copy-w so the lead stops where the headline stops (see .hero .lead
    in site.css).
 
@@ -46,13 +50,14 @@
 
   var belt = document.querySelector('[data-belt]');
   if (!belt) return;
-  var cards = Array.prototype.slice.call(belt.querySelectorAll('.belt__card'));
-  if (!cards.length) return;
+  var sources = Array.prototype.slice.call(belt.querySelectorAll('.belt__card'));
+  if (!sources.length) return;
 
   var ground = belt.parentNode;                       /* .hero-ground */
   var grid = document.querySelector('.hero__grid');
   var copy = document.querySelector('.hero__copy');
   var h1 = document.querySelector('.hero h1');
+  var vsl = document.querySelector('.hero__video');
   if (!grid || !copy || !h1) return;
 
   var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -60,20 +65,59 @@
 
   /* ---- the numbers -------------------------------------------------- */
 
-  var BELT_SPEED  = 20;    /* px per second. Slow end of the study. */
-  var CARD_H      = 391;   /* px, the 9:16 card. Real heights are measured. */
+  var BELT_SPEED  = 14;    /* px per second. Under the study's slow row. */
+  var CARD_W_TWO  = 190;   /* px card width with two columns, at most... */
+  var CARD_W_MIN  = 150;   /* ...and at least, before it drops to one */
+  var CARD_W_ONE  = 220;   /* px card width with one column */
+  var COL_GAP     = 44;    /* px between the two columns */
   var MOUTH_GAP   = 28;    /* px between the headline's end and the lane */
-  var MIN_GAP     = 56;    /* px between cards, the study's 3.5rem */
-  var FADE_IN_PX  = BELT_SPEED * 1.2;   /* 1.2s of travel: the hard start */
-  var FADE_OUT_MAX = 260;  /* the centre's last 260px before the edge... */
-  var FADE_OUT_FRAC = 0.35; /* ...or 35% of a short lane, so a card is
-                               solid for most of a short drop too */
+  var CHAIN_GAP   = 40;    /* px between one card and the next: the __ */
+  var FADE_OUT_MAX = 140;  /* the centre's last 140px before the edge... */
+  var FADE_OUT_FRAC = 0.25; /* ...or a quarter of a short lane */
   var MAX_DT      = 50;    /* ms. A throttled tab must not lurch. */
+
+  /* ---- the slots ---------------------------------------------------- */
+
+  /* The list: what each clip is, read once from the HTML. */
+  var clips = sources.map(function (v) {
+    return { src: v.getAttribute('src'), tall: !v.classList.contains('belt__card--4x5') };
+  });
+  var cards = sources.slice();   /* every slot, the HTML's four first */
+  var started = false;
+
+  /* More slots, cloned from the first. A clone is a fresh <video> with
+     preload="none"; which clip it shows is dealt in layout(), and it
+     fetches only once the belt has started. */
+  function ensureSlots(n) {
+    while (cards.length < n) {
+      var clone = sources[0].cloneNode(false);
+      clone.preload = started ? 'auto' : 'none';
+      clone.style.opacity = '0';
+      belt.appendChild(clone);
+      cards.push(clone);
+    }
+  }
+
+  /* Deal the clips down the columns so every column runs through all
+     four in turn and no clip sits beside, under or diagonal to itself:
+     slot i in column c, row k, shows clip (k + 2c) mod 4, the second
+     column half the list ahead of the first. Only touched when it
+     changes, since setting src restarts the video. */
+  function deal(i, cols) {
+    var card = cards[i];
+    var lead = Math.ceil(clips.length / cols);
+    var clip = clips[(Math.floor(i / cols) + (i % cols) * lead) % clips.length];
+    if (card.getAttribute('src') !== clip.src) {
+      card.setAttribute('src', clip.src);
+      if (started) { card.preload = 'auto'; card.load(); }
+    }
+    card.classList.toggle('belt__card--4x5', !clip.tall);
+  }
 
   /* ---- measurement -------------------------------------------------- */
 
-  var laneH = 0, pitch = 0, beltLen = 0, fadeOut = FADE_OUT_MAX;
-  var heights = [];
+  var laneH = 0, laneW = 0, cols = 1, colLen = 0, stagger = 0, fadeOut = FADE_OUT_MAX;
+  var heights = [], starts = [], colX = [0, 0], perCol = 0;
 
   /* The right edge of the headline's widest LINE, not of its box: the
      box is 13ch wide and the text wraps short of it. */
@@ -86,6 +130,13 @@
     return edge;
   }
 
+  function cardHeight(w, i) {
+    var c = cards[i];
+    var r = c.getBoundingClientRect();
+    if (r.height) return r.height;
+    return c.classList.contains('belt__card--4x5') ? w * 5 / 4 : w * 16 / 9;
+  }
+
   function layout() {
     var g = ground.getBoundingClientRect();
     var gr = grid.getBoundingClientRect();
@@ -93,25 +144,54 @@
 
     copy.style.setProperty('--copy-w', Math.round(edge - copy.getBoundingClientRect().left) + 'px');
 
-    /* The column: from the mouth to the viewport edge. The drop: from
-       the top of the copy block to the bottom of the hero ground, so a
-       card leaves through the section's own edge, not mid-air. */
+    /* The lane: from the mouth to the viewport edge; from under the VSL
+       box (or the top of the copy block if there is none) to the bottom
+       of the hero ground. Both ends clip. */
     var left = Math.round(edge - g.left + MOUTH_GAP);
-    var top = Math.round(gr.top - g.top);
+    var topEdge = vsl ? vsl.getBoundingClientRect().bottom : gr.top;
+    var top = Math.round(topEdge - g.top);
+    laneW = Math.max(0, Math.round(g.width - left));
     laneH = Math.max(0, Math.round(g.height - top));
     fadeOut = Math.min(FADE_OUT_MAX, laneH * FADE_OUT_FRAC);
     belt.style.top = top + 'px';
     belt.style.height = laneH + 'px';
     belt.style.left = left + 'px';
-    belt.style.width = Math.max(0, Math.round(g.width - left)) + 'px';
+    belt.style.width = laneW + 'px';
 
-    heights = cards.map(function (c) { return c.getBoundingClientRect().height || CARD_H; });
-    var sum = heights.reduce(function (a, b) { return a + b; }, 0);
-    /* Even spacing, and enough of it that the belt is never shorter than
-       the lane - otherwise a card could wrap while still on screen. */
-    var gap = Math.max(MIN_GAP, (laneH - sum) / cards.length);
-    pitch = sum / cards.length + gap;
-    beltLen = pitch * cards.length;
+    /* Two columns when they fit, centred as a pair, the cards narrowing
+       to make them fit before giving up and going to one column, centred.
+       The card width reaches the stylesheet as --card-w. */
+    var fit = Math.floor((laneW - COL_GAP - 2 * MOUTH_GAP) / 2);
+    cols = fit >= CARD_W_MIN ? 2 : 1;
+    var w = cols === 2 ? Math.min(CARD_W_TWO, fit) : CARD_W_ONE;
+    belt.style.setProperty('--card-w', w + 'px');
+    var span = cols * w + (cols - 1) * COL_GAP;
+    colX[0] = Math.round((laneW - span) / 2);
+    colX[1] = colX[0] + w + COL_GAP;
+
+    /* How many slots a column needs: enough that its belt is longer than
+       the lane by a card and a gap, so the wrap happens off screen. Every
+       column gets the same count; slots are dealt round-robin. */
+    var tallest = Math.round(w * 16 / 9);
+    perCol = Math.ceil((laneH + tallest + CHAIN_GAP) / (tallest + CHAIN_GAP)) + 1;
+    perCol = Math.max(perCol, Math.ceil(sources.length / cols));
+    ensureSlots(perCol * cols);
+    for (var d = 0; d < cards.length; d++) deal(d, cols);
+
+    /* Each slot's start down its column, cumulative, so the gap between
+       any two cards is CHAIN_GAP whatever their heights. */
+    heights = cards.map(function (c, i) { return cardHeight(w, i); });
+    starts = [];
+    var run = [0, 0];
+    for (var i = 0; i < cards.length; i++) {
+      var col = i % cols;
+      starts[i] = run[col];
+      run[col] += heights[i] + CHAIN_GAP;
+    }
+    colLen = Math.max(run[0], run[1]);
+    /* The second column runs half a card behind the first, so the two
+       read as one chain rather than two rows of pairs. */
+    stagger = (heights[0] + CHAIN_GAP) / 2;
   }
 
   /* ---- the frame ---------------------------------------------------- */
@@ -121,31 +201,31 @@
   var raf = 0;
   var running = false;
 
-  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
-  function easeInQuad(t)   { return t * t; }
-  function clamp01(t)      { return t < 0 ? 0 : t > 1 ? 1 : t; }
+  function easeInQuad(t) { return t * t; }
+  function clamp01(t)    { return t < 0 ? 0 : t > 1 ? 1 : t; }
 
   function place(i) {
     var card = cards[i];
-    var h = heights[i] || CARD_H;
-    /* Card i is i pitches behind the belt's head. Negative means it has
-       not reached the top yet; it is hidden and waits its turn. */
-    var raw = offset - i * pitch;
-    if (raw < 0) { card.style.opacity = '0'; keep(card, false); return; }
-    var y = raw % beltLen;
+    var h = heights[i] || 0;
+    var col = i % cols;
+    /* Where the card is down its column's belt, positive modulo so the
+       belt is full from the first frame. Minus its own height: a card at
+       the start of the belt is just above the lane's top edge, and slides
+       out from under the VSL box as it goes. */
+    var y = (offset - starts[i] - col * stagger) % colLen;
+    if (y < 0) y += colLen;
+    y -= h;
 
-    var fadeIn  = easeOutCubic(clamp01(y / FADE_IN_PX));
     var centre  = y + h / 2;
-    var leaving = 1 - easeInQuad(clamp01((centre - (laneH - fadeOut)) / fadeOut));
-    var o = Math.min(fadeIn, leaving);
+    var o = 1 - easeInQuad(clamp01((centre - (laneH - fadeOut)) / fadeOut));
 
-    card.style.transform = 'translate3d(-50%, ' + y.toFixed(1) + 'px, 0)';
+    card.style.transform = 'translate3d(' + colX[col] + 'px, ' + y.toFixed(1) + 'px, 0)';
     card.style.opacity = o.toFixed(3);
-    keep(card, o > 0.01 && y < laneH);
+    keep(card, o > 0.01 && y + h > 0 && y < laneH);
   }
 
-  /* Play while it can be seen, pause when it cannot: four clips looping
-     off screen is decode work for nothing. */
+  /* Play while it can be seen, pause when it cannot: a chain of clips
+     looping off screen is decode work for nothing. */
   function keep(card, playing) {
     if (playing) {
       if (card.paused) { var p = card.play(); if (p && p.catch) p.catch(function () {}); }
@@ -164,8 +244,6 @@
   }
 
   /* ---- start, and only when it is worth starting ------------------ */
-
-  var started = false;
 
   function fetchAll() {
     cards.forEach(function (c) {
@@ -198,12 +276,13 @@
 
   if (REDUCED) {
     layout();
-    cards[0].preload = 'metadata';
-    cards[0].load();
+    sources[0].preload = 'metadata';
+    sources[0].load();
     /* Opacity comes from the stylesheet; only the position is ours. */
-    cards[0].style.transform = 'translate3d(-50%, 0, 0)';
-    window.addEventListener('resize', layout);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+    function still() { sources[0].style.transform = 'translate3d(' + colX[0] + 'px, 0, 0)'; }
+    still();
+    window.addEventListener('resize', function () { layout(); still(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { layout(); still(); });
     return;
   }
 
@@ -232,7 +311,7 @@
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (started) layout(); });
 
   /* Crossing the breakpoint with the belt running: stop it and drop the
-     buffers. Crossing back: it starts again from the top. */
+     buffers. Crossing back: it starts again, full. */
   NARROW.addEventListener('change', function (e) {
     if (e.matches) {
       pauseAll(); started = false; offset = 0;

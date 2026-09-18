@@ -311,15 +311,17 @@
       </section>
 
       <!-- ============================================================
-           The hero belt. Four clips as free cards coming down one lane
-           like an elevator. The lane is the column past the end of the
-           headline's widest line, out to the viewport edge; the cards
-           sit centred in it. Each hard-starts its fade level with the
-           top of the headline, drops at about 20px/s, plays on a loop
-           while it is visible, and fades to nothing as it leaves through
-           the bottom of the hero. Spacing is even, so the belt is
-           continuous once all four are out; one is always clearly on
-           screen, rarely two.
+           The hero belt: a chain of clips coming down one lane like an
+           elevator, 0__0__0, always connected, always several live. The
+           lane is the column past the end of the headline's widest line,
+           out to the viewport edge, from under the VSL box to the bottom
+           of the hero; where it is wide enough the chain runs in two
+           columns, half a card apart, so four or five are in frame. A
+           card slides out from under the VSL box already solid, drops at
+           about 14px/s playing on a loop, and dissolves into the hero's
+           bottom edge with the next card 40px behind it. The four clips
+           here are the list; reel.js clones them into as many slots as
+           the lane needs and deals them down the columns.
 
            reel.js measures the lane (the headline's line ends, the grid's
            height) and drives the drift on requestAnimationFrame - no

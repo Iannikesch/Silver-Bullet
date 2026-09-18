@@ -9,10 +9,12 @@ Read both before touching anything that moves.
 Movement is a priority for this site, but it is rationed. What moves: the bullet
 intro, the reactive chrome on two elements, four marquee bands — the word band's
 two rows, the creative conveyor and the logo band — the hero belt (four
-clips as free cards coming down one lane like an elevator: the column past the
-end of the headline's widest line, out to the viewport edge; each hard-starts
-its fade level with the headline's top, drops at 20px/s on a loop, and fades
-out through the hero's bottom edge; `reel.js`, no
+clips as a chain of cards coming down one lane like an elevator, 0__0__0,
+always connected, two columns where the lane is wide enough: the column past
+the end of the headline's widest line, out to the viewport edge, from under the
+VSL box to the hero's bottom; the clips are cloned into as many slots as the
+lane needs, each slides out from under the box, drops at 14px/s on a loop, and
+dissolves into the hero's bottom edge; `reel.js`, no
 GSAP, requestAnimationFrame only, paused off screen and in background tabs,
 never fetched under 760px, a single still under reduced motion; the lane is
 measured from the h1's line rects and the same measurement caps the lead's
