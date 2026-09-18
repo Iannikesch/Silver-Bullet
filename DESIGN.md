@@ -342,23 +342,28 @@ dimmed to a fifth through the headline by the mask, and charts.js only
 refits its viewBox to the band's aspect. Reduced motion, no JS and a CDN
 outage all get the same drawing: the SVG in index.html is complete.
 
-**Three small motifs joined the big three (2026-09-18, later).** A
-heatmap top-left, an isotype grid (13 of 20 figures) top-right of the
-headline, three stacked horizontal bars centred under it, on the owner's
-brief, to balance the negative space. They are subordinate by rule:
-smaller than the big three, at about six tenths of their strength,
-nothing under the copy, and hidden below 900px with the bars and pie.
-Same two fills, plus the burnt gold flat as the stacked bars' third tone.
-They arrive once, on scroll, after the bars and slices have settled:
-heatmap cell by cell from the corner, segments growing from the left,
-figures in order. Same easings as the big three. This is six drawn
-things around one headline; the count of movers on the page is
-unchanged (each arrives once and rests), but if the band ever reads
-as busy, these three go first.
+**Six small motifs joined the big three (2026-09-18, later, in two
+briefs).** Around the headline, in the negative space, on the owner's
+brief, to balance the band: top row, a heatmap (left), nine candlesticks
+(centre), an isotype grid of 13-of-20 figures (right of the headline,
+under the line's arc); bottom row, a three-band stacked area (left of
+centre), three stacked horizontal bars (centre), five flat horizontal bars
+(right, under the pie). They are subordinate by rule: smaller than the
+big three, at about six tenths of their strength, nothing under the copy,
+and hidden below 900px with the bars and pie. Same two fills, plus the
+burnt gold flat as the stacked bars' third tone; the area's upper bands
+are the fills at lower strength. They arrive once, on scroll, in the
+order above, after the bars and slices have settled, on the same easings;
+the whole band is still by about 4.5s.
+
+This is nine drawn things around one headline. The count of ongoing
+movers on the page is unchanged (each arrives once and rests), and the
+owner asked for every one of them. If it reads as busy, the order to cut
+is the reverse of arrival: the last three first.
 
 The numbers are made up. If the band ever reads as too busy, the order to
-drop things: the three small motifs, then the bar-and-slice arrival, and
-the line last.
+drop things: the six small motifs (last in, first out), then the
+bar-and-slice arrival, and the line last.
 
 ## The scale pass (2026-09-16)
 

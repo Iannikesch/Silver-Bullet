@@ -779,10 +779,13 @@
              left      a bar chart, bars alternating the two fills
              centre    a rising line behind the headline
              right     a pie of six slices in the same alternation
-           and three smaller motifs in the negative space, subordinate:
-             top-left  a heatmap
-             bottom    three stacked horizontal bars
-             top-right an isotype grid, 13 of 20
+           and six smaller motifs in the negative space, subordinate:
+             top-left     a heatmap
+             top-centre   nine candlesticks
+             top-right    an isotype grid, 13 of 20
+             bottom-left  a stacked area, three bands
+             bottom       three stacked horizontal bars
+             bottom-right five horizontal bars
            Both fills are tokens: "one" is --white pulled a step toward
            --magenta, "two" is the gold ramp with a lit top edge. -->
       <div class="ch-layer" aria-hidden="true">
@@ -942,6 +945,45 @@
       <use class="ch-person ch-person--off" href="#ch-person" x="40" y="72" width="12" height="16"/>
       <use class="ch-person ch-person--off" href="#ch-person" x="60" y="72" width="12" height="16"/>
       <use class="ch-person ch-person--off" href="#ch-person" x="80" y="72" width="12" height="16"/>
+    </svg>
+        </div>
+        <div class="ch-slot ch-slot--hbars">
+    <!-- Five solid horizontal bars on one left baseline, square ends,
+         bar 2.5x the gap, lengths descending but not tidily, alternating
+         the two fills down the stack. -->
+    <svg class="ch ch--hbars" viewBox="0 0 140 66" width="140" height="66" aria-hidden="true" focusable="false">
+      <rect class="ch-hbar ch-two" x="0" y="0" width="140" height="10"/>
+      <rect class="ch-hbar ch-one" x="0" y="14" width="101" height="10"/>
+      <rect class="ch-hbar ch-two" x="0" y="28" width="112" height="10"/>
+      <rect class="ch-hbar ch-one" x="0" y="42" width="63" height="10"/>
+      <rect class="ch-hbar ch-two" x="0" y="56" width="42" height="10"/>
+    </svg>
+        </div>
+        <div class="ch-slot ch-slot--candles">
+    <!-- Nine candles on a shared centre line, no order to the highs and
+         lows. Wick 1 unit, body 8 units; the body's tone runs down its
+         wick. Gold and off-white with no repeating pattern. -->
+    <svg class="ch ch--candles" viewBox="0 0 160 80" width="160" height="80" aria-hidden="true" focusable="false">
+      <g class="ch-candle ch-two"><line x1="9.00" y1="27.2" x2="9.00" y2="73.4"/><rect x="5.00" y="40.1" width="8" height="28.5"/></g>
+      <g class="ch-candle ch-one"><line x1="26.75" y1="17.3" x2="26.75" y2="53.8"/><rect x="22.75" y="26.6" width="8" height="21.8"/></g>
+      <g class="ch-candle ch-one"><line x1="44.50" y1="25.1" x2="44.50" y2="53.7"/><rect x="40.50" y="31.3" width="8" height="13.8"/></g>
+      <g class="ch-candle ch-two"><line x1="62.25" y1="10.4" x2="62.25" y2="40.2"/><rect x="58.25" y="21.5" width="8" height="10.5"/></g>
+      <g class="ch-candle ch-one"><line x1="80.00" y1="29.8" x2="80.00" y2="62.2"/><rect x="76.00" y="37.4" width="8" height="20.3"/></g>
+      <g class="ch-candle ch-two"><line x1="97.75" y1="19.4" x2="97.75" y2="65.9"/><rect x="93.75" y="30.0" width="8" height="25.7"/></g>
+      <g class="ch-candle ch-two"><line x1="115.50" y1="9.3" x2="115.50" y2="58.0"/><rect x="111.50" y="20.9" width="8" height="29.4"/></g>
+      <g class="ch-candle ch-one"><line x1="133.25" y1="27.3" x2="133.25" y2="60.7"/><rect x="129.25" y="34.4" width="8" height="21.4"/></g>
+      <g class="ch-candle ch-two"><line x1="151.00" y1="27.3" x2="151.00" y2="65.2"/><rect x="147.00" y="37.2" width="8" height="19.5"/></g>
+    </svg>
+        </div>
+        <div class="ch-slot ch-slot--area">
+    <!-- Three bands on one baseline, each top edge a wave, the waves
+         offset so the bands breathe. Bottom gold, middle off-white at
+         lower strength, top gold at the lowest. Fills only, no stroke.
+         Each band is its own region, so the strengths do not stack. -->
+    <svg class="ch ch--area" viewBox="0 0 180 70" width="180" height="70" aria-hidden="true" focusable="false">
+      <path class="ch-band ch-band--top" d="M0,12.7 L3,12.7 L6,12.5 L9,12.1 L12,11.5 L15,11.0 L18,10.8 L21,11.0 L24,11.8 L27,13.2 L30,15.1 L33,17.2 L36,19.3 L39,21.0 L42,22.2 L45,22.7 L48,22.5 L51,21.8 L54,20.7 L57,19.5 L60,18.5 L63,17.7 L66,17.3 L69,17.0 L72,16.8 L75,16.4 L78,15.7 L81,14.7 L84,13.4 L87,11.9 L90,10.4 L93,9.3 L96,8.8 L99,8.9 L102,9.8 L105,11.3 L108,13.2 L111,15.2 L114,17.1 L117,18.5 L120,19.5 L123,19.9 L126,19.9 L129,19.8 L132,19.6 L135,19.5 L138,19.7 L141,20.1 L144,20.5 L147,20.7 L150,20.6 L153,20.0 L156,18.8 L159,17.1 L162,15.1 L165,13.0 L168,11.1 L171,9.8 L174,9.1 L177,9.1 L180,9.8 L180,27.7 L177,26.7 L174,25.9 L171,25.7 L168,26.2 L165,27.7 L162,29.9 L159,32.5 L156,35.2 L153,37.3 L150,38.5 L147,38.9 L144,38.3 L141,37.3 L138,36.1 L135,35.1 L132,34.4 L129,34.1 L126,33.9 L123,33.5 L120,32.7 L117,31.3 L114,29.5 L111,27.4 L108,25.5 L105,24.3 L102,24.0 L99,24.7 L96,26.4 L93,28.6 L90,31.0 L87,33.1 L84,34.5 L81,35.3 L78,35.5 L75,35.5 L72,35.5 L69,35.8 L66,36.3 L63,37.1 L60,37.7 L57,37.8 L54,37.2 L51,35.6 L48,33.4 L45,30.8 L42,28.2 L39,26.2 L36,25.0 L33,24.8 L30,25.5 L27,26.7 L24,28.1 L21,29.3 L18,30.2 L15,30.6 L12,30.9 L9,31.3 L6,32.0 L3,33.3 L0,35.0 Z"/>
+      <path class="ch-band ch-band--mid" d="M0,35.0 L3,33.3 L6,32.0 L9,31.3 L12,30.9 L15,30.6 L18,30.2 L21,29.3 L24,28.1 L27,26.7 L30,25.5 L33,24.8 L36,25.0 L39,26.2 L42,28.2 L45,30.8 L48,33.4 L51,35.6 L54,37.2 L57,37.8 L60,37.7 L63,37.1 L66,36.3 L69,35.8 L72,35.5 L75,35.5 L78,35.5 L81,35.3 L84,34.5 L87,33.1 L90,31.0 L93,28.6 L96,26.4 L99,24.7 L102,24.0 L105,24.3 L108,25.5 L111,27.4 L114,29.5 L117,31.3 L120,32.7 L123,33.5 L126,33.9 L129,34.1 L132,34.4 L135,35.1 L138,36.1 L141,37.3 L144,38.3 L147,38.9 L150,38.5 L153,37.3 L156,35.2 L159,32.5 L162,29.9 L165,27.7 L168,26.2 L171,25.7 L174,25.9 L177,26.7 L180,27.7 L180,55.2 L177,54.4 L174,53.1 L171,51.5 L168,50.0 L165,48.7 L162,47.9 L159,47.3 L156,47.1 L153,46.8 L150,46.4 L147,45.7 L144,44.7 L141,43.5 L138,42.3 L135,41.5 L132,41.3 L129,41.8 L126,43.1 L123,45.0 L120,47.2 L117,49.4 L114,51.2 L111,52.5 L108,53.2 L105,53.2 L102,52.8 L99,52.2 L96,51.7 L93,51.3 L90,51.2 L87,51.3 L84,51.3 L81,51.1 L78,50.4 L75,49.2 L72,47.5 L69,45.5 L66,43.6 L63,41.9 L60,40.9 L57,40.6 L54,41.2 L51,42.4 L48,44.1 L45,45.8 L42,47.3 L39,48.5 L36,49.2 L33,49.6 L30,49.8 L27,50.0 L24,50.4 L21,51.1 L18,52.1 L15,53.1 L12,54.0 L9,54.4 L6,54.1 L3,53.0 L0,51.4 Z"/>
+      <path class="ch-band ch-band--low" d="M0,51.4 L3,53.0 L6,54.1 L9,54.4 L12,54.0 L15,53.1 L18,52.1 L21,51.1 L24,50.4 L27,50.0 L30,49.8 L33,49.6 L36,49.2 L39,48.5 L42,47.3 L45,45.8 L48,44.1 L51,42.4 L54,41.2 L57,40.6 L60,40.9 L63,41.9 L66,43.6 L69,45.5 L72,47.5 L75,49.2 L78,50.4 L81,51.1 L84,51.3 L87,51.3 L90,51.2 L93,51.3 L96,51.7 L99,52.2 L102,52.8 L105,53.2 L108,53.2 L111,52.5 L114,51.2 L117,49.4 L120,47.2 L123,45.0 L126,43.1 L129,41.8 L132,41.3 L135,41.5 L138,42.3 L141,43.5 L144,44.7 L147,45.7 L150,46.4 L153,46.8 L156,47.1 L159,47.3 L162,47.9 L165,48.7 L168,50.0 L171,51.5 L174,53.1 L177,54.4 L180,55.2 L180,70 L0,70 Z"/>
     </svg>
         </div>
       </div>
