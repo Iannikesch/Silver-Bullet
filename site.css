@@ -391,6 +391,58 @@
       .roll__ch { transition: none !important; transform: none !important; }
     }
 
+    /* ---------- capabilities, inline in the bar ----------
+       "Capabilities:" as a quiet label, then the group names as links,
+       so the groups are in front of the reader instead of behind a
+       dropdown. The label is a step down the ramp from the links, and
+       the links carry the same centre-grown underline the other nav
+       links do (defined below, on .nav > .nav-link, and reused here).
+
+       Below 1100px the three group links are dropped and the label
+       alone stays, as the plain "Capabilities" link it always was: the
+       bar holds five items plus a button, and three more do not fit
+       until the drawer takes over at 760px. Above 1100px they fit with
+       room. */
+    .nav-caps {
+      display: flex;
+      align-items: baseline;   /* the links carry 3px of underline room; centring them lifts the text */
+      gap: clamp(10px, 1.2vw, 16px);
+    }
+
+    .nav-caps__label {
+      color: var(--steel-700, #6B7C86);
+    }
+
+    .nav-caps__label:hover { color: var(--steel-300, #9AAFB8); }
+
+    .nav-caps__link {
+      position: relative;
+      padding-bottom: 3px;
+    }
+    .nav-caps__link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background: var(--steel-300, #9AAFB8);
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform .25s var(--ease-settle, ease);
+    }
+    .nav-caps__link:hover::after,
+    .nav-caps__link:focus-visible::after { transform: scaleX(1); }
+
+    @media (max-width: 1100px) and (min-width: 761px) {
+      .nav-caps__link { display: none; }
+      .nav-caps__label { color: var(--steel-300, #9AAFB8); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .nav-caps__link::after { transition: none; }
+    }
+
     /* ---------- nav dropdown ----------
        Built on <details> so the thing works with the script absent: click
        opens it, the keyboard gets it for free, and nav.js only adds the
@@ -689,6 +741,12 @@
         border-top: 1px solid var(--border);
       }
       .nav > a { padding: calc(16px + 2px * var(--dial)) 0; font-size: calc(17px + 3px * var(--dial)); }
+      /* The inline group becomes a short stack in the drawer: label on
+         its own line, then the three groups indented under it. */
+      .nav-caps { width: 100%; flex-direction: column; align-items: stretch; gap: 0; }
+      .nav-caps__label { padding: calc(16px + 2px * var(--dial)) 0 6px; font-size: calc(17px + 3px * var(--dial)); }
+      .nav-caps__link  { padding: 10px 0 10px 18px; font-size: calc(15px + 2px * var(--dial)); }
+      .nav-caps__link::after { display: none; }
       .nav .nav-link { color: var(--steel-050); }
 
       /* The capabilities dropdown stays a <details> here - tapping it opens

@@ -3,7 +3,7 @@
 
    Two things read from this file and nothing else does:
 
-     - the Capabilities dropdown in the nav, on every page
+     - the Capabilities group links in the nav, on every page
      - the two-panel Capabilities section on capabilities.html
 
    Change a group's name, its one-line descriptor, or which
@@ -44,6 +44,17 @@
         label:   'B2C',
         tagline: 'For businesses that sell direct to consumers.',
         items:   ['paid-acquisition', 'landing-pages', 'offer-positioning', 'tracking-attribution', 'creative-production', 'lifecycle-retention']
+      },
+      {
+        /* Added with the inline nav. The four items are a first cut of
+           what an agency would hand us - the buying, the pages, the
+           measurement, the creative - and are a guess to be confirmed;
+           the tagline likewise. Change either here and both the nav and
+           the capabilities page follow. */
+        key:     'agencies',
+        label:   'Agencies',
+        tagline: 'For agencies that need a performance partner behind them.',
+        items:   ['paid-acquisition', 'landing-pages', 'tracking-attribution', 'creative-production']
       }
     ],
 
@@ -75,30 +86,20 @@
 
   function pad(n) { return (n < 10 ? '0' : '') + n; }
 
-  /* ---- the nav dropdown -------------------------------------------
-     One column per group. Each column is a <details> so that on a
-     phone, where the dropdown becomes an accordion inside the menu,
-     tapping the group name opens its list - and with nav.js absent
-     the <details> still opens and closes on its own. On desktop
-     nav.js holds them open and they read as plain headed columns. */
+  /* ---- the nav: the groups, inline ----------------------------------
+     No dropdown. The three group names sit in the bar itself after a
+     "Capabilities:" label, so a reader sees B2B, B2C and Agencies without
+     opening anything. Each links to its own panel on the capabilities
+     page. The label is in the markup (it is the no-JS fallback and the
+     link to the page as a whole); only the group links are rendered here,
+     so the group names are still written in one place. */
   function renderNav(root) {
     var html = '';
     CAPS.groups.forEach(function (g) {
-      html += '<details class="nav-dd__group" data-group="' + esc(g.key) + '" open>' +
-                '<summary class="nav-dd__group-head">' + esc(g.label) +
-                  '<span class="nav-dd__sign" aria-hidden="true"></span></summary>' +
-                '<ul class="nav-dd__list">';
-      g.items.forEach(function (slug, i) {
-        var c = CAPS.capabilities[slug];
-        if (!c) return;
-        html += '<li><a href="' + SECTION_PAGE + '#cap-' + esc(g.key) + '-' + esc(slug) + '"' +
-                  ' data-track="nav-capability-' + esc(g.key) + '-' + esc(slug) + '">' +
-                  '<span class="nav-dd__num">' + pad(i + 1) + '</span>' + esc(c.name) + '</a></li>';
-      });
-      html += '</ul></details>';
+      html += '<a class="nav-caps__link" href="' + SECTION_PAGE + '#cap-' + esc(g.key) + '"' +
+                ' data-track="nav-capabilities-' + esc(g.key) + '">' + esc(g.label) + '</a>';
     });
-    root.innerHTML = html;
-    root.classList.add('nav-dd__cols');
+    root.insertAdjacentHTML('beforeend', html);
   }
 
   /* ---- the page section --------------------------------------------
@@ -109,7 +110,7 @@
   function renderSection(root) {
     var html = '';
     CAPS.groups.forEach(function (g) {
-      html += '<div class="cap-panel" data-group="' + esc(g.key) + '">' +
+      html += '<div class="cap-panel" id="cap-' + esc(g.key) + '" data-group="' + esc(g.key) + '">' +
                 '<h3 class="cap-panel__label">' + esc(g.label) + '</h3>' +
                 '<p class="cap-panel__tag">' + esc(g.tagline) + '</p>' +
                 '<ol class="cap-panel__list">';

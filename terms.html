@@ -98,12 +98,13 @@
              by capabilities.js from the one data object it holds, so this
              list is never typed a second time. With that script absent the
              panel is empty and the summary still works as a link. -->
-        <details class="nav-dd">
-          <summary class="nav-dd__toggle">Capabilities<span class="nav-dd__sign" aria-hidden="true"></span></summary>
-          <div class="nav-dd__panel" data-cap-menu>
-            <noscript><a class="nav-dd__all" href="capabilities.html">All capabilities</a></noscript>
-          </div>
-        </details>
+        <!-- Capabilities, inline: the label links to the page, and
+             capabilities.js appends one link per group (B2B, B2C,
+             Agencies) so the reader sees them without opening anything.
+             With JS off the label alone is the link, which is enough. -->
+        <div class="nav-caps" data-cap-menu>
+          <a class="nav-caps__label" href="capabilities.html" data-track="nav-capabilities">Capabilities:</a>
+        </div>
 
         <a class="nav-link" href="work.html">Our work</a>
 
