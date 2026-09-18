@@ -62,3 +62,13 @@ a thrown test and made the next three desktop runs report hover as broken.
 Prevented by: reading the comment, and a fresh page per test run. Lesson:
 `padding-block` on anything that is also `.wrap`; never trust a probe after a
 throw.
+
+## 2026-09-18: a chart that rendered black
+
+Tried: replace the bore band with three SVG charts. Wrong: the first render
+was all default-black SVG in normal flow, and I spent a pass suspecting a CSS
+parse error before finding it was the browser's cached site.css. The `?v=`
+busters are gone by design, and `Network.setCacheDisabled` does nothing
+unless `Network.enable` was sent first on that session. Prevented by: a fresh
+page with the cache actually cleared before judging any CSS change. Lesson:
+when every new rule fails at once, suspect the cache before the code.

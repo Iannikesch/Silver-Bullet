@@ -93,7 +93,6 @@
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css">
 
-  <link rel="stylesheet" href="bore.css">
   <!-- Full-page lighting field, same as every other page. See nightfield.css. -->
   <link rel="stylesheet" href="nightfield.css">
   <!-- Calendly popup chrome. Its own stylesheet - the popup renders in
@@ -753,56 +752,99 @@
     </section>
 
     <!-- ============================================================
-         Punchline band — .tx-bore
+         Punchline band.
 
-         The ground is a rifled barrel drawn entirely in CSS gradients:
-         no image request, no canvas. It is dark in the middle by
-         construction, so the headline sits IN the art rather than on a
-         scrim laid over it.
+         Three decorative charts around the headline, replacing the bore
+         (the rifled barrel, bore.css, still in the texture pack and in
+         sandbox.html). Ian's brief, 2026-09-18: a bar chart on the left,
+         a rising line behind the headline tipped with a bullet, a pie on
+         the right; two fills alternating 1-2-1-2, "one" off-white with a
+         purple tint, "two" the gold from the nav; the line draws itself
+         as the visitor scrolls down to it.
 
-         The rifling twist is pointer-driven. Toward the middle winds it
-         up, out to the corners unwinds it flat. initTextures() drives
-         the key light (the section carries data-texture); initBore()
-         drives the twist. One writer per variable.
+         This section breaks two DESIGN.md rules on purpose and the record
+         is in DESIGN.md under "The punchline charts": gold appears three
+         times in one viewport, and the line is a scroll-scrubbed mover.
+         The gold is lit-edge metal, not glow: no blur anywhere.
 
-         The twenty ring spans are the effect, not decoration — ten
-         rings turning twice as far reads as a stair-stepped gear stack.
-         They are aria-hidden: there is nothing here to announce.
-
-         With JS off, or under reduced motion, the whole thing renders
-         static at its composed rest position and nothing moves.
+         The SVG is static and complete; charts.js only animates it, so
+         with JS off or reduced motion the band is simply finished. The
+         numbers are made up and mean nothing: change them freely in the
+         generator comment at the top of charts.js.
          ============================================================ -->
-    <section id="punchline" class="punchline tx-bore">
-      <div class="bore-barrel" aria-hidden="true">
-        <span class="bore-crown"></span>
-          <span class="bore-ring" style="--i:0"></span>
-          <span class="bore-ring" style="--i:1"></span>
-          <span class="bore-ring" style="--i:2"></span>
-          <span class="bore-ring" style="--i:3"></span>
-          <span class="bore-ring" style="--i:4"></span>
-          <span class="bore-ring" style="--i:5"></span>
-          <span class="bore-ring" style="--i:6"></span>
-          <span class="bore-ring" style="--i:7"></span>
-          <span class="bore-ring" style="--i:8"></span>
-          <span class="bore-ring" style="--i:9"></span>
-          <span class="bore-ring" style="--i:10"></span>
-          <span class="bore-ring" style="--i:11"></span>
-          <span class="bore-ring" style="--i:12"></span>
-          <span class="bore-ring" style="--i:13"></span>
-          <span class="bore-ring" style="--i:14"></span>
-          <span class="bore-ring" style="--i:15"></span>
-          <span class="bore-ring" style="--i:16"></span>
-          <span class="bore-ring" style="--i:17"></span>
-          <span class="bore-ring" style="--i:18"></span>
-          <span class="bore-ring" style="--i:19"></span>
-        <span class="bore-throat"></span>
-        <span class="bore-fall"></span>
-        <span class="bore-key"></span>
-        <span class="bore-fill"></span>
+    <section id="punchline" class="punchline" aria-labelledby="punchline-head">
+      <!-- The three charts. Static SVG, complete without JS; charts.js only
+           animates. They are decorative and carry no data, so no legend,
+           no labels, no table: aria-hidden throughout.
+             left    a bar chart, bars alternating the two fills
+             centre  a rising line behind the headline, tipped with a bullet
+             right   a pie of six slices in the same alternation
+           Both fills are tokens: "one" is --white pulled a step toward
+           --magenta, "two" is the gold ramp with a lit top edge. -->
+      <div class="ch-layer" aria-hidden="true">
+        <div class="ch-slot ch-slot--line">
+    <svg class="ch ch--line" viewBox="0 0 1400 700" preserveAspectRatio="xMinYMax meet" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="ch-gold-line" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" style="stop-color: var(--amber-burnt, #AB804F)"/>
+          <stop offset=".55" style="stop-color: var(--amber, #DFC38C)"/>
+          <stop offset="1" style="stop-color: var(--gold, #EDD997)"/>
+        </linearGradient>
+        <!-- The two alternating fills. Both read the band's custom
+             properties, so the colours are tokens and one place to change. -->
+        <linearGradient id="ch-grad-one" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" style="stop-color: var(--ch-one-top, #E8F1F2)"/>
+          <stop offset="1" style="stop-color: var(--ch-one-base, #D4E5EA)"/>
+        </linearGradient>
+        <linearGradient id="ch-grad-two" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" style="stop-color: var(--ch-two-top, #EDD997)"/>
+          <stop offset=".42" style="stop-color: var(--ch-two-mid, #DFC38C)"/>
+          <stop offset="1" style="stop-color: var(--ch-two-base, #AB804F)"/>
+        </linearGradient>
+        <linearGradient id="ch-bullet" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" style="stop-color: var(--chrome-050, #E1E1E1)"/>
+          <stop offset=".45" style="stop-color: var(--chrome-300, #7F7F7F)"/>
+          <stop offset="1" style="stop-color: var(--chrome-700, #343434)"/>
+        </linearGradient>
+      </defs>
+      <path class="ch-path" d="M40,610 L180,470 L300,520 L440,380 L560,430 L700,290 L820,340 L960,200 L1080,250 L1220,120 L1360,60"/>
+      <!-- The tip. A small bullet nose-forward, rotated to the last segment.
+           JS carries it along the path as the line draws; static, it rests
+           at the end. Chrome, per the depiction ramp: it is a piece of metal. -->
+      <g class="ch-tip" transform="translate(1360,60) rotate(-23.2) scale(1.7)">
+        <path d="M-14,-4 H2 Q10,-4 14,0 Q10,4 2,4 H-14 Z" fill="url(#ch-bullet)"/>
+        <path d="M-14,-4 H2 Q8,-4 11,-1.5" class="ch-tip__lit"/>
+      </g>
+    </svg>
+        </div>
+        <div class="ch-slot ch-slot--bars">
+    <svg class="ch ch--bars" viewBox="0 0 312 240" width="312" height="240" aria-hidden="true" focusable="false">
+      <line class="ch-base" x1="0" y1="240" x2="312" y2="240"/>
+      <path class="ch-bar ch-one" style="--i:0" d="M0,240 V162.4 Q0,158.4 4,158.4 H20 Q24,158.4 24,162.4 V240 Z"/>
+      <path class="ch-bar ch-two" style="--i:1" d="M36,240 V119.2 Q36,115.2 40,115.2 H56 Q60,115.2 60,119.2 V240 Z"/>
+      <path class="ch-bar ch-one" style="--i:2" d="M72,240 V145.6 Q72,141.6 76,141.6 H92 Q96,141.6 96,145.6 V240 Z"/>
+      <path class="ch-bar ch-two" style="--i:3" d="M108,240 V85.6 Q108,81.6 112,81.6 H128 Q132,81.6 132,85.6 V240 Z"/>
+      <path class="ch-bar ch-one" style="--i:4" d="M144,240 V104.80000000000001 Q144,100.80000000000001 148,100.80000000000001 H164 Q168,100.80000000000001 168,104.80000000000001 V240 Z"/>
+      <path class="ch-bar ch-two" style="--i:5" d="M180,240 V52.0 Q180,48.0 184,48.0 H200 Q204,48.0 204,52.0 V240 Z"/>
+      <path class="ch-bar ch-one" style="--i:6" d="M216,240 V76.0 Q216,72.0 220,72.0 H236 Q240,72.0 240,76.0 V240 Z"/>
+      <path class="ch-bar ch-two" style="--i:7" d="M252,240 V23.19999999999999 Q252,19.19999999999999 256,19.19999999999999 H272 Q276,19.19999999999999 276,23.19999999999999 V240 Z"/>
+      <path class="ch-bar ch-one" style="--i:8" d="M288,240 V42.400000000000006 Q288,38.400000000000006 292,38.400000000000006 H308 Q312,38.400000000000006 312,42.400000000000006 V240 Z"/>
+    </svg>
+        </div>
+        <div class="ch-slot ch-slot--pie">
+    <svg class="ch ch--pie" viewBox="0 0 248 248" width="248" height="248" aria-hidden="true" focusable="false">
+      <path class="ch-slice ch-one" style="--i:0" d="M124,124 L124.00,4.00 A120,120 0 0 1 194.53,26.92 Z"/>
+      <path class="ch-slice ch-two" style="--i:1" d="M124,124 L194.53,26.92 A120,120 0 0 1 238.13,161.08 Z"/>
+      <path class="ch-slice ch-one" style="--i:2" d="M124,124 L238.13,161.08 A120,120 0 0 1 86.92,238.13 Z"/>
+      <path class="ch-slice ch-two" style="--i:3" d="M124,124 L86.92,238.13 A120,120 0 0 1 9.87,161.08 Z"/>
+      <path class="ch-slice ch-one" style="--i:4" d="M124,124 L9.87,161.08 A120,120 0 0 1 53.47,26.92 Z"/>
+      <path class="ch-slice ch-two" style="--i:5" d="M124,124 L53.47,26.92 A120,120 0 0 1 124.00,4.00 Z"/>
+    </svg>
+        </div>
       </div>
 
-      <div class="bore-content wrap">
-        <h2><em>Data-driven</em><br>performance marketing.</h2>
+      <div class="punchline__content wrap">
+        <h2 id="punchline-head"><em>Data-driven</em><br>performance marketing.</h2>
       </div>
     </section>
 
@@ -1169,6 +1211,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <script defer src="motion.js"></script>
   <script defer src="textures.js"></script>
+  <script defer src="charts.js"></script>
 
   <script defer src="boot.js"></script>
 

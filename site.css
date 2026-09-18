@@ -1165,40 +1165,111 @@
       color: var(--text-muted);
     }
 
-    /* ---------- punchline band ---------- */
+    /* ---------- punchline band: the three charts ----------
+       Bars left, pie right, a rising line behind the headline. All three
+       are static inline SVG in index.html; charts.js only animates them.
 
-    /* The ground is .tx-bore, in bore.css. Everything here is just the
-       box it sits in and the type on top.
+       Two fills, alternating. "one" is the site's white pulled a step
+       toward the palette's magenta, as a top-to-bottom gradient. "two" is
+       the gold ramp with a lit top edge: the same lit-metal move as the
+       nav's warm button, and deliberately NOT a blurred glow.
 
-       Type is the site's normal h2 stack on purpose. The sandbox demo
-       used a serif and it looked better, but a display face is a brand
-       decision still marked open in CLAUDE.md, so this does not quietly
-       make it. Swap it in one place when that call gets made. */
+       DESIGN.md exceptions recorded under "The punchline charts". */
 
     .punchline {
+      position: relative;
       min-height: clamp(calc(460px + 60px * var(--dial)), calc(64vh + 16vh * var(--dial)), calc(720px + 180px * var(--dial)));
       display: grid;
       place-items: center;
+      overflow: hidden;
       border-top: 1px solid var(--border);
+      background: var(--bg);
+
+      /* the two fills, as tokens the SVG reads through fill: var() */
+      --ch-one-top:  color-mix(in srgb, var(--white, #E8F1F2) 90%, var(--magenta, #844C76));
+      --ch-one-base: color-mix(in srgb, var(--steel-050, #D4E5EA) 84%, var(--magenta, #844C76));
+      --ch-two-top:  var(--gold, #EDD997);
+      --ch-two-mid:  var(--amber, #DFC38C);
+      --ch-two-base: var(--amber-burnt, #AB804F);
     }
 
-    .punchline .bore-content {
+    .punchline__content {
+      position: relative;
+      z-index: 2;
       text-align: center;
       padding-block: var(--space-md);
     }
 
     .punchline h2 {
-      /* Wider than .contact h2 — this line wants to break where it is
-         written, not where the measure runs out. */
       max-width: 20ch;
       margin: 0 auto;
       color: var(--text-strong);
       text-wrap: balance;
     }
+    .punchline h2 em { font-style: italic; color: var(--steel-050); }
 
-    .punchline h2 em {
-      font-style: italic;
-      color: var(--steel-050);
+    /* The chart layer fills the band; each slot is placed absolutely. */
+    .ch-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .ch-slot { position: absolute; }
+    .ch { display: block; overflow: visible; }
+
+    /* The line spans the band, inset by the gutter, and sits behind the
+       headline. Its geometry is a 2:1 viewBox scaled to fit, so the
+       "90px above the bottom-left corner" start is proportional. */
+    .ch-slot--line { inset: 0; }
+    .ch-slot--line .ch { width: 100%; height: 100%; }
+
+    .ch-slot--bars {
+      left: var(--gutter, 24px);
+      bottom: clamp(var(--s-16), 12vh, var(--s-27));
+      width: clamp(220px, 22vw, 312px);
+    }
+    .ch-slot--bars .ch { width: 100%; height: auto; }
+
+    .ch-slot--pie {
+      right: var(--gutter, 24px);
+      top: 50%;
+      transform: translateY(-50%);
+      width: clamp(180px, 17vw, 248px);
+    }
+    .ch-slot--pie .ch { width: 100%; height: auto; }
+
+    /* ---- fills ----
+       The gradients live once, in an SVG the layer carries; each shape
+       references them by id. "one" is a vertical fade; "two" is the gold
+       ramp with the brightest step at the top, and the lit edge is a
+       1px stroke of the top colour on the bar's top or the slice's rim. */
+    .ch-one { fill: url(#ch-grad-one); }
+    .ch-two { fill: url(#ch-grad-two); stroke: var(--ch-two-top); stroke-width: 1; paint-order: stroke; }
+    .ch-slice { stroke: var(--bg); stroke-width: 2; }            /* 2px surface gap between slices */
+    .ch-slice.ch-two { stroke: var(--bg); }                       /* the rim stroke would fight the gap; the ramp carries the light */
+    .ch-base { stroke: var(--border); stroke-width: 1; }
+
+    .ch-path {
+      fill: none;
+      stroke: url(#ch-gold-line);
+      stroke-width: 2.5;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      vector-effect: non-scaling-stroke;
+    }
+    .ch-tip__lit { fill: none; stroke: var(--gold); stroke-width: 1; opacity: .8; }
+
+    /* Bars grow from the baseline and slices sweep in once, on arrival;
+       charts.js sets the start state and drives it, so nothing here hides
+       anything. With reduced motion or no JS every mark is simply there. */
+    .ch-bar { transform-box: fill-box; transform-origin: bottom; }
+
+    @media (max-width: 900px) {
+      /* The side charts do not fit beside a headline at this width, and
+         stacked under it they read as three unrelated graphics. The line
+         stays: it is the one that is part of the headline's frame. */
+      .ch-slot--bars, .ch-slot--pie { display: none; }
     }
 
     /* ---------- contact ---------- */

@@ -312,6 +312,40 @@ go, drop the client wall reveal before touching any of these.
 There is no sixth. Five self-moving things is already past where this document
 wanted to be, and the next one should be traded for one of these, not added.
 
+## The punchline charts (2026-09-18)
+
+The "Data-driven performance marketing" band used to sit on the rifled bore.
+It now sits between three decorative charts, on the owner's brief: a bar
+chart on the left, a rising line behind the headline tipped with a bullet,
+a pie on the right, two fills alternating one-two across all of them. This
+breaks two rules above and this is the record.
+
+**Warmth appears three times, not once.** The bars, the line and the pie
+all carry the gold ramp, in one viewport. Asked about it directly, the
+owner chose gold in all three over gold on the line alone. What keeps it
+from reading as three accents: it is one composition around one headline,
+the fills alternate so half of every chart is the cold off-white, and the
+gold is the lit-metal treatment (`--gold` top edge, `--amber-burnt` base),
+the same move as the nav's warm button, not a blurred glow. No blur
+anywhere in the band. The ticker's "Book a call" is still the only amber
+*action* in view.
+
+**The off-white is a gradient with a purple tint.** `--white` pulled a step
+toward `--magenta`, top to bottom. The "do not" list rules out gradient
+washes as decoration; this is a fill on a mark, not a wash on a surface,
+and the magenta is well under the palette's 1% budget.
+
+**The line is a scroll-scrubbed mover.** It draws itself as the band
+scrolls in and the bullet rides its tip; the bars and slices arrive once.
+It replaces the bore's pointer-driven twist, so the count of things that
+move on this page did not go up, and it answers scroll rather than a
+clock, which is the test this document applies. Reduced motion, no JS and
+a CDN outage all get the finished drawing: the SVG in index.html is
+complete and charts.js only animates it.
+
+The numbers are made up. If the band ever reads as too busy, the first
+thing to drop is the bar-and-slice arrival, not the line.
+
 ## The scale pass (2026-09-16)
 
 The agency owner's feedback, applied site-wide: everything read too small, too
