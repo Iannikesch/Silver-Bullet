@@ -335,26 +335,30 @@ toward `--magenta`, top to bottom. The "do not" list rules out gradient
 washes as decoration; this is a fill on a mark, not a wash on a surface,
 and the magenta is well under the palette's 1% budget.
 
-**The line is a clocked streak, once.** Revised the same day. It was a
-scroll-scrubbed mover; the owner then asked for a bolt: the bullet crosses
-the band drawing the line behind it, the line fades away from the
-bottom-left forward at a slower pace, and the whole thing is gone once it
-has crossed. "Speed" and "the fade follows at 75% of it" only mean
-something against a clock, so this one runs on a clock, not scroll, and
-that is a knowing exception to the test above. What keeps it inside the
-doctrine: it plays once, on arrival, and leaves nothing behind; it
-replaces the bore's pointer-driven twist, so the count of movers did not
-go up; and the bullet is the only warm thing moving. The timing is the
-owner's arithmetic, kept in charts.js: crossing pace 1.8s reduced by 32%
-gives 2.65s edge to edge; the fading edge moves at 75% of that new pace,
-so it takes 3.53s and the line is gone 0.88s after the bullet leaves.
-Reduced motion, no JS and a CDN outage all get the finished drawing: the
-SVG in index.html is complete and charts.js only animates it.
+**The line is static.** It was a scroll-scrubbed mover, then for a few
+hours a clocked streak with a bullet crossing the band; the owner cut the
+bullet and its animation the same day. The line is now simply drawn,
+dimmed to a fifth through the headline by the mask, and charts.js only
+refits its viewBox to the band's aspect. Reduced motion, no JS and a CDN
+outage all get the same drawing: the SVG in index.html is complete.
 
-The bars and slices still arrive once, on scroll.
+**Three small motifs joined the big three (2026-09-18, later).** A
+heatmap top-left, an isotype grid (13 of 20 figures) top-right of the
+headline, three stacked horizontal bars centred under it, on the owner's
+brief, to balance the negative space. They are subordinate by rule:
+smaller than the big three, at about six tenths of their strength,
+nothing under the copy, and hidden below 900px with the bars and pie.
+Same two fills, plus the burnt gold flat as the stacked bars' third tone.
+They arrive once, on scroll, after the bars and slices have settled:
+heatmap cell by cell from the corner, segments growing from the left,
+figures in order. Same easings as the big three. This is six drawn
+things around one headline; the count of movers on the page is
+unchanged (each arrives once and rests), but if the band ever reads
+as busy, these three go first.
 
-The numbers are made up. If the band ever reads as too busy, the first
-thing to drop is the bar-and-slice arrival, not the line.
+The numbers are made up. If the band ever reads as too busy, the order to
+drop things: the three small motifs, then the bar-and-slice arrival, and
+the line last.
 
 ## The scale pass (2026-09-16)
 

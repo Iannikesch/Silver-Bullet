@@ -773,12 +773,16 @@
          generator comment at the top of charts.js.
          ============================================================ -->
     <section id="punchline" class="punchline" aria-labelledby="punchline-head">
-      <!-- The three charts. Static SVG, complete without JS; charts.js only
+      <!-- The charts. Static SVG, complete without JS; charts.js only
            animates. They are decorative and carry no data, so no legend,
            no labels, no table: aria-hidden throughout.
-             left    a bar chart, bars alternating the two fills
-             centre  a rising line behind the headline, tipped with a bullet
-             right   a pie of six slices in the same alternation
+             left      a bar chart, bars alternating the two fills
+             centre    a rising line behind the headline
+             right     a pie of six slices in the same alternation
+           and three smaller motifs in the negative space, subordinate:
+             top-left  a heatmap
+             bottom    three stacked horizontal bars
+             top-right an isotype grid, 13 of 20
            Both fills are tokens: "one" is --white pulled a step toward
            --magenta, "two" is the gold ramp with a lit top edge. -->
       <div class="ch-layer" aria-hidden="true">
@@ -786,11 +790,8 @@
     <!-- data-points is the design, on a 1400x700 canvas. charts.js refits
          the viewBox to the band's real aspect and rescales these points to
          it, so the line runs from the bottom-left corner to the right EDGE
-         whatever the band's proportions. The bullet's TAIL sits on the
-         drawn tip, so the line runs into it; at the end of the path the
-         bullet leaves the band through the right edge. Static (no JS or
-         reduced motion) the line is simply drawn and the bullet rests at
-         the edge. -->
+         whatever the band's proportions. The line is static: drawn in
+         full, dimmed through the headline by the mask below. -->
     <svg class="ch ch--line" viewBox="0 0 1400 700" preserveAspectRatio="xMidYMid meet"
          data-points="40,610 180,470 300,520 440,380 560,430 700,290 820,340 960,200 1080,250 1200,120 1300,170 1400,50" data-height="700" aria-hidden="true" focusable="false">
       <defs>
@@ -810,20 +811,13 @@
           <stop offset=".42" style="stop-color: var(--ch-two-mid, #DFC38C)"/>
           <stop offset="1" style="stop-color: var(--ch-two-base, #AB804F)"/>
         </linearGradient>
-        <linearGradient id="ch-bullet" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" style="stop-color: var(--chrome-050, #E1E1E1)"/>
-          <stop offset=".45" style="stop-color: var(--chrome-300, #7F7F7F)"/>
-          <stop offset="1" style="stop-color: var(--chrome-700, #343434)"/>
-        </linearGradient>
         <!-- Luminance mask: white shows the line, dark hides it. A soft
-             ellipse over the headline's zone drops the line to half
-             strength there. Half, not a fifth: the line is now a short
-             moving streak, and at a fifth it vanished for the third of its
-             journey that crosses the headline. charts.js keeps the ellipse
-             centred on the band as the viewBox is refitted. -->
+             ellipse over the headline's zone drops the line to a fifth of
+             its strength there, so the copy stays clean. charts.js keeps
+             the ellipse centred on the band as the viewBox is refitted. -->
         <radialGradient id="ch-text-fade">
-          <stop offset="0" stop-color="rgb(128,128,128)"/>
-          <stop offset=".62" stop-color="rgb(128,128,128)"/>
+          <stop offset="0" stop-color="rgb(48,48,48)"/>
+          <stop offset=".62" stop-color="rgb(48,48,48)"/>
           <stop offset="1" stop-color="white"/>
         </radialGradient>
         <mask id="ch-text-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1400" height="700">
@@ -831,19 +825,7 @@
           <ellipse class="ch-mask__text" cx="700" cy="350" rx="430" ry="105" fill="url(#ch-text-fade)"/>
         </mask>
       </defs>
-      <!-- Two copies of the line. The bright one is the streak the bullet
-           is drawing; the dim one runs a little behind its fading edge so the
-           tail softens instead of ending on a hard cut. charts.js sets both
-           windows every frame with stroke-dasharray. -->
-      <path class="ch-path ch-path--dim" mask="url(#ch-text-mask)" d="M40,610 L180,470 L300,520 L440,380 L560,430 L700,290 L820,340 L960,200 L1080,250 L1200,120 L1300,170 L1400,50"/>
       <path class="ch-path" mask="url(#ch-text-mask)" d="M40,610 L180,470 L300,520 L440,380 L560,430 L700,290 L820,340 L960,200 L1080,250 L1200,120 L1300,170 L1400,50"/>
-      <!-- The bullet. Tail at the local origin, nose 28 units forward, so
-           translate() puts its tail on the line's tip and rotate() lays it
-           along the final segment. Chrome, per the depiction ramp. -->
-      <g class="ch-tip" transform="translate(1400,50) rotate(-50.2) scale(3.2)">
-        <path d="M0,-2.4 H16 Q24,-2.4 28,0 Q24,2.4 16,2.4 H0 Z" fill="url(#ch-bullet)"/>
-        <path d="M0,-2.4 H16 Q22,-2.4 25,-0.9" class="ch-tip__lit"/>
-      </g>
     </svg>
         </div>
         <div class="ch-slot ch-slot--bars">
@@ -868,6 +850,98 @@
       <path class="ch-slice ch-two" style="--i:3" d="M124,124 L86.92,238.13 A120,120 0 0 1 9.87,161.08 Z"/>
       <path class="ch-slice ch-one" style="--i:4" d="M124,124 L9.87,161.08 A120,120 0 0 1 53.47,26.92 Z"/>
       <path class="ch-slice ch-two" style="--i:5" d="M124,124 L53.47,26.92 A120,120 0 0 1 124.00,4.00 Z"/>
+    </svg>
+        </div>
+        <div class="ch-slot ch-slot--heat">
+    <!-- Heatmap: 36 cells, the strong ones clustered loosely along the
+         upper-left to lower-right diagonal, lighter with distance from it,
+         with a little scatter so it is not a ramp. Strength is fill-opacity
+         so charts.js can fade the cell itself in. -->
+    <svg class="ch ch--heat" viewBox="0 0 94 94" width="94" height="94" aria-hidden="true" focusable="false">
+      <rect class="ch-cell" x="0" y="0" width="14" height="14" rx="1.5" fill-opacity="0.99"/>
+      <rect class="ch-cell" x="16" y="0" width="14" height="14" rx="1.5" fill-opacity="0.75"/>
+      <rect class="ch-cell" x="32" y="0" width="14" height="14" rx="1.5" fill-opacity="0.55"/>
+      <rect class="ch-cell" x="48" y="0" width="14" height="14" rx="1.5" fill-opacity="0.21"/>
+      <rect class="ch-cell" x="64" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="80" y="0" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="0" y="16" width="14" height="14" rx="1.5" fill-opacity="0.69"/>
+      <rect class="ch-cell" x="16" y="16" width="14" height="14" rx="1.5" fill-opacity="1.00"/>
+      <rect class="ch-cell" x="32" y="16" width="14" height="14" rx="1.5" fill-opacity="0.76"/>
+      <rect class="ch-cell" x="48" y="16" width="14" height="14" rx="1.5" fill-opacity="0.53"/>
+      <rect class="ch-cell" x="64" y="16" width="14" height="14" rx="1.5" fill-opacity="0.16"/>
+      <rect class="ch-cell" x="80" y="16" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="0" y="32" width="14" height="14" rx="1.5" fill-opacity="0.41"/>
+      <rect class="ch-cell" x="16" y="32" width="14" height="14" rx="1.5" fill-opacity="0.79"/>
+      <rect class="ch-cell" x="32" y="32" width="14" height="14" rx="1.5" fill-opacity="1.00"/>
+      <rect class="ch-cell" x="48" y="32" width="14" height="14" rx="1.5" fill-opacity="0.67"/>
+      <rect class="ch-cell" x="64" y="32" width="14" height="14" rx="1.5" fill-opacity="0.56"/>
+      <rect class="ch-cell" x="80" y="32" width="14" height="14" rx="1.5" fill-opacity="0.29"/>
+      <rect class="ch-cell" x="0" y="48" width="14" height="14" rx="1.5" fill-opacity="0.24"/>
+      <rect class="ch-cell" x="16" y="48" width="14" height="14" rx="1.5" fill-opacity="0.50"/>
+      <rect class="ch-cell" x="32" y="48" width="14" height="14" rx="1.5" fill-opacity="0.69"/>
+      <rect class="ch-cell" x="48" y="48" width="14" height="14" rx="1.5" fill-opacity="0.92"/>
+      <rect class="ch-cell" x="64" y="48" width="14" height="14" rx="1.5" fill-opacity="0.74"/>
+      <rect class="ch-cell" x="80" y="48" width="14" height="14" rx="1.5" fill-opacity="0.41"/>
+      <rect class="ch-cell" x="0" y="64" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="16" y="64" width="14" height="14" rx="1.5" fill-opacity="0.18"/>
+      <rect class="ch-cell" x="32" y="64" width="14" height="14" rx="1.5" fill-opacity="0.40"/>
+      <rect class="ch-cell" x="48" y="64" width="14" height="14" rx="1.5" fill-opacity="0.73"/>
+      <rect class="ch-cell" x="64" y="64" width="14" height="14" rx="1.5" fill-opacity="0.99"/>
+      <rect class="ch-cell" x="80" y="64" width="14" height="14" rx="1.5" fill-opacity="0.79"/>
+      <rect class="ch-cell" x="0" y="80" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="16" y="80" width="14" height="14" rx="1.5" fill-opacity="0.06"/>
+      <rect class="ch-cell" x="32" y="80" width="14" height="14" rx="1.5" fill-opacity="0.22"/>
+      <rect class="ch-cell" x="48" y="80" width="14" height="14" rx="1.5" fill-opacity="0.51"/>
+      <rect class="ch-cell" x="64" y="80" width="14" height="14" rx="1.5" fill-opacity="0.73"/>
+      <rect class="ch-cell" x="80" y="80" width="14" height="14" rx="1.5" fill-opacity="0.96"/>
+    </svg>
+        </div>
+        <div class="ch-slot ch-slot--stack">
+    <!-- Three stacked bars on one left baseline, longest / shortest /
+         medium, each in three tones: the gold ramp, the off-white, and the
+         burnt gold flat. 2px surface gap between segments, as the pie. -->
+    <svg class="ch ch--stack" viewBox="0 0 220 62" width="220" height="62" aria-hidden="true" focusable="false">
+      <path class="ch-seg ch-two" d="M3,0 H103.6 V12 H3 Q0,12 0,9 V3 Q0,0 3,0 Z"/>
+      <path class="ch-seg ch-three" d="M105.6,0 H169.6 V12 H105.6 Z"/>
+      <path class="ch-seg ch-one" d="M171.6,0 H217.0 Q220.0,0 220.0,3 V9 Q220.0,12 217.0,12 H171.6 Z"/>
+      <path class="ch-seg ch-two" d="M3,25 H49.2 V37 H3 Q0,37 0,34 V28 Q0,25 3,25 Z"/>
+      <path class="ch-seg ch-three" d="M51.2,25 H94.0 V37 H51.2 Z"/>
+      <path class="ch-seg ch-one" d="M96.0,25 H125.0 Q128.0,25 128.0,28 V34 Q128.0,37 125.0,37 H96.0 Z"/>
+      <path class="ch-seg ch-two" d="M3,50 H89.5 V62 H3 Q0,62 0,59 V53 Q0,50 3,50 Z"/>
+      <path class="ch-seg ch-three" d="M91.5,50 H135.3 V62 H91.5 Z"/>
+      <path class="ch-seg ch-one" d="M137.3,50 H173.0 Q176.0,50 176.0,53 V59 Q176.0,62 173.0,62 H137.3 Z"/>
+    </svg>
+        </div>
+        <div class="ch-slot ch-slot--people">
+    <!-- Isotype: twenty figures, thirteen in gold and seven in the
+         off-white at a fraction of the strength. Reads as 13 of 20. -->
+    <svg class="ch ch--people" viewBox="0 0 92 88" width="92" height="88" aria-hidden="true" focusable="false">
+      <defs>
+        <symbol id="ch-person" viewBox="0 0 12 16">
+          <circle cx="6" cy="3.4" r="3.2"/>
+          <path d="M0,16 V11.2 Q0,7.6 3.6,7.6 H8.4 Q12,7.6 12,11.2 V16 Z"/>
+        </symbol>
+      </defs>
+      <use class="ch-person ch-person--on" href="#ch-person" x="0" y="0" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="20" y="0" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="40" y="0" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="60" y="0" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="80" y="0" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="0" y="24" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="20" y="24" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="40" y="24" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="60" y="24" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="80" y="24" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="0" y="48" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="20" y="48" width="12" height="16"/>
+      <use class="ch-person ch-person--on" href="#ch-person" x="40" y="48" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="60" y="48" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="80" y="48" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="0" y="72" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="20" y="72" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="40" y="72" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="60" y="72" width="12" height="16"/>
+      <use class="ch-person ch-person--off" href="#ch-person" x="80" y="72" width="12" height="16"/>
     </svg>
         </div>
       </div>

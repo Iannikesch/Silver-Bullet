@@ -1219,8 +1219,8 @@
     .ch { display: block; overflow: visible; }
 
     /* The line fills the band edge to edge. charts.js refits its viewBox
-       to the band's aspect, so the drawing spans corner to corner
-       uniformly and the bullet is never sheared. */
+       to the band's aspect, so the drawing spans corner to edge
+       uniformly. */
     .ch-slot--line { inset: 0; }
     .ch-slot--line .ch { width: 100%; height: 100%; }
 
@@ -1244,6 +1244,33 @@
     }
     .ch-slot--pie .ch { width: 100%; height: auto; }
 
+    /* ---- the three small motifs ----
+       Placed in the negative space the big three leave: the heatmap in
+       the top-left, the isotype grid top-right of the headline (under
+       the line's arc, clear of both), the stacked bars centred under the
+       headline. All three are smaller than the big three and sit at
+       little over half strength, so they stay behind the copy. */
+    .ch-slot--heat {
+      left: calc(var(--gutter, 24px) + 7vw);
+      top: clamp(var(--s-8), 9vh, var(--s-16));
+      width: clamp(76px, 7vw, 104px);
+      opacity: .62;
+    }
+    .ch-slot--stack {
+      left: 50%;
+      bottom: clamp(var(--s-10), 11vh, var(--s-18));
+      transform: translateX(-50%);
+      width: clamp(160px, 15vw, 220px);
+      opacity: .6;
+    }
+    .ch-slot--people {
+      left: 60%;
+      top: clamp(var(--s-8), 8vh, var(--s-14));
+      width: clamp(72px, 6.5vw, 96px);
+      opacity: .6;
+    }
+    .ch-slot--heat .ch, .ch-slot--stack .ch, .ch-slot--people .ch { width: 100%; height: auto; }
+
     /* ---- fills ----
        The gradients live once, in an SVG the layer carries; each shape
        references them by id. "one" is a vertical fade; "two" is the gold
@@ -1254,6 +1281,11 @@
     .ch-slice { stroke: var(--bg); stroke-width: 2; }            /* 2px surface gap between slices */
     .ch-slice.ch-two { stroke: var(--bg); }                       /* the rim stroke would fight the gap; the ramp carries the light */
     .ch-base { stroke: var(--border); stroke-width: 1; }
+    /* the third tone the stacked bars need: the burnt gold, flat */
+    .ch-three { fill: var(--ch-two-base); }
+    .ch-cell { fill: var(--ch-two-mid); }                           /* strength is per cell, in the markup */
+    .ch-person--on  { fill: var(--ch-two-mid); }
+    .ch-person--off { fill: color-mix(in srgb, var(--ch-one-top) 22%, transparent); } /* the tone is in the fill, so the arrival tween can own opacity */
 
     .ch-path {
       fill: none;
@@ -1263,21 +1295,19 @@
       stroke-linecap: round;
       vector-effect: non-scaling-stroke;
     }
-    /* The soft tail behind the fading edge: same line, a third of the
-       strength, running a little behind the bright one's trailing edge. */
-    .ch-path--dim { opacity: .34; }
-    .ch-tip__lit { fill: none; stroke: var(--gold); stroke-width: 1; opacity: .8; }
 
     /* Bars grow from the baseline and slices sweep in once, on arrival;
        charts.js sets the start state and drives it, so nothing here hides
        anything. With reduced motion or no JS every mark is simply there. */
     .ch-bar { transform-box: fill-box; transform-origin: bottom; }
+    .ch-seg { transform-box: fill-box; transform-origin: left; }
 
     @media (max-width: 900px) {
       /* The side charts do not fit beside a headline at this width, and
          stacked under it they read as three unrelated graphics. The line
          stays: it is the one that is part of the headline's frame. */
-      .ch-slot--bars, .ch-slot--pie { display: none; }
+      .ch-slot--bars, .ch-slot--pie,
+      .ch-slot--heat, .ch-slot--stack, .ch-slot--people { display: none; }
     }
 
     /* ---------- contact ---------- */
