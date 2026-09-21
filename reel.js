@@ -40,9 +40,12 @@
 
    It also decides what gets DOWNLOADED. The clips carry preload="none"
    and no autoplay attribute, so nothing is fetched until this file says
-   so - and it never says so under 760px (the belt is display:none there)
-   or under prefers-reduced-motion, where the first clip is asked for its
-   first frame only and parked at the top of the lane as a still.
+   so. It says so once the page has loaded and gone idle - after first
+   paint, while the visitor is on the headline - so the belt is already
+   running by the time they reach it; and it never says so under 760px
+   (the belt is display:none there) or under prefers-reduced-motion,
+   where the first clip is asked for its first frame only and parked at
+   the top of the lane as a still.
    ========================================================== */
 
 (function () {
@@ -251,12 +254,15 @@
     });
   }
 
+  /* Measure and fetch. This is what the page's idle moment calls, so
+     the clips are streaming while the visitor reads the headline and
+     the belt is already running when they reach it - the drift itself
+     waits for the belt to be in view (resume, from the observer). */
   function start() {
     if (started || NARROW.matches) return;
     started = true;
     layout();
     fetchAll();
-    resume();
   }
 
   function resume() {
@@ -286,6 +292,18 @@
     return;
   }
 
+  /* Fetch early: once the page has loaded and the browser is idle,
+     nothing the visitor is waiting for is still in flight, so the clips
+     can come in behind the headline. Everyone who lands here sees the
+     hero, so the bytes are spent either way; this just spends them
+     before the belt is looked at rather than as it is. */
+  function whenIdle(fn) {
+    if ('requestIdleCallback' in window) window.requestIdleCallback(fn, { timeout: 2500 });
+    else setTimeout(fn, 800);
+  }
+  if (document.readyState === 'complete') whenIdle(start);
+  else window.addEventListener('load', function () { whenIdle(start); });
+
   /* Off screen or in a background tab the belt holds where it is and the
      clips pause. Back on, it carries on from the same place. */
   if ('IntersectionObserver' in window) {
@@ -294,7 +312,7 @@
       else pauseAll();
     }, { threshold: 0.1 }).observe(belt);
   } else {
-    start();
+    start(); resume();
   }
   document.addEventListener('visibilitychange', function () {
     if (document.hidden) pauseAll(); else resume();
@@ -317,7 +335,7 @@
       pauseAll(); started = false; offset = 0;
       cards.forEach(function (c) { c.style.opacity = '0'; c.preload = 'none'; c.load(); });
     } else {
-      start();
+      start(); resume();
     }
   });
 })();
