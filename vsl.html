@@ -42,9 +42,10 @@
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="tokens.css">
-  <!-- Calendly popup chrome. Its own stylesheet - the popup renders in
-       Calendly's iframe and cannot take our tokens. -->
-  <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css">
+  <!-- Tag Manager and GA4. One file holds both IDs and stays inert while
+       they are placeholders; see tracking.js. async, as Google's own
+       snippet is, so it starts early without blocking paint. -->
+  <script async src="tracking.js"></script>
 
   <style>
     /* ==========================================================
@@ -369,7 +370,7 @@
 
   <header class="vsl-header">
     <div class="wrap">
-      <a class="logo" href="/" aria-label="Silver Bullet, home">
+      <a class="logo" href="/" aria-label="Silver Bullet, home" data-track="nav-logo">
         <img class="logo__img" src="silver-bullet-logo-alpha.png"
              width="732" height="60" alt="">
       </a>
@@ -416,7 +417,7 @@
              obviously broken on purpose: a plausible-looking wrong link
              would fail silently on live traffic.
              ============================================================ -->
-        <a data-book class="cta" href="https://calendly.com/inikesch-theprofectusagency/30min">Book a call</a>
+        <a class="cta" href="mailto:contact@silverbulletagency.com" data-track="vsl-book-top">Book a call</a>
         <p class="meta cta-note">Free, 30 minutes, no pitch deck.</p>
       </div>
     </div>
@@ -493,7 +494,7 @@
       <div class="wrap">
         <h2 class="section-head" style="margin: 0 auto var(--space-sm);">
           See if you qualify.</h2>
-        <a data-book class="cta" href="https://calendly.com/inikesch-theprofectusagency/30min">Book a call</a>
+        <a class="cta" href="mailto:contact@silverbulletagency.com" data-track="vsl-book-band">Book a call</a>
         <p class="meta cta-note">If we don't think we can move your numbers,
           we'll tell you on the call.</p>
       </div>
@@ -521,7 +522,6 @@
     </div>
   </footer>
 
-  <script defer src="booking.js"></script>
 
 </body>
 </html>

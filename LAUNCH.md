@@ -59,8 +59,9 @@ own advertising, not just compliance.
 
 | | Status | Needs |
 |---|---|---|
-| Calendly | 🟢 wired — `calendly.com/inikesch-theprofectusagency/30min` | see note |
-| Enquiry form endpoint | 🔴 `REPLACE_WITH_FORM_ENDPOINT` on 7 pages | a decision |
+| Booking | 🟢 Calendly is gone; every call-to-action is `mailto:contact@silverbulletagency.com` (21 September) | — |
+| Enquiry form endpoint | 🔴 `REPLACE_WITH_FORM_ENDPOINT` on 14 pages; decided: GoHighLevel via a Vercel function | webhook URL |
+| GTM / GA4 | 🟡 `tracking.js` on every page, inert until `GTM-XXXXXXX` / `G-XXXXXXXXXX` are real | the IDs |
 | Social links | 🔴 6 icons × every page → `href="#"` | which are real |
 | VSL video | 🔴 "VSL goes here" placeholder in the hero | the video |
 | Contact email | 🟢 `contact@silverbulletagency.com` on 7 pages + schema | — |

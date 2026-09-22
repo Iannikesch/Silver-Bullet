@@ -291,6 +291,7 @@
     b.type = 'button';
     b.className = 'vrail-btn';
     b.setAttribute('aria-label', label);
+    b.setAttribute('data-track', 'verticals-' + (dir < 0 ? 'prev' : 'next'));
     b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
       'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' +
       '<path d="' + d + '"></path></svg>';

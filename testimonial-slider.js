@@ -76,6 +76,7 @@
     b.type = 'button';
     b.className = 'tq-dot';
     b.setAttribute('aria-label', 'Testimonial ' + (i + 1) + ' of ' + slides.length);
+    b.setAttribute('data-track', 'testimonials-dot-' + (i + 1));
     b.addEventListener('click', function () { surrender(); go(i); });
     dots.appendChild(b);
     return b;

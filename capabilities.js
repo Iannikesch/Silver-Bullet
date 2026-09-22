@@ -186,7 +186,7 @@
     CAPS.groups.forEach(function (g) {
       html += '<details class="nav-dd__group' + (g.parent ? ' nav-dd__group--brand' : '') +
                 '" data-group="' + esc(g.key) + '" open>' +
-                '<summary class="nav-dd__group-head">' +
+                '<summary class="nav-dd__group-head" data-track="nav-' + esc(g.key) + '">' +
                   '<span class="nav-dd__group-name">' + esc(g.name) + '</span>' +
                   '<span class="nav-dd__sign" aria-hidden="true"></span>' +
                 '</summary>' +
@@ -205,7 +205,7 @@
 
     var s = CAPS.shared;
     var shared = '<details class="nav-dd__group nav-dd__group--shared" data-group="' + esc(s.key) + '" open>' +
-                   '<summary class="nav-dd__group-head">' +
+                   '<summary class="nav-dd__group-head" data-track="nav-' + esc(s.key) + '">' +
                      '<span class="nav-dd__group-name">' + esc(s.label) + '</span>' +
                      '<span class="nav-dd__sign" aria-hidden="true"></span>' +
                    '</summary>' +

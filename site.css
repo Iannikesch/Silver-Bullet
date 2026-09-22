@@ -1025,21 +1025,31 @@
       pointer-events: none;
     }
 
-    /* A card - one slot in the chain. The four in the HTML are the list;
-       reel.js clones them into as many slots as the lane needs and deals
-       the clips down the columns. Hung from the lane's top-left; reel.js
-       writes its column's x and its y in translate3d, and its opacity,
-       each frame, and sets --card-w on the lane (190px in two columns,
-       220px in one). Sized by width and
-       held to its clip's ratio so the 9:16 and 4:5 clips each keep their
-       own shape with nothing letterboxed. 16px radius and a hairline
-       outline is the site's panel edge without the lit top, which a video
-       would paint over anyway. */
-    .belt__card {
+    /* A column of the chain. reel.js positions it (left, width) and
+       fills it with slots; the markup's two [data-belt-col] elements are
+       the lists, read top to bottom. Below the two-column threshold the
+       second is hidden and the first carries both lists interleaved. */
+    .belt__col {
       position: absolute;
       top: 0;
       left: 0;
       width: var(--card-w, 220px);
+      height: 100%;
+    }
+    .belt__col[hidden] { display: none; }
+
+    /* A card - one slot in the chain, a <video> or an <img>. reel.js
+       writes its y in translate3d and its opacity each frame, and sets
+       aspect-ratio inline from the item's data-ar, so a square ad and a
+       9:16 clip each keep their own shape rather than being cropped to a
+       common one. The 9:16 here is only the value before reel.js runs.
+       16px radius and a hairline outline is the site's panel edge
+       without the lit top, which the media would paint over anyway. */
+    .belt__card {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
       aspect-ratio: 9 / 16;
       object-fit: cover;
       display: block;
@@ -1051,13 +1061,12 @@
       transform: translate3d(0, 0, 0);
       will-change: transform, opacity;
     }
-    .belt__card--4x5 { aspect-ratio: 4 / 5; }
 
     /* Reduced motion: no drift, no autoplay. reel.js still measures the
        lane, then parks the first card at the top of it as a still (first
        frame only) and binds nothing else. */
     @media (prefers-reduced-motion: reduce) {
-      .belt__card:first-child { opacity: 1; }
+      .belt__col:first-child .belt__card:first-child { opacity: 1; }
     }
 
     /* Under the nav's own breakpoint the belt is gone and the copy takes
