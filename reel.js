@@ -70,7 +70,9 @@
 
   /* ---- the numbers -------------------------------------------------- */
 
-  var BELT_SPEED  = 14;    /* px per second. Under the study's slow row. */
+  var BELT_SPEED  = 28;    /* px per second. Doubled from 14 on instruction,
+                              to get round the chain quicker; the study's
+                              two rows run at ~21 and ~44. */
   var CARD_W_TWO  = 190;   /* px card width with two columns, at most... */
   var CARD_W_MIN  = 150;   /* ...and at least, before it drops to one */
   var CARD_W_ONE  = 220;   /* px card width with one column */
