@@ -114,6 +114,42 @@
       outline-offset: 3px;
     }
 
+    /* ---------- skip link ----------
+       The first focusable thing on every page. Without it a keyboard or
+       screen reader user tabs the wordmark, four nav links, the dropdown and
+       the CTA on every single page before reaching the content.
+
+       Parked off the top edge rather than display:none or visibility:hidden,
+       either of which would take it out of the focus order and defeat the
+       point. It sits above the intro layer (z-index 60) so it is reachable
+       while the bullet is still playing.
+
+       Warm surface because it sits over the header band, DESIGN.md's lit top
+       edge on the leading edge, and the same amber focus ring every other
+       link on the site already gets from the rule above. */
+    .skip-link {
+      position: fixed;
+      top: 0;
+      left: var(--s-3, 12px);
+      z-index: 70;
+      transform: translateY(-120%);
+      padding: var(--s-3, 12px) var(--s-5, 20px);
+      background: var(--bg-warm-raised, #17130F);
+      color: var(--white, #E8F1F2);
+      border: 1px solid var(--border, #323738);
+      border-top-color: var(--border-lit, #4A4C4D);
+      border-radius: 0 0 var(--r-sm, 8px) var(--r-sm, 8px);
+      font-size: 15px;
+      line-height: 1.2;
+      text-decoration: none;
+      transition: transform var(--dur-quick, .18s) var(--ease-enter, cubic-bezier(.25, 1, .5, 1));
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .skip-link { transition: none; }
+    }
+
     /* ---------- type ---------- */
 
     /* Display sizes were roughly 1.7x'd in the scale pass. The old ladder
