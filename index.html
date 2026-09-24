@@ -1150,7 +1150,13 @@
       </div>
 
       <div class="punchline__content wrap">
-        <h2 id="punchline-head"><em>Data-driven</em><br>performance marketing.</h2>
+        <!-- The space before the <br> is load-bearing for the accessible name and
+           for anything reading textContent, which was "Data-drivenperformance
+           marketing." with the two words joined. A <br> contributes no
+           character. It costs nothing visually: white space at the end of a
+           line is removed before the line is aligned, so the centring and the
+           <em>'s own box are unchanged. Do not tidy it away. -->
+        <h2 id="punchline-head"><em>Data-driven</em> <br>performance marketing.</h2>
       </div>
     </section>
 
