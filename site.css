@@ -735,7 +735,14 @@
       appearance: none;
       background: none;
       border: 0;
-      padding: 10px;
+      /* 26x16 of bars in a 46x44 target. The vertical padding is 14px, not
+         the 10px the horizontal keeps, purely to clear 44px: measured 46x36
+         before, which is under the 44x44 a finger is drawn against. Nothing
+         moves, because .site-header has a fixed height and .site-header .wrap
+         centres its children in it, so the extra 8px is taken from the space
+         either side of the button rather than from the bar. The bars, the
+         gutter and the crossing animation are untouched. */
+      padding: 14px 10px;
       margin-right: -10px;        /* optical: the bars sit on the gutter */
       cursor: pointer;
       color: var(--steel-100);
