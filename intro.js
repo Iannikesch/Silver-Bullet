@@ -56,7 +56,22 @@
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var skip = arrivedFromInside();
 
-  if (reduced || skip || !layer || !logo) {
+  /* A fragment in the URL is the one arrival the rule above gets wrong.
+     The sequence below takes scrollRestoration to 'manual' and scrolls to
+     0 because the bullet has to play at the top of the document, but the
+     browser applies the fragment scroll AFTER this file has run. So
+     /index.html#work played the whole 2.4s sequence over the middle of the
+     page: nav animating in, logo travelling from centre, <main> fading up
+     under it, all on top of the work section. Measured at 900ms: is-intro
+     true, scrollY 1594, .intro-layer displayed.
+
+     That is the same "animation glitching" this file's scrollRestoration
+     note describes, reached by a path the note does not cover, so a deep
+     link now takes the skip instead. The visitor asked for a section, not
+     for the opening. */
+  var deepLinked = location.hash !== '';
+
+  if (reduced || skip || deepLinked || !layer || !logo) {
     if (layer) layer.remove();
     return;   /* scrollRestoration deliberately left alone — see below */
   }
