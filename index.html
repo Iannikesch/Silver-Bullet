@@ -97,9 +97,13 @@
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css">
 
-  <!-- Full-page lighting field, same as every other page. See nightfield.css. -->
-  <link rel="stylesheet" href="nightfield.css">
   <link rel="stylesheet" href="site.css">
+  <!-- Full-page lighting field, same as every other page, and loaded in the
+       same place they load it: AFTER site.css. It is written to override the
+       page's own opaque section backgrounds so the field shows through, which
+       only works from the later sheet. This page had it first, so any rule of
+       equal specificity in site.css beat it. -->
+  <link rel="stylesheet" href="nightfield.css">
 
 </head>
 
