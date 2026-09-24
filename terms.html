@@ -357,10 +357,10 @@
             <p class="cform__field">
               <label for="cf-phone">Phone</label>
               <input id="cf-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel"
-                     maxlength="24" pattern="[0-9+\(\)\.\- ]{7,24}"
-                     title="Digits, spaces and + ( ) - . Seven characters or more."
+                     maxlength="32" pattern="[0-9+\(\)\.\- ]{7,24}(?: ?(?:[xX]|[eE][xX][tT]\.?) ?[0-9]{1,6})?"
+                     title="Digits, spaces and + ( ) - . Seven characters or more. An extension may follow as x, ext or ext. plus digits."
                      aria-describedby="cf-phone-hint" required>
-              <span class="cform__hint" id="cf-phone-hint">Numbers only, any format</span>
+              <span class="cform__hint" id="cf-phone-hint">Any format, extension optional</span>
             </p>
             <p class="cform__field">
               <label for="cf-site">Business website</label>
