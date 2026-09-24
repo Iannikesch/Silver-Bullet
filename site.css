@@ -2702,7 +2702,15 @@
     /* padding-block, not the shorthand: this element is also .wrap, and the
        shorthand zeroes its gutter. */
     .cap-page { padding-block: var(--space-lg) var(--space-xl); }
-    .cap-page__group {
+    /* capabilities.js puts this class on two different elements: the <p>
+       breadcrumb above the title (number, then group name, on one line), and
+       a <div> in the unknown-slug branch that wraps a heading, a tagline and
+       a list. The flex row below was written for the first. Applied to the
+       second it laid the heading, tagline and list out side by side, and the
+       row could not shrink: 508px wide inside a 320px viewport, which is the
+       188px of sideways scroll. Scoped to the <p> so the wrapper is a normal
+       block. */
+    p.cap-page__group {
       display: flex;
       align-items: baseline;
       gap: var(--s-3);
@@ -2710,7 +2718,7 @@
       font-size: 15px;
       color: var(--steel-700);
     }
-    .cap-page__group .cap-n { font-weight: 700; font-variant-numeric: tabular-nums; }
+    p.cap-page__group .cap-n { font-weight: 700; font-variant-numeric: tabular-nums; }
     .cap-page__title {
       margin: 0;
       font-size: clamp(44px, 6vw, 96px);
@@ -2724,6 +2732,10 @@
       line-height: 1.5;
       color: var(--steel-300);
       max-width: 48ch;
+      /* The unknown-slug branch quotes ?c= back at the visitor, and a slug is
+         one token with nothing to break on. A 500-character one measured 5671px
+         of scrollWidth in a 280px column. */
+      overflow-wrap: anywhere;
     }
     .cap-page__body {
       margin-top: var(--space-md);
@@ -2754,7 +2766,9 @@
       margin: var(--s-6) 0 0;
       padding: 0;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      /* min() so the track can fall below 260px rather than forcing the grid
+         wider than its container on a narrow phone. */
+      grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
       gap: 0 var(--s-6);
     }
     .cap-page__list li { border-top: 1px solid var(--border); }
