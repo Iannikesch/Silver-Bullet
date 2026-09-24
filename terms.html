@@ -303,23 +303,73 @@
              ============================================================ -->
         <div class="cform-wrap">
         <form class="cform" action="REPLACE_WITH_FORM_ENDPOINT" method="post">
+          <!-- ============================================================
+               Spam trap. A real field with a real label, moved off screen
+               rather than display:none - a bot reading the DOM fills
+               everything it can find, and hiding a field with display:none
+               is the first thing they learn to skip. tabindex="-1" and
+               autocomplete="off" keep it away from keyboard users and from
+               the browser's own autofill, and aria-hidden keeps it out of
+               the accessibility tree, so no real visitor ever meets it.
+
+               If it arrives with anything in it, the submission is a bot.
+               enquire.js checks it, and so should whatever receives the
+               post - client-side checks only stop the lazy ones.
+               ============================================================ -->
+          <p class="cform__trap" aria-hidden="true">
+            <label for="cf-company-url">Company URL</label>
+            <input id="cf-company-url" name="company_url" type="text"
+                   tabindex="-1" autocomplete="off">
+          </p>
+
+          <!-- Where the lead came from. Filled by enquire.js on load, because
+               none of it can be reconstructed after the fact: the campaign
+               that brought them in, the page they were on, and the site that
+               sent them. Empty for a direct visit, which is correct. -->
+          <input type="hidden" name="utm_source"   value="">
+          <input type="hidden" name="utm_medium"   value="">
+          <input type="hidden" name="utm_campaign" value="">
+          <input type="hidden" name="utm_content"  value="">
+          <input type="hidden" name="utm_term"     value="">
+          <input type="hidden" name="gclid"        value="">
+          <input type="hidden" name="fbclid"       value="">
+          <input type="hidden" name="landing_page" value="">
+          <input type="hidden" name="referrer"     value="">
+          <input type="hidden" name="page_url"     value="">
+          <input type="hidden" name="form_render_ts" value="">
+
           <div class="cform__grid">
             <p class="cform__field">
-              <label for="cf-name">Your name</label>
-              <input id="cf-name" name="name" type="text" autocomplete="name" required>
+              <label for="cf-first">First name</label>
+              <input id="cf-first" name="first_name" type="text" autocomplete="given-name"
+                     maxlength="60" required>
+            </p>
+            <p class="cform__field">
+              <label for="cf-last">Last name</label>
+              <input id="cf-last" name="last_name" type="text" autocomplete="family-name"
+                     maxlength="60" required>
             </p>
             <p class="cform__field">
               <label for="cf-email">Email</label>
-              <input id="cf-email" name="email" type="email" autocomplete="email" required>
+              <input id="cf-email" name="email" type="email" autocomplete="email"
+                     maxlength="254" required>
             </p>
             <p class="cform__field">
               <label for="cf-phone">Phone</label>
-              <input id="cf-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required>
+              <input id="cf-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel"
+                     maxlength="24" pattern="[0-9+\(\)\.\- ]{7,24}"
+                     title="Digits, spaces and + ( ) - . Seven characters or more."
+                     aria-describedby="cf-phone-hint" required>
+              <span class="cform__hint" id="cf-phone-hint">Numbers only, any format</span>
             </p>
             <p class="cform__field">
               <label for="cf-site">Business website</label>
               <input id="cf-site" name="website" type="text" inputmode="url"
-                     autocomplete="url" placeholder="yourbusiness.com" required>
+                     autocomplete="url" placeholder="yourbusiness.com" maxlength="255"
+                     pattern="(https?:\/\/)?([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}(\/.*)?"
+                     title="A domain, with or without https://"
+                     aria-describedby="cf-site-hint" required>
+              <span class="cform__hint" id="cf-site-hint">With or without https://</span>
             </p>
           </div>
 
@@ -347,23 +397,29 @@
                  them answer "roughly 3m" or decline, which a required
                  <select> cannot. -->
             <p class="cform__field">
+              <label for="cf-company">Company</label>
+              <input id="cf-company" name="company" type="text" autocomplete="organization"
+                     maxlength="120" required>
+            </p>
+            <p class="cform__field">
               <label for="cf-rev">Annual revenue</label>
-              <input id="cf-rev" name="revenue" type="text"
-                     placeholder="e.g. $2.5M" required>
+              <input id="cf-rev" name="revenue" type="text" autocomplete="off"
+                     placeholder="e.g. $2.5M" maxlength="40" required>
             </p>
             <p class="cform__field">
               <label for="cf-heard">How did you hear about us? <span class="cform__opt">optional</span></label>
-              <input id="cf-heard" name="heard" type="text">
+              <input id="cf-heard" name="heard" type="text" autocomplete="off" maxlength="120">
             </p>
           </div>
 
           <p class="cform__field">
             <label for="cf-goal">What are you trying to grow?</label>
-            <textarea id="cf-goal" name="goal" rows="4" required></textarea>
+            <textarea id="cf-goal" name="goal" rows="4" autocomplete="off"
+                      maxlength="2000" required></textarea>
           </p>
 
           <div class="cform__actions">
-            <button class="cta" type="submit" data-track="form-send">Send it</button>
+            <button class="cta tx-halo" type="submit" data-track="form-send">Send it</button>
             <span class="cform__note">
               We read every one. If a performance deal doesn't make sense for you,
               we'll tell you that instead of pitching. Or just email

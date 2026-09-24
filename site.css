@@ -1572,6 +1572,33 @@
       transition: border-color var(--dur-quick) var(--ease-hover), background-color var(--dur-quick) var(--ease-hover);
     }
 
+    /* The spam trap. Off screen rather than display:none - a bot that
+       reads the DOM skips anything hidden the obvious way, and this needs
+       to look like a field worth filling. Not clipped to 0x0 either: some
+       bots treat a zero-size input as hidden too. aria-hidden and
+       tabindex="-1" on the markup keep it away from real visitors. */
+    .cform__trap {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    /* Hint text under a field, tied to it by aria-describedby so a screen
+       reader reads the rule with the label rather than after the mistake. */
+    .cform__field .cform__hint {
+      display: block;
+      margin-top: var(--s-1);
+      font-size: var(--fs--1);
+      color: var(--text-muted);
+    }
+
+    /* 16px floor on the pick rows. Anything under it makes iOS zoom the
+       page when the row is tapped, and the zoom does not undo itself. */
+    .cform__row { font-size: max(16px, var(--fs--1)); }
+
     .cform__field textarea { resize: vertical; min-height: 270px; padding: 14px 16px; }
 
     .cform__field input::placeholder,
