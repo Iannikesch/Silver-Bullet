@@ -130,13 +130,9 @@
 
 
   /* ---- submission ---------------------------------------------------
-     Guarded on the endpoint: while action is still the REPLACE_WITH
-     placeholder this binds nothing and the form falls through to a
-     normal submit, which fails visibly, which is the point of the
-     placeholder. The moment a real URL is in action, this is live with
-     no other change. */
+     Guarded on the endpoint: the moment a real URL is in action, the live
+     path below runs with no other change. */
   var action = form.getAttribute('action') || '';
-  if (!/^https?:\/\//.test(action)) return;
 
   var done = reveal.querySelector('.cform__done');
   var fail = reveal.querySelector('.cform__fail');
@@ -150,6 +146,31 @@
       done.setAttribute('tabindex', '-1');
       done.focus();
     }
+  }
+
+  function showFail() {
+    if (!fail) return;
+    fail.hidden = false;
+    fail.setAttribute('tabindex', '-1');
+    fail.focus();     /* role="alert" announces it; focus makes it findable again */
+  }
+
+  /* While action is still the REPLACE_WITH placeholder there is nowhere to
+     post. This used to bind nothing and let the form fall through to a
+     native submit, on the reasoning that failing visibly is the point of a
+     placeholder. It does not fail visibly: the browser posts to a relative
+     path named REPLACE_WITH_FORM_ENDPOINT, the visitor lands on a 404, the
+     page they filled in is gone and so is what they typed.
+
+     Now the submit is stopped and the same failure message the fetch path
+     uses is shown, which names the mailto fallback. The form and every
+     field stay exactly where they were. */
+  if (!/^https?:\/\//.test(action)) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      showFail();
+    });
+    return;
   }
 
   form.addEventListener('submit', function (e) {
@@ -188,11 +209,7 @@
       form.dispatchEvent(new CustomEvent('sb:enquiry-sent', { bubbles: true }));
     }).catch(function () {
       sending = false;
-      if (fail) {
-        fail.hidden = false;
-        fail.setAttribute('tabindex', '-1');
-        fail.focus();     /* role="alert" announces it; focus makes it findable again */
-      }
+      showFail();
       if (button) { button.disabled = false; button.textContent = 'Send it'; }
     });
   });
