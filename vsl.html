@@ -95,6 +95,38 @@
       outline-offset: 3px;
     }
 
+    /* ---------- skip link ----------
+       Same contract as every other page, restated here because this page is
+       standalone: it loads tokens.css and nothing else, so the .skip-link
+       rule in site.css never reaches it and the link rendered as visible
+       body text above the header. tokens.css IS loaded, so the values below
+       are the same tokens site.css uses.
+
+       There is no .site-header and no intro layer here, so no z-index has to
+       be cleared; 70 is kept to match. */
+    .skip-link {
+      position: fixed;
+      top: 0;
+      left: var(--s-3, 12px);
+      z-index: 70;
+      transform: translateY(-120%);
+      padding: var(--s-3, 12px) var(--s-5, 20px);
+      background: var(--bg-warm-raised, #17130F);
+      color: var(--white, #E8F1F2);
+      border: 1px solid var(--border, #323738);
+      border-top-color: var(--border-lit, #4A4C4D);
+      border-radius: 0 0 var(--r-sm, 8px) var(--r-sm, 8px);
+      font-size: 15px;
+      line-height: 1.2;
+      text-decoration: none;
+      transition: transform var(--dur-quick, .18s) var(--ease-enter, cubic-bezier(.25, 1, .5, 1));
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .skip-link { transition: none; }
+    }
+
     /* ---------- type ---------- */
 
     h1, h2, h3 {
