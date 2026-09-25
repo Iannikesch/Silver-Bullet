@@ -215,7 +215,7 @@ all, which is the thing this section otherwise rules out:
 | --- | --- | --- |
 | `.ticker__row` (A) | the word band, row one — what this company is, hollow with a lit subset | ~38px/s |
 | `.ticker__row--b` | the word band, row two | ~30px/s |
-| `.conveyor` | creative, four slots in view | ~49px/s |
+| `.conveyor` | creative, four slots in view | 70px/s |
 | `.logo-band` | client logos | ~16px/s |
 
 The word band's two rows are the "fourth band" this section warned about, and

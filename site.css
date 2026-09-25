@@ -53,10 +53,16 @@
 
       /* Work conveyors. Three bands run right-to-left on this page, so they
          get three clearly different speeds — matched speeds would read as
-         one striped block rather than as separate systems. Roughly
-         45px/s for the creative slots, 18px/s for the logo band, against
-         the hook banner's 28px/s. */
-      --conveyor-rate: 36s;   /* no-JS fallback; JS uses data-marquee-speed */
+         one striped block rather than as separate systems. 70px/s for the
+         creative slots, 18px/s for the logo band, against the hook
+         banner's 28px/s. */
+      /* No-JS fallback, and a whole-loop time rather than a speed, so it has
+         to be recomputed whenever the set gains or loses a slot: it is
+         setWidth / px-per-second. 1956px of committed set at 70px/s = 27.9s.
+         It was 36s against a 50px/s JS speed, which was already 8.6% out.
+         motion.js prefers data-marquee-speed precisely because this number
+         retunes itself every time the content changes. */
+      --conveyor-rate: 27.9s;
       --logo-rate:    112s;   /* no-JS fallback; JS uses data-marquee-speed */
 
       /* Set by JS: how far left the logo must travel from centre */

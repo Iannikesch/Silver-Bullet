@@ -98,7 +98,8 @@ Four strips run perpetual right-to-left marquees at deliberately different
 speeds: the word band's two rows (`.ticker__row`, ~38 and ~30px/s - big hollow
 words with a lit subset, modelled on thearmcandy.com's client-partners strip;
 the pinned amber CTA it used to carry is gone), `.conveyor` (creative, four slots
-in view, ~49px/s) and `.logo-band` (client logos, ~16px/s). Speeds are
+in view, 70px/s, raised from 50 on instruction) and `.logo-band` (client logos,
+~16px/s). Speeds are
 `data-marquee-speed` in the markup, px/s; the `:root` rates are the no-JS
 fallback. Keep them apart or they read as one striped block - the two word rows
 are close on purpose so they slide against each other as one band, and that is
