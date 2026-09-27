@@ -2479,9 +2479,14 @@
       --slot-gap: clamp(calc(12px + 2px * var(--dial)), calc(1.6vw + 0.2vw * var(--dial)), calc(24px + 4px * var(--dial)));
     }
 
+    /* One height, two shapes. The photo slot is 3:2 and gets its height from
+       its width; the video slots are vertical and keep their own aspect, so
+       they need that same height as a number to size from. */
+    .conveyor { --slot-w: calc((100vw - var(--cols) * var(--slot-gap)) / var(--cols)); }
+
     .slot {
       flex: none;
-      width: calc((100vw - var(--cols) * var(--slot-gap)) / var(--cols));
+      width: var(--slot-w);
       /* 3:2, because that is what the photographs are. Cropping 3:2 sources
          into a 4:3 box threw away 11% of every frame for no reason. */
       aspect-ratio: 3 / 2;
@@ -2511,6 +2516,32 @@
       height: 100%;
       object-fit: cover;
       display: block;
+    }
+
+    /* ---------- the vertical slots ----------
+       Three of the belt's items are 9:16 video, and they are NOT cropped to
+       3:2. The brief was to keep them whole and match the height, so each is
+       as wide as its own aspect makes it at the photos' height - about 138px
+       against a 245px-tall photo slot at 1440px. They read as a narrow card
+       between wide ones, which is the point.
+
+       The frame comes from .slot, so the belt still looks like one belt. */
+    .slot--v {
+      /* Both dimensions from the same number the photo slot uses, rather than
+         a height plus aspect-ratio: with border-box those two disagree by the
+         2px of border and the video card sits short in the row. */
+      height: calc(var(--slot-w) / 1.5);
+      width: calc(var(--slot-w) / 1.5 * 9 / 16);
+    }
+
+    /* contain, not cover: the whole frame is the reason these are here, and
+       the slot is already the video's shape, so nothing letterboxes. */
+    .slot__v {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: var(--bg);
     }
 
     @media (max-width: 900px) { .conveyor { --cols: 2; } }
