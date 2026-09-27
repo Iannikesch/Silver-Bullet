@@ -24,6 +24,15 @@ testimonial band, which advances itself on a 7s dwell, and the verticals
 carousel, which drifts its industry cards on a continuous loop at about 9s per
 card. Nothing else does.
 
+The three vertical clips in the creative conveyor carry `data-src` and
+`preload="none"`, and `slot-video.js` swaps them in when the belt approaches.
+This is the reel.js arrangement and it is not optional: `autoplay` overrides
+`preload`, so a browser told to autoplay fetches the file immediately, and
+116KB of video was arriving at 202ms for a section 1843px down the page. It
+costs nothing visible, because Chrome only plays a muted clip while it is
+actually in the viewport, so these were already sitting paused until scrolled
+to. Anything else added to that belt must load the same way.
+
 The testimonial band is the fourth ambient mover and the verticals carousel is
 the fifth. DESIGN.md said a fourth would force a re-examination and that there
 would be no fifth; both are written up there, under "The fourth mover" and

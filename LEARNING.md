@@ -72,3 +72,26 @@ busters are gone by design, and `Network.setCacheDisabled` does nothing
 unless `Network.enable` was sent first on that session. Prevented by: a fresh
 page with the cache actually cleared before judging any CSS change. Lesson:
 when every new rule fails at once, suspect the cache before the code.
+
+## 2026-09-27: a performance harness that measured its own bugs
+
+Tried: a measure-fix-verify loop against a local server. Wrong three times, and
+every one of them would have sent the loop after the wrong fix. The server did
+not gzip, so site.css measured 149KB against Vercel's 46KB and text looked like
+the problem. It cached file contents by path, so two rounds reported byte-for-byte
+identical results for changes that were really on disk. It spoke HTTP/1.1 where
+Vercel speaks HTTP/2, which reverses how a render-blocking file competes for
+bandwidth. Prevented by: making the harness match production before trusting a
+number from it, and checking the local baseline against the live site. Lesson:
+an optimisation loop is only as honest as its server.
+
+## 2026-09-27: the queue refills
+
+Tried: lazy-loading 116KB of work-belt video to cut FCP. It cut DOMContentLoaded
+by 985ms and load by 1393ms, and moved FCP by 16ms. Bandwidth was the constraint,
+so the logo band simply took what the video gave up and the bytes before first
+paint did not change at all. Marking that band lazy then did nothing either,
+because Chrome widens its lazy threshold to roughly 2500px on a slow connection
+and the band sits 3151px down. What worked was deleting bytes: resizing logos
+that were up to 5.2x their display size. Lesson: deferring one asset on a
+bandwidth-bound page just promotes the next one; only fewer bytes are fewer bytes.
