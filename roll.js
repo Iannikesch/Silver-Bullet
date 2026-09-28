@@ -80,10 +80,13 @@
 
   /* Same shape around an image: the mark, and a clone of it underneath.
      The clone carries an empty alt and sits in an aria-hidden line, so
-     assistive tech still sees one logo. */
+     assistive tech still sees one logo. A mark with a case study is
+     wrapped in a link; the roll then goes inside the link, and the link
+     carries has-roll so keyboard focus rolls it as hover does. */
   function rollMark(li) {
-    var img = li.querySelector(':scope > img');
+    var img = li.querySelector(':scope > img, :scope > a > img');
     if (!img || li.querySelector('.roll')) return;
+    var host = img.parentNode;
 
     var twin = img.cloneNode(true);
     twin.alt = '';
@@ -102,8 +105,8 @@
 
     roll.appendChild(a);
     roll.appendChild(b);
-    li.appendChild(roll);
-    li.classList.add('has-roll');
+    host.appendChild(roll);
+    host.classList.add('has-roll');
   }
 
   var text = document.querySelectorAll('.nav .nav-link, .nav .nav-dd__toggle, .nav .cta-secondary');

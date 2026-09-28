@@ -438,7 +438,6 @@
       startX = lastX = e.clientX;
       startPos = pos;
       lastT = performance.now();
-      area.setPointerCapture(e.pointerId);
       area.classList.add('is-dragging');
     });
 
@@ -461,6 +460,13 @@
       var dx = e.clientX - startX;
       moved = Math.max(moved, Math.abs(dx));
       pos = startPos + dx;
+
+      /* Capture only once this is a drag. Capturing on pointerdown sent
+         every click to the band instead of what was under the pointer,
+         so a logo linked to its case study could never be followed. */
+      if (moved > DRAG_SLOP && !area.hasPointerCapture(e.pointerId)) {
+        area.setPointerCapture(e.pointerId);
+      }
 
       var now = performance.now();
       var dt = now - lastT;

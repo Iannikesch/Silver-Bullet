@@ -2570,6 +2570,11 @@
     }
     .logo-band__set li:hover img { opacity: 1; }
 
+    /* Marks with a case study are links. The link is only a wrapper, so it
+       lays out as the bare image did; focus brightens it as hover does. */
+    .logo-band__set a { display: block; }
+    .logo-band__set a:focus-visible img { opacity: 1; }
+
     .logo-band__set li {
       flex: none;
       padding: calc(22px + 8px * var(--dial)) clamp(calc(28px + 4px * var(--dial)), calc(4vw + 0.5vw * var(--dial)), calc(56px + 16px * var(--dial)));
@@ -3618,6 +3623,8 @@
 }
 
 .client-wall li:hover img { opacity: 1; }
+.client-wall a { display: block; }
+.client-wall a:focus-visible img { opacity: 1; }
 
 /* Optical sizing, not mechanical. A wide wordmark and a stacked mark set to
    the same height do not read as the same size, so each shape gets its own
