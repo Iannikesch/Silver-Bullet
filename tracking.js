@@ -22,6 +22,9 @@
      contact_form_submit   the enquiry form went through (enquire.js
                            dispatches sb:enquiry-sent; this file turns
                            it into the event)
+     calendly_event_type_viewed / calendly_booking_complete
+                           the booking popup rendered / a call was
+                           booked, with the visit's UTMs (booking.js)
    Clicks are meant to be read off data-track="{section}-{element}"
    attributes by a GTM click trigger; see CLAUDE.md for the format.
 

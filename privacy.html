@@ -32,6 +32,7 @@
        they are placeholders; see tracking.js. async, as Google's own
        snippet is, so it starts early without blocking paint. -->
   <script async src="tracking.js"></script>
+  <script defer src="booking.js"></script>
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css">
 
@@ -108,7 +109,7 @@
         </details>
 
         <a class="nav-link" href="testimonials.html" data-track="nav-testimonials">Testimonials</a>
-        <a class="cta-secondary tx-glare tx-halo" href="mailto:contact@silverbulletagency.com" data-texture="rim" data-track="nav-talk">Talk to us</a>
+        <a data-book class="cta-secondary tx-glare tx-halo" href="https://calendly.com/inikesch-theprofectusagency/30min" data-texture="rim" data-track="nav-talk">Talk to us</a>
       </nav>
     </div>
     <div class="site-header__rule"></div>
@@ -203,13 +204,14 @@
     <section class="wrap legal">
       <p class="meta legal__eyebrow">Legal</p>
       <h1>Privacy policy</h1>
-      <p class="legal__date">Effective 23 September 2026. Last updated 23 September 2026.</p>
+      <p class="legal__date">Effective 23 September 2026. Last updated 28 September 2026.</p>
 
       <div class="panel legal__summary">
         <h2>The short version</h2>
-        <p>We do not track you. This site sets no cookies, runs no analytics, and
-          carries no advertising pixels. The only personal information we hold is
-          what you type into the enquiry form and send us. We do not sell it, and
+        <p>We do not track you. This site sets no cookies of its own, runs no
+          analytics, and carries no advertising pixels. The only personal
+          information we hold is what you send us: through the enquiry form, or
+          when you book a call through Calendly. We do not sell it, and
           we do not share it for anyone else&rsquo;s advertising.</p>
       </div>
 
@@ -230,6 +232,15 @@
       <p>Revenue is asked because our model is a share of revenue or profit, and the
         figure decides whether the arrangement is possible at all. It is not passed
         to anyone outside the business.</p>
+
+      <h3>When you book a call</h3>
+      <p>The &ldquo;Talk to us&rdquo;, &ldquo;See if you qualify&rdquo; and &ldquo;Book a
+        call&rdquo; buttons open a booking window run by Calendly. What you enter there
+        (your name, your email address, the time you choose, and any answers to its
+        questions) goes to Calendly, which passes it to us so we can hold the call.
+        If you arrived from a link carrying campaign tags, those tags travel with the
+        booking, so we can see which campaign it came from. If you had already typed
+        your name and email into our enquiry form, they are filled in for you.</p>
 
       <h3>Automatically, when you load a page</h3>
       <p>Our host records standard server logs: your IP address, the page requested,
@@ -256,7 +267,8 @@
       </ul>
 
       <h2>Why we are allowed to use it</h2>
-      <p>For enquiries: because you sent them to us and asked for a reply. For server
+      <p>For enquiries and bookings: because you sent them to us and asked for a
+        reply or a call. For server
         logs: because we have a legitimate interest in keeping the site up and
         defending it from abuse. If you are covered by a law that requires a specific
         legal basis or consent (the UK or EU GDPR, for example), treat
@@ -273,6 +285,9 @@
           where we work from when we reply.</li>
         <li><strong>Google Workspace</strong> runs our email, including the
           contact address above, so anything you send us lives there.</li>
+        <li><strong>Calendly</strong> runs call booking. It receives what you enter
+          when you book, sets its own cookies once the booking window is open, and
+          handles that information under <a href="https://calendly.com/legal/privacy-notice" rel="noopener">its own privacy notice</a>.</li>
         <li><strong>Cloudflare (cdnjs) and jsDelivr</strong> serve the
           JavaScript libraries, and so see the IP address making the request.</li>
       </ul>
@@ -534,7 +549,7 @@
       <div class="foot-brand">
         <img class="foot-brand__logo" src="silver-bullet-logo-alpha.webp"
              width="532" height="162" alt="Silver Bullet">
-        <a class="cta-secondary tx-halo" href="mailto:contact@silverbulletagency.com" data-track="footer-connect">Connect with us</a>
+        <a data-book class="cta-secondary tx-halo" href="https://calendly.com/inikesch-theprofectusagency/30min" data-track="footer-connect">Connect with us</a>
       </div>
 
       <!-- Legal lives on the copyright line, not in a column of its own —

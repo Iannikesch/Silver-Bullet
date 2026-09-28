@@ -59,17 +59,17 @@ own advertising, not just compliance.
 
 | | Status | Needs |
 |---|---|---|
-| Booking | 🟢 Calendly is gone; every call-to-action is `mailto:contact@silverbulletagency.com` (21 September) | — |
+| Booking | 🟢 Calendly is back (28 September): 35 booking CTAs on 15 pages open `calendly.com/inikesch-theprofectusagency/30min` as a popup via `booking.js` (`data-book`); plain email links stay `mailto:`. Privacy and cookie pages updated to name Calendly | a separate "closer" event for vsl.html, if wanted |
 | Enquiry form endpoint | 🔴 `REPLACE_WITH_FORM_ENDPOINT` on 14 pages; decided: GoHighLevel via a Vercel function | webhook URL |
 | GTM / GA4 | 🟡 `tracking.js` on every page, inert until `GTM-XXXXXXX` / `G-XXXXXXXXXX` are real | the IDs |
 | Social links | 🔴 6 icons × every page → `href="#"` | which are real |
 | VSL video | 🔴 "VSL goes here" placeholder in the hero | the video |
 | Contact email | 🟢 `contact@silverbulletagency.com` on 7 pages + schema | — |
 
-**Calendly note.** The booking URL is under `inikesch-theprofectusagency`. If
-that Calendly account is branded "The Profectus Agency", the visitor clicks
-"Book a call" on Silver Bullet and lands on a page for a different company.
-Worth checking what the booking page actually shows before it goes live.
+**Calendly note.** The booking URL is under `inikesch-theprofectusagency`.
+Checked 28 September: the page shows "Ian Nikesch · 30 Minute Meeting" with no
+Profectus branding, and has open dates. Renaming the event (e.g. "Silver Bullet
+intro call") is a Calendly setting, no site change needed; the URL slug stays.
 
 **Form endpoint.** Today a submit navigates to a relative path that 404s *and
 loses everything the person typed*. Worse than a dead link. Three routes, and

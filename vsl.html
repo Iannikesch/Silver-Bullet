@@ -46,6 +46,7 @@
        they are placeholders; see tracking.js. async, as Google's own
        snippet is, so it starts early without blocking paint. -->
   <script async src="tracking.js"></script>
+  <script defer src="booking.js"></script>
 
   <style>
     /* ==========================================================
@@ -443,14 +444,12 @@
     <div class="cta-block">
       <div class="wrap">
         <!-- ============================================================
-             BOOKING LINK — not set yet.
-
-             Both CTAs on this page point here. Replace the href on BOTH
-             with the Calendly URL that routes to the closer. It is left
-             obviously broken on purpose: a plausible-looking wrong link
-             would fail silently on live traffic.
+             BOOKING LINK. Both CTAs on this page open the same 30-minute
+             Calendly booking as the rest of the site (booking.js, via
+             data-book). If a separate event that routes to the closer is
+             set up, swap the href on BOTH.
              ============================================================ -->
-        <a class="cta" href="mailto:contact@silverbulletagency.com" data-track="vsl-book-top">Book a call</a>
+        <a data-book class="cta" href="https://calendly.com/inikesch-theprofectusagency/30min" data-track="vsl-book-top">Book a call</a>
         <p class="meta cta-note">Free, 30 minutes, no pitch deck.</p>
       </div>
     </div>
@@ -527,7 +526,7 @@
       <div class="wrap">
         <h2 class="section-head" style="margin: 0 auto var(--space-sm);">
           See if you qualify.</h2>
-        <a class="cta" href="mailto:contact@silverbulletagency.com" data-track="vsl-book-band">Book a call</a>
+        <a data-book class="cta" href="https://calendly.com/inikesch-theprofectusagency/30min" data-track="vsl-book-band">Book a call</a>
         <p class="meta cta-note">If we don't think we can move your numbers,
           we'll tell you on the call.</p>
       </div>

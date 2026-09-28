@@ -219,7 +219,11 @@
    on focus, and this rule would make it position:relative in flow, where it
    is simply visible at the top of every page. Its z-index:70 would go to 1
    as well, under the header. */
-body.has-nightfield > *:not(.tx-nightfield--fixed):not(.site-header):not(.intro-layer):not(.skip-link) {
+/* .calendly-overlay likewise: booking.js opens Calendly's popup, which
+   appends its overlay to <body> as a position:fixed full-screen layer.
+   Caught by this rule it became relative, zero height, at the foot of the
+   page - the click "worked" and nothing appeared. */
+body.has-nightfield > *:not(.tx-nightfield--fixed):not(.site-header):not(.intro-layer):not(.skip-link):not(.calendly-overlay) {
   position: relative;
   z-index: 1;
 }

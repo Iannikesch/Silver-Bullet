@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cookie policy | Silver Bullet</title>
-  <meta name="description" content="Silver Bullet sets no cookies of its own and runs no analytics. What the site stores in your browser, why it is not a cookie, and why there is nothing to configure.">
+  <meta name="description" content="Silver Bullet sets no cookies of its own and runs no analytics. What the site stores in your browser, what Calendly does if you book a call, and why there is nothing to configure.">
   <link rel="canonical" href="https://silverbulletagency.com/cookies.html">
   <!-- Icons. The mark is the bullet, drawn with the same hard-stopped chrome
        ramp as the site: paired stops at identical offsets, so every band is
@@ -32,6 +32,7 @@
        they are placeholders; see tracking.js. async, as Google's own
        snippet is, so it starts early without blocking paint. -->
   <script async src="tracking.js"></script>
+  <script defer src="booking.js"></script>
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css">
 
@@ -106,7 +107,7 @@
         </details>
 
         <a class="nav-link" href="testimonials.html" data-track="nav-testimonials">Testimonials</a>
-        <a class="cta-secondary tx-glare tx-halo" href="mailto:contact@silverbulletagency.com" data-texture="rim" data-track="nav-talk">Talk to us</a>
+        <a data-book class="cta-secondary tx-glare tx-halo" href="https://calendly.com/inikesch-theprofectusagency/30min" data-texture="rim" data-track="nav-talk">Talk to us</a>
       </nav>
     </div>
     <div class="site-header__rule"></div>
@@ -201,13 +202,14 @@
     <section class="wrap legal">
       <p class="meta legal__eyebrow">Legal</p>
       <h1>Cookie policy</h1>
-      <p class="legal__date">Effective 23 September 2026. Last updated 23 September 2026.</p>
+      <p class="legal__date">Effective 23 September 2026. Last updated 28 September 2026.</p>
 
       <div class="panel legal__summary">
         <h2>The short version</h2>
-        <p>This site sets no cookies of its own and runs no analytics. No third
-          party sets cookies through it either. There is no settings panel because
-          there is nothing to switch off.</p>
+        <p>This site sets no cookies of its own and runs no analytics. The one third
+          party that can set cookies is Calendly, and only once you open the booking
+          window to book a call. There is no settings panel because there is nothing
+          of ours to switch off.</p>
       </div>
 
       <h2>What we store in your browser</h2>
@@ -217,7 +219,11 @@
         storage</strong> under the name <code>sb:utm</code>, so that if you go on to
         book a call we can see which campaign the booking came from. If your address
         carries no tags, nothing is written at all.</p>
-      <p>That entry holds the tags and nothing else: no identifier, nothing about you,
+      <p>If you start typing your name or email address into the enquiry form, those
+        two fields are kept in session storage too, under <code>sb:lead</code>, so that
+        if you then book a call the booking window is filled in for you rather than
+        asking again.</p>
+      <p>The campaign entry holds the tags and nothing else: no identifier, nothing about you,
         nothing that could be joined to anything else. Session storage is not a
         cookie. It is never sent to our server, it cannot be read by any other site,
         and the browser discards it the moment you close the tab.</p>
@@ -227,9 +233,11 @@
         nothing.</p>
 
       <h2>Getting in touch</h2>
-      <p>The &ldquo;Talk to us&rdquo; and &ldquo;See if you qualify&rdquo; buttons open
-        your own email program addressed to us. Nothing on this site is involved after
-        the click, and nothing is stored. The enquiry form at the foot of each page
+      <p>The &ldquo;Talk to us&rdquo;, &ldquo;Connect with us&rdquo;, &ldquo;See if you
+        qualify&rdquo; and &ldquo;Book a call&rdquo; buttons open a Calendly booking
+        window; the next section says what that involves. Our email address, wherever
+        it appears as a link, opens your own email program, and nothing on this site
+        is involved after the click. The enquiry form at the foot of each page
         posts what you type to our CRM; the <a href="privacy.html">privacy policy</a>
         covers what happens to it there.</p>
 
@@ -240,11 +248,20 @@
         does. We do not set cookies through them and
         receive nothing back. Their own policies govern what they do with that
         request.</p>
+      <p><strong>Calendly</strong>, which runs call booking, is a separate company.
+        Nothing is requested from it when a page loads. The first time you hover or
+        focus a booking button, the site fetches Calendly&rsquo;s script and
+        stylesheet, which discloses your IP address and user agent to Calendly the
+        way any web request does. Once the booking window is open, it is
+        Calendly&rsquo;s page inside ours: Calendly sets its own cookies and collects
+        whatever you type into the booking, under <a href="https://calendly.com/legal/privacy-notice" rel="noopener">its own privacy notice</a>. If
+        you never open the window, Calendly sets nothing.</p>
 
       <h2>Why there is nothing to configure</h2>
       <p>Cookie settings panels exist to let you turn off analytics and advertising
         trackers. This site runs neither, so a panel would be a control with nothing
-        behind it. The <a href="privacy.html">privacy policy</a> sets out what little
+        behind it. The one third-party cookie source, Calendly, is something you opt
+        into by opening the booking window, and you can close it. The <a href="privacy.html">privacy policy</a> sets out what little
         we collect.</p>
 
       <h2>If this changes</h2>
@@ -481,7 +498,7 @@
       <div class="foot-brand">
         <img class="foot-brand__logo" src="silver-bullet-logo-alpha.webp"
              width="532" height="162" alt="Silver Bullet">
-        <a class="cta-secondary tx-halo" href="mailto:contact@silverbulletagency.com" data-track="footer-connect">Connect with us</a>
+        <a data-book class="cta-secondary tx-halo" href="https://calendly.com/inikesch-theprofectusagency/30min" data-track="footer-connect">Connect with us</a>
       </div>
 
       <!-- Legal lives on the copyright line, not in a column of its own —

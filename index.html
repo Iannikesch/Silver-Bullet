@@ -94,6 +94,7 @@
        they are placeholders; see tracking.js. async, as Google's own
        snippet is, so it starts early without blocking paint. -->
   <script async src="tracking.js"></script>
+  <script defer src="booking.js"></script>
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css">
 
@@ -163,7 +164,7 @@
         </details>
 
         <a class="nav-link" href="testimonials.html" data-track="nav-testimonials">Testimonials</a>
-        <a class="cta-secondary tx-glare tx-halo" href="mailto:contact@silverbulletagency.com" data-texture="rim" data-track="nav-talk">Talk to us</a>
+        <a data-book class="cta-secondary tx-glare tx-halo" href="https://calendly.com/inikesch-theprofectusagency/30min" data-texture="rim" data-track="nav-talk">Talk to us</a>
       </nav>
     </div>
     <div class="site-header__rule"></div>
@@ -300,7 +301,7 @@
               only arrives after yours does.
             </p>
             <div class="cta-row">
-              <a class="cta tx-torch tx-halo" href="mailto:contact@silverbulletagency.com" data-texture="torch" data-track="hero-qualify"
+              <a data-book class="cta tx-torch tx-halo" href="https://calendly.com/inikesch-theprofectusagency/30min" data-texture="torch" data-track="hero-qualify"
                  data-lit-in="0.9" data-lit-out="0.7">See if you qualify</a>
               <a class="cta-secondary tx-torch tx-halo" href="#work" data-texture="torch" data-track="hero-work"
                  data-lit-in="0.9" data-lit-out="0.7">See our work</a>
@@ -1539,7 +1540,7 @@
       <div class="foot-brand">
         <img class="foot-brand__logo" src="silver-bullet-logo-alpha.webp"
              width="532" height="162" alt="Silver Bullet">
-        <a class="cta-secondary tx-halo" href="mailto:contact@silverbulletagency.com" data-track="footer-connect">Connect with us</a>
+        <a data-book class="cta-secondary tx-halo" href="https://calendly.com/inikesch-theprofectusagency/30min" data-track="footer-connect">Connect with us</a>
       </div>
 
       <!-- Legal lives on the copyright line, not in a column of its own —
