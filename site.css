@@ -2534,6 +2534,47 @@
       width: calc(var(--slot-w) / 1.5 * 9 / 16);
     }
 
+    /* ---------- the phone-only slots ----------
+       The hero belt is display:none under 760px and reel.js never fetches its
+       clips there, so a phone sees none of that creative at all. Six of the
+       belt's items ride the conveyor instead, which already runs on phones and
+       already carries three of the belt's clips. No new mover: DESIGN.md says
+       there is no sixth, and this adds none.
+
+       Hidden above 760px rather than the other way round, because that is the
+       belt's own breakpoint (site.css:1125, reel.js:90) and the two should
+       hand over at the same width. Above it the belt does the job and showing
+       these as well would be the same creative twice.
+
+       display:none is also what keeps them free on desktop: the images are
+       loading=lazy so a hidden one is never in the viewport to fetch, and the
+       videos are loaded by slot-video.js off an IntersectionObserver, which a
+       display:none element never fires. Neither costs a desktop visitor
+       anything.
+
+       Same two-number sizing as .slot--v above, with the ratio parameterised
+       because these are not all 9:16: --ar is width over height, set inline
+       per item from the same figure the belt's data-ar carries. */
+    .slot--phone { display: none; }
+
+    @media (max-width: 760px) {
+      .slot--phone {
+        display: flex;
+        height: calc(var(--slot-w) / 1.5);
+        width: calc(var(--slot-w) / 1.5 * var(--ar, 1));
+      }
+
+      /* Six more slots make the phone's set wider than the desktop's, and
+         --conveyor-rate is a whole-loop time rather than a speed, so the
+         no-JS fallback has to be restated here or a phone with scripts off
+         would run the band at about 133px/s instead of 70. Measured set at
+         390px is 3724px, and 3724 / 70 = 53.2s. With JS on,
+         data-marquee-speed governs at either width and this is unused.
+         On .conveyor, not bare in the block: a custom property still needs a
+         selector, and .conveyor__track inherits it from here. */
+      .conveyor { --conveyor-rate: 53.2s; }
+    }
+
     /* contain, not cover: the whole frame is the reason these are here, and
        the slot is already the video's shape, so nothing letterboxes. */
     .slot__v {
