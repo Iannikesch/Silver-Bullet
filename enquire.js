@@ -155,22 +155,55 @@
     fail.focus();     /* role="alert" announces it; focus makes it findable again */
   }
 
-  /* While action is still the REPLACE_WITH placeholder there is nowhere to
-     post. This used to bind nothing and let the form fall through to a
-     native submit, on the reasoning that failing visibly is the point of a
-     placeholder. It does not fail visibly: the browser posts to a relative
-     path named REPLACE_WITH_FORM_ENDPOINT, the visitor lands on a 404, the
-     page they filled in is gone and so is what they typed.
+  /* The endpoint is /api/enquire, a same-origin Vercel function that holds
+     the GoHighLevel webhook URL and re-runs the checks below. An absolute
+     URL is still accepted so a different provider needs no change here.
 
-     Now the submit is stopped and the same failure message the fetch path
-     uses is shown, which names the mailto fallback. The form and every
-     field stay exactly where they were. */
-  if (!/^https?:\/\//.test(action)) {
+     Anything else, including a leftover placeholder, binds a handler that
+     stops the submit and shows the same failure message the fetch path
+     uses, which names the mailto fallback. It used to fall through to a
+     native submit on the reasoning that failing visibly is the point of a
+     placeholder. It does not fail visibly: the browser posts to a relative
+     path of that name, the visitor lands on a 404, and the page they filled
+     in is gone along with everything they typed. */
+  var LIVE = /^https?:\/\//.test(action) || action.charAt(0) === '/';
+  if (!LIVE) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       showFail();
     });
     return;
+  }
+
+  /* ---- payload -------------------------------------------------------
+     Built by hand rather than posted as FormData, because FormData is sent
+     as multipart and the endpoint parses JSON. Doing it here also fixes the
+     shape: the GHL workflow maps on these exact key names, so a rename
+     anywhere silently drops a field rather than failing loudly.
+
+     interest is always an array, including when nothing is ticked and when
+     exactly one box is, which are the two cases a form encoding would
+     otherwise flatten into nothing and into a bare string.
+
+     company_url and form_render_ts are included on purpose. They are not
+     lead data and never reach the CRM, but the endpoint re-runs both checks
+     there, because a bot posting straight to the URL runs none of this. */
+  function payload() {
+    var out = {};
+    var simple = ['first_name', 'last_name', 'email', 'phone', 'website',
+                  'company', 'revenue', 'heard', 'goal',
+                  'utm_source', 'utm_medium', 'utm_campaign', 'utm_content',
+                  'utm_term', 'gclid', 'fbclid',
+                  'landing_page', 'referrer', 'page_url',
+                  'company_url', 'form_render_ts'];
+    simple.forEach(function (name) {
+      var el = field(name);
+      out[name] = el ? el.value : '';
+    });
+    out.interest = Array.prototype.slice
+      .call(form.querySelectorAll('[name="interest"]:checked'))
+      .map(function (el) { return el.value; });
+    return out;
   }
 
   form.addEventListener('submit', function (e) {
@@ -198,8 +231,8 @@
 
     fetch(action, {
       method: 'POST',
-      body: new FormData(form),
-      headers: { 'Accept': 'application/json' }
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload())
     }).then(function (r) {
       if (!r.ok) throw new Error(String(r.status));
       showDone();

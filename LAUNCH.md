@@ -60,7 +60,7 @@ own advertising, not just compliance.
 | | Status | Needs |
 |---|---|---|
 | Booking | 🟢 Calendly is back (28 September): 35 booking CTAs on 15 pages open `calendly.com/inikesch-theprofectusagency/30min` as a popup via `booking.js` (`data-book`); plain email links stay `mailto:`. Privacy and cookie pages updated to name Calendly | a separate "closer" event for vsl.html, if wanted |
-| Enquiry form endpoint | 🔴 `REPLACE_WITH_FORM_ENDPOINT` on 14 pages; decided: GoHighLevel via a Vercel function | webhook URL |
+| Enquiry form endpoint | 🟡 Built: 14 pages post to `/api/enquire`, a Vercel function that re-checks the honeypot and the 3s timing gate, defuses spreadsheet formulas, drops `company_url` and `form_render_ts`, and forwards the 20 mapped keys to a GoHighLevel inbound webhook. Inert until the env var is set | `GHL_WEBHOOK_URL` in Vercel, then redeploy |
 | GTM / GA4 | 🟡 `tracking.js` on every page, inert until `GTM-XXXXXXX` / `G-XXXXXXXXXX` are real | the IDs |
 | Social links | 🔴 6 icons × every page → `href="#"` | which are real |
 | VSL video | 🔴 "VSL goes here" placeholder in the hero | the video |
