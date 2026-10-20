@@ -1074,6 +1074,15 @@
       pointer-events: none;
     }
 
+    /* With the VSL out of the hero the lane starts at the headline's top,
+       and nothing covers the line the cards come in at, so they were cut
+       flat across it. A short fade in, only while the box is absent: with
+       it back, cards slide out from under it as before. */
+    .hero-ground:not(:has(.hero__video)) .hero__belt {
+      -webkit-mask-image: linear-gradient(to bottom, transparent, #000 72px);
+              mask-image: linear-gradient(to bottom, transparent, #000 72px);
+    }
+
     /* A column of the chain. reel.js positions it (left, width) and
        fills it with slots; the markup's two [data-belt-col] elements are
        the lists, read top to bottom. Below the two-column threshold the

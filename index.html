@@ -278,18 +278,18 @@
 
     <section class="hero wrap">
         <!-- ============================================================
-             VSL SLOT — the video goes here, first, above the headline.
+             VSL SLOT: out for now, so the headline leads the hero. When
+             the video is ready it goes back here, first, above the
+             headline:
 
-             Wistia / YouTube / Vimeo iframes drop straight into this
-             container; the 16:9 box and the lit top edge are handled by
-             .hero__video. Delete the placeholder div when the embed lands.
+               <div class="hero__video"> EMBED </div>
+
+             Wistia / YouTube / Vimeo iframes drop straight into it; the
+             16:9 box and the lit top edge are still in site.css as
+             .hero__video. With it gone, reel.js starts the belt's lane at
+             the top of .hero__grid instead of under the box, so nothing
+             else needs to change either way.
              ============================================================ -->
-        <div class="hero__video">
-          <div class="hero__video-placeholder">
-            <strong>VSL goes here</strong>
-            <span class="meta">Paste the video embed into .hero__video in index.html</span>
-          </div>
-        </div>
 
         <div class="hero__grid">
           <div class="hero__copy">
