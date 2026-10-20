@@ -380,7 +380,12 @@
       var tallest = 0;
       col.list.forEach(function (it) { tallest = Math.max(tallest, it.ratio * w); });
       var need = Math.ceil((laneH + tallest + CHAIN_GAP) / (tallest + CHAIN_GAP)) + 1;
-      ensureSlots(col, Math.max(need, col.list.length));
+      /* Whole laps of the list only. The chain wraps from its last slot to
+         slot 0, so a part lap puts list[0] straight after itself: four
+         items in five slots ran hero-reel-3 twice in a row. ensureSlots
+         only grows, and only to multiples, so this holds across resizes. */
+      var L = col.list.length;
+      ensureSlots(col, Math.ceil(Math.max(need, L) / L) * L);
 
       /* Each slot's start down the chain, cumulative, so the gap between
          any two cards is CHAIN_GAP whatever their heights. The cached
