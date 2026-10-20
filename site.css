@@ -2525,13 +2525,15 @@
        against a 245px-tall photo slot at 1440px. They read as a narrow card
        between wide ones, which is the point.
 
-       The frame comes from .slot, so the belt still looks like one belt. */
+       The frame comes from .slot, so the belt still looks like one belt. A
+       clip that is not 9:16 sets --ar inline (width over height), as
+       .slot--phone does. */
     .slot--v {
       /* Both dimensions from the same number the photo slot uses, rather than
          a height plus aspect-ratio: with border-box those two disagree by the
          2px of border and the video card sits short in the row. */
       height: calc(var(--slot-w) / 1.5);
-      width: calc(var(--slot-w) / 1.5 * 9 / 16);
+      width: calc(var(--slot-w) / 1.5 * var(--ar, .5625));
     }
 
     /* ---------- the phone-only slots ----------
