@@ -58,11 +58,11 @@
          banner's 28px/s. */
       /* No-JS fallback, and a whole-loop time rather than a speed, so it has
          to be recomputed whenever the set gains or loses a slot: it is
-         setWidth / px-per-second. 1717px of set at 1440 wide, at 70px/s = 24.5s.
+         setWidth / px-per-second. 2232px of set at 1440 wide, at 70px/s = 31.9s.
          It was 36s against a 50px/s JS speed, which was already 8.6% out.
          motion.js prefers data-marquee-speed precisely because this number
          retunes itself every time the content changes. */
-      --conveyor-rate: 24.5s;
+      --conveyor-rate: 31.9s;
       --logo-rate:    112s;   /* no-JS fallback; JS uses data-marquee-speed */
 
       /* Set by JS: how far left the logo must travel from centre */
@@ -2579,11 +2579,11 @@
          --conveyor-rate is a whole-loop time rather than a speed, so the
          no-JS fallback has to be restated here or a phone with scripts off
          would run the band at about 133px/s instead of 70. Set width at
-         390px is 2802px, and 2802 / 70 = 40.0s. With JS on,
+         390px is 3210px, and 3210 / 70 = 45.9s. With JS on,
          data-marquee-speed governs at either width and this is unused.
          On .conveyor, not bare in the block: a custom property still needs a
          selector, and .conveyor__track inherits it from here. */
-      .conveyor { --conveyor-rate: 40.0s; }
+      .conveyor { --conveyor-rate: 45.9s; }
     }
 
     /* contain, not cover: the whole frame is the reason these are here, and
