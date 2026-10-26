@@ -355,7 +355,7 @@
           <img   class="belt__card" data-src="Assets/web/belt-lansing.webp" width="450" height="450"          data-ar="1/1"  alt="">
           <video class="belt__card" data-src="Assets/Videos/grey-modern-elegant.mp4" data-poster="Assets/web/belt-poster-grey-modern-elegant.webp" data-ar="9/16" muted playsinline loop preload="none"></video>
           <img   class="belt__card" data-src="Assets/web/belt-vitality.webp" width="450" height="563"         data-ar="4/5"  alt="">
-          <video class="belt__card" data-src="Assets/Videos/product-promo.mp4"       data-poster="Assets/web/belt-poster-product-promo.webp" data-ar="9/16" muted playsinline loop preload="none"></video>
+          <video class="belt__card" data-src="Assets/Videos/odette.mp4"              data-poster="Assets/web/belt-poster-odette.webp" data-ar="9/16" muted playsinline loop preload="none"></video>
           <img   class="belt__card" data-src="Assets/web/belt-nsp.webp" width="450" height="450"              data-ar="1/1"  alt="">
         </div>
         <div class="belt__col" data-belt-col>
@@ -420,27 +420,22 @@
             <!-- Phone only. The hero belt is display:none under 760px and reel.js
                  never fetches its clips there, so a phone sees none of that creative.
                  These five ride the conveyor instead, which already runs on phones.
-                 The belt's statue still is not among them: it is the same photo
-                 as work-mantis-statue, already in this set.
                  Hidden above 760px, where the belt itself does the job. -->
             <li class="slot slot--phone" style="--ar: 1"><img src="Assets/web/belt-lansing.webp"
                  width="450" height="450"
                  loading="lazy" decoding="async" alt="Lansing Moving Pros crew on a job"></li>
+            <li class="slot slot--v"><video class="slot__v" data-src="Assets/Videos/fashion-sale.mp4" muted loop playsinline data-poster="Assets/web/belt-poster-fashion-sale.webp" preload="none"
+                   width="450" height="800" aria-label="Fashion sale animation, green and yellow"></video></li>
             <li class="slot"><img src="Assets/web/work-vitality-roof.webp"
                  srcset="Assets/web/work-vitality-roof-480.webp 480w, Assets/web/work-vitality-roof-800.webp 800w, Assets/web/work-vitality-roof.webp 1200w"
                  sizes="(max-width: 560px) 97vw, (max-width: 900px) 48vw, 32vw"
                  width="1200" height="800"
                  loading="lazy" decoding="async" alt="Two Vitality Mechanical technicians carrying cylinders on a rooftop"></li>
-            <li class="slot slot--v"><video class="slot__v" data-src="Assets/Videos/fashion-sale.mp4" muted loop playsinline data-poster="Assets/web/belt-poster-fashion-sale.webp" preload="none"
-                   width="450" height="800" aria-label="Fashion sale animation, green and yellow"></video></li>
             <li class="slot slot--phone" style="--ar: .7993"><img src="Assets/web/belt-vitality.webp"
                  width="450" height="563"
                  loading="lazy" decoding="async" alt="A Vitality Mechanical technician at work"></li>
-            <li class="slot"><img src="Assets/web/work-lansing-assembly.webp"
-                 srcset="Assets/web/work-lansing-assembly-480.webp 480w, Assets/web/work-lansing-assembly-800.webp 800w, Assets/web/work-lansing-assembly.webp 1200w"
-                 sizes="(max-width: 560px) 97vw, (max-width: 900px) 48vw, 32vw"
-                 width="1200" height="800"
-                 loading="lazy" decoding="async" alt="Lansing Moving Pros crew assembling furniture"></li>
+            <li class="slot slot--v" style="--ar: .8"><video class="slot__v" data-src="Assets/Videos/saas-growth.mp4" muted loop playsinline data-poster="Assets/web/belt-poster-saas-growth.webp" preload="none"
+                   width="450" height="562" aria-label="AI solution promo"></video></li>
             <li class="slot slot--phone" style="--ar: .8"><video class="slot__v" data-src="Assets/Videos/apartment.mp4" muted loop playsinline data-poster="Assets/web/belt-poster-apartment.webp" preload="none"
                    width="450" height="563" aria-label="Apartment walkthrough"></video></li>
             <li class="slot"><img src="Assets/web/work-vitality-lobby.webp"
@@ -448,20 +443,13 @@
                  sizes="(max-width: 560px) 97vw, (max-width: 900px) 48vw, 32vw"
                  width="1200" height="800"
                  loading="lazy" decoding="async" alt="Vitality Mechanical's lit lobby signage"></li>
-            <li class="slot slot--v" style="--ar: .8"><video class="slot__v" data-src="Assets/Videos/saas-growth.mp4" muted loop playsinline data-poster="Assets/web/belt-poster-saas-growth.webp" preload="none"
-                   width="450" height="562" aria-label="AI solution promo"></video></li>
             <li class="slot slot--phone" style="--ar: 1"><img src="Assets/web/belt-nsp.webp"
                  width="450" height="450"
                  loading="lazy" decoding="async" alt="An NSP Plumbing engineer on a call-out"></li>
-            <li class="slot"><img src="Assets/web/work-mantis-statue.webp"
-                 srcset="Assets/web/work-mantis-statue-480.webp 480w, Assets/web/work-mantis-statue-800.webp 800w, Assets/web/work-mantis-statue.webp 1200w"
-                 sizes="(max-width: 560px) 97vw, (max-width: 900px) 48vw, 32vw"
-                 width="1200" height="800"
-                 loading="lazy" decoding="async" alt="Two Mantis Moving crew members beside a black and gold bear sculpture in a client's home"></li>
-            <li class="slot slot--phone" style="--ar: .5625"><video class="slot__v" data-src="Assets/Videos/food.mp4" muted loop playsinline data-poster="Assets/web/belt-poster-food.webp" preload="none"
-                   width="450" height="800" aria-label="Food promo"></video></li>
             <li class="slot slot--v"><video class="slot__v" data-src="Assets/Videos/yoga-class.mp4" muted loop playsinline data-poster="Assets/web/belt-poster-yoga-class.webp" preload="none"
                    width="450" height="800" aria-label="Yoga class promo"></video></li>
+            <li class="slot slot--phone" style="--ar: .5625"><video class="slot__v" data-src="Assets/Videos/food.mp4" muted loop playsinline data-poster="Assets/web/belt-poster-food.webp" preload="none"
+                   width="450" height="800" aria-label="Food promo"></video></li>
         </ul>
           <!-- Duplicate set is what makes the loop seamless. -->
         <ul class="conveyor__set" aria-hidden="true">
@@ -473,27 +461,22 @@
             <!-- Phone only. The hero belt is display:none under 760px and reel.js
                  never fetches its clips there, so a phone sees none of that creative.
                  These five ride the conveyor instead, which already runs on phones.
-                 The belt's statue still is not among them: it is the same photo
-                 as work-mantis-statue, already in this set.
                  Hidden above 760px, where the belt itself does the job. -->
             <li class="slot slot--phone" style="--ar: 1"><img src="Assets/web/belt-lansing.webp"
                  width="450" height="450"
                  loading="lazy" decoding="async" alt=""></li>
+            <li class="slot slot--v"><video class="slot__v" data-src="Assets/Videos/fashion-sale.mp4" muted loop playsinline data-poster="Assets/web/belt-poster-fashion-sale.webp" preload="none"
+                   width="450" height="800"></video></li>
             <li class="slot"><img src="Assets/web/work-vitality-roof.webp"
                  srcset="Assets/web/work-vitality-roof-480.webp 480w, Assets/web/work-vitality-roof-800.webp 800w, Assets/web/work-vitality-roof.webp 1200w"
                  sizes="(max-width: 560px) 97vw, (max-width: 900px) 48vw, 32vw"
                  width="1200" height="800"
                  loading="lazy" decoding="async" alt=""></li>
-            <li class="slot slot--v"><video class="slot__v" data-src="Assets/Videos/fashion-sale.mp4" muted loop playsinline data-poster="Assets/web/belt-poster-fashion-sale.webp" preload="none"
-                   width="450" height="800"></video></li>
             <li class="slot slot--phone" style="--ar: .7993"><img src="Assets/web/belt-vitality.webp"
                  width="450" height="563"
                  loading="lazy" decoding="async" alt=""></li>
-            <li class="slot"><img src="Assets/web/work-lansing-assembly.webp"
-                 srcset="Assets/web/work-lansing-assembly-480.webp 480w, Assets/web/work-lansing-assembly-800.webp 800w, Assets/web/work-lansing-assembly.webp 1200w"
-                 sizes="(max-width: 560px) 97vw, (max-width: 900px) 48vw, 32vw"
-                 width="1200" height="800"
-                 loading="lazy" decoding="async" alt=""></li>
+            <li class="slot slot--v" style="--ar: .8"><video class="slot__v" data-src="Assets/Videos/saas-growth.mp4" muted loop playsinline data-poster="Assets/web/belt-poster-saas-growth.webp" preload="none"
+                   width="450" height="562"></video></li>
             <li class="slot slot--phone" style="--ar: .8"><video class="slot__v" data-src="Assets/Videos/apartment.mp4" muted loop playsinline data-poster="Assets/web/belt-poster-apartment.webp" preload="none"
                    width="450" height="563"></video></li>
             <li class="slot"><img src="Assets/web/work-vitality-lobby.webp"
@@ -501,19 +484,12 @@
                  sizes="(max-width: 560px) 97vw, (max-width: 900px) 48vw, 32vw"
                  width="1200" height="800"
                  loading="lazy" decoding="async" alt=""></li>
-            <li class="slot slot--v" style="--ar: .8"><video class="slot__v" data-src="Assets/Videos/saas-growth.mp4" muted loop playsinline data-poster="Assets/web/belt-poster-saas-growth.webp" preload="none"
-                   width="450" height="562"></video></li>
             <li class="slot slot--phone" style="--ar: 1"><img src="Assets/web/belt-nsp.webp"
                  width="450" height="450"
                  loading="lazy" decoding="async" alt=""></li>
-            <li class="slot"><img src="Assets/web/work-mantis-statue.webp"
-                 srcset="Assets/web/work-mantis-statue-480.webp 480w, Assets/web/work-mantis-statue-800.webp 800w, Assets/web/work-mantis-statue.webp 1200w"
-                 sizes="(max-width: 560px) 97vw, (max-width: 900px) 48vw, 32vw"
-                 width="1200" height="800"
-                 loading="lazy" decoding="async" alt=""></li>
-            <li class="slot slot--phone" style="--ar: .5625"><video class="slot__v" data-src="Assets/Videos/food.mp4" muted loop playsinline data-poster="Assets/web/belt-poster-food.webp" preload="none"
-                   width="450" height="800"></video></li>
             <li class="slot slot--v"><video class="slot__v" data-src="Assets/Videos/yoga-class.mp4" muted loop playsinline data-poster="Assets/web/belt-poster-yoga-class.webp" preload="none"
+                   width="450" height="800"></video></li>
+            <li class="slot slot--phone" style="--ar: .5625"><video class="slot__v" data-src="Assets/Videos/food.mp4" muted loop playsinline data-poster="Assets/web/belt-poster-food.webp" preload="none"
                    width="450" height="800"></video></li>
         </ul>
         </div>
