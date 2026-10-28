@@ -4022,3 +4022,342 @@
   .tq.is-slider .tq-item.is-current { transition: none; }
   .tq-dot { transition: none; }
 }
+
+/* ==========================================================
+   Cookie consent: the banner and the settings panel (consent.js)
+
+   Epsilon's layout (scouted 2026-10-27), this site's surface. A full-
+   width bar fixed to the bottom, copy on the left and three buttons
+   stacked on the right at desktop, everything in one column below
+   900px. Separation is the lit top edge every panel here uses, not
+   their 18px grey shadow: DESIGN.md rules shadows out.
+
+   The three buttons are deliberately the same weight, Reject and
+   Accept identical. None is amber: the hero's "See if you qualify" is
+   the viewport's one amber element and the banner sits in the same
+   view. The panel is a native <dialog>, so focus is held inside it and
+   Esc closes it with no code here.
+
+   Layer 55: over the nav dropdown (50), under the intro (60), so the
+   bullet plays over the bar rather than the bar over the bullet.
+   ========================================================== */
+
+.consent {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 55;
+  background: var(--bg-raised, #161A1B);
+  border-top: 1px solid var(--border-lit, #4A4C4D);
+  color: var(--text, #9AAFB8);
+}
+.consent[hidden] { display: none; }
+
+.consent__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 300px);
+  align-items: center;
+  gap: var(--s-4, 16px) var(--s-12, 48px);
+  padding-top: var(--s-6, 24px);
+  padding-bottom: var(--s-6, 24px);
+}
+
+.consent__text {
+  margin: 0;
+  max-width: 68ch;
+  font-size: var(--fs-0, 16px);
+  line-height: 1.55;
+}
+.consent__text strong { color: var(--steel-050, #D4E5EA); font-weight: 600; }
+.consent__text a,
+.consent-panel a {
+  color: var(--steel-050, #D4E5EA);
+  text-decoration: underline;
+  text-decoration-color: var(--steel-900, #50636E);
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--dur-quick, 0.18s) var(--ease-hover, ease);
+}
+.consent__text a:hover,
+.consent-panel a:hover { text-decoration-color: var(--steel-050, #D4E5EA); }
+
+.consent__actions {
+  display: grid;
+  gap: var(--s-2, 8px);
+}
+
+/* One button, two fills. Pills, like every other button on the site. */
+.consent__btn {
+  font: inherit;
+  font-size: calc(14px + 1px * var(--dial, 0.32));
+  font-weight: 600;
+  line-height: 1.2;
+  padding: var(--s-3, 12px) var(--s-5, 20px);
+  border-radius: var(--r-pill, 10px);
+  border: 1px solid var(--border-lit, #4A4C4D);
+  background: transparent;
+  color: var(--steel-100, #B4CAD2);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-quick, 0.18s) var(--ease-hover, ease),
+    border-color var(--dur-quick, 0.18s) var(--ease-hover, ease),
+    color var(--dur-quick, 0.18s) var(--ease-hover, ease);
+}
+.consent__btn--solid {
+  background: var(--charcoal, #202222);
+  color: var(--steel-050, #D4E5EA);
+}
+.consent__btn:hover {
+  border-color: var(--steel-700, #6B7C86);
+  color: var(--white, #E8F1F2);
+}
+.consent__btn--solid:hover {
+  background: color-mix(in srgb, var(--steel-300, #9AAFB8) var(--alpha-hair, 10%), var(--charcoal, #202222));
+}
+
+/* Below 900px the copy takes the full width and the buttons go into a
+   row under it, so on a phone the bar is about a quarter of the screen
+   rather than Epsilon's 39%. */
+@media (max-width: 900px) {
+  .consent__inner {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: var(--s-4, 16px);
+    padding-bottom: var(--s-4, 16px);
+  }
+  .consent__actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .consent__text { font-size: 15px; line-height: 1.5; }
+  .consent__btn { padding: var(--s-3, 12px) var(--s-2, 8px); }
+}
+
+/* The footer's re-entry point, written in by consent.js. A button,
+   because it opens something rather than going somewhere, dressed
+   exactly as the links beside it. */
+.foot-legal__btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: color var(--dur-quick, 0.18s) var(--ease-hover, ease);
+}
+.foot-legal__btn:hover,
+.foot-legal__btn:focus-visible { color: var(--steel-050, #D4E5EA); }
+
+/* ---------- the settings panel ---------- */
+
+.consent-panel {
+  width: min(575px, calc(100% - 2 * var(--gutter, 20px)));
+  max-height: calc(100dvh - 2 * var(--s-10, 40px));
+  padding: 0;
+  overflow: hidden;
+  color: var(--text, #9AAFB8);
+  background: var(--bg-raised, #161A1B);
+  border: 1px solid var(--border, #323738);
+  border-top-color: var(--border-lit, #4A4C4D);
+  border-bottom-color: var(--ink, #010205);
+  border-radius: var(--r-md, 5px);
+}
+.consent-panel::backdrop {
+  background: color-mix(in srgb, var(--bg, #0A0D0E) var(--alpha-pane, 82%), transparent);
+}
+
+/* Answers a click, so it is allowed to move: DESIGN.md, Motion. */
+.consent-panel[open],
+.consent-panel[open]::backdrop {
+  animation: consent-in var(--dur-base, 0.42s) var(--ease-enter, ease-out);
+}
+@keyframes consent-in { from { opacity: 0; } }
+
+.consent-panel__form {
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
+  margin: 0;
+}
+
+.consent-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4, 16px);
+  padding: var(--s-5, 20px) var(--s-6, 24px);
+  border-bottom: 1px solid var(--border, #323738);
+}
+.consent-panel h2 {
+  margin: 0;
+  font-size: var(--fs-1, 20px);
+  line-height: 1.2;
+  color: var(--white, #E8F1F2);
+}
+
+/* An X drawn from two hairlines rather than a glyph, 44px to hit. */
+.consent-panel__close {
+  position: relative;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  margin: calc(-1 * var(--s-3, 12px));
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-sm, 3px);
+  background: none;
+  cursor: pointer;
+}
+.consent-panel__close::before,
+.consent-panel__close::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 1px;
+  background: var(--steel-300, #9AAFB8);
+  transition: background-color var(--dur-quick, 0.18s) var(--ease-hover, ease);
+}
+.consent-panel__close::before { transform: translate(-50%, -50%) rotate(45deg); }
+.consent-panel__close::after  { transform: translate(-50%, -50%) rotate(-45deg); }
+.consent-panel__close:hover::before,
+.consent-panel__close:hover::after { background: var(--white, #E8F1F2); }
+
+.consent-panel__scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--s-5, 20px) var(--s-6, 24px);
+}
+.consent-panel__scroll > p { margin: 0 0 var(--s-3, 12px); font-size: 15px; line-height: 1.6; }
+.consent-panel__scroll strong { color: var(--steel-050, #D4E5EA); font-weight: 600; }
+
+.consent-panel__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-1, 4px) var(--s-5, 20px);
+}
+
+.consent-panel h3 {
+  margin: var(--s-6, 24px) 0 var(--s-3, 12px);
+  font-size: var(--fs-0, 16px);
+  color: var(--steel-050, #D4E5EA);
+}
+
+/* ---------- a category row ---------- */
+
+.consent-cats { border-top: 1px solid var(--border, #323738); }
+
+.consent-cat {
+  position: relative;
+  border-bottom: 1px solid var(--border, #323738);
+}
+
+.consent-cat__head {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3, 12px);
+  min-height: 52px;
+  padding-right: 120px;    /* room for the control beside it */
+  list-style: none;
+  cursor: pointer;
+}
+.consent-cat__head::-webkit-details-marker { display: none; }
+
+/* Epsilon's + that turns to -, drawn as two hairlines; the upright one
+   folds flat when the row opens. */
+.consent-cat__head::before {
+  content: "";
+  flex: none;
+  width: 12px;
+  height: 12px;
+  background:
+    linear-gradient(var(--steel-300, #9AAFB8), var(--steel-300, #9AAFB8)) center / 12px 1px no-repeat,
+    linear-gradient(var(--steel-300, #9AAFB8), var(--steel-300, #9AAFB8)) center / 1px 12px no-repeat;
+  transition: background-size var(--dur-quick, 0.18s) var(--ease-hover, ease);
+}
+.consent-cat details[open] .consent-cat__head::before {
+  background-size: 12px 1px, 1px 0;
+}
+
+.consent-cat__name {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--steel-050, #D4E5EA);
+}
+
+.consent-cat__body { padding: 0 0 var(--s-4, 16px) var(--s-6, 24px); }
+.consent-cat__body p { margin: 0 0 var(--s-2, 8px); font-size: 14px; line-height: 1.6; color: var(--steel-500, #83979F); }
+.consent-cat__body .consent-cat__note { color: var(--steel-100, #B4CAD2); }
+
+.consent-cat__control {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 52px;
+  display: flex;
+  align-items: center;
+}
+
+.consent-cat__always {
+  font-size: var(--fs--1, 12.8px);
+  font-weight: 600;
+  color: var(--steel-100, #B4CAD2);
+}
+
+/* The switch: a native checkbox with role="switch", restyled. Steel,
+   not amber, for the same reason as the buttons. */
+.consent-cat__switch {
+  appearance: none;
+  position: relative;
+  width: 40px;
+  height: 22px;
+  margin: 0;
+  border: 1px solid var(--border-lit, #4A4C4D);
+  border-radius: 11px;
+  background: var(--charcoal, #202222);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-quick, 0.18s) var(--ease-hover, ease),
+    border-color var(--dur-quick, 0.18s) var(--ease-hover, ease);
+}
+.consent-cat__switch::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--steel-700, #6B7C86);
+  transition:
+    transform var(--dur-quick, 0.18s) var(--ease-enter, ease-out),
+    background-color var(--dur-quick, 0.18s) var(--ease-hover, ease);
+}
+.consent-cat__switch:checked {
+  background: color-mix(in srgb, var(--steel-300, #9AAFB8) var(--alpha-mid, 34%), var(--charcoal, #202222));
+  border-color: var(--steel-500, #83979F);
+}
+.consent-cat__switch:checked::after {
+  transform: translateX(18px);
+  background: var(--steel-050, #D4E5EA);
+}
+.consent-cat__switch:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.consent-panel__foot {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--s-3, 12px);
+  padding: var(--s-4, 16px) var(--s-6, 24px);
+  border-top: 1px solid var(--border, #323738);
+}
+@media (max-width: 560px) {
+  .consent-panel__foot > * { flex: 1 1 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .consent-panel[open],
+  .consent-panel[open]::backdrop { animation: none; }
+  .consent__btn,
+  .consent-cat__switch,
+  .consent-cat__switch::after,
+  .consent-cat__head::before { transition: none; }
+}

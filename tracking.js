@@ -6,12 +6,18 @@
    this file and nothing else knows the IDs.
 
    Inert until then. While an ID still reads as a placeholder (the X
-   run) its loader does not run, so no request leaves the page, no
-   cookie is set, and the cookie policy's "no analytics" stays true.
-   The day the IDs go real, cookies.html and privacy.html must change
-   with them: both currently say the site runs no analytics, and GA4
-   through GTM sets _ga cookies. That is a copy job, not a code one,
-   but it is not optional.
+   run) its loader does not run, so no request leaves the page and no
+   cookie is set.
+
+   Gated on consent once the IDs are real. Nothing loads until the
+   visitor has said yes to Analytics or Advertising in the cookie
+   banner (consent.js, which stores the answer in localStorage under
+   sb:consent and announces it with a 'sb:consent' event). Then the
+   container loads with Google's Consent Mode set to exactly what was
+   accepted, so an ad tag inside GTM stays off for someone who only
+   accepted analytics. Taking a yes back reloads the page (consent.js
+   does that), because a running tag cannot be unloaded. cookies.html
+   and privacy.html describe this; keep them in step with it.
 
    Order of preference once live: GTM alone. GA4 belongs inside the
    container as a tag, so the gtag loader here is a fallback for a GA4
@@ -52,6 +58,27 @@
 
   if (!gtmLive && !ga4Live) return;
 
+  /* Google's queue function, which Consent Mode commands go through as
+     well as gtag's. It has to push the arguments object itself, not an
+     array: that is how the libraries tell a command from an event. */
+  function gtag() { window.dataLayer.push(arguments); }
+
+  /* consent.js's record. VERSION there and the 1 here move together. */
+  function stored() {
+    try {
+      var c = JSON.parse(localStorage.getItem('sb:consent'));
+      return c && c.v === 1 ? c : null;
+    } catch (e) { return null; }
+  }
+
+  function modes(c) {
+    var ads = c.ads ? 'granted' : 'denied';
+    return {
+      analytics_storage: c.analytics ? 'granted' : 'denied',
+      ad_storage: ads, ad_user_data: ads, ad_personalization: ads
+    };
+  }
+
   function script(src) {
     var s = document.createElement('script');
     s.async = true;
@@ -60,19 +87,32 @@
     first.parentNode.insertBefore(s, first);
   }
 
-  if (gtmLive) {
-    /* Google's snippet, unminified. When the container is live, also
-       add its <noscript> iframe just inside <body> on every page:
-       <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
-         height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> */
-    window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-    script('https://www.googletagmanager.com/gtm.js?id=' + GTM_ID);
-    return;
+  var loaded = false;
+
+  function load(c) {
+    if (!c || !(c.analytics || c.ads)) return;
+    /* Already running and the visitor allowed more: say so. Allowing
+       less never arrives here, consent.js reloads the page instead. */
+    if (loaded) { gtag('consent', 'update', modes(c)); return; }
+    loaded = true;
+    gtag('consent', 'default', modes(c));
+
+    if (gtmLive) {
+      /* Google's snippet, unminified. Do NOT add the container's
+         <noscript> iframe: with no JavaScript there is no banner, so
+         it would track visitors who were never asked. */
+      window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+      script('https://www.googletagmanager.com/gtm.js?id=' + GTM_ID);
+      return;
+    }
+
+    /* GA4 with no container: gtag directly. */
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', GA4_ID);
+    script('https://www.googletagmanager.com/gtag/js?id=' + GA4_ID);
   }
 
-  /* GA4 with no container: gtag directly. */
-  window.gtag = function () { window.dataLayer.push(arguments); };
-  window.gtag('js', new Date());
-  window.gtag('config', GA4_ID);
-  script('https://www.googletagmanager.com/gtag/js?id=' + GA4_ID);
+  load(stored());
+  document.addEventListener('sb:consent', function (e) { load(e.detail); });
 })();

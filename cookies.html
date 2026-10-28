@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cookie policy | Silver Bullet</title>
-  <meta name="description" content="Silver Bullet sets no cookies of its own and runs no analytics. What the site stores in your browser, what Calendly does if you book a call, and why there is nothing to configure.">
+  <meta name="description" content="The site works without cookies. Analytics and advertising stay off until you switch them on. What the site stores in your browser, what Calendly does if you book a call, and how to change your choice.">
   <link rel="canonical" href="https://silverbulletagency.com/cookies.html">
   <!-- Icons. The mark is the bullet, drawn with the same hard-stopped chrome
        ramp as the site: paired stops at identical offsets, so every band is
@@ -32,6 +32,7 @@
        they are placeholders; see tracking.js. async, as Google's own
        snippet is, so it starts early without blocking paint. -->
   <script async src="tracking.js"></script>
+  <script defer src="consent.js"></script>
   <script defer src="booking.js"></script>
   <!-- Texture pack. Must load AFTER tokens.css: every value in it is a token. -->
   <link rel="stylesheet" href="textures.css">
@@ -202,14 +203,15 @@
     <section class="wrap legal">
       <p class="meta legal__eyebrow">Legal</p>
       <h1>Cookie policy</h1>
-      <p class="legal__date">Effective 23 September 2026. Last updated 28 September 2026.</p>
+      <p class="legal__date">Effective 23 September 2026. Last updated 28 October 2026.</p>
 
       <div class="panel legal__summary">
         <h2>The short version</h2>
-        <p>This site sets no cookies of its own and runs no analytics. The one third
-          party that can set cookies is Calendly, and only once you open the booking
-          window to book a call. There is no settings panel because there is nothing
-          of ours to switch off.</p>
+        <p>The site works without any cookies. Two kinds are optional, analytics
+          and advertising, and both stay off unless you switch them on in the cookie
+          banner or in <strong>Cookie settings</strong> at the foot of every page.
+          The one other company that can set cookies is Calendly, and only once you
+          open the booking window to book a call.</p>
       </div>
 
       <h2>What we store in your browser</h2>
@@ -227,6 +229,11 @@
         nothing that could be joined to anything else. Session storage is not a
         cookie. It is never sent to our server, it cannot be read by any other site,
         and the browser discards it the moment you close the tab.</p>
+      <p>Once you answer the cookie banner, your answer is kept in your browser&rsquo;s
+        <strong>local storage</strong> under <code>sb:consent</code>, so we do not ask
+        on every page. It holds which of the two optional kinds you allowed and the
+        date you chose, nothing else. It stays until you change it or clear your
+        browser&rsquo;s site data, and like session storage it is never sent to us.</p>
       <p>The opening animation, the bullet that draws the line under the
         navigation, used to leave a flag here so it would not replay. It no
         longer does. It plays on every fresh arrival and every refresh, and stores
@@ -257,17 +264,34 @@
         whatever you type into the booking, under <a href="https://calendly.com/legal/privacy-notice" rel="noopener">its own privacy notice</a>. If
         you never open the window, Calendly sets nothing.</p>
 
-      <h2>Why there is nothing to configure</h2>
-      <p>Cookie settings panels exist to let you turn off analytics and advertising
-        trackers. This site runs neither, so a panel would be a control with nothing
-        behind it. The one third-party cookie source, Calendly, is something you opt
-        into by opening the booking window, and you can close it. The <a href="privacy.html">privacy policy</a> sets out what little
-        we collect.</p>
+      <h2>Optional cookies, and your choice</h2>
+      <p>The banner at the foot of the screen gives you three buttons of equal
+        weight: <strong>Accept all</strong>, <strong>Reject all</strong> and
+        <strong>Customize</strong>, which opens a panel where you can switch each
+        kind on or off. Nothing optional is switched on until you switch it on, and
+        nothing optional loads until you have chosen.</p>
+      <p><strong>Analytics</strong> counts visits and shows which pages get read and
+        where visitors came from, through Google Analytics, loaded by Google Tag
+        Manager. It sets cookies whose names begin with <code>_ga</code>. We see totals
+        and trends, not names.</p>
+      <p><strong>Advertising</strong> tells the ad platforms we run campaigns on that
+        a visit came from one of their ads, so we can see which ads work. Those
+        platforms may connect it with what they already know about you. If you are in
+        the United States, switching this off is how you opt out of the sale or
+        sharing of your personal information. If your browser sends a Global Privacy
+        Control signal, we treat it as that opt-out and keep Advertising off whatever
+        you click.</p>
+      <p>At the time of writing neither kind is live yet: the banner records your
+        choice, and the tags it controls are not switched on. When they are, they
+        will load only for visitors who said yes, and this page will name each one
+        before it does.</p>
 
-      <h2>If this changes</h2>
-      <p>Adding analytics or an advertising pixel would change this page and, most
-        likely, require a real consent mechanism before it went live. We would update
-        this page first, not afterwards.</p>
+      <h2>Changing your mind</h2>
+      <p>Open <strong>Cookie settings</strong> at the foot of any page and change the
+        switches, or choose <strong>Reject all</strong>. If you take back a yes, the
+        site clears the Google Analytics cookies it can reach and reloads the page
+        without the tags. The <a href="privacy.html">privacy policy</a> sets out
+        everything else we collect.</p>
 
       <h2>Contact</h2>
       <p>Silver Bullet Agency LLC, 1309 Coffeen Ave, Sheridan, WY 82801, USA.

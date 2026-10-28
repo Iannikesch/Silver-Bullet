@@ -223,7 +223,11 @@
    appends its overlay to <body> as a position:fixed full-screen layer.
    Caught by this rule it became relative, zero height, at the foot of the
    page - the click "worked" and nothing appeared. */
-body.has-nightfield > *:not(.tx-nightfield--fixed):not(.site-header):not(.intro-layer):not(.skip-link):not(.calendly-overlay) {
+/* .consent and .consent-panel, the cookie banner and its settings dialog
+   (consent.js), for the same reason: the banner is fixed to the bottom
+   edge, and the dialog is a modal whose top-layer position this rule
+   would also have overridden. */
+body.has-nightfield > *:not(.tx-nightfield--fixed):not(.site-header):not(.intro-layer):not(.skip-link):not(.calendly-overlay):not(.consent):not(.consent-panel) {
   position: relative;
   z-index: 1;
 }
