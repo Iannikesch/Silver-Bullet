@@ -2547,7 +2547,7 @@
 
     /* ---------- the phone-only slots ----------
        The hero belt is display:none under 760px and reel.js never fetches its
-       clips there, so a phone sees none of that creative at all. Five of the
+       clips there, so a phone sees none of that creative at all. Four of the
        belt's items ride the conveyor instead, which already runs on phones and
        already carries three clips the belt does not. No new mover: DESIGN.md says
        there is no sixth, and this adds none.
@@ -2575,15 +2575,15 @@
         width: calc(var(--slot-w) / 1.5 * var(--ar, 1));
       }
 
-      /* Five more slots make the phone's set wider than the desktop's, and
+      /* Four more slots make the phone's set wider than the desktop's, and
          --conveyor-rate is a whole-loop time rather than a speed, so the
          no-JS fallback has to be restated here or a phone with scripts off
-         would run the band at about 98px/s instead of 70. Set width at
-         390px is 3423px, and 3423 / 70 = 48.9s. With JS on,
+         would run the band at about 90px/s instead of 70. Set width at
+         390px is 3159px, and 3159 / 70 = 45.1s. With JS on,
          data-marquee-speed governs at either width and this is unused.
          On .conveyor, not bare in the block: a custom property still needs a
          selector, and .conveyor__track inherits it from here. */
-      .conveyor { --conveyor-rate: 48.9s; }
+      .conveyor { --conveyor-rate: 45.1s; }
     }
 
     /* contain, not cover: the whole frame is the reason these are here, and
